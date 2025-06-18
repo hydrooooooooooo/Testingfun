@@ -1,4 +1,3 @@
-
 import React from "react";
 import { PLANS, Pack } from "@/lib/plans";
 import { toast } from "@/hooks/use-toast";
@@ -119,8 +118,8 @@ export function useScrape() {
           console.log(`Progression mise à jour: ${finalPercent}%`);
           return finalPercent;
         });
-      } else if (result.status === 'finished' || result.status === 'FINISHED' || result.status === 'SUCCESS') {
-        console.log('Statut: finished - Scraping terminé');
+      } else if (result.status === 'finished' || result.status === 'FINISHED' || result.status === 'SUCCESS' || result.status === 'completed') {
+        console.log('Statut: finished/completed - Scraping terminé');
         console.log('Réponse complète du serveur:', JSON.stringify(result, null, 2));
         
         // Mettre à jour les états immédiatement
@@ -128,17 +127,6 @@ export function useScrape() {
         setScrapeDone(true);
         setShowPreview(true); // Activer l'affichage de la prévisualisation
         setLoading(false); // S'assurer que loading est mis à false
-        
-        // Notification de succès
-        toast({
-          title: "Scraping terminé",
-          description: "Les données ont été récupérées avec succès.",
-          variant: "default",
-        });
-        
-        // IMPORTANT: Forcer l'affichage de la prévisualisation immédiatement
-        setShowPreview(true);
-        console.log('Preview activée immédiatement: showPreview=true');
         
         // Si les previewItems sont disponibles dans la réponse, les mettre à jour
         if (result.previewItems && Array.isArray(result.previewItems)) {
@@ -180,7 +168,7 @@ export function useScrape() {
       }
       
       // Si le scraping est terminé, vérifier à nouveau le statut de paiement
-      if (result.status === 'finished') {
+      if (result.status === 'finished' || result.status === 'completed') {
         try {
           console.log('Vérification du statut de paiement après scraping terminé');
           const paymentStatus = await api.verifyPayment(sid);
@@ -194,13 +182,15 @@ export function useScrape() {
       }
       
       // Si le scraping est terminé ou a échoué, arrêter le polling
-      const isDone = result.status === 'finished' || result.status === 'FINISHED' || result.status === 'SUCCESS' || result.status === 'failed';
+      const isDone = result.status === 'finished' || result.status === 'FINISHED' || result.status === 'SUCCESS' || result.status === 'completed' || result.status === 'failed';
       if (isDone) {
         console.log('Scraping terminé ou échoué, arrêt du polling');
+        setLoading(false); // S'assurer que loading est mis à false
       }
       return isDone;
     } catch (error) {
       console.error('Error checking scrape status:', error);
+      setLoading(false); // S'assurer que loading est mis à false en cas d'erreur
       return false;
     }
   }, [api, toast]);
@@ -219,7 +209,7 @@ export function useScrape() {
         if (isDone) {
           console.log('Polling terminé, nettoyage de l\'intervalle');
           clearInterval(pollInterval);
-          setLoading(false);
+          setLoading(false); // S'assurer que loading est mis à false
           
           // Force l'affichage de la prévisualisation sans faire d'appel API supplémentaire
           setTimeout(() => {
@@ -232,7 +222,7 @@ export function useScrape() {
         console.error('Erreur pendant le polling:', error);
         // En cas d'erreur, arrêter le polling et afficher un message
         clearInterval(pollInterval);
-        setLoading(false);
+        setLoading(false); // S'assurer que loading est mis à false
         toast({
           title: "Erreur de communication",
           description: "Impossible de vérifier l'état du scraping. Veuillez rafraîchir la page.",
@@ -245,7 +235,7 @@ export function useScrape() {
     const safetyTimeout = setTimeout(() => {
       console.log('Timeout de sécurité atteint, arrêt du polling');
       clearInterval(pollInterval);
-      setLoading(false);
+      setLoading(false); // S'assurer que loading est mis à false
       setScrapePercent(0);
       toast({
         title: "Timeout",
@@ -258,6 +248,7 @@ export function useScrape() {
     return () => {
       clearInterval(pollInterval);
       clearTimeout(safetyTimeout);
+      setLoading(false); // S'assurer que loading est mis à false lors du nettoyage
     };
   }, [checkScrapeStatus, toast]);
 
@@ -316,13 +307,13 @@ export function useScrape() {
       }
     } catch (error) {
       console.error('Error starting scrape:', error);
+      setLoading(false); // S'assurer que loading est mis à false en cas d'erreur
+      setScrapePercent(0);
       toast({
         title: "Erreur de scraping",
         description: "Une erreur est survenue lors du démarrage du scraping.",
         variant: "destructive",
       });
-      setLoading(false);
-      setScrapePercent(0);
     }
   }
 

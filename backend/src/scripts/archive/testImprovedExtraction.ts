@@ -1,5 +1,5 @@
-import { apifyService } from '../services/apifyService';
-import { logger } from '../utils/logger';
+import { apifyService } from '../../services/apifyService';
+import { logger } from '../../utils/logger';
 import fs from 'fs';
 import path from 'path';
 
@@ -41,7 +41,7 @@ async function testImprovedExtraction() {
     
     // Get all items to compare with preview
     logger.info('Retrieving all items from dataset...');
-    const allItems = await apifyService.getAllItems(datasetId);
+    const allItems = await apifyService.getDatasetItems(datasetId);
     logger.info(`Retrieved ${allItems.length} total items`);
     
     // Save all items to a file

@@ -1,5 +1,5 @@
-import { apifyService } from '../services/apifyService';
-import { logger } from '../utils/logger';
+import { apifyService } from '../../services/apifyService';
+import { logger } from '../../utils/logger';
 
 // ID du dataset Apify à tester
 const datasetId = 'ttRRtMbZgZ9WD0ZXG';
@@ -15,7 +15,7 @@ async function testDatasetRetrieval() {
     // Si nous avons des éléments, récupérer tous les éléments
     if (previewItems.length > 0) {
       console.log('Récupération de tous les éléments du dataset...');
-      const allItems = await apifyService.getAllItems(datasetId);
+      const allItems = await apifyService.getDatasetItems(datasetId);
       console.log(`Nombre total d'éléments récupérés: ${allItems.length}`);
       console.log('Premier élément:', JSON.stringify(allItems[0], null, 2));
     } else {

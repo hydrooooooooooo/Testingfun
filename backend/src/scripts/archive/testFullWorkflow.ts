@@ -1,6 +1,6 @@
-import { logger } from '../utils/logger';
-import { apifyService } from '../services/apifyService';
-import { sessionService } from '../services/sessionService';
+import { logger } from '../../utils/logger';
+import { apifyService } from '../../services/apifyService';
+import { sessionService } from '../../services/sessionService';
 import dotenv from 'dotenv';
 
 // Load environment variables
@@ -82,7 +82,7 @@ async function testFullWorkflow() {
     // Log sample items
     logger.info(`Retrieved ${previewItems.length} preview items`);
     logger.info('Sample preview items:');
-    previewItems.slice(0, 3).forEach((item, index) => {
+    previewItems.slice(0, 3).forEach((item: any, index: number) => {
       logger.info(`Item ${index + 1}:`);
       logger.info(`  Title: ${item.title}`);
       logger.info(`  Price: ${item.price}`);
@@ -114,7 +114,7 @@ async function testFullWorkflow() {
     
     // Get all items (in production this would be done when user pays)
     logger.info('Getting all items with improved extraction...');
-    const allItems = await apifyService.getAllItems(datasetId);
+    const allItems = await apifyService.getDatasetItems(datasetId);
     
     logger.info(`Retrieved ${allItems.length} total items`);
     logger.info(`First item: ${JSON.stringify(allItems[0], null, 2)}`);
