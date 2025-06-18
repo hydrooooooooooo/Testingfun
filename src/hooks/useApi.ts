@@ -99,7 +99,7 @@ export function useApi() {
       
       // Essayer d'abord avec la route spécifique
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/payment/verify-payment`, {
+        const response = await axios.get(`${API_BASE_URL}/api/payment/verify-payment`, {
           params: { sessionId },
           timeout: 10000, // 10 secondes de timeout
           headers: {
@@ -123,7 +123,7 @@ export function useApi() {
         console.warn('Erreur avec la route spécifique, essai avec la route générique:', error);
         
         // Fallback sur l'ancienne route
-        const fallbackResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/verify-payment`, {
+        const fallbackResponse = await axios.get(`${API_BASE_URL}/api/verify-payment`, {
           params: { sessionId },
           timeout: 10000, // 10 secondes de timeout
           headers: {

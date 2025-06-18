@@ -123,7 +123,7 @@ export class ExportService {
       }
 
       // Get items from APIFY dataset
-      const items = await apifyService.getAllItems(datasetId);
+      const items = await apifyService.getDatasetItems(datasetId);
       
       // Limit items based on the pack's nbDownloads
       const limitedItems = items.slice(0, pack.nbDownloads);
@@ -184,7 +184,7 @@ export class ExportService {
       }
 
       // Get items from APIFY dataset
-      const items = await apifyService.getAllItems(datasetId);
+      const items = await apifyService.getDatasetItems(datasetId);
       
       // Limit items based on the pack's nbDownloads
       const limitedItems = items.slice(0, pack.nbDownloads);
@@ -193,7 +193,7 @@ export class ExportService {
       let csv = 'Titre;Prix;Description;Ville;URL;Date de publication;Image URL\n';
       
       // Add rows
-      limitedItems.forEach(item => {
+      limitedItems.forEach((item: any) => {
         // Escape semicolons in fields
         const escapedTitle = (item.title || '').replace(/;/g, ',');
         const escapedDesc = (item.desc || '').replace(/;/g, ',');

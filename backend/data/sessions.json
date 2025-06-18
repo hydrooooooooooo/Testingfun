@@ -1478,5 +1478,199 @@
     },
     "error": "Failed to start scraping: You must rent a paid Actor in order to run it after its free trial has expired. To rent this Actor, go to https://console.apify.com/actors/Y0QGH7cuqgKtNbEgt",
     "updatedAt": "2025-06-17T16:49:23.969Z"
+  },
+  {
+    "id": "sess_i-JLk9kKLe",
+    "url": "https://www.facebook.com/marketplace/110080935687758/search/?query=Voiture",
+    "status": "failed",
+    "createdAt": "2025-06-18T12:30:51.530Z",
+    "isPaid": false,
+    "data": {
+      "nbItems": 0,
+      "startedAt": "2025-06-18T12:30:51.530Z",
+      "previewItems": []
+    },
+    "error": "Failed to start scraping: You must rent a paid Actor in order to run it after its free trial has expired. To rent this Actor, go to https://console.apify.com/actors/Y0QGH7cuqgKtNbEgt",
+    "updatedAt": "2025-06-18T12:30:53.712Z"
+  },
+  {
+    "id": "sess_pc1W2HIbt0",
+    "url": "https://www.facebook.com/marketplace/110080935687758/search/?query=Voiture",
+    "status": "completed",
+    "createdAt": "2025-06-18T12:53:23.706Z",
+    "isPaid": false,
+    "data": {
+      "nbItems": 12,
+      "startedAt": "2025-06-18T12:53:23.706Z",
+      "previewItems": [
+        {
+          "title": "Voiture",
+          "price": "$95",
+          "desc": "No Description",
+          "image": "https://scontent.fknu3-1.fna.fbcdn.net/v/t45.5328-4/509750314_3016023748579238_5223517753614843742_n.jpg?stp=c244.0.540.540a_dst-jpg_p180x540_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=gnYVFU_G1PAQ7kNvwHdgINW&_nc_oc=Admdw16QxYe0KsKlrCWgZg0TPKfymWeNelzuNFO4YSLxzC8ajrceu0UXV1aS5-VatQo&_nc_zt=23&_nc_ht=scontent.fknu3-1.fna&_nc_gid=Hb_wz1zzOXjYM6scTB0f2g&oh=00_AfOjazTi0VisDGQRs1FICPXpio1jugjsmMvI7FL5sD_XDw&oe=685877EB",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/1903377057087062",
+          "postedAt": ""
+        },
+        {
+          "title": "voiture",
+          "price": "$13,600,000",
+          "desc": "No Description",
+          "image": "https://scontent.fknu3-1.fna.fbcdn.net/v/t45.5328-4/505717497_1451672696186460_8631457112391714592_n.jpg?stp=c0.87.526.526a_dst-jpg_p526x395_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=SlE4CUIoqucQ7kNvwFcHcPW&_nc_oc=AdkQClAsG7AsmyA0HUY3Lij1Z0hY-bBOAPuLq7XRpAch9yUoflz3ebufktp9Hr-DeHA&_nc_zt=23&_nc_ht=scontent.fknu3-1.fna&_nc_gid=Hb_wz1zzOXjYM6scTB0f2g&oh=00_AfO3Fg5QIyUO3SwLugC8FKYSNf8A9Q53H-EZZakTLKPNdA&oe=68589F26",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/695939306381896",
+          "postedAt": ""
+        },
+        {
+          "title": "Voiture captiva ltz phase 1   intérieur cuir tres propre entretiens bien fait en tout jeante 18\"\"",
+          "price": "MGA30,000",
+          "desc": "No Description",
+          "image": "https://scontent.fknu3-1.fna.fbcdn.net/v/t39.30808-6/506821232_4426806320880149_2438436398302352843_n.jpg?stp=c0.79.720.720a_dst-jpg_s565x565_tt6&_nc_cat=110&ccb=1-7&_nc_sid=454cf4&_nc_ohc=MeP8-RgdojkQ7kNvwGqB2gI&_nc_oc=Admb8zAJl90UfZvKpk-IXl2gDx7pmOzTTaF09ZRi4lCwariF4dgs5WjGTHbAo46Mztk&_nc_zt=23&_nc_ht=scontent.fknu3-1.fna&_nc_gid=Hb_wz1zzOXjYM6scTB0f2g&oh=00_AfP6ECaS3u0X9cCt0ufy4coH2Ye3tJ3uyx0clu3D4tiC9Q&oe=68589639",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/742868028079325",
+          "postedAt": ""
+        }
+      ],
+      "finishedAt": "2025-06-18T12:56:35.333Z",
+      "totalItems": 12
+    },
+    "datasetId": "coOZnVX1jgQUHpfQR",
+    "actorRunId": "zWXmOgaXeRVw8xZqa",
+    "updatedAt": "2025-06-18T12:56:35.333Z"
+  },
+  {
+    "id": "sess_cmsA6laxtt",
+    "url": "https://www.facebook.com/marketplace/110080935687758/search/?query=Voiture",
+    "status": "completed",
+    "createdAt": "2025-06-18T13:09:45.007Z",
+    "isPaid": false,
+    "data": {
+      "nbItems": 12,
+      "startedAt": "2025-06-18T13:09:45.007Z",
+      "previewItems": [
+        {
+          "title": "Voiture",
+          "price": "$95",
+          "desc": "No Description",
+          "image": "https://scontent.fmct2-3.fna.fbcdn.net/v/t45.5328-4/509750314_3016023748579238_5223517753614843742_n.jpg?stp=c244.0.540.540a_dst-jpg_p180x540_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=gnYVFU_G1PAQ7kNvwFEEzKr&_nc_oc=Admv0dg7Z447hsopkvmIHW9mKkz1k1rdykzCeMswHVq5KVJVwFTlVqZz54MIB7JMbUU&_nc_zt=23&_nc_ht=scontent.fmct2-3.fna&_nc_gid=v9gxe2kDSEqEvpPhf8kerw&oh=00_AfODlU_vlQ6NaJSl0EBIqeZt3kJ0eiKgC-0hvsh6DTB9hg&oe=685877EB",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/1903377057087062",
+          "postedAt": ""
+        },
+        {
+          "title": "voiture",
+          "price": "$13,600,000",
+          "desc": "No Description",
+          "image": "https://scontent.fmct2-3.fna.fbcdn.net/v/t45.5328-4/505717497_1451672696186460_8631457112391714592_n.jpg?stp=c0.87.526.526a_dst-jpg_p526x395_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=SlE4CUIoqucQ7kNvwGgXWaT&_nc_oc=AdkV5G53hDfkjxOsXjZVOGMh72I2XlgsmU9p367_2zqtiyH9TiavQ77jYoZtbaDFeAY&_nc_zt=23&_nc_ht=scontent.fmct2-3.fna&_nc_gid=v9gxe2kDSEqEvpPhf8kerw&oh=00_AfPlTQTJS8WiKocKmfW1RbCJQlY6ReNG3fFWC_QviWhGSQ&oe=68589F26",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/695939306381896",
+          "postedAt": ""
+        },
+        {
+          "title": "Voiture captiva ltz phase 1   intérieur cuir tres propre entretiens bien fait en tout jeante 18\"\"",
+          "price": "MGA30,000",
+          "desc": "No Description",
+          "image": "https://scontent.fmct2-3.fna.fbcdn.net/v/t39.30808-6/506821232_4426806320880149_2438436398302352843_n.jpg?stp=c0.79.720.720a_dst-jpg_s565x565_tt6&_nc_cat=110&ccb=1-7&_nc_sid=454cf4&_nc_ohc=MeP8-RgdojkQ7kNvwGq91Fy&_nc_oc=AdnxcLelOk5PCzYdJsDNiOY4Zef5W0gTNOMYLRnpjL-cNiiOCJlGVCtQ25_jKBNYV70&_nc_zt=23&_nc_ht=scontent.fmct2-3.fna&_nc_gid=v9gxe2kDSEqEvpPhf8kerw&oh=00_AfMRdD2A_P_NCebqFmsA3PIrJK3IViY3MuAXpK7D4FPttA&oe=68589639",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/742868028079325",
+          "postedAt": ""
+        }
+      ],
+      "finishedAt": "2025-06-18T13:12:14.464Z",
+      "totalItems": 12
+    },
+    "datasetId": "5YTn3Oky43wyirOkt",
+    "actorRunId": "HLq6ZVXBM7yevBuCq",
+    "updatedAt": "2025-06-18T13:12:14.465Z"
+  },
+  {
+    "id": "sess_1M_g9tgRHG",
+    "url": "https://www.facebook.com/marketplace/110080935687758/search/?query=Voiture",
+    "status": "completed",
+    "createdAt": "2025-06-18T13:18:51.724Z",
+    "isPaid": false,
+    "data": {
+      "nbItems": 13,
+      "startedAt": "2025-06-18T13:18:51.724Z",
+      "previewItems": [
+        {
+          "title": "Voiture",
+          "price": "$95",
+          "desc": "No Description",
+          "image": "https://scontent.fccu2-1.fna.fbcdn.net/v/t45.5328-4/509750314_3016023748579238_5223517753614843742_n.jpg?stp=c244.0.540.540a_dst-jpg_p180x540_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=gnYVFU_G1PAQ7kNvwHLTqKs&_nc_oc=AdkDnmeGjABiFk0l3CARuKwMByaghQ0WZ8lbTbDepPq2BHY3JlrRoLeJ3HbVtIJzlK8&_nc_zt=23&_nc_ht=scontent.fccu2-1.fna&_nc_gid=ph0jZ1bpc_NreCmqlgEeDg&oh=00_AfMt7HKa1MVnJSXuuIcnru-W7ZLKKKKbl_kAh9xftYBK-g&oe=685877EB",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/1903377057087062",
+          "postedAt": ""
+        },
+        {
+          "title": "Voiture captiva ltz phase 1   intérieur cuir tres propre entretiens bien fait en tout jeante 18\"\"",
+          "price": "MGA30,000",
+          "desc": "No Description",
+          "image": "https://scontent.fccu2-1.fna.fbcdn.net/v/t39.30808-6/506821232_4426806320880149_2438436398302352843_n.jpg?stp=c0.79.720.720a_dst-jpg_s565x565_tt6&_nc_cat=110&ccb=1-7&_nc_sid=454cf4&_nc_ohc=MeP8-RgdojkQ7kNvwHNh5Hy&_nc_oc=AdlQG_-19X5Aa3U2w4jSG_koc6Tc4rQYqW0W2aTynZRTDnbTpG_tt8rGqEn4lgrLUEA&_nc_zt=23&_nc_ht=scontent.fccu2-1.fna&_nc_gid=ph0jZ1bpc_NreCmqlgEeDg&oh=00_AfO72OFvWxEkCTNcmrpw2C-IdCHDLzEAR4DvNM_aFzKNZw&oe=68589639",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/742868028079325",
+          "postedAt": ""
+        },
+        {
+          "title": "voiture",
+          "price": "$13,600,000",
+          "desc": "No Description",
+          "image": "https://scontent.fccu2-3.fna.fbcdn.net/v/t45.5328-4/505717497_1451672696186460_8631457112391714592_n.jpg?stp=c0.87.526.526a_dst-jpg_p526x395_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=SlE4CUIoqucQ7kNvwH5N09K&_nc_oc=AdnjnUYvVJ7jgYfryaO24ZvX2jyXdoCV-u5BBqkiwhsUIouklryR-gAqmqukyFj37tA&_nc_zt=23&_nc_ht=scontent.fccu2-3.fna&_nc_gid=ph0jZ1bpc_NreCmqlgEeDg&oh=00_AfPJgfCJWYFqgZ_zvie44AFlAaFE7wwSl8fjdU6UM4sHbw&oe=68589F26",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/695939306381896",
+          "postedAt": ""
+        }
+      ],
+      "finishedAt": "2025-06-18T13:23:33.547Z",
+      "totalItems": 13
+    },
+    "datasetId": "dlRPBCzVUnFDdghqT",
+    "actorRunId": "PeyjGi5b7BdetcPUG",
+    "updatedAt": "2025-06-18T13:23:33.547Z"
+  },
+  {
+    "id": "sess_b1DotXWwQK",
+    "url": "https://www.facebook.com/marketplace/110080935687758/search/?query=Voiture",
+    "status": "completed",
+    "createdAt": "2025-06-18T13:23:49.273Z",
+    "isPaid": false,
+    "data": {
+      "nbItems": 14,
+      "startedAt": "2025-06-18T13:23:49.273Z",
+      "previewItems": [
+        {
+          "title": "Voiture captiva ltz phase 1   intérieur cuir tres propre entretiens bien fait en tout jeante 18\"\"",
+          "price": "MGA30,000",
+          "desc": "No Description",
+          "image": "https://scontent.fltn3-2.fna.fbcdn.net/v/t39.30808-6/506821232_4426806320880149_2438436398302352843_n.jpg?stp=c0.79.720.720a_dst-jpg_s565x565_tt6&_nc_cat=110&ccb=1-7&_nc_sid=454cf4&_nc_ohc=MeP8-RgdojkQ7kNvwFLCyv9&_nc_oc=AdkJaElTfTEYjrg-qy7HPFa-PxcXNxwU7ihyn6drnEL9NqSw8UGxaW-U_NZ2KzRKPC0&_nc_zt=23&_nc_ht=scontent.fltn3-2.fna&_nc_gid=eskuDdEfz4BWCON4xihyFw&oh=00_AfOhVkHoCxrA019PbARU1xf259lHLVt5OuwSxvSsyponPA&oe=68589639",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/742868028079325",
+          "postedAt": ""
+        },
+        {
+          "title": "Voiture",
+          "price": "$95",
+          "desc": "No Description",
+          "image": "https://scontent.fltn3-1.fna.fbcdn.net/v/t45.5328-4/509750314_3016023748579238_5223517753614843742_n.jpg?stp=c244.0.540.540a_dst-jpg_p180x540_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=gnYVFU_G1PAQ7kNvwHLKBWj&_nc_oc=AdkpbZIBTnLV1INMcOshT-NBBL3tPfSMnHZ7NGLqCLI6oZbU94wdr9urxREZc8OBEZI&_nc_zt=23&_nc_ht=scontent.fltn3-1.fna&_nc_gid=eskuDdEfz4BWCON4xihyFw&oh=00_AfOmos5Y6XgrGjHLrGBayZvNem5Zur6qrlL3T0fwwUeTJg&oe=685877EB",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/1903377057087062",
+          "postedAt": ""
+        },
+        {
+          "title": "voiture",
+          "price": "$13,600,000",
+          "desc": "No Description",
+          "image": "https://scontent.fltn3-1.fna.fbcdn.net/v/t45.5328-4/505717497_1451672696186460_8631457112391714592_n.jpg?stp=c0.87.526.526a_dst-jpg_p526x395_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=SlE4CUIoqucQ7kNvwE1P1v0&_nc_oc=AdlStskkhiXpqEqIKxlVXEg9gJArKZY5KQNrLBxXH6Dm5uBXudfTPJqmI43QtZYmmyE&_nc_zt=23&_nc_ht=scontent.fltn3-1.fna&_nc_gid=eskuDdEfz4BWCON4xihyFw&oh=00_AfN1yGlw67SrR2a1wKnzrLovJqMfi25tYsUqAc809G1mFQ&oe=68589F26",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/695939306381896",
+          "postedAt": ""
+        }
+      ],
+      "finishedAt": "2025-06-18T13:24:03.891Z",
+      "totalItems": 14
+    },
+    "datasetId": "aVrabQQTTQDxSvGtk",
+    "actorRunId": "X0h5KfSsi0L3NcrCo",
+    "updatedAt": "2025-06-18T13:24:03.891Z"
   }
 ]
