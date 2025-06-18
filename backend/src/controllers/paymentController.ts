@@ -96,9 +96,25 @@ export class PaymentController {
         throw new ApiError(400, 'Stripe signature is missing');
       }
       
+      // Pour les webhooks Stripe, le corps de la requête doit être brut (Buffer ou string)
+      // Vérifions si req.body est déjà un Buffer ou une chaîne
+      let payload = req.body;
+      
+      if (Buffer.isBuffer(payload)) {
+        // Si c'est un Buffer, c'est parfait
+        logger.info('Payload reçu comme Buffer, format correct');
+      } else if (typeof payload === 'string') {
+        // Si c'est une chaîne, c'est aussi bon
+        logger.info('Payload reçu comme string, format correct');
+      } else if (typeof payload === 'object') {
+        // Si c'est un objet, il a déjà été parsé par express.json()
+        logger.warn('Payload reçu comme objet JSON parsé, conversion en string');
+        payload = JSON.stringify(payload);
+      }
+      
       // Verify the event with the signature and secret
       const event = stripeService.constructEvent(
-        req.body,
+        payload,
         signature as string
       );
       
