@@ -1,0 +1,500 @@
+{
+  "sessionId": "sess_6hBQhTXy1U",
+  "datasetId": "CquRYu7a5IC1Q0Fh0",
+  "timestamp": "2025-06-16T14:23:37.963Z",
+  "totalItems": 101,
+  "previewItems": [
+    {
+      "title": "Appartement A louer",
+      "price": "200,000 ",
+      "desc": "No Description",
+      "image": "",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/3684096911734737",
+      "postedAt": ""
+    },
+    {
+      "title": "Appartement a louer",
+      "price": "200,000 ",
+      "desc": "No Description",
+      "image": "",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/2103736646811707",
+      "postedAt": ""
+    },
+    {
+      "title": "🔴🟠🟡 🏢🏣🏨 APPARTEMENT T3 MEUBLÉ A LOUER A  AMBOHIMIANDRA 🏠🏡🏘 🟢🔵🟣",
+      "price": "1,800,000 ",
+      "desc": "No Description",
+      "image": "",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1223951416034633",
+      "postedAt": ""
+    }
+  ],
+  "allItems": [
+    {
+      "id": "3684096911734737",
+      "primary_listing_photo": {
+        "image": {
+          "uri": "https://scontent.fnjf7-2.fna.fbcdn.net/v/t45.5328-4/485932241_1249030266704536_1636985348211342797_n.jpg?stp=c330.0.540.540a_dst-jpg_p180x540_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=QeJQ7O4hZDkQ7kNvwH9ZN2Q&_nc_oc=Adkn23vLZn6i_lNZ7BPdyciWlgW5JorUTW-RTv9p1XLKKl2u4L_yZm8p5rTr3oT1dIU&_nc_zt=23&_nc_ht=scontent.fnjf7-2.fna&_nc_gid=MIgfiAR31vYcVTc-i--EYg&oh=00_AfP_q2yUsIWMbkXbNTeVKOtwMSa3TBdqr4x6VUqrpSzuaA&oe=6855FBCC"
+        },
+        "id": "1249030263371203"
+      },
+      "listing_price": {
+        "formatted_amount": "MGA200,000",
+        "amount_with_offset_in_currency": "4485",
+        "amount": "200000.0"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "reverse_geocode": {
+          "city": "Antananarivo",
+          "state": "",
+          "city_page": {
+            "display_name": "Antananarivo, Madagascar",
+            "id": "110080935687758"
+          }
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "1569171756675761",
+      "marketplace_listing_title": "Appartement A louer",
+      "custom_title": null,
+      "custom_sub_titles_with_rendering_flags": [],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/3684096911734737"
+    },
+    {
+      "id": "2103736646811707",
+      "primary_listing_photo": {
+        "image": {
+          "uri": "https://scontent.fnjf7-2.fna.fbcdn.net/v/t45.5328-4/503057760_1793760284880390_5567968741029865164_n.jpg?stp=c89.0.540.540a_dst-jpg_p180x540_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=FMa018Xs2moQ7kNvwHXwaXM&_nc_oc=Adltw0nBDrS1AN7aj77hoIAF1rhyXZ8HutRJbdKBH08M8OqWGcjxqczwA72Q1GdiZYk&_nc_zt=23&_nc_ht=scontent.fnjf7-2.fna&_nc_gid=MIgfiAR31vYcVTc-i--EYg&oh=00_AfOxVpYbqQTxHSWDumbmkdxnLM3b9KFdi0PyCugcWFjCiw&oe=6855F443"
+        },
+        "id": "1793760281547057"
+      },
+      "listing_price": {
+        "formatted_amount": "MGA200,000",
+        "amount_with_offset_in_currency": "4485",
+        "amount": "200000.0"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "reverse_geocode": {
+          "city": "Antananarivo",
+          "state": "",
+          "city_page": {
+            "display_name": "Antananarivo, Madagascar",
+            "id": "110080935687758"
+          }
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "1468271819871448",
+      "marketplace_listing_title": "Appartement a louer",
+      "custom_title": "Appartement a louer",
+      "custom_sub_titles_with_rendering_flags": [],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/2103736646811707"
+    },
+    {
+      "id": "1223951416034633",
+      "primary_listing_photo": {
+        "image": {
+          "uri": "https://scontent.fnjf7-2.fna.fbcdn.net/v/t45.5328-4/495045990_676758208278686_2024786449732164582_n.jpg?stp=c89.0.540.540a_dst-jpg_p180x540_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=KW6uSL9VougQ7kNvwG2FGHS&_nc_oc=Adns-FbN0p1A5o7C9iG5G0HbVTKkRnP3wUtcNufw-Ud7CUhuz99FQNDnPUj81aO1YvQ&_nc_zt=23&_nc_ht=scontent.fnjf7-2.fna&_nc_gid=MIgfiAR31vYcVTc-i--EYg&oh=00_AfMJPslLCxJU9ho6cEJZSjqUJsxqaRRXL-GA4HQX4jfkFw&oe=685608DE"
+        },
+        "id": "676758204945353"
+      },
+      "listing_price": {
+        "formatted_amount": "MGA1,800,000",
+        "amount_with_offset_in_currency": "40365",
+        "amount": "1800000.0"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "reverse_geocode": {
+          "city": "Antananarivo",
+          "state": "",
+          "city_page": {
+            "display_name": "Antananarivo, Madagascar",
+            "id": "110080935687758"
+          }
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "1569171756675761",
+      "marketplace_listing_title": "🔴🟠🟡 🏢🏣🏨 APPARTEMENT T3 MEUBLÉ A LOUER A  AMBOHIMIANDRA 🏠🏡🏘 🟢🔵🟣",
+      "custom_title": null,
+      "custom_sub_titles_with_rendering_flags": [],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/1223951416034633"
+    },
+    {
+      "id": "2136635393447004",
+      "primary_listing_photo": {
+        "image": {
+          "uri": "https://scontent.fnjf7-2.fna.fbcdn.net/v/t39.30808-6/495119250_10232924422405286_5870731902581207971_n.jpg?stp=c120.0.720.720a_dst-jpg_s565x565_tt6&_nc_cat=111&ccb=1-7&_nc_sid=454cf4&_nc_ohc=bh82pY3MNh8Q7kNvwEzYKaZ&_nc_oc=AdmCa_mZLbmfONhSeE4ZPKoNcuw2pst7gSjelGUKmZnspe4Mhd7XMY9FTMnTjN67eoA&_nc_zt=23&_nc_ht=scontent.fnjf7-2.fna&_nc_gid=MIgfiAR31vYcVTc-i--EYg&oh=00_AfPtWkKCQ2EWzMgW32yqQvxmKkGto2UbSXRqKqT6M8uucA&oe=6855FB49"
+        },
+        "id": "10232540252921289"
+      },
+      "listing_price": {
+        "formatted_amount": "MGA900,000",
+        "amount_with_offset_in_currency": "20183",
+        "amount": "900000.0"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "reverse_geocode": {
+          "city": "Antananarivo",
+          "state": "",
+          "city_page": {
+            "display_name": "Antananarivo, Madagascar",
+            "id": "110080935687758"
+          }
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "1468271819871448",
+      "marketplace_listing_title": "À LOUER – Appartements spacieux & modulables à 2 pas de l’école BIRD - Ambohidraserika – Mandroseza",
+      "custom_title": "À LOUER – Appartements spacieux & modulables à 2 pas de l’école BIRD - Ambohidraserika – Mandroseza",
+      "custom_sub_titles_with_rendering_flags": [],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/2136635393447004"
+    },
+    {
+      "id": "585657167895201",
+      "primary_listing_photo": {
+        "image": {
+          "uri": "https://scontent.fnjf7-2.fna.fbcdn.net/v/t39.30808-6/501088312_1672946503364728_4209666718844554933_n.jpg?stp=c0.84.720.720a_dst-jpg_s565x565_tt6&_nc_cat=100&ccb=1-7&_nc_sid=946e27&_nc_ohc=tLbafweRHy4Q7kNvwFTG9E2&_nc_oc=AdnnnSC7x-q1l6dJIy01aX3z2th2XjXTEtDj_-oB9sEXXEqh51mo01SX_Jzo7bRNjWY&_nc_zt=23&_nc_ht=scontent.fnjf7-2.fna&_nc_gid=MIgfiAR31vYcVTc-i--EYg&oh=00_AfPF7ESHWkPOTXGh9lBP3b4AgqX-z5G3693so7yf3MojdQ&oe=68561455"
+        },
+        "id": "1672946496698062"
+      },
+      "listing_price": {
+        "formatted_amount": "MGA1,200,000",
+        "amount_with_offset_in_currency": "26910",
+        "amount": "1200000.0"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "reverse_geocode": {
+          "city": "Antananarivo",
+          "state": "",
+          "city_page": {
+            "display_name": "Antananarivo, Madagascar",
+            "id": "110080935687758"
+          }
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "1468271819871448",
+      "marketplace_listing_title": "Appartement T3 à Mahamasina",
+      "custom_title": "Appartement T3 à Mahamasina",
+      "custom_sub_titles_with_rendering_flags": [],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/585657167895201"
+    },
+    {
+      "id": "2387801781591511",
+      "primary_listing_photo": {
+        "image": {
+          "uri": "https://scontent.fnjf7-2.fna.fbcdn.net/v/t45.5328-4/501080823_1350170302937166_1985490722644970794_n.jpg?stp=c0.87.526.526a_dst-jpg_p526x395_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=_p-bOoj_UJAQ7kNvwHeWSMz&_nc_oc=AdkzK8EVurQOeZ7aGLjsZKQ28HaCB0kXD_Eh5xp_7gDXfQM208WrFADRq8LiHng2wV4&_nc_zt=23&_nc_ht=scontent.fnjf7-2.fna&_nc_gid=MIgfiAR31vYcVTc-i--EYg&oh=00_AfO9cf5C7S3AWd7lfCXmqF0aNT-3yFjiAxHOzlYZNk4qXQ&oe=6855E060"
+        },
+        "id": "1350170299603833"
+      },
+      "listing_price": {
+        "formatted_amount": "MGA1,300,000",
+        "amount_with_offset_in_currency": "29153",
+        "amount": "1300000.0"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "reverse_geocode": {
+          "city": "Ambohidratrimo",
+          "state": "",
+          "city_page": {
+            "display_name": "Antananarivo, Madagascar",
+            "id": "110080935687758"
+          }
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "1468271819871448",
+      "marketplace_listing_title": "🔴🟠🟡 🏢🏣🏨 APPARTEMENT T3 au 1er étage À LOUER - IVATO 🏠🏡🏘 🟢🔵🟣",
+      "custom_title": "🔴🟠🟡 🏢🏣🏨 APPARTEMENT T3 au 1er étage À LOUER - IVATO 🏠🏡🏘 🟢🔵🟣",
+      "custom_sub_titles_with_rendering_flags": [],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/2387801781591511"
+    },
+    {
+      "id": "1030573962353243",
+      "primary_listing_photo": {
+        "image": {
+          "uri": "https://scontent.fnjf7-2.fna.fbcdn.net/v/t45.5328-4/495268480_947925427276173_4753561514501939098_n.jpg?stp=c0.0.526.526a_dst-jpg_p526x395_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=f0giPLtwyjUQ7kNvwGqvE1L&_nc_oc=Adm0LpkN_E6frHM7nKUxFhRnjbCzZoLnFPPQ2TKvsa-srLZxZ2u0dHmPQQThJw4eTfQ&_nc_zt=23&_nc_ht=scontent.fnjf7-2.fna&_nc_gid=MIgfiAR31vYcVTc-i--EYg&oh=00_AfOZpFGHXV1UziKZ2JT_2EvyXe1_6h5ATRq5_Lb0AqDvpg&oe=6855FE13"
+        },
+        "id": "947925423942840"
+      },
+      "listing_price": {
+        "formatted_amount": "$700,000",
+        "amount_with_offset_in_currency": "70000000",
+        "amount": "700000.00"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "reverse_geocode": {
+          "city": "Antananarivo",
+          "state": "",
+          "city_page": {
+            "display_name": "Antananarivo, Madagascar",
+            "id": "110080935687758"
+          }
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "1468271819871448",
+      "marketplace_listing_title": "Appartement A louer",
+      "custom_title": "Appartement A louer",
+      "custom_sub_titles_with_rendering_flags": [],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/1030573962353243"
+    },
+    {
+      "id": "2062811447539113",
+      "primary_listing_photo": {
+        "image": {
+          "uri": "https://scontent.fnjf7-2.fna.fbcdn.net/v/t45.5328-4/491770904_722113180390675_2522403019530115938_n.jpg?stp=c0.87.526.526a_dst-jpg_p526x395_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=UPiAXTNF3zUQ7kNvwGhkMaL&_nc_oc=AdnUWAEEEHyDMibmA62MJZfnE2jDKyMuA9NZQ0r9Xflt2RCmTd8-XOZfEpgzj5CzwG0&_nc_zt=23&_nc_ht=scontent.fnjf7-2.fna&_nc_gid=MIgfiAR31vYcVTc-i--EYg&oh=00_AfOxqmKHqtGnRWGd2euEa6_rNOlNa84cROBqa591AAfKjg&oe=685603AB"
+        },
+        "id": "722113177057342"
+      },
+      "listing_price": {
+        "formatted_amount": "MGA1,500,000",
+        "amount_with_offset_in_currency": "33638",
+        "amount": "1500000.0"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "reverse_geocode": {
+          "city": "Antananarivo",
+          "state": "",
+          "city_page": {
+            "display_name": "Antananarivo, Madagascar",
+            "id": "110080935687758"
+          }
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "1468271819871448",
+      "marketplace_listing_title": "🔴🟠🟡 🏢🏣🏨 APPARTEMENT T3  A LOUER A AMPEFILOHA 🏠🏡🏘 🟢🔵🟣",
+      "custom_title": "🔴🟠🟡 🏢🏣🏨 APPARTEMENT T3  A LOUER A AMPEFILOHA 🏠🏡🏘 🟢🔵🟣",
+      "custom_sub_titles_with_rendering_flags": [],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/2062811447539113"
+    },
+    {
+      "id": "1086737226682428",
+      "primary_listing_photo": {
+        "image": {
+          "uri": "https://scontent.fnjf7-2.fna.fbcdn.net/v/t39.30808-6/504150366_690895970430274_5106677307432327515_n.jpg?stp=c0.14.720.720a_dst-jpg_s565x565_tt6&_nc_cat=110&ccb=1-7&_nc_sid=454cf4&_nc_ohc=IjRgoSAbdpEQ7kNvwFhoIUV&_nc_oc=Adk126PkXGubc9WgtqPHwxXtbXS5ardKJ76Y8nEnLCZC8_XiCPdkQ998sIJ4C3cjkcE&_nc_zt=23&_nc_ht=scontent.fnjf7-2.fna&_nc_gid=MIgfiAR31vYcVTc-i--EYg&oh=00_AfNAmYCZeoMEBoXC6z0AE-uUbNQccZgBRZTPwkBzvUD_TA&oe=68560123"
+        },
+        "id": "690895913763613"
+      },
+      "listing_price": {
+        "formatted_amount": "MGA3,800,000",
+        "amount_with_offset_in_currency": "85215",
+        "amount": "3800000.0"
+      },
+      "strikethrough_price": {
+        "formatted_amount": "MGA4,000,000",
+        "amount": "4000000.0"
+      },
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "reverse_geocode": {
+          "city": "Antananarivo",
+          "state": "",
+          "city_page": {
+            "display_name": "Antananarivo, Madagascar",
+            "id": "110080935687758"
+          }
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "1468271819871448",
+      "marketplace_listing_title": "VILLA A LOUER",
+      "custom_title": "VILLA A LOUER",
+      "custom_sub_titles_with_rendering_flags": [],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/1086737226682428"
+    },
+    {
+      "id": "1588175061856154",
+      "primary_listing_photo": {
+        "image": {
+          "uri": "https://scontent.fnjf7-2.fna.fbcdn.net/v/t39.30808-6/505890131_746060634423051_7247133613357147048_n.jpg?stp=c0.106.960.960a_dst-jpg_s565x565_tt6&_nc_cat=108&ccb=1-7&_nc_sid=454cf4&_nc_ohc=VWE7gDzZ4E0Q7kNvwHZJhpY&_nc_oc=AdmfrKOXE6Oq2uy-rC6YC1yNqWzVJjm2tCd--Ispg83SncAJ6jSNHJ7cXI3VgaohpeA&_nc_zt=23&_nc_ht=scontent.fnjf7-2.fna&_nc_gid=MIgfiAR31vYcVTc-i--EYg&oh=00_AfMqwPq-EkqvbZxA8p_uog5NJzbbL8uFK1i46YzO0SHsjw&oe=6855F6E0"
+        },
+        "id": "725539639808484"
+      },
+      "listing_price": {
+        "formatted_amount": "MGA2,330,000",
+        "amount_with_offset_in_currency": "52250",
+        "amount": "2330000.0"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "reverse_geocode": {
+          "city": "Antananarivo",
+          "state": "",
+          "city_page": {
+            "display_name": "Antananarivo, Madagascar",
+            "id": "110080935687758"
+          }
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "1468271819871448",
+      "marketplace_listing_title": "𝑨𝑷𝑷𝑨𝑹𝑻𝑬𝑴𝑬𝑵𝑻 𝑻𝟒 𝑫𝑬 𝑺𝑻𝑨𝑵𝑫𝑰𝑵𝑮 𝑬𝑵 𝑳𝑶𝑪𝑨𝑻𝑰𝑶𝑵 𝑨 𝑻𝑨𝑳𝑨𝑻𝑨𝑴𝑨𝑻𝒀",
+      "custom_title": "𝑨𝑷𝑷𝑨𝑹𝑻𝑬𝑴𝑬𝑵𝑻 𝑻𝟒 𝑫𝑬 𝑺𝑻𝑨𝑵𝑫𝑰𝑵𝑮 𝑬𝑵 𝑳𝑶𝑪𝑨𝑻𝑰𝑶𝑵 𝑨 𝑻𝑨𝑳𝑨𝑻𝑨𝑴𝑨𝑻𝒀",
+      "custom_sub_titles_with_rendering_flags": [],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/1588175061856154"
+    }
+  ]
+}

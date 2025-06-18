@@ -1,0 +1,1303 @@
+[
+  {
+    "id": "4059636157628067",
+    "primary_listing_photo": {
+      "listing_image": {
+        "uri": "https://scontent.fist4-1.fna.fbcdn.net/v/t45.5328-4/508158679_1235467724171635_5028365331466006636_n.jpg?stp=c0.27.133.133a_dst-jpg_p133x133_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=YZm9TKwGn_wQ7kNvwEkGAMV&_nc_oc=AdlOggdFx669Pit4w2azbhXPF8nkkTEhh-YexJrCCIVjcVygsNKb2xiMHVNOPI2g9qg&_nc_zt=23&_nc_ht=scontent.fist4-1.fna&_nc_gid=4mrOlN7Rrti_RP7dBfdRSQ&oh=00_AfMg_myqDUKyjoAXdAxq2cXGztaMOviTeOXle-5G-a9CBA&oe=6854A1A8"
+      },
+      "id": "1235467720838302"
+    },
+    "listing_price": {
+      "amount": "0.0",
+      "currency": "MGA"
+    },
+    "strikethrough_price": null,
+    "comparable_price": null,
+    "comparable_price_type": null,
+    "location": {
+      "latitude": -18.915710449219,
+      "longitude": 47.521362304688,
+      "reverse_geocode_detailed": {
+        "city": "Antananarivo",
+        "state": "",
+        "postal_code": ""
+      }
+    },
+    "is_hidden": false,
+    "is_live": true,
+    "is_pending": false,
+    "is_sold": false,
+    "is_viewer_seller": false,
+    "min_listing_price": null,
+    "max_listing_price": null,
+    "marketplace_listing_category_id": "1468271819871448",
+    "marketplace_listing_title": "🏢 À Louer : Appartement T3 meublé duplex à Androhibe \nEntre Ivandry et Ambatobe\n130,6m² ~ RDC",
+    "custom_title": "🏢 À Louer : Appartement T3 meublé duplex à Androhibe \nEntre Ivandry et Ambatobe\n130,6m² ~ RDC",
+    "custom_sub_titles_with_rendering_flags": [],
+    "origin_group": null,
+    "listing_video": null,
+    "parent_listing": null,
+    "marketplace_listing_seller": null,
+    "delivery_types": [
+      "IN_PERSON"
+    ],
+    "listingUrl": "https://www.facebook.com/marketplace/item/4059636157628067",
+    "if_viewer_is_buyer": {
+      "marketplace_pdp_integrity_banner_strings_rewrite": null,
+      "id": "4059636157628067"
+    },
+    "story": null,
+    "redacted_description": {
+      "text": "🏢 À Louer : Appartement T3 meublé duplex à Androhibe \nEntre Ivandry et Ambatobe\n130,6m² ~ Au Rez de chaussé \n\nSpacieux living meublé ~ baie vitrée ~ terrasse\n🍽️ Cuisine placardée fermée \n🛏️ 2 chambres meublées placardées\n1 SDE + WC ~ WC visiteurs\n\nLoyer: 1300 euro/mois (l’équivalent en ariary)\nHT~ Hors charges\n\nAbonnement: 🏊 Piscine ~ 🧘 Salle de sport ~ 🔥 Hammam et massage\n🔋 Groupe (horaires de marche) ~ 💧 Citerne d’eau\n🔒 Gardiennage ~ 🚗 Parking\n\n📞 Contact :\n• 📱 +261 34 11 142 00 (WhatsApp)\n• ✉️ [hidden information]\n🔗 Réseaux sociaux : Megoo Immobilier\n(FB, IG, TikTok, YouTube, Snapchat, LinkedIn, Airbnb)"
+    },
+    "pdp_display_sections": [],
+    "marketplace_listing_category": {
+      "slug": "propertyrentals",
+      "id": "1468271819871448"
+    },
+    "formatted_price": {
+      "text": "FREE"
+    },
+    "additional_fees_description": null,
+    "fee_schedule_url": null,
+    "has_children": false,
+    "marketplace_listing_category_name": "Property to rent",
+    "inventory_count": null,
+    "legal_reporting_cta_type": null,
+    "legal_reporting_uri": null,
+    "messaging_enabled": true,
+    "listing_is_rejected": false,
+    "product_item": {
+      "id": "29951051837842622",
+      "boosted_marketplace_listing": null,
+      "promoted_listing": null
+    },
+    "seller_message_thread": null,
+    "is_checkout_enabled": false,
+    "is_draft": false,
+    "can_seller_edit": false,
+    "default_variant_listing": null,
+    "primary_mp_ent": {
+      "id": "4059636157628067"
+    },
+    "reportable_seller_type": null,
+    "reportable_ent_id": "29951051837842622",
+    "hidden_from_friends": "VISIBLE_TO_EVERYONE",
+    "can_share": true,
+    "share_uri": "https://www.facebook.com/marketplace/item/4059636157628067/",
+    "logging_id": "29951051837842622",
+    "listed_by": null,
+    "real_estate_listing_agent": null,
+    "bike_score_info": {
+      "score": null,
+      "description": null
+    },
+    "transit_score_info": {
+      "score": null,
+      "description": null
+    },
+    "walk_score_info": {
+      "score": null,
+      "description": null
+    },
+    "marketplace_bump_info": null,
+    "fi_enhanced_appeal_data": {
+      "use_fi_appeals": true,
+      "enforcement_instance_id": null
+    },
+    "listing_seller_notices": [],
+    "is_email_communication_enabled": false,
+    "nearby_schools": [],
+    "nearby_transits": [],
+    "is_map_eligible": false,
+    "home_address": null,
+    "co2_emission_rating_eu": null,
+    "energy_rating_eu": null,
+    "vertical_partner": null,
+    "unit_room_info": null,
+    "unit_area_info": null,
+    "unit_floor_plan_photo_list": [],
+    "virtual_tour_url": null,
+    "can_seller_change_availability": false,
+    "is_on_marketplace": true,
+    "messagingEnabled": true,
+    "cross_post_info": {
+      "all_listings": [
+        {
+          "is_on_marketplace": true,
+          "id": "4059636157628067"
+        }
+      ]
+    },
+    "active_order": null,
+    "rebuy_order_receipt": null,
+    "c2c_shipping_eligible": false,
+    "is_shipping_offered": false,
+    "cross_post_sync_metadata": null,
+    "most_recent_active_order_as_buyer": null,
+    "order_summaries": [],
+    "should_hide_pdp_shipping_content": true,
+    "shipping_profile": null,
+    "is_seller_business_onboarded": false,
+    "is_buy_now_enabled": false,
+    "is_purchase_protected": false,
+    "can_buyer_make_checkout_offer": false,
+    "is_cart_enabled": false,
+    "seller_cms": null,
+    "vacation_mode": null,
+    "all_message_threads": {
+      "is_empty": true
+    },
+    "should_show_txn_survey_on_mas": false,
+    "listing_inventory_type": "SINGLE_QUANTITY",
+    "incentive_campaign_for_free_shipping": null,
+    "first_message_suggested_value": null,
+    "sweepstake_enabled": false,
+    "sweepstake_status": "INVALID",
+    "sweepstake_content": null,
+    "is_lead_gen_form_enabled": false,
+    "shipping_offered": false,
+    "legal_disclosure_impressum_url": null,
+    "vehicle_seller_type": null,
+    "commerce_badges_info": {
+      "source_summary": null,
+      "badges": []
+    },
+    "real_estate_agent_logo": null,
+    "hide_external_link_on_pdp": false,
+    "external_url": null,
+    "real_estate_multi_listing": null,
+    "listing_photos": [
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-atl3-1.xx.fbcdn.net/v/t45.5328-4/508158679_1235467724171635_5028365331466006636_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=YZm9TKwGn_wQ7kNvwGGpNwX&_nc_oc=AdlClwGm978DyPGDCtsMmwoCKVKO09LO05czrRWEQVBnF_ydSpOfem_b4IE-kqQjAgSN05v5jlcjQxyuvRZhU2C5&_nc_zt=23&_nc_ht=scontent-atl3-1.xx&_nc_gid=RxW3GOsSpjayRicZaGB2AA&oh=00_AfMz7H_AaEJ72h2BVgk51fpkVEumM2_jdoW5J9rsEOOizA&oe=6854A1A8"
+        },
+        "id": "1235467720838302"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-atl3-1.xx.fbcdn.net/v/t45.5328-4/506306086_763050006048518_435095181585357981_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=58cCpBl5CQEQ7kNvwHHnIAq&_nc_oc=AdknfOT3KwHflSG72Urb42jRYfo9cvwcUIguIfdpIeNRKgN1ynpnN2tj5VOtQ1Yn0T5L4YWk85Wuhv1siBSZ6mkm&_nc_zt=23&_nc_ht=scontent-atl3-1.xx&_nc_gid=RxW3GOsSpjayRicZaGB2AA&oh=00_AfOr0SnmbJmVqYbpJSkyqBS4J1VpPMV6ZjdFdHAUtCnNlg&oe=68549AF4"
+        },
+        "id": "763050002715185"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-atl3-2.xx.fbcdn.net/v/t45.5328-4/506858149_1773552300235235_4946963498468425968_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=Df6LeLLQ48IQ7kNvwHTIGhL&_nc_oc=AdlOCXTPzGY52UrfKTPYI98mKqMwrhg9BVdTrHA5GX35Z6eEmxVTnaFNlxsA42oOK7Y8ofPILlfrDNqT6OB2-zaH&_nc_zt=23&_nc_ht=scontent-atl3-2.xx&_nc_gid=RxW3GOsSpjayRicZaGB2AA&oh=00_AfPYw7xtHzL3E0GITLEbl5bgLyfWiVIkvFAdFQIRHHUpKw&oe=6854B59A"
+        },
+        "id": "1773552296901902"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-atl3-2.xx.fbcdn.net/v/t45.5328-4/505813990_578752291955861_4570885255189546028_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=crwNH5KdbOAQ7kNvwFkAbFc&_nc_oc=Adnb4hakLWceUqsham9vqB6E21wmbwL9zlsPdl-gGzdV9up7XSTB3AgAiJKUv4V3nTgNsEa2eY8IL8IJxnmEvL1i&_nc_zt=23&_nc_ht=scontent-atl3-2.xx&_nc_gid=RxW3GOsSpjayRicZaGB2AA&oh=00_AfPG56YF8xtW0BBDrzjQE_bHSdDYlaFMnNhhG6XmMxac0g&oe=6854B961"
+        },
+        "id": "578752288622528"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-atl3-1.xx.fbcdn.net/v/t45.5328-4/502887916_1252479999786370_7648091511863364296_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=-omydq7HcvAQ7kNvwEJ9vYl&_nc_oc=AdkSxcgDo2sG3A6hD4UcK5M1Ye1m1E57ZOUbv0biWngbR-ptgm-IKuZB4romXyxX7TkhbCd6oObs3ix71h3Uh20W&_nc_zt=23&_nc_ht=scontent-atl3-1.xx&_nc_gid=RxW3GOsSpjayRicZaGB2AA&oh=00_AfN95kB5xydVnivuFF63F69hhaB4V-jIQl9hcaNOnGN0yA&oe=6854BEC1"
+        },
+        "id": "1252479996453037"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-atl3-2.xx.fbcdn.net/v/t45.5328-4/505423428_519077421196053_5585278567875973397_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=GPKdnXgnXpcQ7kNvwETGcwO&_nc_oc=AdnGBpXZ8TIpGKoxnCtFokKmUq2rA5o_21p1-IExd5hSqMgWqQWzoqP5gBAY0mAQq1fwkpMdxn4B7_Ema5w6DaND&_nc_zt=23&_nc_ht=scontent-atl3-2.xx&_nc_gid=RxW3GOsSpjayRicZaGB2AA&oh=00_AfOs9mCLAE51A2CXocBCpqQWAX1xnWKN_Wfg0cdwUa1PtQ&oe=6854C552"
+        },
+        "id": "519077414529387"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-atl3-3.xx.fbcdn.net/v/t45.5328-4/502867776_10008302032616156_1354981829448360885_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=c5nIhOW7qIEQ7kNvwGSbXqX&_nc_oc=AdmaGLsQ_BMa3pFh1ruSwf78ldeGqJlYR-y6L9sCx4KWrScWCSXMwA6o75tUT_Uob_bS4WmUlvZ0zaos8WG9g8Aa&_nc_zt=23&_nc_ht=scontent-atl3-3.xx&_nc_gid=RxW3GOsSpjayRicZaGB2AA&oh=00_AfOPTKvlsVpSG4vmTpOyofF1X4Q9jo18POIr91uLSCsNAQ&oe=6854C807"
+        },
+        "id": "10008302029282823"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-atl3-3.xx.fbcdn.net/v/t45.5328-4/502802751_701306719533831_1994158605886260109_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=0yvl8O7gpHEQ7kNvwExMiS4&_nc_oc=AdlUqp4wYBYl1qGmJxW7kwprnENGq_XHmjcWYa0EkBWc7ElYYgiG-bIA5paDgHd1XWFg5ccmvDC7wwtunarj_Otj&_nc_zt=23&_nc_ht=scontent-atl3-3.xx&_nc_gid=RxW3GOsSpjayRicZaGB2AA&oh=00_AfNt4CUk6T4cItlRVj-JFuy2_Rsd4DLKgVpXBIpl-9g0FA&oe=6854AA2B"
+        },
+        "id": "701306716200498"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-atl3-3.xx.fbcdn.net/v/t45.5328-4/504282720_727710672951840_9102419868459015628_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=jfX4J_lqMi8Q7kNvwFckZST&_nc_oc=AdkWc5APat7uEaYKOXigOlnL1jbuqS34oTN1EtDg91sgSWxXEvRTUif0G6mpDF0GPCy9isCEcda4BhVt-_lv4ANY&_nc_zt=23&_nc_ht=scontent-atl3-3.xx&_nc_gid=RxW3GOsSpjayRicZaGB2AA&oh=00_AfOeRCAc2mnplHLZMnyod6WoQTNzKxlLosDVOglOa05IYw&oe=6854C34C"
+        },
+        "id": "727710669618507"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-atl3-2.xx.fbcdn.net/v/t45.5328-4/502799396_1359704578478959_5867282236130564552_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=IG6kGlZEMaIQ7kNvwE27XsC&_nc_oc=Adkh5IVv6FqkeGVEmqZsxaoGbS7b4ipFPA1U0Y0dNSTICXR1zrCVkukDU3_PtEVO3CTEBc5nrJvZ5CPCJnUUwz2i&_nc_zt=23&_nc_ht=scontent-atl3-2.xx&_nc_gid=RxW3GOsSpjayRicZaGB2AA&oh=00_AfPeeiqp4ULPZfM43_xTYGTRshchAcAgs64nGD3rDBovRw&oe=6854AD8F"
+        },
+        "id": "1359704575145626"
+      }
+    ],
+    "pre_recorded_videos": []
+  },
+  {
+    "id": "2192736401174911",
+    "primary_listing_photo": {
+      "listing_image": {
+        "uri": "https://scontent-atl3-1.xx.fbcdn.net/v/t45.5328-4/502712320_1157630712803477_6965127651882837540_n.jpg?stp=c0.27.133.133a_dst-jpg_p133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=_nHWd6Kt13AQ7kNvwEdG7dq&_nc_oc=AdnQ44yy40GIGlbBPku5ruT4WiPZ_NJpy9cCcZwoO-Nhr0ggGCcgVXbTb81-cB3qWBg&_nc_zt=23&_nc_ht=scontent-atl3-1.xx&_nc_gid=GEgLvwIOPQdPxQsTKhIhOw&oh=00_AfMNBiEoOXMcluF06Wab81T93IQ1vYr4UUUKH6sR2UpOdg&oe=68549FEE"
+      },
+      "id": "1157630702803478"
+    },
+    "listing_price": {
+      "amount": "0.0",
+      "currency": "MGA"
+    },
+    "strikethrough_price": null,
+    "comparable_price": null,
+    "comparable_price_type": null,
+    "location": {
+      "latitude": -18.899230957031,
+      "longitude": 47.532348632812,
+      "reverse_geocode_detailed": {
+        "city": "Antananarivo",
+        "state": "",
+        "postal_code": ""
+      }
+    },
+    "is_hidden": false,
+    "is_live": true,
+    "is_pending": false,
+    "is_sold": false,
+    "is_viewer_seller": false,
+    "min_listing_price": null,
+    "max_listing_price": null,
+    "marketplace_listing_category_id": "1468271819871448",
+    "marketplace_listing_title": "À louer : Appartement T2 Meublé Haut Standing \n\nSitué à Androhibe près de Ivandry \n\nLiving - Balcon",
+    "custom_title": "À louer : Appartement T2 Meublé Haut Standing \n\nSitué à Androhibe près de Ivandry \n\nLiving - Balcon",
+    "custom_sub_titles_with_rendering_flags": [],
+    "origin_group": null,
+    "listing_video": null,
+    "parent_listing": null,
+    "marketplace_listing_seller": null,
+    "delivery_types": [
+      "IN_PERSON"
+    ],
+    "listingUrl": "https://www.facebook.com/marketplace/item/2192736401174911",
+    "if_viewer_is_buyer": {
+      "marketplace_pdp_integrity_banner_strings_rewrite": null,
+      "id": "2192736401174911"
+    },
+    "story": null,
+    "redacted_description": {
+      "text": "À louer : Appartement T2 Meublé Haut Standing \n\nSitué à Androhibe près de Ivandry \n\nLiving - Balcon - Cuisine équipée\nChambre placardée -  climatisée - balcon\nSalle d’eau attenante - Toilettes - Buanderie\n\nSalle de sport - Rooftop aménagé - Barbecue\nAscenseur - Groupe électrogène - Surpresseur\n\n📞 Contact : +261 34 94 94 113 (WhatsApp)"
+    },
+    "pdp_display_sections": [],
+    "marketplace_listing_category": {
+      "slug": "propertyrentals",
+      "id": "1468271819871448"
+    },
+    "formatted_price": {
+      "text": "FREE"
+    },
+    "additional_fees_description": null,
+    "fee_schedule_url": null,
+    "has_children": false,
+    "marketplace_listing_category_name": "Rentals",
+    "inventory_count": null,
+    "legal_reporting_cta_type": null,
+    "legal_reporting_uri": null,
+    "messaging_enabled": true,
+    "listing_is_rejected": false,
+    "product_item": {
+      "id": "9974786285970371",
+      "boosted_marketplace_listing": null,
+      "promoted_listing": null
+    },
+    "seller_message_thread": null,
+    "is_checkout_enabled": false,
+    "is_draft": false,
+    "can_seller_edit": false,
+    "default_variant_listing": null,
+    "primary_mp_ent": {
+      "id": "2192736401174911"
+    },
+    "reportable_seller_type": null,
+    "reportable_ent_id": "9974786285970371",
+    "hidden_from_friends": "VISIBLE_TO_EVERYONE",
+    "can_share": true,
+    "share_uri": "https://www.facebook.com/marketplace/item/2192736401174911/",
+    "logging_id": "9974786285970371",
+    "listed_by": null,
+    "real_estate_listing_agent": null,
+    "bike_score_info": {
+      "score": null,
+      "description": null
+    },
+    "transit_score_info": {
+      "score": null,
+      "description": null
+    },
+    "walk_score_info": {
+      "score": null,
+      "description": null
+    },
+    "marketplace_bump_info": null,
+    "fi_enhanced_appeal_data": {
+      "use_fi_appeals": true,
+      "enforcement_instance_id": null
+    },
+    "listing_seller_notices": [],
+    "is_email_communication_enabled": false,
+    "nearby_schools": [],
+    "nearby_transits": [],
+    "is_map_eligible": false,
+    "home_address": null,
+    "co2_emission_rating_eu": null,
+    "energy_rating_eu": null,
+    "vertical_partner": null,
+    "unit_room_info": null,
+    "unit_area_info": null,
+    "unit_floor_plan_photo_list": [],
+    "virtual_tour_url": null,
+    "can_seller_change_availability": false,
+    "is_on_marketplace": true,
+    "messagingEnabled": true,
+    "cross_post_info": {
+      "all_listings": [
+        {
+          "is_on_marketplace": true,
+          "id": "2192736401174911"
+        }
+      ]
+    },
+    "active_order": null,
+    "rebuy_order_receipt": null,
+    "c2c_shipping_eligible": false,
+    "is_shipping_offered": false,
+    "cross_post_sync_metadata": null,
+    "most_recent_active_order_as_buyer": null,
+    "order_summaries": [],
+    "should_hide_pdp_shipping_content": true,
+    "shipping_profile": null,
+    "is_seller_business_onboarded": false,
+    "is_buy_now_enabled": false,
+    "is_purchase_protected": false,
+    "can_buyer_make_checkout_offer": false,
+    "is_cart_enabled": false,
+    "seller_cms": null,
+    "vacation_mode": null,
+    "all_message_threads": {
+      "is_empty": true
+    },
+    "should_show_txn_survey_on_mas": false,
+    "listing_inventory_type": "SINGLE_QUANTITY",
+    "incentive_campaign_for_free_shipping": null,
+    "first_message_suggested_value": null,
+    "sweepstake_enabled": false,
+    "sweepstake_status": "INVALID",
+    "sweepstake_content": null,
+    "is_lead_gen_form_enabled": false,
+    "shipping_offered": false,
+    "legal_disclosure_impressum_url": null,
+    "vehicle_seller_type": null,
+    "commerce_badges_info": {
+      "source_summary": null,
+      "badges": []
+    },
+    "real_estate_agent_logo": null,
+    "hide_external_link_on_pdp": false,
+    "external_url": null,
+    "real_estate_multi_listing": null,
+    "listing_photos": [
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/502712320_1157630712803477_6965127651882837540_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=_nHWd6Kt13AQ7kNvwETidS7&_nc_oc=AdlX4VrG9feNYJ9rncZKOIhMD4r4iZZXN1oh50EdJFZcYxygN-W6QSUnoONNAEqpTTU&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=T2FRSwg-_P6UVojEqFuf8g&oh=00_AfO8psbQCDcsGtodUhTGxqlG2Nf_3DimI94zzZXb-qa0vA&oe=68549FEE"
+        },
+        "id": "1157630702803478"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/473197729_1312545616830522_1742277354836304049_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=k3oZzWvoNqcQ7kNvwEo08Qa&_nc_oc=Admy1GFoBUg-YZGJtU4dIRdmVCSnfvaVWLhGjHJ4-6fsguppwJNXTMQUZc72bWe57cQ&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=T2FRSwg-_P6UVojEqFuf8g&oh=00_AfOQjM_bifBKcPovwx_xjpFO6Ip-ayBKQvUCKnigF7Uhpw&oe=6854B0EA"
+        },
+        "id": "1312545613497189"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/473213554_625563376638821_6865736863512340903_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=h5HEmQhuFUQQ7kNvwGjjCfi&_nc_oc=AdkN6Rd-xaU7uYyYsaRK5I4loT2_ARxSlVuUkG1Tuv0PNhG8RoFcj99zuYudRvw2T44&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=T2FRSwg-_P6UVojEqFuf8g&oh=00_AfMRr5Xk_BzRA6eDoZIKUf_zzHtDzmXsG7kcGho2xsG4XQ&oe=68549671"
+        },
+        "id": "625563369972155"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/502859671_1831799680720243_604367301393490620_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=k_3YDOrxthUQ7kNvwFfdzj0&_nc_oc=AdkfZgE2tgyWi4Oz6k8GVPdVn5kiBYBmz_kP6gONBWt_jORfaLO6AfHj59iPU1GHgQs&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=T2FRSwg-_P6UVojEqFuf8g&oh=00_AfNBXWxXC6_RUnUuLpGSp5Of8uJOnD1gcpyj7UEZdoZ90A&oe=6854AD45"
+        },
+        "id": "1831799677386910"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/505383721_1503040327347656_7785793762226980582_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=YtvRKss8TjsQ7kNvwEOcbC1&_nc_oc=AdloKdBt-20uyB20ege6iGqj4ffr0h9rNIm9RwGMNUVQV1NrEc3hVJltctCj4vPcIg0&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=T2FRSwg-_P6UVojEqFuf8g&oh=00_AfNvumnAGy_bmafV6J4E9xnyCXeQJpdOhVlY0SYdPmEBpA&oe=6854AB0A"
+        },
+        "id": "1503040324014323"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/473217077_626095729977580_4795376265814687596_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=BrlBRxM9dkIQ7kNvwH9Yfls&_nc_oc=AdltrIIMaQKDTO3KfjozIqAtwJdS6O8krU8GFsCi5Gl14Pp3_raGW7WGVlDCq8YPVLk&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=T2FRSwg-_P6UVojEqFuf8g&oh=00_AfMAFWYP5mjasjwsLFcmag37I2hx2aZAr28V5VSW2LiMgg&oe=68549843"
+        },
+        "id": "626095726644247"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/502771378_721499217128732_761895524071028038_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=GUt7FZi9rhEQ7kNvwFxwwzz&_nc_oc=Admg3hi9Rzbt35nF7zBTsZGNC2rv35tDiWixxigfCHiSXcKDnCpHI99dbsZK3KPmm3M&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=T2FRSwg-_P6UVojEqFuf8g&oh=00_AfPOgG8-hLkvAzBFEJ5LHh6I14zfH0W044NWdzlid0sVUQ&oe=685497CC"
+        },
+        "id": "721499213795399"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/505140478_4040302426257145_374289095516011380_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=J5OeTop6G6kQ7kNvwHukP_z&_nc_oc=AdmplMS2Py0TRloRqvb-klxQ-cpxSkQ-zi8o0K6b9WRC6AjVJmg7re9ovbSkc6IY514&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=T2FRSwg-_P6UVojEqFuf8g&oh=00_AfOqcd3xgFWpfvY22mNWj-sGLzDqq1MG1wHJmQffuGRdsw&oe=68549455"
+        },
+        "id": "4040302422923812"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/502769771_2399329120451939_8663194654375688082_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=vEGI75XuyQkQ7kNvwFsV9Nv&_nc_oc=Adn7Qt2rczh9gEDHApEZQCIOce4OJLkrilxQVxK9aQgD6mj0Rnpe2pWn3muppSdIUh0&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=T2FRSwg-_P6UVojEqFuf8g&oh=00_AfNGAZgNSyIkXoBuhubeqdlNneUonjn_Wjn9zhoW3zLurw&oe=68549467"
+        },
+        "id": "2399329117118606"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/473208128_1113464593577866_8366867681762349017_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=_DrddmVjZL0Q7kNvwETiZMn&_nc_oc=Adn2KYMMKBnMbpd_YnEGuMe8xelroZ2t4WrkZEx48ZpOi2iyv1U1-nlnnyb9DMNsit0&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=T2FRSwg-_P6UVojEqFuf8g&oh=00_AfP5ZwWH6ePRfa0BwFiliulp0GRG9m8wzTkjpG9qrhAMaQ&oe=6854B84F"
+        },
+        "id": "1113464590244533"
+      }
+    ],
+    "pre_recorded_videos": []
+  },
+  {
+    "id": "1257226986047694",
+    "primary_listing_photo": {
+      "listing_image": {
+        "uri": "https://scontent.fbgi2-1.fna.fbcdn.net/v/t45.5328-4/508113742_1231591391956931_7666334906567806355_n.jpg?stp=c0.27.133.133a_dst-jpg_p133x133_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=5HxYTPjQ5SgQ7kNvwEZT21C&_nc_oc=AdnGuGgkg-isRHiw36b0zYPRbABWQp75IHQxDDIpGcioRnCkjpWYz0cbrSDvIMQAWic&_nc_zt=23&_nc_ht=scontent.fbgi2-1.fna&_nc_gid=OeoTymz2wARQS_65B-ET-g&oh=00_AfNrRvPbtXzH5w7gGH0zyJntjyMccHPwg8coCM2-THjhMw&oe=6854B07B"
+      },
+      "id": "1231591385290265"
+    },
+    "listing_price": {
+      "amount": "0.0",
+      "currency": "MGA"
+    },
+    "strikethrough_price": null,
+    "comparable_price": null,
+    "comparable_price_type": null,
+    "location": {
+      "latitude": -18.915710449219,
+      "longitude": 47.521362304688,
+      "reverse_geocode_detailed": {
+        "city": "Antananarivo",
+        "state": "",
+        "postal_code": ""
+      }
+    },
+    "is_hidden": false,
+    "is_live": true,
+    "is_pending": false,
+    "is_sold": false,
+    "is_viewer_seller": false,
+    "min_listing_price": null,
+    "max_listing_price": null,
+    "marketplace_listing_category_id": "1468271819871448",
+    "marketplace_listing_title": "🏢 À Louer : Appartement T3 meublé à Androhibe \nEntre Ivandry et Ambatobe\n101m² ~ Au 2ème étage",
+    "custom_title": "🏢 À Louer : Appartement T3 meublé à Androhibe \nEntre Ivandry et Ambatobe\n101m² ~ Au 2ème étage",
+    "custom_sub_titles_with_rendering_flags": [],
+    "origin_group": null,
+    "listing_video": null,
+    "parent_listing": null,
+    "marketplace_listing_seller": null,
+    "delivery_types": [
+      "IN_PERSON"
+    ],
+    "listingUrl": "https://www.facebook.com/marketplace/item/1257226986047694",
+    "if_viewer_is_buyer": {
+      "marketplace_pdp_integrity_banner_strings_rewrite": null,
+      "id": "1257226986047694"
+    },
+    "story": null,
+    "redacted_description": {
+      "text": "🏢 À Louer : Appartement T3 meublé à Androhibe \nEntre Ivandry et Ambatobe\n101m² ~ Au 2ème étage\n\nLiving meublé ~ baie vitrée ~ terrasse\n🍽️ Cuisine placardée fermée \n🛏️ 2 chambres meublées placardées\n1 SDE + WC ~ WC visiteurs\n\nLoyer: 1300 euro/mois (l’équivalent en ariary)\nHT~ Hors charges\n\nAbonnement: 🏊 Piscine ~ 🧘 Salle de sport ~ 🔥 Hammam et massage\n🔋 Groupe (horaires de marche) ~ 💧 Citerne d’eau\n🔒 Gardiennage ~ 🚗 Parking\n\n📞 Contact :\n• 📱 +261 34 11 142 00 (WhatsApp)\n• ✉️ [hidden information]\n🔗 Réseaux sociaux : Megoo Immobilier\n(FB, IG, TikTok, YouTube, Snapchat, LinkedIn, Airbnb)"
+    },
+    "pdp_display_sections": [],
+    "marketplace_listing_category": {
+      "slug": "propertyrentals",
+      "id": "1468271819871448"
+    },
+    "formatted_price": {
+      "text": "FREE"
+    },
+    "additional_fees_description": null,
+    "fee_schedule_url": null,
+    "has_children": false,
+    "marketplace_listing_category_name": "Rentals",
+    "inventory_count": null,
+    "legal_reporting_cta_type": null,
+    "legal_reporting_uri": null,
+    "messaging_enabled": true,
+    "listing_is_rejected": false,
+    "product_item": {
+      "id": "24704639145804829",
+      "boosted_marketplace_listing": null,
+      "promoted_listing": null
+    },
+    "seller_message_thread": null,
+    "is_checkout_enabled": false,
+    "is_draft": false,
+    "can_seller_edit": false,
+    "default_variant_listing": null,
+    "primary_mp_ent": {
+      "id": "1257226986047694"
+    },
+    "reportable_seller_type": null,
+    "reportable_ent_id": "24704639145804829",
+    "hidden_from_friends": "VISIBLE_TO_EVERYONE",
+    "can_share": true,
+    "share_uri": "https://www.facebook.com/marketplace/item/1257226986047694/",
+    "logging_id": "24704639145804829",
+    "listed_by": null,
+    "real_estate_listing_agent": null,
+    "bike_score_info": {
+      "score": null,
+      "description": null
+    },
+    "transit_score_info": {
+      "score": null,
+      "description": null
+    },
+    "walk_score_info": {
+      "score": null,
+      "description": null
+    },
+    "marketplace_bump_info": null,
+    "fi_enhanced_appeal_data": {
+      "use_fi_appeals": true,
+      "enforcement_instance_id": null
+    },
+    "listing_seller_notices": [],
+    "is_email_communication_enabled": false,
+    "nearby_schools": [],
+    "nearby_transits": [],
+    "is_map_eligible": false,
+    "home_address": null,
+    "co2_emission_rating_eu": null,
+    "energy_rating_eu": null,
+    "vertical_partner": null,
+    "unit_room_info": null,
+    "unit_area_info": null,
+    "unit_floor_plan_photo_list": [],
+    "virtual_tour_url": null,
+    "can_seller_change_availability": false,
+    "is_on_marketplace": true,
+    "messagingEnabled": true,
+    "cross_post_info": {
+      "all_listings": [
+        {
+          "is_on_marketplace": true,
+          "id": "1257226986047694"
+        }
+      ]
+    },
+    "active_order": null,
+    "rebuy_order_receipt": null,
+    "c2c_shipping_eligible": false,
+    "is_shipping_offered": false,
+    "cross_post_sync_metadata": null,
+    "most_recent_active_order_as_buyer": null,
+    "order_summaries": [],
+    "should_hide_pdp_shipping_content": true,
+    "shipping_profile": null,
+    "is_seller_business_onboarded": false,
+    "is_buy_now_enabled": false,
+    "is_purchase_protected": false,
+    "can_buyer_make_checkout_offer": false,
+    "is_cart_enabled": false,
+    "seller_cms": null,
+    "vacation_mode": null,
+    "all_message_threads": {
+      "is_empty": true
+    },
+    "should_show_txn_survey_on_mas": false,
+    "listing_inventory_type": "SINGLE_QUANTITY",
+    "incentive_campaign_for_free_shipping": null,
+    "first_message_suggested_value": null,
+    "sweepstake_enabled": false,
+    "sweepstake_status": "INVALID",
+    "sweepstake_content": null,
+    "is_lead_gen_form_enabled": false,
+    "shipping_offered": false,
+    "legal_disclosure_impressum_url": null,
+    "vehicle_seller_type": null,
+    "commerce_badges_info": {
+      "source_summary": null,
+      "badges": []
+    },
+    "real_estate_agent_logo": null,
+    "hide_external_link_on_pdp": false,
+    "external_url": null,
+    "real_estate_multi_listing": null,
+    "listing_photos": [
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/508113742_1231591391956931_7666334906567806355_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=5HxYTPjQ5SgQ7kNvwGBSNQq&_nc_oc=AdnosKZE9i3qxSCZykGkgkLB-RrOo_cyfGc8YEu53QEQ9P-pTOnNjIoS4_gtz4y6H8M&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=BNKFKuUIlfEOufbzLFK-SQ&oh=00_AfMW3pg1qnVyVAymxadmufEXBJMJgYnAguP5wmjkOrdckg&oe=6854B07B"
+        },
+        "id": "1231591385290265"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.5328-4/502677797_1189507922953686_1339513721339915479_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=4a_BDUuP-lgQ7kNvwHI4lra&_nc_oc=AdmF_x1dZQEmXBun3m2XTw4YFhWg6tcHNkPTGku8L7lahrCdPgyKs3scP-ZfbRUtWSU&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=BNKFKuUIlfEOufbzLFK-SQ&oh=00_AfPWNNdCxfKSBihf6yBXU6B9KIbm0iYKZhx84fh18b7itA&oe=6854C175"
+        },
+        "id": "1189507919620353"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.5328-4/505810707_1433564860983454_2824240229729318736_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=106&ccb=1-7&_nc_sid=247b10&_nc_ohc=-HfTd3P6jvsQ7kNvwGd5Afv&_nc_oc=AdnZRK78VJwYkixPyt0JCSqzAYwSUdZMGQ8x8I8h_xzrqcO0Qg1G9aZiDWU1arWX0Lw&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=BNKFKuUIlfEOufbzLFK-SQ&oh=00_AfPHiH_djXPNwwk9GLHOE6ycsc51LFxLE5gVu4LVVU5LYA&oe=6854C21D"
+        },
+        "id": "1433564854316788"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/506851324_580894114712064_734279802250841287_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=kI1O4abFevUQ7kNvwFnoljW&_nc_oc=Adnv_eFjvxMDCKgy9_2FRpEVKDLSrI_uyFc5vHLhLbAiLnpaZ_Q9v6LLKy7aSZz5xJQ&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=BNKFKuUIlfEOufbzLFK-SQ&oh=00_AfMmJucHs6U6-oQpTrxbCpNTPNkBCQSLokiquHpicnVuUQ&oe=6854C52A"
+        },
+        "id": "580894111378731"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/505517074_1219516373310821_3981844671276669343_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=WMhNNRYDO5cQ7kNvwHQNWO-&_nc_oc=AdlOtFdhHXMRUjsMkZxbfeSyCPC-nyGT1C6pBkpEfWZYq9Oo4xEMsQVZDzVdoBuzY3A&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=BNKFKuUIlfEOufbzLFK-SQ&oh=00_AfOKnalahyRjmKlqCnZcP1VY1pkQ75lPJrcD93nNZGLOSQ&oe=68549CA7"
+        },
+        "id": "1219516363310822"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/506014968_681258991399335_5622368122027027963_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=3gq16gXc6FgQ7kNvwFQfM2L&_nc_oc=AdmUq7cYd7--2cZ8q1IZE73OnrNB7Z9IqOoazh6OdqyWT1GSy1HqrxRCenVK9X1x7lw&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=BNKFKuUIlfEOufbzLFK-SQ&oh=00_AfO5o5kjkfeBp5P2bIFYCihyKgn8bDNKDrctRytltGzBdw&oe=6854BA7B"
+        },
+        "id": "681258988066002"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/503095975_1604622410225633_6316324084232764608_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=9eLXHV-eYo4Q7kNvwHHyyHM&_nc_oc=AdmPSQ3AhH-p6291eOPelvC6K4qZD2RmjdZ2YMxhfYORPvachntBI8U12E3ceutOeOM&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=BNKFKuUIlfEOufbzLFK-SQ&oh=00_AfMgNsCrCrPdrf4Fmfd_C133LvgD19-ptuFiQ3b1JwrdQg&oe=6854C92B"
+        },
+        "id": "1604622406892300"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/506901077_1257839156013353_1779043862733625255_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=tO9LnQ7z-UgQ7kNvwHeCG76&_nc_oc=Adl3jTr927dgxYAy6YiktuWlo-oyPQWUit0TkI9FNpbYuselNXTOfST4p2RyOYUYcq4&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=BNKFKuUIlfEOufbzLFK-SQ&oh=00_AfOzGsprhceqYWFzV5VFCdJDA6CzFNu6c_xy38JOeb_4Kg&oe=6854AA09"
+        },
+        "id": "1257839152680020"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/502809870_1900641657437530_6339060962763045533_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=diJIKUJ0QM0Q7kNvwGno3We&_nc_oc=AdmzNPFNcQGG9d8u6a5AHeH9lS0TOIp1um4UP15T12agVbESE4ZMGs8q_0TJMPy1T5s&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=BNKFKuUIlfEOufbzLFK-SQ&oh=00_AfNFDleW4Wjc_IRu7mhy2SqPDAPJiM4ags1LvsD_wYnCGA&oe=6854A2AE"
+        },
+        "id": "1900641654104197"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.5328-4/504572580_610186011453231_4214012291668289878_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=2hv3G80sbHMQ7kNvwHOzYPd&_nc_oc=Adluy1ixH_hdcoMpCcIOJg5yIuWaq_KuwgoXuQbXETOjBBouByG4KRe2xclMIuvATLM&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=BNKFKuUIlfEOufbzLFK-SQ&oh=00_AfN6VkUShmvPE5YB2CKTfJybRxU_i2gAJlejiR9cre-Wfw&oe=6854B90A"
+        },
+        "id": "610186008119898"
+      }
+    ],
+    "pre_recorded_videos": []
+  },
+  {
+    "id": "1121253676501795",
+    "primary_listing_photo": {
+      "listing_image": {
+        "uri": "https://scontent.fsdv1-2.fna.fbcdn.net/v/t45.5328-4/502399146_677103528559192_7382942200186329637_n.jpg?stp=c0.27.133.133a_dst-jpg_p133x133_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=HfNe1lLU1tAQ7kNvwEbyiho&_nc_oc=AdlYVaPo3WuInwwGoGf6E2VRuS_K6_h9IJZXfaIWsr0DTcP14C2URiRM5xBLs7VSihk&_nc_zt=23&_nc_ht=scontent.fsdv1-2.fna&_nc_gid=cZG0SPjIg6Akb-dJzxOddA&oh=00_AfMshIQBlxKkG0wF2FqypmZSI9aEoczBi3ygkZzRajdr8g&oe=68549B52"
+      },
+      "id": "677103525225859"
+    },
+    "listing_price": {
+      "amount": "0.0",
+      "currency": "MGA"
+    },
+    "strikethrough_price": null,
+    "comparable_price": null,
+    "comparable_price_type": null,
+    "location": {
+      "latitude": -18.899230957031,
+      "longitude": 47.532348632812,
+      "reverse_geocode_detailed": {
+        "city": "Antananarivo",
+        "state": "",
+        "postal_code": ""
+      }
+    },
+    "is_hidden": false,
+    "is_live": true,
+    "is_pending": false,
+    "is_sold": false,
+    "is_viewer_seller": false,
+    "min_listing_price": null,
+    "max_listing_price": null,
+    "marketplace_listing_category_id": "1468271819871448",
+    "marketplace_listing_title": "Grand Appartement T4 Meublé à louer ~ Ivandry\nPrès des écoles British School et École D",
+    "custom_title": "Grand Appartement T4 Meublé à louer ~ Ivandry\nPrès des écoles British School et École D",
+    "custom_sub_titles_with_rendering_flags": [],
+    "origin_group": null,
+    "listing_video": null,
+    "parent_listing": null,
+    "marketplace_listing_seller": null,
+    "delivery_types": [
+      "IN_PERSON"
+    ],
+    "listingUrl": "https://www.facebook.com/marketplace/item/1121253676501795",
+    "if_viewer_is_buyer": {
+      "marketplace_pdp_integrity_banner_strings_rewrite": null,
+      "id": "1121253676501795"
+    },
+    "story": null,
+    "redacted_description": {
+      "text": "Grand Appartement T4 Meublé à louer ~ Ivandry\nPrès des écoles British School et École D \n\nSuperficie de 300 m² ~ Dernier étage\n\nDouble salon lumineux avec baies vitrées – Très grande terrasse avec vue dégagée\nCuisine séparée entièrement équipée\nSuite parentale avec salle d’eau, toilettes, placards et balcon privé\n2 chambres enfants placardées – Balcon pour chaque chambre\n2 salles d’eau supplémentaires – Toilettes visiteurs\n\nPrestations de la résidence :\nAscenseur – Piscine – Salle de sport – Sauna\nGroupe électrogène – Citerne d’eau – Sécurité 24h/24\nParking sécurisé\n\n📞 Contact : +261 34 94 941 13 (WhatsApp)"
+    },
+    "pdp_display_sections": [],
+    "marketplace_listing_category": {
+      "slug": "propertyrentals",
+      "id": "1468271819871448"
+    },
+    "formatted_price": {
+      "text": "FREE"
+    },
+    "additional_fees_description": null,
+    "fee_schedule_url": null,
+    "has_children": false,
+    "marketplace_listing_category_name": "Rentals",
+    "inventory_count": null,
+    "legal_reporting_cta_type": null,
+    "legal_reporting_uri": null,
+    "messaging_enabled": true,
+    "listing_is_rejected": false,
+    "product_item": {
+      "id": "9758333804289995",
+      "boosted_marketplace_listing": null,
+      "promoted_listing": null
+    },
+    "seller_message_thread": null,
+    "is_checkout_enabled": false,
+    "is_draft": false,
+    "can_seller_edit": false,
+    "default_variant_listing": null,
+    "primary_mp_ent": {
+      "id": "1121253676501795"
+    },
+    "reportable_seller_type": null,
+    "reportable_ent_id": "9758333804289995",
+    "hidden_from_friends": "VISIBLE_TO_EVERYONE",
+    "can_share": true,
+    "share_uri": "https://www.facebook.com/marketplace/item/1121253676501795/",
+    "logging_id": "9758333804289995",
+    "listed_by": null,
+    "real_estate_listing_agent": null,
+    "bike_score_info": {
+      "score": null,
+      "description": null
+    },
+    "transit_score_info": {
+      "score": null,
+      "description": null
+    },
+    "walk_score_info": {
+      "score": null,
+      "description": null
+    },
+    "marketplace_bump_info": null,
+    "fi_enhanced_appeal_data": {
+      "use_fi_appeals": true,
+      "enforcement_instance_id": null
+    },
+    "listing_seller_notices": [],
+    "is_email_communication_enabled": false,
+    "nearby_schools": [],
+    "nearby_transits": [],
+    "is_map_eligible": false,
+    "home_address": null,
+    "co2_emission_rating_eu": null,
+    "energy_rating_eu": null,
+    "vertical_partner": null,
+    "unit_room_info": null,
+    "unit_area_info": null,
+    "unit_floor_plan_photo_list": [],
+    "virtual_tour_url": null,
+    "can_seller_change_availability": false,
+    "is_on_marketplace": true,
+    "messagingEnabled": true,
+    "cross_post_info": {
+      "all_listings": [
+        {
+          "is_on_marketplace": true,
+          "id": "1121253676501795"
+        }
+      ]
+    },
+    "active_order": null,
+    "rebuy_order_receipt": null,
+    "c2c_shipping_eligible": false,
+    "is_shipping_offered": false,
+    "cross_post_sync_metadata": null,
+    "most_recent_active_order_as_buyer": null,
+    "order_summaries": [],
+    "should_hide_pdp_shipping_content": true,
+    "shipping_profile": null,
+    "is_seller_business_onboarded": false,
+    "is_buy_now_enabled": false,
+    "is_purchase_protected": false,
+    "can_buyer_make_checkout_offer": false,
+    "is_cart_enabled": false,
+    "seller_cms": null,
+    "vacation_mode": null,
+    "all_message_threads": {
+      "is_empty": true
+    },
+    "should_show_txn_survey_on_mas": false,
+    "listing_inventory_type": "SINGLE_QUANTITY",
+    "incentive_campaign_for_free_shipping": null,
+    "first_message_suggested_value": null,
+    "sweepstake_enabled": false,
+    "sweepstake_status": "INVALID",
+    "sweepstake_content": null,
+    "is_lead_gen_form_enabled": false,
+    "shipping_offered": false,
+    "legal_disclosure_impressum_url": null,
+    "vehicle_seller_type": null,
+    "commerce_badges_info": {
+      "source_summary": null,
+      "badges": []
+    },
+    "real_estate_agent_logo": null,
+    "hide_external_link_on_pdp": false,
+    "external_url": null,
+    "real_estate_multi_listing": null,
+    "listing_photos": [
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/502399146_677103528559192_7382942200186329637_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=HfNe1lLU1tAQ7kNvwG0YZuz&_nc_oc=Adn_cuTbNzgF55TChcZLn9dSzYo1XvIrUPgjROrwUosAC64pOjpJDx3KY8dXgBZ63DI&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=CC4nXC4Q0mzk_k2jrQgs2w&oh=00_AfPNmYmX-8AE7FAIB5_dXuQJH8nMH1Gf70_RigGwEi5tZw&oe=68549B52"
+        },
+        "id": "677103525225859"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/501703527_555851924055083_4118185835351992341_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=QZJosV97ZuMQ7kNvwFvLasU&_nc_oc=AdnaC0UMQfxBEpBZ1YO_kUIO6emDXqjKMwvSNMWon6LiG7zEf6yXbXV8K9aBzW_AJDY&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=CC4nXC4Q0mzk_k2jrQgs2w&oh=00_AfPQTwkty7kx15W0-yNWOdAup8_E0NX772i8u6oMkXjryg&oe=6854A501"
+        },
+        "id": "555851920721750"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.5328-4/501673538_9832528550193281_3899590814132822721_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=ODXC_YRVqrwQ7kNvwH2VKHl&_nc_oc=AdkZ3HYLAZ7HR4RVCUYeQlFzT6SRda9zz3eu2KpgUEz1dubnLHfUs9An-zEYq1__-Qs&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=CC4nXC4Q0mzk_k2jrQgs2w&oh=00_AfMbmJPrbUe-65d9gomlkFWIek6Kh4mPCL7QPRjgJ6_Q-w&oe=6854A67C"
+        },
+        "id": "9832528546859948"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/502699383_1225041652663163_8911112015727304959_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=uSueTbahn9EQ7kNvwHPH8yi&_nc_oc=AdlJfgqrVNUm_Q1qn7rUeFehB8qUk56EDIuc5krUVrVQJhoZBqJHy9C9FoSjTj5VyPk&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=CC4nXC4Q0mzk_k2jrQgs2w&oh=00_AfPBdWRWaFAiXQcipnZ91Bf0MC3vZlWVSdS_3LUT09v6_Q&oe=6854BB14"
+        },
+        "id": "1225041642663164"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.5328-4/500777844_1018171897048663_2764373184437521495_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=106&ccb=1-7&_nc_sid=247b10&_nc_ohc=2RgbiDxa-WcQ7kNvwHwgtUu&_nc_oc=Adl6ScrYMkCPcO236wRwxF_62Jm_orw6fceMV5TNUzi1KT9W0v4xbtgq7yZxSXcMBJs&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=CC4nXC4Q0mzk_k2jrQgs2w&oh=00_AfP1zQTFtkPRDV1AsoBAf1VMKg-Fa5-UnKAW2Lxe2ax7Nw&oe=6854CA8D"
+        },
+        "id": "1018171893715330"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.5328-4/500820854_1727279691251713_7310352129831553054_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=zFZmZtL527oQ7kNvwF2jQLb&_nc_oc=AdkP8Q-UcqAsCGvrktv1NMNbEda6O3R95WRe00mNGDxzH7ObZMCLeIGWinljdGqfRos&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=CC4nXC4Q0mzk_k2jrQgs2w&oh=00_AfNk49ydXY5RPxNxstzBEwSJzBQehL9_Zu3ZJ-uRoudyxA&oe=6854C846"
+        },
+        "id": "1727279687918380"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/502656902_2449520135410282_3993941351791529775_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=o8vsv380kPEQ7kNvwFtBjYN&_nc_oc=AdliN88a_t5IQ0yTBbNa_cgmOh6L_rIS56mhMcPdC1fXPRlftBhY9qtCR_bh2cj66gI&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=CC4nXC4Q0mzk_k2jrQgs2w&oh=00_AfOET3tSG4e6hbYJfCyWPM7ccY4ZkHNAkGEWi5B75Td_oQ&oe=6854CAAB"
+        },
+        "id": "2449520132076949"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/506897616_1033699628914995_827229466708651554_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=bYKhvvCq4E8Q7kNvwEeKM5l&_nc_oc=AdnfOOYvaLJnpThQP9x64rHBGKthJivWwGdfRTglI8DTguKczm_71oSlvNr3fBlsk_Q&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=CC4nXC4Q0mzk_k2jrQgs2w&oh=00_AfO1ElQSTvjeAtmxYoagK8XsH9697c935eYrVFic0LtSxg&oe=68549457"
+        },
+        "id": "1033699625581662"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/501393328_527292763797022_4353028671643595226_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=cLwRDYm5gJcQ7kNvwH7JVEF&_nc_oc=AdmCQpnMYObu2Bk3KGJOWfDPD_BDK0YbH8N8rQiE7G4eueRbY4KS1NxsLsdS1Jljg-4&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=CC4nXC4Q0mzk_k2jrQgs2w&oh=00_AfO71lDz3_FWICoi8qFAf9BT_XZj7B_JYnAQdZZYIY3soA&oe=6854B46D"
+        },
+        "id": "527292760463689"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.5328-4/502773153_1071907771495429_6518010938339938621_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=vnjyF2dRB6IQ7kNvwGsovnh&_nc_oc=AdmvMswxTGsU0VM9kEWAbSVxR_Gja-WdEMEl-zO94_vvYjZHFMb_RIBQyqMx0C1ayAU&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=CC4nXC4Q0mzk_k2jrQgs2w&oh=00_AfPd84FlBEVKQf5v1CesJfQtrCLDbKxFUTgaslCoeLePkw&oe=6854C355"
+        },
+        "id": "1071907768162096"
+      }
+    ],
+    "pre_recorded_videos": []
+  },
+  {
+    "id": "1008315628127655",
+    "primary_listing_photo": {
+      "listing_image": {
+        "uri": "https://scontent-atl3-2.xx.fbcdn.net/v/t45.5328-4/507279261_4052208445026506_2796019228040995484_n.jpg?stp=c0.27.133.133a_dst-jpg_p133x133_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=MlyXgBQvRkgQ7kNvwH-0MnC&_nc_oc=Adk241U29jnr4Mycv96S0MHX7LgQT8gC51Zvvl7rMDqaU4hMiUkULqFvl3c0O3g_wBk5qiF1s-IuT1d2gCNqV8h1&_nc_zt=23&_nc_ht=scontent-atl3-2.xx&_nc_gid=_El-JGJ1-DQZVpr7ObvQ2A&oh=00_AfPz9ookIFHnPOao3WIcSEOicBkwJ_1Udm13RqNF6DVzcg&oe=68549858"
+      },
+      "id": "4052208441693173"
+    },
+    "listing_price": {
+      "amount": "0.0",
+      "currency": "MGA"
+    },
+    "strikethrough_price": null,
+    "comparable_price": null,
+    "comparable_price_type": null,
+    "location": {
+      "latitude": -18.915710449219,
+      "longitude": 47.521362304688,
+      "reverse_geocode_detailed": {
+        "city": "Antananarivo",
+        "state": "",
+        "postal_code": ""
+      }
+    },
+    "is_hidden": false,
+    "is_live": true,
+    "is_pending": false,
+    "is_sold": false,
+    "is_viewer_seller": false,
+    "min_listing_price": null,
+    "max_listing_price": null,
+    "marketplace_listing_category_id": "1468271819871448",
+    "marketplace_listing_title": "🏢 À Louer : Appartement T2 Meublé à Androhibe\nÀ proximité de Ivandry et Ambatobe \n📍 résidence",
+    "custom_title": "🏢 À Louer : Appartement T2 Meublé à Androhibe\nÀ proximité de Ivandry et Ambatobe \n📍 résidence",
+    "custom_sub_titles_with_rendering_flags": [],
+    "origin_group": null,
+    "listing_video": null,
+    "parent_listing": null,
+    "marketplace_listing_seller": null,
+    "delivery_types": [
+      "IN_PERSON"
+    ],
+    "listingUrl": "https://www.facebook.com/marketplace/item/1008315628127655",
+    "if_viewer_is_buyer": {
+      "marketplace_pdp_integrity_banner_strings_rewrite": null,
+      "id": "1008315628127655"
+    },
+    "story": null,
+    "redacted_description": {
+      "text": "🏢 À Louer : Appartement T2 Meublé à Androhibe\nÀ proximité de Ivandry et Ambatobe \n📍 Dans une résidence haut standing\n\n✨ Caractéristiques :\n • 🛋️ Living avec balcon\n • 🍴 Cuisine équipée ouverte sur le salon\n • 🛌 Chambre placardée et climatisée avec balcon\n • 🚿 Salle d’eau attenante ~ Toilettes\n • 🧺 Buanderie\n\n🌟 Atouts :\n • 🏋️ Salle de sport ~ 🌇 Rooftop aménagé ~ 🔥 Coin barbecue\n • 🛗 Ascenseur ~ ⚡ Groupe électrogène ~ 💧 Surpresseur\n\n📞 Contact :\n• 📱 +261 34 11 142 00 (WhatsApp)\n• ✉️ [hidden information]\n\n(FB, IG, TikTok, YouTube, Snapchat, LinkedIn, Airbnb)"
+    },
+    "pdp_display_sections": [],
+    "marketplace_listing_category": {
+      "slug": "propertyrentals",
+      "id": "1468271819871448"
+    },
+    "formatted_price": {
+      "text": "FREE"
+    },
+    "additional_fees_description": null,
+    "fee_schedule_url": null,
+    "has_children": false,
+    "marketplace_listing_category_name": "Rentals",
+    "inventory_count": null,
+    "legal_reporting_cta_type": null,
+    "legal_reporting_uri": null,
+    "messaging_enabled": true,
+    "listing_is_rejected": false,
+    "product_item": {
+      "id": "29822740700703408",
+      "boosted_marketplace_listing": null,
+      "promoted_listing": null
+    },
+    "seller_message_thread": null,
+    "is_checkout_enabled": false,
+    "is_draft": false,
+    "can_seller_edit": false,
+    "default_variant_listing": null,
+    "primary_mp_ent": {
+      "id": "1008315628127655"
+    },
+    "reportable_seller_type": null,
+    "reportable_ent_id": "29822740700703408",
+    "hidden_from_friends": "VISIBLE_TO_EVERYONE",
+    "can_share": true,
+    "share_uri": "https://www.facebook.com/marketplace/item/1008315628127655/",
+    "logging_id": "29822740700703408",
+    "listed_by": null,
+    "real_estate_listing_agent": null,
+    "bike_score_info": {
+      "score": null,
+      "description": null
+    },
+    "transit_score_info": {
+      "score": null,
+      "description": null
+    },
+    "walk_score_info": {
+      "score": null,
+      "description": null
+    },
+    "marketplace_bump_info": null,
+    "fi_enhanced_appeal_data": {
+      "use_fi_appeals": true,
+      "enforcement_instance_id": null
+    },
+    "listing_seller_notices": [],
+    "is_email_communication_enabled": false,
+    "nearby_schools": [],
+    "nearby_transits": [],
+    "is_map_eligible": false,
+    "home_address": null,
+    "co2_emission_rating_eu": null,
+    "energy_rating_eu": null,
+    "vertical_partner": null,
+    "unit_room_info": null,
+    "unit_area_info": null,
+    "unit_floor_plan_photo_list": [],
+    "virtual_tour_url": null,
+    "can_seller_change_availability": false,
+    "is_on_marketplace": true,
+    "messagingEnabled": true,
+    "cross_post_info": {
+      "all_listings": [
+        {
+          "is_on_marketplace": true,
+          "id": "1008315628127655"
+        }
+      ]
+    },
+    "active_order": null,
+    "rebuy_order_receipt": null,
+    "c2c_shipping_eligible": false,
+    "is_shipping_offered": false,
+    "cross_post_sync_metadata": null,
+    "most_recent_active_order_as_buyer": null,
+    "order_summaries": [],
+    "should_hide_pdp_shipping_content": true,
+    "shipping_profile": null,
+    "is_seller_business_onboarded": false,
+    "is_buy_now_enabled": false,
+    "is_purchase_protected": false,
+    "can_buyer_make_checkout_offer": false,
+    "is_cart_enabled": false,
+    "seller_cms": null,
+    "vacation_mode": null,
+    "all_message_threads": {
+      "is_empty": true
+    },
+    "should_show_txn_survey_on_mas": false,
+    "listing_inventory_type": "SINGLE_QUANTITY",
+    "incentive_campaign_for_free_shipping": null,
+    "first_message_suggested_value": null,
+    "sweepstake_enabled": false,
+    "sweepstake_status": "INVALID",
+    "sweepstake_content": null,
+    "is_lead_gen_form_enabled": false,
+    "shipping_offered": false,
+    "legal_disclosure_impressum_url": null,
+    "vehicle_seller_type": null,
+    "commerce_badges_info": {
+      "source_summary": null,
+      "badges": []
+    },
+    "real_estate_agent_logo": null,
+    "hide_external_link_on_pdp": false,
+    "external_url": null,
+    "real_estate_multi_listing": null,
+    "listing_photos": [
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lhr6-2.xx.fbcdn.net/v/t45.5328-4/507279261_4052208445026506_2796019228040995484_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=MlyXgBQvRkgQ7kNvwGzSC1z&_nc_oc=Adml7Y01QqjyfknC9nyU9XiGBJqPdcuWD1GseR2I5Tu-SezuB69cQ_ZuMuQUY5JD7ek9ikbvYj706DlORJpnkv4h&_nc_zt=23&_nc_ht=scontent-lhr6-2.xx&_nc_gid=7Jn5UMdxS8-fR07iy8HV-g&oh=00_AfN4X5IjoHN7emdT7RNVQvwRPs4emU3uaKUC4v-jmedJ9Q&oe=68549858"
+        },
+        "id": "4052208441693173"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lhr6-1.xx.fbcdn.net/v/t45.5328-4/506346556_1281721403325808_639082836473723372_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=-Q21nDkILt8Q7kNvwElS33N&_nc_oc=Adn-xi2enF8Z9YgxbRcjvoz7PoS2JbO6nTdJHgkzpgRpKN9PXEdvIH4gBlm0644IJX4vq4h8_DJvJStk_CDjAnSe&_nc_zt=23&_nc_ht=scontent-lhr6-1.xx&_nc_gid=7Jn5UMdxS8-fR07iy8HV-g&oh=00_AfOLNvBlBFfFWXawZhvGYimhNmbN6YnnC_YczZJaaG5qkw&oe=6854B5B7"
+        },
+        "id": "1281721389992476"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lhr8-2.xx.fbcdn.net/v/t45.5328-4/502703469_677608341826174_7328411489713702630_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=qwquzVvIPUwQ7kNvwGFYrpG&_nc_oc=AdljUzCeDZfHsPwVmYtt1wkFaN05jHrBaHnGrL_gC_ejN3Y1fbyjgLIB7X_-wQZRq4cN1eabcknjMGwRo40KgNwP&_nc_zt=23&_nc_ht=scontent-lhr8-2.xx&_nc_gid=7Jn5UMdxS8-fR07iy8HV-g&oh=00_AfMbWjPXTbTdOy51mVxjHJ0oPPfYrmaE924CddArn4GzpQ&oe=6854BC72"
+        },
+        "id": "677608338492841"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lhr8-1.xx.fbcdn.net/v/t45.5328-4/502781098_908201178094591_7715816103561047882_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=yPJ3Lm99nOwQ7kNvwHiZmlF&_nc_oc=AdkLAatIfJVvknfY7XJYlQDsynI5l4jc_8715oC8t5rDHX5ganPjhJ6mxlI5szhoto2DSTT3ZBmb9B3dcZtrBVMQ&_nc_zt=23&_nc_ht=scontent-lhr8-1.xx&_nc_gid=7Jn5UMdxS8-fR07iy8HV-g&oh=00_AfO9sTyTFpwWa4R7WZB2ZLTiOW6ygoHgyKHfk3xUXlQj2A&oe=6854BD33"
+        },
+        "id": "908201174761258"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lhr8-1.xx.fbcdn.net/v/t45.5328-4/505740538_2579337662422584_4695248254060430690_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=JYgrt3xpVPYQ7kNvwFYFN7s&_nc_oc=AdllJORShS-0_IRSREhcpAlCgUss7HNXyEagfjIQaZNXFfGepd5bl9JBarOso6Mry-gcjQVDuxTx_iNWkCz9Fv19&_nc_zt=23&_nc_ht=scontent-lhr8-1.xx&_nc_gid=7Jn5UMdxS8-fR07iy8HV-g&oh=00_AfNzgb9geTcv3wpsAXhLEELu9O_jpM0QtbQb89C2jSIXAA&oe=6854B879"
+        },
+        "id": "2579337659089251"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 679,
+          "uri": "https://scontent-lhr8-2.xx.fbcdn.net/v/t45.5328-4/508163141_3001123563381029_3134904111479654437_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=106&ccb=1-7&_nc_sid=247b10&_nc_ohc=3pKvMRAdV-8Q7kNvwGzOpdP&_nc_oc=AdlupcFU9jrysGncrjGfYB2RYNyceZ9sM8yYdzSL5eh75dSixjhwq_SrLJJWpvVLIuPY41T9NjRipmHb04sReMNb&_nc_zt=23&_nc_ht=scontent-lhr8-2.xx&_nc_gid=7Jn5UMdxS8-fR07iy8HV-g&oh=00_AfPs55w0rfV06jkCtPV6u_m0Nr0SUs1fI-mbbURQkMboPw&oe=6854A981"
+        },
+        "id": "3001123560047696"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 678,
+          "uri": "https://scontent-lhr6-1.xx.fbcdn.net/v/t45.5328-4/473215900_983524650498773_8443199999722885045_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=-6nBfuX9AXAQ7kNvwEJ6XRt&_nc_oc=AdlYRUTv830T4EQ_t58EnKD0inLjxR615eKA2n7biUANglVANNnpll6c2JNO9pOz9POQz5kqj8HsA5lbMIHXrgcz&_nc_zt=23&_nc_ht=scontent-lhr6-1.xx&_nc_gid=7Jn5UMdxS8-fR07iy8HV-g&oh=00_AfOimye38tnoB1BRpue1fLy1spbgf6fhO_o4AklXxZ4cpw&oe=6854BD7E"
+        },
+        "id": "983524647165440"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 678,
+          "uri": "https://scontent-lhr6-2.xx.fbcdn.net/v/t45.5328-4/473210721_470780052744124_8738967093923760383_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=Yf-TWmNtIjoQ7kNvwE3pkoj&_nc_oc=AdnqQrmiro9lTEYl5k60Q19QkLGH4cnPDDNzckSvsBMIjCMUPrTBGZXLEc2IElHuO1EkryC3yr0dcUErxpjYCmfU&_nc_zt=23&_nc_ht=scontent-lhr6-2.xx&_nc_gid=7Jn5UMdxS8-fR07iy8HV-g&oh=00_AfNgI6c_xZERPYoXXKKDsQOAZcAre0u0ZqJbn0soqBwXxw&oe=6854B6B0"
+        },
+        "id": "470780049410791"
+      },
+      {
+        "accessibility_caption": "No photo description available.",
+        "image": {
+          "height": 960,
+          "width": 678,
+          "uri": "https://scontent-lhr8-1.xx.fbcdn.net/v/t45.5328-4/473216008_1619692945588554_2638656258986428045_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=Xu7hOluEpf0Q7kNvwGUpP21&_nc_oc=AdkS70pWzRXS6iiRd36de6gyRH2q79yFNQI7cuuKV7P2NtJVkY-lWD2xkgnB5pWJUnhYR9G1hHg-07RKjAHU0GDU&_nc_zt=23&_nc_ht=scontent-lhr8-1.xx&_nc_gid=7Jn5UMdxS8-fR07iy8HV-g&oh=00_AfPSMWfooT_Ud4nmQsv1qLpSp0jhUnG6uDB4Vkh8IRyvJQ&oe=6854A9D0"
+        },
+        "id": "1619692942255221"
+      }
+    ],
+    "pre_recorded_videos": []
+  }
+]
