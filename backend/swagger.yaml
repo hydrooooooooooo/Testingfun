@@ -1,0 +1,589 @@
+openapi: 3.0.0
+info:
+  title: Marketplace Scraper Pro API
+  description: API for scraping Facebook and LinkedIn Marketplaces with APIFY integration and Stripe payments
+  version: 1.0.0
+  
+servers:
+  - url: http://localhost:3001
+    description: Development server
+  
+tags:
+  - name: Scraping
+    description: Endpoints for scraping marketplace data
+  - name: Payment
+    description: Endpoints for payment processing
+  - name: Export
+    description: Endpoints for data export
+  - name: Admin
+    description: Endpoints for admin operations
+
+paths:
+  /api/scrape:
+    post:
+      summary: Start a new scraping job
+      tags:
+        - Scraping
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+              properties:
+                url:
+                  type: string
+                  description: Facebook or LinkedIn Marketplace URL
+                  example: https://www.facebook.com/marketplace/item/123456789
+                sessionId:
+                  type: string
+                  description: Optional session ID
+                  example: sess_abc123def456
+      responses:
+        '200':
+          description: Scraping job started successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      sessionId:
+                        type: string
+                        example: sess_abc123def456
+                      datasetId:
+                        type: string
+                        example: data_xyz789
+                      actorRunId:
+                        type: string
+                        example: run_123456
+                      status:
+                        type: string
+                        example: running
+        '400':
+          description: Invalid input
+        '500':
+          description: Server error
+  
+  /api/scrape/result:
+    get:
+      summary: Get scraping job results
+      tags:
+        - Scraping
+      parameters:
+        - name: sessionId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Session ID
+          example: sess_abc123def456
+      responses:
+        '200':
+          description: Scraping job results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      sessionId:
+                        type: string
+                        example: sess_abc123def456
+                      datasetId:
+                        type: string
+                        example: data_xyz789
+                      status:
+                        type: string
+                        enum: [pending, running, finished, failed]
+                        example: finished
+                      stats:
+                        type: object
+                        properties:
+                          nbItems:
+                            type: integer
+                            example: 50
+                          startedAt:
+                            type: string
+                            format: date-time
+                            example: "2023-11-15T14:30:00Z"
+                          finishedAt:
+                            type: string
+                            format: date-time
+                            example: "2023-11-15T14:35:00Z"
+                      isPaid:
+                        type: boolean
+                        example: false
+                      previewItems:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              example: "iPhone 13 Pro Max"
+                            price:
+                              type: string
+                              example: "750 €"
+                            desc:
+                              type: string
+                              example: "Très bon état, 256 Go, débloqué tout opérateur."
+                            image:
+                              type: string
+                              example: "https://example.com/image.jpg"
+                            location:
+                              type: string
+                              example: "Paris"
+        '400':
+          description: Invalid input
+        '404':
+          description: Session not found
+        '500':
+          description: Server error
+  
+  /api/create-payment:
+    post:
+      summary: Create a Stripe checkout session
+      tags:
+        - Payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - packId
+                - sessionId
+              properties:
+                packId:
+                  type: string
+                  description: Pack ID
+                  example: pack-essentiel
+                sessionId:
+                  type: string
+                  description: Session ID
+                  example: sess_abc123def456
+      responses:
+        '200':
+          description: Checkout session created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      checkoutUrl:
+                        type: string
+                        example: https://checkout.stripe.com/pay/cs_test_123456789
+        '400':
+          description: Invalid input
+        '404':
+          description: Pack or session not found
+        '500':
+          description: Server error
+  
+  /api/stripe/webhook:
+    post:
+      summary: Handle Stripe webhook events
+      tags:
+        - Payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Stripe event payload
+      responses:
+        '200':
+          description: Webhook processed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  received:
+                    type: boolean
+                    example: true
+        '400':
+          description: Invalid webhook signature
+  
+  /api/verify-payment:
+    get:
+      summary: Verify payment status
+      tags:
+        - Payment
+      parameters:
+        - name: sessionId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Session ID
+          example: sess_abc123def456
+      responses:
+        '200':
+          description: Payment status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      isPaid:
+                        type: boolean
+                        example: true
+                      packId:
+                        type: string
+                        example: pack-essentiel
+        '400':
+          description: Invalid input
+        '404':
+          description: Session not found
+        '500':
+          description: Server error
+  
+  /api/export:
+    get:
+      summary: Export data as Excel/CSV file
+      tags:
+        - Export
+      parameters:
+        - name: sessionId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Session ID
+          example: sess_abc123def456
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [excel, csv]
+            default: excel
+          description: Export format
+          example: excel
+      responses:
+        '200':
+          description: File download
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid input
+        '403':
+          description: Payment required
+        '404':
+          description: Session not found
+        '500':
+          description: Server error
+  
+  /api/admin/sessions:
+    get:
+      summary: Get all sessions (admin)
+      tags:
+        - Admin
+      parameters:
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Admin API key
+      responses:
+        '200':
+          description: List of all sessions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      sessions:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: sess_abc123def456
+                            url:
+                              type: string
+                              example: https://www.facebook.com/marketplace/item/123456789
+                            status:
+                              type: string
+                              enum: [pending, running, finished, failed]
+                              example: finished
+                            createdAt:
+                              type: string
+                              format: date-time
+                              example: "2023-11-15T14:30:00Z"
+                            updatedAt:
+                              type: string
+                              format: date-time
+                              example: "2023-11-15T14:35:00Z"
+                            isPaid:
+                              type: boolean
+                              example: true
+                            packId:
+                              type: string
+                              example: pack-essentiel
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  
+  /api/admin/sessions/{sessionId}:
+    get:
+      summary: Get session details by ID (admin)
+      tags:
+        - Admin
+      parameters:
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Admin API key
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Session ID
+          example: sess_abc123def456
+      responses:
+        '200':
+          description: Session details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      session:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: sess_abc123def456
+                          url:
+                            type: string
+                            example: https://www.facebook.com/marketplace/item/123456789
+                          datasetId:
+                            type: string
+                            example: data_xyz789
+                          actorRunId:
+                            type: string
+                            example: run_123456
+                          status:
+                            type: string
+                            enum: [pending, running, finished, failed]
+                            example: finished
+                          createdAt:
+                            type: string
+                            format: date-time
+                            example: "2023-11-15T14:30:00Z"
+                          updatedAt:
+                            type: string
+                            format: date-time
+                            example: "2023-11-15T14:35:00Z"
+                          stats:
+                            type: object
+                            properties:
+                              nbItems:
+                                type: integer
+                                example: 50
+                              startedAt:
+                                type: string
+                                format: date-time
+                                example: "2023-11-15T14:30:00Z"
+                              finishedAt:
+                                type: string
+                                format: date-time
+                                example: "2023-11-15T14:35:00Z"
+                          isPaid:
+                            type: boolean
+                            example: true
+                          packId:
+                            type: string
+                            example: pack-essentiel
+        '401':
+          description: Unauthorized
+        '404':
+          description: Session not found
+        '500':
+          description: Server error
+  
+  /api/admin/stats:
+    get:
+      summary: Get dashboard statistics (admin)
+      tags:
+        - Admin
+      parameters:
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Admin API key
+      responses:
+        '200':
+          description: Dashboard statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      totalSessions:
+                        type: integer
+                        example: 100
+                      paidSessions:
+                        type: integer
+                        example: 75
+                      completedSessions:
+                        type: integer
+                        example: 90
+                      failedSessions:
+                        type: integer
+                        example: 5
+                      packStats:
+                        type: object
+                        additionalProperties:
+                          type: integer
+                        example:
+                          pack-decouverte: 20
+                          pack-essentiel: 30
+                          pack-business: 15
+                          pack-pro: 8
+                          pack-enterprise: 2
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+
+components:
+  schemas:
+    Session:
+      type: object
+      properties:
+        id:
+          type: string
+          example: sess_abc123def456
+        url:
+          type: string
+          example: https://www.facebook.com/marketplace/item/123456789
+        datasetId:
+          type: string
+          example: data_xyz789
+        actorRunId:
+          type: string
+          example: run_123456
+        status:
+          type: string
+          enum: [pending, running, finished, failed]
+          example: finished
+        createdAt:
+          type: string
+          format: date-time
+          example: "2023-11-15T14:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2023-11-15T14:35:00Z"
+        stats:
+          type: object
+          properties:
+            nbItems:
+              type: integer
+              example: 50
+            startedAt:
+              type: string
+              format: date-time
+              example: "2023-11-15T14:30:00Z"
+            finishedAt:
+              type: string
+              format: date-time
+              example: "2023-11-15T14:35:00Z"
+        isPaid:
+          type: boolean
+          example: true
+        packId:
+          type: string
+          example: pack-essentiel
+    
+    Pack:
+      type: object
+      properties:
+        id:
+          type: string
+          example: pack-essentiel
+        name:
+          type: string
+          example: Pack Essentiel
+        nbDownloads:
+          type: integer
+          example: 150
+        price:
+          type: number
+          example: 12
+        currency:
+          type: string
+          enum: [eur, ar]
+          example: eur
+        priceLabel:
+          type: string
+          example: 12 € / 60 000 Ar
+        description:
+          type: string
+          example: 150 extractions de données complètes. Économisez 47% par rapport aux téléchargements individuels.
+        popular:
+          type: boolean
+          example: true
