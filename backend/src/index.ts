@@ -36,7 +36,8 @@ app.use(requestLogger);
 // Body parsing middleware
 app.use(express.json());
 
-// Special handling for Stripe webhook route
+// Special handling for Stripe webhook routes (support both paths for compatibilité)
+app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));
 app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
 
 // Main routes

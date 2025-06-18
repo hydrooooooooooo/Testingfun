@@ -107,6 +107,31 @@ export class ApifyService {
   }
 
   /**
+   * Valider et nettoyer les données extraites
+   */
+  private validateAndCleanData(item: any): any {
+    // Filtrer les prix aberrants
+    if (item.price && item.price.includes('MGA')) {
+      const amount = parseFloat(item.price.replace(/[^\d]/g, ''));
+      if (amount < 1000) {
+        item.price = 'Prix à négocier';
+      }
+    }
+    
+    // S'assurer que la description n'est pas vide
+    if (!item.desc || item.desc === 'No Description') {
+      item.desc = 'Description non disponible';
+    }
+    
+    // Valider l'URL de l'image
+    if (item.image && !item.image.startsWith('http')) {
+      item.image = '';
+    }
+    
+    return item;
+  }
+
+  /**
    * Get actor ID to use for scraping
    */
   private getActorIdFromUrl(url: string): string {
@@ -117,48 +142,48 @@ export class ApifyService {
   /**
    * Start a scraping job on APIFY
    */
-  async startScraping(url: string, sessionId: string, resultsLimit: number = 3): Promise<{ datasetId: string; actorRunId: string }> {
+  async startScraping(
+    url: string, 
+    sessionId: string, 
+    resultsLimit: number = 3,
+    options: {
+      deepScrape?: boolean;
+      getProfileUrls?: boolean;
+    } = {}
+  ): Promise<{ datasetId: string; actorRunId: string }> {
     try {
       this.validateConfig();
       
       const actorId = this.getActorIdFromUrl(url);
       
-      logger.info(`Starting APIFY scraping job for URL: ${url} with actor: ${actorId}`, { sessionId, resultsLimit });
+      logger.info(`Starting APIFY scraping job for URL: ${url} with actor: ${actorId}`, { 
+        sessionId, 
+        resultsLimit, 
+        deepScrape: options.deepScrape,
+        getProfileUrls: options.getProfileUrls 
+      });
       
-      // Configuration optimisée pour éviter les timeouts
+      // Configuration selon le format attendu par l'acteur Facebook Marketplace
       const input: any = {
         urls: [url],
-        resultsLimit: resultsLimit,
-        maxResults: resultsLimit,
-        maxItems: resultsLimit,
-        maxPages: resultsLimit > 10 ? 3 : 1,
-        deepScrape: resultsLimit > 1,
-        getProfileUrls: resultsLimit > 5,
-        scrollWait: 2000,
-        maxRequestRetries: 2,
-        timeout: 60,
-        proxyConfiguration: {
-          useApifyProxy: true
-        },
-        forceEnglish: true,
-        limitResults: resultsLimit,
-        maxConcurrency: 1
+        count: resultsLimit,
+        deepScrape: options.deepScrape !== undefined ? options.deepScrape : (resultsLimit > 5),
+        getProfileUrls: options.getProfileUrls !== undefined ? options.getProfileUrls : false,
+        proxy: {
+          useApifyProxy: true,
+          apifyProxyGroups: ["RESIDENTIAL"]
+        }
       };
       
-      logger.info(`Configuration du scraper avec limite stricte de ${resultsLimit} résultats`);
+      logger.info(`Configuration du scraper avec limite de ${resultsLimit} résultats`);
       logger.info('Configuration du scraper', { input });
 
-      // Lancer l'acteur avec timeout personnalisé et plus de ressources
-      const runResult = await Promise.race([
-        apifyClient.actor(actorId).call(input, {
-          timeout: 120000,
-          memory: 2048,
-          build: 'latest'
-        }),
-        new Promise<never>((_, reject) => 
-          setTimeout(() => reject(new Error('Apify actor call timeout')), 125000)
-        )
-      ]);
+      // Lancer l'acteur en mode asynchrone sans attendre la fin du job
+      const runResult = await apifyClient.actor(actorId).start(input, {
+        memory: 2048,
+        build: 'latest',
+        waitForFinish: 10 // Attendre seulement 10 secondes pour le démarrage
+      });
       
       // Convert to the expected structure
       const run = {
@@ -230,7 +255,7 @@ export class ApifyService {
       }
       
       const { items } = await apifyClient.dataset(datasetId).listItems(options);
-      return items;
+      return items.map((item: ApifyItem) => this.extractItemData(item));
     } catch (error) {
       logger.error(`Error getting dataset items for ${datasetId}:`, error);
       throw new Error(`Failed to get dataset items: ${(error as Error).message}`);
@@ -265,6 +290,162 @@ export class ApifyService {
   }
 
   /**
+   * Extract and clean item data from raw Apify response
+   */
+  private extractItemData(item: ApifyItem): any {
+    // 1. Extraction du titre depuis les champs appropriés
+    let title = '';
+    if (item.marketplace_listing_title) {
+      title = item.marketplace_listing_title;
+    } else if (item.custom_title) {
+      title = item.custom_title;
+    } else if (item.title) {
+      title = item.title;
+    } else if (item.name) {
+      title = item.name;
+    }
+    
+    // 2. Extraction du prix avec devise - Version corrigée
+    let price = 'N/A';
+    if (item.listing_price && item.listing_price.amount !== undefined) {
+      let amount: number;
+      if (typeof item.listing_price.amount === 'string') {
+        amount = parseFloat(item.listing_price.amount);
+      } else {
+        amount = item.listing_price.amount;
+      }
+      
+      const currency = item.listing_price.currency || 'MGA';
+      if (!isNaN(amount) && amount > 0) {
+        if (currency === 'MGA') {
+          price = `${amount.toLocaleString('fr-FR')} MGA`;
+        } else if (currency === 'USD') {
+          price = `$${amount.toLocaleString('fr-FR')}`;
+        } else {
+          price = `${amount.toLocaleString('fr-FR')} ${currency}`;
+        }
+      }
+    }
+    // Vérifier les autres champs de prix possibles
+    else if (item.price) {
+      if (typeof item.price === 'number') {
+        price = `${item.price.toLocaleString('fr-FR')} EUR`;
+      } else {
+        price = item.price;
+      }
+    } else if (item.prix) {
+      if (typeof item.prix === 'number') {
+        price = `${item.prix.toLocaleString('fr-FR')} EUR`;
+      } else {
+        price = item.prix;
+      }
+    }
+    
+    // 3. Extraction de la description - Version corrigée
+    let description = '';
+    if (item.redacted_description && typeof item.redacted_description === 'object' && item.redacted_description.text) {
+      description = item.redacted_description.text;
+    } else if (item.redacted_description && typeof item.redacted_description === 'string') {
+      description = item.redacted_description;
+    } else if (item.description) {
+      description = typeof item.description === 'string' ? item.description : '';
+    }
+    
+    // 4. Extraction de l'image principale - Version corrigée
+    let imageUrl = '';
+    if (item.primary_listing_photo?.listing_image?.uri) {
+      imageUrl = item.primary_listing_photo.listing_image.uri;
+    } else if (item.primary_listing_photo?.image?.uri) {
+      imageUrl = item.primary_listing_photo.image.uri;
+    } else if (item.listing_photos && item.listing_photos.length > 0 && item.listing_photos[0].image?.uri) {
+      imageUrl = item.listing_photos[0].image.uri;
+    } else if (item.imageUrl && typeof item.imageUrl === 'string') {
+      imageUrl = item.imageUrl;
+    } else if (item.image) {
+      if (typeof item.image === 'string') {
+        imageUrl = item.image;
+      } else if (typeof item.image === 'object' && item.image !== null && 'uri' in item.image) {
+        imageUrl = (item.image as { uri: string }).uri;
+      }
+    }
+    
+    // S'assurer que l'URL de l'image est complète
+    if (imageUrl && !imageUrl.startsWith('http')) {
+      if (imageUrl.startsWith('//')) {
+        imageUrl = 'https:' + imageUrl;
+      } else if (imageUrl.startsWith('/')) {
+        const listingUrl = item.listingUrl || item.url || item.link || item.href;
+        if (listingUrl && typeof listingUrl === 'string') {
+          try {
+            const urlObj = new URL(listingUrl);
+            imageUrl = `${urlObj.protocol}//${urlObj.hostname}${imageUrl}`;
+          } catch (e) {
+            // En cas d'erreur, laisser l'URL telle quelle
+          }
+        }
+      }
+    }
+    
+    // 5. Extraction de la localisation - Version corrigée
+    let locationStr = 'Unknown';
+    if (item.location) {
+      if (typeof item.location === 'string') {
+        locationStr = item.location;
+      } else if (typeof item.location === 'object' && item.location !== null) {
+        const loc = item.location as ApifyLocation;
+        // Vérifier reverse_geocode_detailed en premier
+        if (loc.reverse_geocode_detailed?.city) {
+          locationStr = loc.reverse_geocode_detailed.city;
+        }
+        // Puis reverse_geocode
+        else if (loc.reverse_geocode?.city) {
+          locationStr = loc.reverse_geocode.city;
+        }
+        // Puis city_page display_name
+        else if (loc.reverse_geocode?.city_page?.display_name) {
+          // Extraire juste la ville du format "Ville, Pays"
+          const displayName = loc.reverse_geocode.city_page.display_name;
+          locationStr = displayName.split(',')[0].trim();
+        }
+      }
+    } else if (item.lieu) {
+      locationStr = item.lieu;
+    }
+    
+    // 6. Extraction de l'URL de l'annonce
+    let url = '';
+    if (item.listingUrl) {
+      url = item.listingUrl;
+    } else if (item.url) {
+      url = item.url;
+    } else if (item.link) {
+      url = item.link;
+    } else if (item.href) {
+      url = item.href;
+    }
+    
+    // 7. Extraction de la date
+    let postedAt = '';
+    if (item.postedAt) {
+      postedAt = item.postedAt;
+    } else if (item.date) {
+      postedAt = item.date;
+    }
+    
+    const extractedItem = {
+      title: title || 'No Title',
+      price: price,
+      desc: description || 'No Description',
+      image: imageUrl,
+      location: locationStr,
+      url: url,
+      postedAt: postedAt
+    };
+    
+    return this.validateAndCleanData(extractedItem);
+  }
+
+  /**
    * Get preview items from a dataset
    */
   async getPreviewItems(datasetId: string, limit: number = 3): Promise<any[]> {
@@ -278,193 +459,7 @@ export class ApifyService {
       
       logger.info(`Retrieved ${items.length} preview items from dataset ${datasetId}`);
       
-      return items.map((item: ApifyItem) => {
-        // 1. Extraction du titre depuis les champs appropriés
-        let title = '';
-        if (item.marketplace_listing_title) {
-          title = item.marketplace_listing_title;
-        } else if (item.custom_title) {
-          title = item.custom_title;
-        } else if (item.title) {
-          title = item.title;
-        } else if (item.name) {
-          title = item.name;
-        }
-        
-        // 2. Extraction du prix avec devise - Version corrigée
-        let price = 'N/A';
-        if (item.listing_price) {
-          // Priorité au prix formaté s'il existe
-          if (item.listing_price.formatted_amount && typeof item.listing_price.formatted_amount === 'string') {
-            price = item.listing_price.formatted_amount;
-          }
-          // Sinon, vérifier formatted_amount_zeros_stripped
-          else if ((item.listing_price as any).formatted_amount_zeros_stripped) {
-            price = (item.listing_price as any).formatted_amount_zeros_stripped;
-          }
-          // Construire le prix à partir de amount et currency
-          else if (item.listing_price.amount !== undefined) {
-            let amount: number;
-            if (typeof item.listing_price.amount === 'string') {
-              amount = parseFloat(item.listing_price.amount);
-            } else {
-              amount = item.listing_price.amount;
-            }
-            
-            const currency = item.listing_price.currency || 'EUR';
-            if (!isNaN(amount)) {
-              // Formatage simple avec la devise
-              if (currency === 'MGA') {
-                price = `${amount.toLocaleString('fr-FR')} MGA`;
-              } else if (currency === 'USD') {
-                price = `${amount.toLocaleString('fr-FR')}`;
-              } else if (currency === 'EUR') {
-                price = `${amount.toLocaleString('fr-FR')} €`;
-              } else {
-                price = `${amount.toLocaleString('fr-FR')} ${currency}`;
-              }
-            }
-          }
-        } 
-        // Vérifier les autres champs de prix possibles
-        else if (item.price) {
-          if (typeof item.price === 'number') {
-            price = `${item.price.toLocaleString('fr-FR')} EUR`;
-          } else {
-            price = item.price;
-          }
-        } else if (item.prix) {
-          if (typeof item.prix === 'number') {
-            price = `${item.prix.toLocaleString('fr-FR')} EUR`;
-          } else {
-            price = item.prix;
-          }
-        }
-        
-        // 3. Extraction de la description - Version corrigée
-        let description = '';
-        if (item.redacted_description) {
-          if (typeof item.redacted_description === 'string') {
-            description = item.redacted_description;
-          } else if (typeof item.redacted_description === 'object' && item.redacted_description !== null) {
-            const descObj = item.redacted_description as ApifyDescriptionObject;
-            if (descObj.text) {
-              description = descObj.text;
-            }
-          }
-        } else if (item.description) {
-          description = typeof item.description === 'string' ? item.description : JSON.stringify(item.description);
-        } else if (item.desc) {
-          description = typeof item.desc === 'string' ? item.desc : JSON.stringify(item.desc);
-        }
-        
-        // 4. Extraction de l'image principale - vérifier toutes les sources possibles
-        let imageUrl = '';
-        
-        // Vérifier les structures imbriquées d'abord - Facebook Marketplace
-        if (item.primary_listing_photo) {
-          // Structure standard: primary_listing_photo.image.uri
-          if (item.primary_listing_photo.image && item.primary_listing_photo.image.uri) {
-            imageUrl = item.primary_listing_photo.image.uri;
-          }
-          // Structure alternative: primary_listing_photo.listing_image.uri
-          else if (item.primary_listing_photo.listing_image && item.primary_listing_photo.listing_image.uri) {
-            imageUrl = item.primary_listing_photo.listing_image.uri;
-          }
-        } else if (item.listing_photos && item.listing_photos.length > 0) {
-          // Vérifier si nous avons une image dans le premier élément de listing_photos
-          if (item.listing_photos[0].image && item.listing_photos[0].image.uri) {
-            imageUrl = item.listing_photos[0].image.uri;
-          }
-        } 
-        // Vérifier les champs d'image directs
-        else if (item.imageUrl) {
-          imageUrl = typeof item.imageUrl === 'string' ? item.imageUrl : '';
-        } else if (item.image) {
-          if (typeof item.image === 'string') {
-            imageUrl = item.image;
-          } else if (typeof item.image === 'object' && item.image !== null && 'uri' in item.image) {
-            imageUrl = (item.image as { uri: string }).uri;
-          }
-        } else if (item.img) {
-          imageUrl = typeof item.img === 'string' ? item.img : '';
-        } else if (item.thumbnail) {
-          imageUrl = typeof item.thumbnail === 'string' ? item.thumbnail : '';
-        }
-        
-        // S'assurer que l'URL de l'image est complète
-        if (imageUrl && !imageUrl.startsWith('http')) {
-          if (imageUrl.startsWith('//')) {
-            imageUrl = 'https:' + imageUrl;
-          } else if (imageUrl.startsWith('/')) {
-            const listingUrl = item.listingUrl || item.url || item.link || item.href;
-            if (listingUrl && typeof listingUrl === 'string') {
-              try {
-                const urlObj = new URL(listingUrl);
-                imageUrl = `${urlObj.protocol}//${urlObj.hostname}${imageUrl}`;
-              } catch (e) {
-                // En cas d'erreur, laisser l'URL telle quelle
-              }
-            }
-          }
-        }
-        
-        // 5. Extraction de la localisation - Version corrigée
-        let locationStr = 'Unknown';
-        if (item.location) {
-          if (typeof item.location === 'string') {
-            locationStr = item.location;
-          } else if (typeof item.location === 'object' && item.location !== null) {
-            const loc = item.location as ApifyLocation;
-            // Vérifier reverse_geocode_detailed en premier
-            if (loc.reverse_geocode_detailed?.city) {
-              locationStr = loc.reverse_geocode_detailed.city;
-            }
-            // Puis reverse_geocode
-            else if (loc.reverse_geocode?.city) {
-              locationStr = loc.reverse_geocode.city;
-            }
-            // Puis city_page display_name
-            else if (loc.reverse_geocode?.city_page?.display_name) {
-              // Extraire juste la ville du format "Ville, Pays"
-              const displayName = loc.reverse_geocode.city_page.display_name;
-              locationStr = displayName.split(',')[0].trim();
-            }
-          }
-        } else if (item.lieu) {
-          locationStr = item.lieu;
-        }
-        
-        // 6. Extraction de l'URL de l'annonce
-        let url = '';
-        if (item.listingUrl) {
-          url = item.listingUrl;
-        } else if (item.url) {
-          url = item.url;
-        } else if (item.link) {
-          url = item.link;
-        } else if (item.href) {
-          url = item.href;
-        }
-        
-        // 7. Extraction de la date
-        let postedAt = '';
-        if (item.postedAt) {
-          postedAt = item.postedAt;
-        } else if (item.date) {
-          postedAt = item.date;
-        }
-        
-        return {
-          title: title || 'No Title',
-          price: price,
-          desc: description || 'No Description',
-          image: imageUrl,
-          location: locationStr,
-          url: url,
-          postedAt: postedAt
-        };
-      });
+      return items.map((item: ApifyItem) => this.extractItemData(item));
     } catch (error) {
       logger.error(`Error getting preview items for dataset ${datasetId}:`, error);
       throw new Error(`Failed to get preview items: ${(error as Error).message}`);

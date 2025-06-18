@@ -5,12 +5,19 @@ import { exportRoutes } from './exportRoutes';
 import { adminRoutes } from './adminRoutes';
 import { previewRoutes } from './previewRoutes';
 import { logger } from '../utils/logger';
+import { paymentController } from '../controllers/paymentController';
 
 const router = Router();
 
 // Register all routes
 router.use('/scrape', scrapeRoutes);
 router.use('/payment', paymentRoutes);
+
+// Route de compatibilité pour les webhooks Stripe (redirection vers le contrôleur de paiement)
+router.post('/stripe/webhook', (req, res, next) => {
+  logger.info('Webhook Stripe reçu sur /api/stripe/webhook, redirection vers le contrôleur de paiement');
+  return paymentController.handleWebhook(req, res, next);
+});
 
 // Routes d'export avec log spécifique pour débogage
 router.use('/export', (req, res, next) => {
