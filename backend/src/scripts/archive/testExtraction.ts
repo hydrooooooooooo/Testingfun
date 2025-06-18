@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { logger } from '../utils/logger';
-import { ApifyItem } from '../types/apifyTypes';
+import { logger } from '../../utils/logger';
+import { ApifyItem } from '../../types/apifyTypes';
 
 /**
  * Test script to verify the improved extraction logic directly

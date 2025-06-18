@@ -1,6 +1,6 @@
-import { logger } from '../utils/logger';
-import { ApifyService } from '../services/apifyService';
-import { sessionService } from '../services/sessionService';
+import { logger } from '../../utils/logger';
+import { ApifyService } from '../../services/apifyService';
+import { sessionService } from '../../services/sessionService';
 import dotenv from 'dotenv';
 
 // Load environment variables

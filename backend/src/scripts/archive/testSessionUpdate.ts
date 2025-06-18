@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { logger } from '../utils/logger';
-import { ApifyItem } from '../types/apifyTypes';
-import { sessionService, Session } from '../services/sessionService';
+import { logger } from '../../utils/logger';
+import { ApifyItem } from '../../types/apifyTypes';
+import { sessionService, Session } from '../../services/sessionService';
 
 /**
  * Test script to update a session with extracted items

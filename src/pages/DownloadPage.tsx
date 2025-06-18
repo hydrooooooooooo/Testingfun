@@ -4,14 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PLANS } from "@/lib/plans";
 import { toast } from "@/hooks/use-toast";
-import { FileDown, Loader2, CheckCircle, AlertCircle, RefreshCw, Home, Eye, AlertTriangle } from "lucide-react";
+import { FileDown, Loader2, CheckCircle, AlertCircle, RefreshCw, Home, Eye, AlertTriangle, Download, ArrowLeft } from "lucide-react";
 import axios from "axios";
 import ScrapePreview from "@/components/ScrapePreview";
 import { useApi } from "@/hooks/useApi";
 
-// L'utilisateur est redirigé ici après paiement Stripe
-
-export default function PaymentSuccessPage() {
+export default function DownloadPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const search = new URLSearchParams(location.search);
@@ -28,6 +26,7 @@ export default function PaymentSuccessPage() {
   const [error, setError] = useState("");
   const [previewItems, setPreviewItems] = useState<any[]>([]);
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
+  const [downloadHistory, setDownloadHistory] = useState<{format: string, timestamp: string}[]>([]);
   
   // Utiliser notre hook API
   const { getPreviewItems } = useApi();
@@ -58,8 +57,6 @@ export default function PaymentSuccessPage() {
         // Récupérer les éléments de prévisualisation
         fetchPreviewItems(sessionId);
         setIsVerifying(false);
-        // Rediriger automatiquement vers la page de téléchargement
-        navigate(`/download?session_id=${sessionId}&pack_id=${packId || 'pack-decouverte'}`);
         return;
       }
       
@@ -88,8 +85,6 @@ export default function PaymentSuccessPage() {
             
             // Récupérer les éléments de prévisualisation
             fetchPreviewItems(sessionId);
-            // Rediriger automatiquement vers la page de téléchargement
-            navigate(`/download?session_id=${sessionId}&pack_id=${packId || response.data.packId || 'pack-decouverte'}`);
           } else {
             setError("Le paiement n'a pas encore été confirmé. Veuillez réessayer dans quelques instants.");
           }
@@ -116,8 +111,6 @@ export default function PaymentSuccessPage() {
             
             // Récupérer les éléments de prévisualisation
             fetchPreviewItems(sessionId);
-            // Rediriger automatiquement vers la page de téléchargement
-            navigate(`/download?session_id=${sessionId}&pack_id=${packId || fallbackResponse.data.packId || 'pack-decouverte'}`);
           } else {
             setError("Le paiement n'a pas encore été confirmé. Veuillez réessayer dans quelques instants.");
           }
@@ -131,7 +124,7 @@ export default function PaymentSuccessPage() {
     };
     
     verifyPayment();
-  }, [sessionId, packId, navigate]);
+  }, [sessionId, packId]);
   
   // Récupérer les éléments de prévisualisation
   const fetchPreviewItems = async (sid: string) => {
@@ -204,28 +197,28 @@ export default function PaymentSuccessPage() {
   const generateDemoItems = () => {
     return [
       {
-        title: "Appartement T3 lumineux",
-        price: "285 000 €",
-        desc: "Bel appartement T3 de 68m² avec balcon et parking. Proche commerces et transports.",
-        image: "https://placehold.co/400x300?text=Appartement+T3",
-        location: "Bordeaux Centre",
-        url: "#"
+        title: "Appartement moderne 3 pièces",
+        price: "850 €",
+        desc: "Magnifique appartement rénové avec vue dégagée, proche des transports et commerces.",
+        location: "Paris 11ème",
+        url: "https://example.com/annonce1",
+        image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400"
       },
       {
-        title: "Maison 4 pièces avec jardin",
-        price: "320 000 €",
-        desc: "Maison familiale de 95m² avec jardin de 300m². 3 chambres, cuisine équipée.",
-        image: "https://placehold.co/400x300?text=Maison+4+pièces",
-        location: "Mérignac",
-        url: "#"
+        title: "Studio meublé centre-ville",
+        price: "650 €",
+        desc: "Studio entièrement meublé, idéal étudiant ou jeune professionnel, charges comprises.",
+        location: "Lyon 2ème",
+        url: "https://example.com/annonce2",
+        image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400"
       },
       {
-        title: "Studio meublé pour étudiant",
-        price: "580 €/mois",
-        desc: "Studio de 25m² entièrement meublé et rénové. Idéal pour étudiant.",
-        image: "https://placehold.co/400x300?text=Studio+meublé",
-        location: "Talence",
-        url: "#"
+        title: "Maison avec jardin 4 pièces",
+        price: "1200 €",
+        desc: "Belle maison avec jardin privatif, garage, proche écoles et parcs.",
+        location: "Marseille 8ème",
+        url: "https://example.com/annonce3",
+        image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400"
       }
     ];
   };
@@ -284,6 +277,12 @@ export default function PaymentSuccessPage() {
           
           console.log(`Téléchargement réussi: ${filename}`);
           
+          // Ajouter à l'historique des téléchargements
+          setDownloadHistory(prev => [...prev, {
+            format: format.toUpperCase(),
+            timestamp: new Date().toLocaleString('fr-FR')
+          }]);
+          
           toast({
             title: "Export réussi !",
             description: `Votre fichier ${format.toUpperCase()} (${pack.nbDownloads} annonces) a été téléchargé.`,
@@ -326,106 +325,168 @@ export default function PaymentSuccessPage() {
 
   return (
     <Layout>
-      <section className="mx-auto w-full max-w-xl my-20 px-2 flex flex-col items-center gap-6">
-        <div className={`rounded-xl border p-8 shadow-lg flex flex-col items-center gap-2 ${isVerifying ? 'bg-blue-50 border-blue-200' : error ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
-          {isVerifying ? (
-            <div className="flex flex-col items-center gap-4 py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-              <p className="text-md text-muted-foreground">Vérification du paiement en cours...</p>
-              <p className="text-sm text-muted-foreground">Session ID: <span className="font-mono text-xs bg-white px-2 py-1 rounded">{sessionId}</span></p>
+      <section className="mx-auto w-full max-w-4xl my-10 px-4">
+        {/* Header avec navigation */}
+        <div className="mb-8">
+          <Button
+            variant="ghost"
+            onClick={() => navigate(-1)}
+            className="mb-4 flex items-center gap-2 text-blue-600 hover:text-blue-800"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Retour
+          </Button>
+          
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              📥 Téléchargement de vos données
+            </h1>
+            <p className="text-gray-600">
+              Votre paiement a été confirmé. Téléchargez vos {pack.nbDownloads} annonces au format Excel ou CSV.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Section principale de téléchargement */}
+          <div className="space-y-6">
+            <div className={`rounded-xl border p-6 shadow-lg ${isVerifying ? 'bg-blue-50 border-blue-200' : error ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
+              {isVerifying ? (
+                <div className="flex flex-col items-center gap-4 py-8">
+                  <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+                  <p className="text-md text-muted-foreground">Vérification du paiement en cours...</p>
+                  <p className="text-sm text-muted-foreground">Session ID: <span className="font-mono text-xs bg-white px-2 py-1 rounded">{sessionId}</span></p>
+                </div>
+              ) : error ? (
+                <>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <AlertCircle className="h-6 w-6 text-red-600" />
+                    <h2 className="text-2xl font-extrabold text-red-600 text-center">Erreur</h2>
+                  </div>
+                  <p className="text-md text-muted-foreground text-center mb-4">{error}</p>
+                  <div className="flex items-center gap-4 mt-2">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => window.location.reload()}
+                      className="flex items-center gap-2"
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                      Réessayer
+                    </Button>
+                    <Link to="/" className="flex items-center gap-1 text-blue-600 font-semibold hover:underline">
+                      <Home className="h-4 w-4" />
+                      Accueil
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center justify-center gap-2 mb-4">
+                    <CheckCircle className="h-6 w-6 text-green-600" />
+                    <h2 className="text-2xl font-extrabold text-green-700 text-center">Paiement confirmé !</h2>
+                  </div>
+                  <div className="text-center mb-6">
+                    <p className="text-md text-muted-foreground mb-2">
+                      Pack acheté : <b>{pack.name}</b>
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Session ID: <span className="font-mono text-xs bg-white px-2 py-1 rounded">{sessionId}</span>
+                    </p>
+                  </div>
+                  
+                  <div className="w-full flex flex-col gap-3">
+                    <Button 
+                      className="w-full font-bold text-lg gap-2 bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800"
+                      onClick={() => handleDownload('excel')}
+                      disabled={isLoading}
+                      type="button"
+                    >
+                      {isLoading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <FileDown className="w-5 h-5" />}
+                      📊 Télécharger Excel ({pack.nbDownloads} annonces)
+                    </Button>
+                    <Button 
+                      className="w-full font-bold text-lg gap-2 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800"
+                      onClick={() => handleDownload('csv')}
+                      disabled={isLoading}
+                      type="button"
+                    >
+                      {isLoading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <FileDown className="w-5 h-5" />}
+                      📄 Télécharger CSV ({pack.nbDownloads} annonces)
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
-          ) : error ? (
-            <>
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <AlertCircle className="h-6 w-6 text-red-600" />
-                <h2 className="text-2xl font-extrabold text-red-600 text-center">Erreur</h2>
+
+            {/* Historique des téléchargements */}
+            {downloadHistory.length > 0 && (
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                  <Download className="h-4 w-4" />
+                  Historique des téléchargements
+                </h3>
+                <div className="space-y-2">
+                  {downloadHistory.map((download, index) => (
+                    <div key={index} className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">Fichier {download.format}</span>
+                      <span className="text-gray-500">{download.timestamp}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <p className="text-md text-muted-foreground text-center mb-4">{error}</p>
-              <div className="flex items-center gap-4 mt-2">
-                <Button 
-                  variant="outline" 
-                  onClick={() => window.location.reload()}
-                  className="flex items-center gap-2"
-                >
-                  <RefreshCw className="h-4 w-4" />
-                  Réessayer
-                </Button>
-                <Link to="/" className="flex items-center gap-1 text-blue-600 font-semibold hover:underline">
-                  <Home className="h-4 w-4" />
-                  Accueil
-                </Link>
-              </div>
-            </>
-          ) : paymentVerified ? (
-            <>
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <CheckCircle className="h-6 w-6 text-green-600" />
-                <h2 className="text-2xl font-extrabold text-green-700 text-center">Paiement confirmé !</h2>
-              </div>
-              <div className="text-center mb-4">
-                <p className="text-md text-muted-foreground mb-0">
-                  Merci pour votre achat : <b>{pack.name}</b>
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Session ID: <span className="font-mono text-xs bg-white px-2 py-1 rounded">{sessionId}</span>
-                </p>
+            )}
+          </div>
+
+          {/* Section de prévisualisation */}
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl border p-6 shadow-lg">
+              <div className="flex items-center gap-2 mb-4">
+                <Eye className="h-5 w-5 text-blue-600" />
+                <h3 className="text-lg font-semibold text-gray-800">Aperçu des données</h3>
               </div>
               
-              {/* Afficher la prévisualisation des données */}
               {isLoadingPreview ? (
-                <div className="flex flex-col items-center gap-4 py-4 mt-4 w-full">
-                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 w-full text-center">
-                    <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-blue-600" />
-                    <p className="text-sm text-muted-foreground">Chargement de la prévisualisation...</p>
-                  </div>
+                <div className="flex flex-col items-center gap-4 py-8">
+                  <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+                  <p className="text-sm text-muted-foreground">Chargement de la prévisualisation...</p>
                 </div>
               ) : previewItems && previewItems.length > 0 ? (
-                <div className="mt-4 w-full">
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <Eye className="h-5 w-5 text-blue-600" />
-                    <h3 className="text-lg font-semibold text-blue-700">Prévisualisation des données</h3>
-                  </div>
+                <>
                   <ScrapePreview items={previewItems.slice(0, 3)} />
-                  <p className="text-xs text-center text-muted-foreground mt-2">
+                  <p className="text-xs text-center text-muted-foreground mt-3">
                     Aperçu de {previewItems.slice(0, 3).length} éléments sur {pack.nbDownloads} disponibles
                   </p>
-                </div>
+                </>
               ) : (
-                <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-200 w-full text-center">
+                <div className="p-4 bg-amber-50 rounded-lg border border-amber-200 text-center">
                   <AlertTriangle className="h-5 w-5 mx-auto mb-2 text-amber-600" />
                   <p className="text-sm text-amber-700">Aucun élément de prévisualisation disponible</p>
                   <p className="text-xs text-amber-600 mt-1">Vous pouvez tout de même télécharger vos données</p>
                 </div>
               )}
-              
-              <div className="w-full flex flex-col gap-2 mt-6">
-                <Button 
-                  className="w-full font-bold text-lg gap-2 bg-gradient-to-r from-green-500 to-green-700"
-                  onClick={() => handleDownload('excel')}
-                  disabled={isLoading}
-                  type="button"
-                >
-                  {isLoading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <FileDown className="w-5 h-5" />}
-                  Télécharger Excel ({pack.nbDownloads} annonces)
-                </Button>
-                <Button 
-                  className="w-full font-bold text-lg gap-2 bg-gradient-to-r from-blue-500 to-blue-700"
-                  onClick={() => handleDownload('csv')}
-                  disabled={isLoading}
-                  type="button"
-                >
-                  {isLoading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <FileDown className="w-5 h-5" />}
-                  Télécharger CSV ({pack.nbDownloads} annonces)
-                </Button>
-              </div>
-              <Link to="/" className="mt-4 flex items-center gap-1 text-blue-600 font-semibold hover:underline">
-                <Home className="h-4 w-4" />
-                Retour à l'accueil
-              </Link>
-            </>
-          ) : null}
+            </div>
+
+            {/* Informations supplémentaires */}
+            <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+              <h4 className="font-semibold text-blue-800 mb-2">💡 Conseils d'utilisation</h4>
+              <ul className="text-sm text-blue-700 space-y-1">
+                <li>• Les fichiers Excel sont optimisés pour l'analyse</li>
+                <li>• Les fichiers CSV sont compatibles avec tous les logiciels</li>
+                <li>• Vous pouvez télécharger plusieurs fois le même format</li>
+                <li>• Vos données restent disponibles pendant 30 jours</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-8 text-center">
+          <Link to="/" className="inline-flex items-center gap-2 text-blue-600 font-semibold hover:underline">
+            <Home className="h-4 w-4" />
+            Retour à l'accueil
+          </Link>
         </div>
       </section>
     </Layout>
   );
-}
+} 
