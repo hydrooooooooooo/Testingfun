@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { apifyService } from '../services/apifyService';
-import { sessionService, Session } from '../services/sessionService';
-import { logger } from '../utils/logger';
+import { apifyService } from '../../services/apifyService';
+import { sessionService, Session } from '../../services/sessionService';
+import { logger } from '../../utils/logger';
 
 /**
  * Test script to verify the improved extraction logic
@@ -36,7 +36,7 @@ async function testImprovedExtraction() {
     const previewItems = await apifyService.getPreviewItems('test-dataset', 5);
     
     logger.info('Testing getAllItems with improved extraction...');
-    const allItems = await apifyService.getAllItems('test-dataset');
+    const allItems = await apifyService.getDatasetItems('test-dataset');
     
     // Restore the original method
     (apifyService as any).apifyClient.dataset = originalDataset;
@@ -50,7 +50,7 @@ async function testImprovedExtraction() {
     
     // Log sample items for quick inspection
     logger.info('Sample preview items:');
-    previewItems.forEach((item, index) => {
+    previewItems.forEach((item: any, index: number) => {
       logger.info(`Item ${index + 1}:`);
       logger.info(`  Title: ${item.title}`);
       logger.info(`  Price: ${item.price}`);

@@ -1,5 +1,5 @@
-import { apifyService } from '../services/apifyService';
-import { logger } from '../utils/logger';
+import { apifyService } from '../../services/apifyService';
+import { logger } from '../../utils/logger';
 import fs from 'fs';
 import path from 'path';
 
