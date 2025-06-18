@@ -5,6 +5,8 @@ import { sessionService, Session, SessionStatus } from '../services/sessionServi
 import { ApiError } from '../middlewares/errorHandler';
 import { logger } from '../utils/logger';
 import { config } from '../config/config';
+import fs from 'fs';
+import path from 'path';
 
 export class ScrapeController {
   /**
@@ -12,12 +14,18 @@ export class ScrapeController {
    */
   async startScrape(req: Request, res: Response, next: NextFunction) {
     const { url } = req.body;
-    let { sessionId, resultsLimit } = req.body;
+    let { sessionId, resultsLimit, deepScrape, getProfileUrls } = req.body;
     let session: Session | null = null;
 
     // Convertir resultsLimit en nombre et valider
     const limit = resultsLimit ? parseInt(resultsLimit, 10) : 3;
     const validLimit = !isNaN(limit) && limit > 0 ? limit : 3;
+
+    // Préparer les options de scraping
+    const scrapingOptions = {
+      deepScrape: deepScrape !== undefined ? Boolean(deepScrape) : (validLimit > 5),
+      getProfileUrls: getProfileUrls !== undefined ? Boolean(getProfileUrls) : false
+    };
 
     try {
       // Validate URL
@@ -30,7 +38,7 @@ export class ScrapeController {
         sessionId = `sess_${nanoid(10)}`;
       }
 
-      logger.info(`Starting scrape for URL: ${url}, sessionId: ${sessionId}`);
+      logger.info(`Starting scrape for URL: ${url}, sessionId: ${sessionId}, options:`, scrapingOptions);
 
       // Create session record with PENDING status first
       session = sessionService.createSession({
@@ -46,8 +54,8 @@ export class ScrapeController {
         }
       });
 
-      // Start APIFY scraping job
-      const { datasetId, actorRunId } = await apifyService.startScraping(url, sessionId, validLimit);
+      // Start APIFY scraping job with options
+      const { datasetId, actorRunId } = await apifyService.startScraping(url, sessionId, validLimit, scrapingOptions);
 
       // Update session with RUNNING status and Apify details
       session = sessionService.updateSession(sessionId, {
@@ -94,7 +102,7 @@ export class ScrapeController {
       logger.info(`Récupération des résultats pour la session ${sessionId}`);
 
       // Get session from service
-      const session = sessionService.getSession(sessionId);
+      let session = sessionService.getSession(sessionId);
       if (!session) {
         logger.error(`Session avec ID ${sessionId} non trouvée`);
         throw new ApiError(404, `Session with ID ${sessionId} not found`);
@@ -109,7 +117,19 @@ export class ScrapeController {
         hasData: !!session.data
       })}`);
 
-      // If session has an actor run ID, get the status from APIFY
+      // Si la session a un actorRunId, vérifier le statut auprès d'APIFY
+      // Mais d'abord, s'assurer que nous avons des données de base même si APIFY échoue
+      if (!session.data) {
+        session = sessionService.updateSession(sessionId, {
+          data: {
+            nbItems: 0,
+            startedAt: new Date().toISOString(),
+            previewItems: []
+          }
+        }) || session;
+      }
+      
+      // Si la session a un actorRunId, vérifier le statut auprès d'APIFY
       if (session.actorRunId) {
         logger.info(`Récupération du statut Apify pour l'acteur ${session.actorRunId}`);
         const runStatus = await apifyService.getRunStatus(session.actorRunId);
@@ -149,42 +169,8 @@ export class ScrapeController {
               const previewItems = await apifyService.getPreviewItems(session.datasetId, 3);
               logger.info(`Éléments de prévisualisation extraits: ${previewItems.length}`);
               
-              // Vérifier si un fichier de backup existe déjà pour cette session
-              const fs = require('fs');
-              const path = require('path');
-              const backupDir = './data/backups';
-              const backupPath = `${backupDir}/sess_${sessionId}.json`;
-              
-              // Vérifier si le fichier existe déjà
-              const backupExists = fs.existsSync(backupPath);
-              
-              // Ne créer un fichier de backup que s'il n'existe pas déjà
-              if (!backupExists) {
-                logger.info(`Création d'un nouveau fichier de backup pour la session ${sessionId}`);
-                
-                try {
-                  // Assurer que le répertoire existe
-                  if (!fs.existsSync(backupDir)) {
-                    fs.mkdirSync(backupDir, { recursive: true });
-                  }
-                  
-                  // Sauvegarder les données brutes
-                  fs.writeFileSync(backupPath, JSON.stringify({
-                    sessionId,
-                    datasetId: session.datasetId,
-                    timestamp: new Date().toISOString(),
-                    totalItems: totalItemsCount,
-                    previewItems,
-                    allItems: allItems.slice(0, 10) // Sauvegarder seulement les 10 premiers éléments complets
-                  }, null, 2));
-                  
-                  logger.info(`Sauvegarde des données créée: ${backupPath}`);
-                } catch (backupError) {
-                  logger.error(`Erreur lors de la sauvegarde des données: ${backupError}`);
-                }
-              } else {
-                logger.info(`Fichier de backup pour la session ${sessionId} existe déjà, pas de nouvelle sauvegarde créée`);
-              }
+              // Créer un fichier de backup avec les données réelles et la structure corrigée
+              this.createBackupFile(sessionId, session.datasetId, totalItemsCount, previewItems, allItems.slice(0, 10));
               
               // Update session with preview items and accurate statistics
               sessionService.updateSession(sessionId, { 
@@ -193,7 +179,8 @@ export class ScrapeController {
                   finishedAt: new Date().toISOString(),
                   previewItems,
                   nbItems: totalItemsCount,
-                  totalItems: totalItemsCount
+                  totalItems: totalItemsCount,
+                  totalItemsCount: totalItemsCount
                 }
               });
               
@@ -229,6 +216,64 @@ export class ScrapeController {
       });
     } catch (error) {
       next(error);
+    }
+  }
+
+  /**
+   * Créer un fichier de backup avec les données extraites
+   */
+  private createBackupFile(
+    sessionId: string, 
+    datasetId: string, 
+    totalItemsCount: number, 
+    previewItems: any[], 
+    sampleAllItems: any[]
+  ): void {
+    try {
+      const backupDir = path.join(process.cwd(), 'data', 'backups');
+      const backupPath = path.join(backupDir, `sess_${sessionId}.json`);
+      
+      // Vérifier si le fichier existe déjà
+      if (fs.existsSync(backupPath)) {
+        logger.info(`Fichier de backup pour la session ${sessionId} existe déjà, pas de nouvelle sauvegarde créée`);
+        return;
+      }
+      
+      // Assurer que le répertoire existe
+      if (!fs.existsSync(backupDir)) {
+        fs.mkdirSync(backupDir, { recursive: true });
+      }
+      
+      // Sauvegarder les données avec la structure correcte et les données extraites
+      const backupData = {
+        sessionId,
+        datasetId,
+        timestamp: new Date().toISOString(),
+        totalItems: totalItemsCount,
+        previewItems: previewItems.map(item => ({
+          title: item.title,
+          price: item.price,
+          desc: item.desc,
+          image: item.image,
+          location: item.location,
+          url: item.url,
+          postedAt: item.postedAt
+        })),
+        allItems: sampleAllItems.map(item => ({
+          title: item.title,
+          price: item.price,
+          desc: item.desc,
+          image: item.image,
+          location: item.location,
+          url: item.url,
+          postedAt: item.postedAt
+        }))
+      };
+      
+      fs.writeFileSync(backupPath, JSON.stringify(backupData, null, 2));
+      logger.info(`Sauvegarde des données créée: ${backupPath}`);
+    } catch (backupError) {
+      logger.error(`Erreur lors de la sauvegarde des données: ${backupError}`);
     }
   }
 

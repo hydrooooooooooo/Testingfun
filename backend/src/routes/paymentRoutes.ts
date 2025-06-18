@@ -24,12 +24,12 @@ router.post(
 );
 
 /**
- * @route   POST /api/stripe/webhook
+ * @route   POST /api/payment/webhook
  * @desc    Handle Stripe webhook events
  * @access  Public
  */
 router.post(
-  '/stripe/webhook',
+  '/webhook',
   express.raw({ type: 'application/json' }), // Raw body for webhook signature verification
   paymentController.handleWebhook.bind(paymentController)
 );

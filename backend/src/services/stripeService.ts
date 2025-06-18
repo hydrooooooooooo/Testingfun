@@ -10,7 +10,7 @@ const stripe = new Stripe(config.api.stripeSecretKey || '', {
 
 export class StripeService {
   /**
-   * Create a payment link using a fixed Stripe checkout URL
+   * Create a dynamic Stripe checkout session
    */
   async createCheckoutSession(packId: string, sessionId: string): Promise<string> {
     try {
@@ -20,20 +20,38 @@ export class StripeService {
         throw new Error(`Pack with ID ${packId} not found`);
       }
       
-      // Utiliser le lien de paiement fixe fourni
-      const fixedPaymentLink = "https://buy.stripe.com/test_8x2dRbgfsale3a93ru2wU02";
-      
-      // Construire l'URL de succès pour la redirection après paiement
+      // Construire les URLs pour la redirection après paiement
       const frontendUrl = config.server.frontendUrl || 'http://localhost:5173';
       const successUrl = `${frontendUrl}/payment-success?session_id=${sessionId}&pack_id=${packId}`;
-      const encodedSuccessUrl = encodeURIComponent(successUrl);
+      const cancelUrl = `${frontendUrl}/payment-cancel`;
       
-      // Ajouter des paramètres de requête pour suivre la session et le pack
-      // Inclure success_url pour la redirection après paiement
-      const paymentUrl = `${fixedPaymentLink}?client_reference_id=${sessionId}&session_id=${sessionId}&pack_id=${packId}&success_url=${encodedSuccessUrl}`;
+      // Créer une session Stripe dynamique
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'eur',
+              product_data: {
+                name: pack.name,
+                description: pack.description,
+              },
+              unit_amount: Math.round(pack.price * 100), // Stripe utilise les centimes
+            },
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+        metadata: {
+          sessionId: sessionId,
+          packId: packId,
+        },
+        client_reference_id: sessionId,
+      });
       
       // Stocker les informations de session dans la base de données locale
-      // pour pouvoir vérifier le paiement plus tard
       try {
         // Marquer la session comme en attente de paiement
         const sessionData = {
@@ -42,17 +60,22 @@ export class StripeService {
           paymentStartedAt: new Date().toISOString()
         };
         
-        // Nous allons vérifier le paiement plus tard via le webhook ou la vérification manuelle
+        // Nous allons vérifier le paiement plus tard via le webhook
         logger.info(`Payment initiated for session ${sessionId} with pack ${packId}`);
       } catch (err) {
         logger.warn(`Could not update session data for payment: ${err}`);
       }
 
-      logger.info(`Using Stripe payment link for pack ${packId}, session ${sessionId}`);
-      return paymentUrl;
+      logger.info(`Created Stripe checkout session for pack ${packId}, session ${sessionId}`);
+      
+      if (!session.url) {
+        throw new Error('Stripe did not return a checkout URL');
+      }
+      
+      return session.url;
     } catch (error) {
-      logger.error('Error creating payment link:', error);
-      throw new Error(`Failed to create payment link: ${(error as Error).message}`);
+      logger.error('Error creating Stripe checkout session:', error);
+      throw new Error(`Failed to create checkout session: ${(error as Error).message}`);
     }
   }
 
@@ -81,6 +104,18 @@ export class StripeService {
     } catch (error) {
       logger.error(`Error retrieving Stripe checkout session ${sessionId}:`, error);
       throw new Error(`Failed to retrieve checkout session: ${(error as Error).message}`);
+    }
+  }
+  
+  /**
+   * Retrieve a payment intent by ID
+   */
+  async getPaymentIntent(paymentIntentId: string): Promise<Stripe.PaymentIntent> {
+    try {
+      return await stripe.paymentIntents.retrieve(paymentIntentId);
+    } catch (error) {
+      logger.error(`Error retrieving payment intent ${paymentIntentId}:`, error);
+      throw new Error(`Failed to retrieve payment intent: ${(error as Error).message}`);
     }
   }
 }

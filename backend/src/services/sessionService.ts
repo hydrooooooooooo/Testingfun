@@ -27,6 +27,14 @@ export interface Session {
   datasetId?: string;
   actorRunId?: string;
   packId?: string;
+  // Nouveaux champs pour la gestion des paiements
+  paymentCompletedAt?: string;
+  paymentStatus?: 'pending' | 'succeeded' | 'failed';
+  paymentError?: string;
+  paymentPending?: boolean;
+  paymentStartedAt?: string;
+  // URL de téléchargement automatique après paiement
+  downloadUrl?: string;
 }
 
 /**

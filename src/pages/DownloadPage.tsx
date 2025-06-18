@@ -17,6 +17,7 @@ export default function DownloadPage() {
   // Récupérer les paramètres de l'URL
   const sessionId = search.get("session_id") || search.get("client_reference_id");
   const packId = search.get("pack_id");
+  const autoDownload = search.get("autoDownload") === "true";
   
   // États pour gérer le chargement et les erreurs
   const [isLoading, setIsLoading] = useState(false);
@@ -27,9 +28,30 @@ export default function DownloadPage() {
   const [previewItems, setPreviewItems] = useState<any[]>([]);
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const [downloadHistory, setDownloadHistory] = useState<{format: string, timestamp: string}[]>([]);
+  const [autoDownloadTriggered, setAutoDownloadTriggered] = useState(false);
   
   // Utiliser notre hook API
   const { getPreviewItems } = useApi();
+  
+  // Déclencher automatiquement le téléchargement si autoDownload est présent
+  useEffect(() => {
+    if (autoDownload && paymentVerified && !isLoading && !autoDownloadTriggered) {
+      console.log('Téléchargement automatique déclenché');
+      setAutoDownloadTriggered(true); // Marquer comme déclenché pour éviter les téléchargements multiples
+      
+      // Ajouter un petit délai pour s'assurer que la page est complètement chargée
+      const timer = setTimeout(() => {
+        handleDownload('excel');
+        // Notification pour informer l'utilisateur
+        toast({
+          title: "Téléchargement automatique",
+          description: "Votre fichier Excel est en cours de téléchargement suite à votre paiement réussi.",
+          variant: "default",
+        });
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [paymentVerified, autoDownload, isLoading, autoDownloadTriggered]);
   
   // Vérifier le paiement au chargement de la page
   useEffect(() => {
@@ -466,6 +488,19 @@ export default function DownloadPage() {
               )}
             </div>
 
+            {/* Bannière de téléchargement automatique */}
+            {autoDownload && autoDownloadTriggered && (
+              <div className="bg-green-50 rounded-lg p-4 border border-green-200 mb-4 animate-pulse">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <h4 className="font-semibold text-green-800">Téléchargement automatique en cours</h4>
+                </div>
+                <p className="text-sm text-green-700 mt-1 pl-7">
+                  Suite à votre paiement réussi, votre fichier Excel est en cours de téléchargement.
+                </p>
+              </div>
+            )}
+            
             {/* Informations supplémentaires */}
             <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
               <h4 className="font-semibold text-blue-800 mb-2">💡 Conseils d'utilisation</h4>
