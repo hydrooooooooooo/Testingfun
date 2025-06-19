@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PLANS } from "@/lib/plans";
 import { toast } from "@/hooks/use-toast";
-import { FileDown, Loader2, CheckCircle, AlertCircle, RefreshCw, Home, Eye, AlertTriangle } from "lucide-react";
+import { FileDown, Loader2, CheckCircle, AlertCircle, RefreshCw, Home, Eye, AlertTriangle, Download } from "lucide-react";
 import axios from "axios";
 import ScrapePreview from "@/components/ScrapePreview";
 import { useApi } from "@/hooks/useApi";
@@ -12,6 +12,8 @@ import { useApi } from "@/hooks/useApi";
 // L'utilisateur est redirigé ici après paiement Stripe
 
 export default function PaymentSuccessPage() {
+  console.log('=== PAYMENT SUCCESS COMPONENT RENDERED ===');
+  
   const location = useLocation();
   const navigate = useNavigate();
   const search = new URLSearchParams(location.search);
@@ -34,6 +36,10 @@ export default function PaymentSuccessPage() {
   
   // Vérifier le paiement au chargement de la page
   useEffect(() => {
+    console.log('=== PAYMENT SUCCESS PAGE LOADED ===');
+    console.log('URL params:', { sessionId, packId });
+    console.log('Current URL:', window.location.href);
+    
     const verifyPayment = async () => {
       if (!sessionId) {
         setError("Aucun identifiant de session trouvé");
@@ -59,7 +65,15 @@ export default function PaymentSuccessPage() {
         fetchPreviewItems(sessionId);
         setIsVerifying(false);
         // Rediriger automatiquement vers la page de téléchargement
-        navigate(`/download?session_id=${sessionId}&pack_id=${packId || 'pack-decouverte'}`);
+        setTimeout(() => {
+          console.log('Redirection vers la page de téléchargement...');
+          try {
+            navigate(`/download?session_id=${sessionId}&pack_id=${packId || 'pack-decouverte'}`);
+          } catch (navError) {
+            console.warn('Erreur avec navigate(), utilisation de window.location:', navError);
+            window.location.href = `/download?session_id=${sessionId}&pack_id=${packId || 'pack-decouverte'}`;
+          }
+        }, 1000); // Attendre 1 seconde pour laisser le temps aux états de se mettre à jour
         return;
       }
       
@@ -89,7 +103,22 @@ export default function PaymentSuccessPage() {
             // Récupérer les éléments de prévisualisation
             fetchPreviewItems(sessionId);
             // Rediriger automatiquement vers la page de téléchargement
-            navigate(`/download?session_id=${sessionId}&pack_id=${packId || response.data.packId || 'pack-decouverte'}`);
+            setTimeout(() => {
+              console.log('=== REDIRECTION ATTEMPT ===');
+              console.log('Session ID:', sessionId);
+              console.log('Pack ID:', packId || response.data.packId || 'pack-decouverte');
+              const redirectUrl = `/download?session_id=${sessionId}&pack_id=${packId || response.data.packId || 'pack-decouverte'}`;
+              console.log('Redirect URL:', redirectUrl);
+              
+              try {
+                console.log('Attempting navigation with react-router...');
+                navigate(redirectUrl);
+                console.log('Navigation successful');
+              } catch (navError) {
+                console.warn('Navigation failed, trying window.location:', navError);
+                window.location.href = redirectUrl;
+              }
+            }, 1000); // Attendre 1 seconde pour laisser le temps aux états de se mettre à jour
           } else {
             setError("Le paiement n'a pas encore été confirmé. Veuillez réessayer dans quelques instants.");
           }
@@ -117,7 +146,15 @@ export default function PaymentSuccessPage() {
             // Récupérer les éléments de prévisualisation
             fetchPreviewItems(sessionId);
             // Rediriger automatiquement vers la page de téléchargement
-            navigate(`/download?session_id=${sessionId}&pack_id=${packId || fallbackResponse.data.packId || 'pack-decouverte'}`);
+            setTimeout(() => {
+              console.log('Redirection vers la page de téléchargement...');
+              try {
+                navigate(`/download?session_id=${sessionId}&pack_id=${packId || fallbackResponse.data.packId || 'pack-decouverte'}`);
+              } catch (navError) {
+                console.warn('Erreur avec navigate(), utilisation de window.location:', navError);
+                window.location.href = `/download?session_id=${sessionId}&pack_id=${packId || fallbackResponse.data.packId || 'pack-decouverte'}`;
+              }
+            }, 1000); // Attendre 1 seconde pour laisser le temps aux états de se mettre à jour
           } else {
             setError("Le paiement n'a pas encore été confirmé. Veuillez réessayer dans quelques instants.");
           }
@@ -416,6 +453,27 @@ export default function PaymentSuccessPage() {
                 >
                   {isLoading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <FileDown className="w-5 h-5" />}
                   Télécharger CSV ({pack.nbDownloads} annonces)
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="w-full gap-2"
+                  onClick={() => navigate(`/download?session_id=${sessionId}&pack_id=${packId || 'pack-decouverte'}`)}
+                  type="button"
+                >
+                  <Download className="w-5 h-5" />
+                  Aller à la page de téléchargement
+                </Button>
+                <Button 
+                  variant="secondary"
+                  className="w-full gap-2"
+                  onClick={() => {
+                    console.log('=== TEST REDIRECTION ===');
+                    console.log('Testing direct navigation...');
+                    window.location.href = `/download?session_id=${sessionId}&pack_id=${packId || 'pack-decouverte'}`;
+                  }}
+                  type="button"
+                >
+                  Test Redirection Directe
                 </Button>
               </div>
               <Link to="/" className="mt-4 flex items-center gap-1 text-blue-600 font-semibold hover:underline">

@@ -46,7 +46,7 @@ export const corsForStripeWebhook = (req: Request, res: Response, next: NextFunc
     // Pour les exports et previews, on autorise toutes les origines
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key, Pragma, Cache-Control, Accept, Origin, X-Requested-With');
     res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition, Content-Length');
     
     // Log pour débogage
@@ -78,7 +78,7 @@ export const corsForStripeWebhook = (req: Request, res: Response, next: NextFunc
   }
   
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key, Pragma, Cache-Control, Accept, Origin, X-Requested-With');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   
   // Handle preflight requests

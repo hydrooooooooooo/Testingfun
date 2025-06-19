@@ -33,6 +33,11 @@ export default function DownloadPage() {
   
   // Vérifier le paiement au chargement de la page
   useEffect(() => {
+    console.log('=== DOWNLOAD PAGE LOADED ===');
+    console.log('URL params:', { sessionId, packId });
+    console.log('Current URL:', window.location.href);
+    console.log('Search params:', location.search);
+    
     const verifyPayment = async () => {
       if (!sessionId) {
         setError("Aucun identifiant de session trouvé");
