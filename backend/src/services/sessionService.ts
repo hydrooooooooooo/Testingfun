@@ -35,6 +35,10 @@ export interface Session {
   paymentStartedAt?: string;
   // URL de téléchargement automatique après paiement
   downloadUrl?: string;
+  // Indique si la session contient des données de scraping
+  hasData?: boolean;
+  // Token de téléchargement unique pour autoriser un téléchargement sans nouvelle vérification
+  downloadToken?: string;
 }
 
 /**
@@ -196,6 +200,34 @@ class SessionService {
       return null;
     }
     return session;
+  }
+
+  /**
+   * Get the most recent session that has data but is not paid yet
+   * @returns Most recent unpaid session with data or null if none found
+   */
+  getMostRecentUnpaidSession(): Session | null {
+    let mostRecent: Session | null = null;
+    let mostRecentDate = new Date(0); // Start with oldest possible date
+
+    // Iterate through all sessions to find the most recent unpaid one with data
+    for (const [id, session] of this.sessions.entries()) {
+      // Considérer une session comme ayant des données si elle a un datasetId ou si hasData est explicitement true
+      const hasData = session.hasData === true || (session.datasetId !== undefined && session.datasetId !== null);
+      
+      if (!session.isPaid && hasData && session.createdAt > mostRecentDate) {
+        mostRecent = session;
+        mostRecentDate = session.createdAt;
+      }
+    }
+
+    if (mostRecent) {
+      logger.info(`Found most recent unpaid session: ${mostRecent.id} created at ${mostRecent.createdAt.toISOString()}`);
+    } else {
+      logger.warn('No unpaid sessions with data found');
+    }
+
+    return mostRecent;
   }
 
   /**

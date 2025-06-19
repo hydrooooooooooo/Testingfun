@@ -42,12 +42,12 @@ export const corsForStripeWebhook = (req: Request, res: Response, next: NextFunc
   }
   
   // Configuration CORS spéciale pour les routes d'export et preview
-  if (req.path.startsWith('/api/export') || req.path.startsWith('/api/preview')) {
-    // Pour les exports et previews, on autorise toutes les origines
+  if (req.path.startsWith('/api/export') || req.path.startsWith('/api/preview') || req.path.startsWith('/api/verify-payment')) {
+    // Pour les exports, previews et vérification de paiement, on autorise toutes les origines et en-têtes
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key');
-    res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition, Content-Length');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, HEAD');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key, Cache-Control, Pragma, Expires, Origin, X-Requested-With, Accept');
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition, Content-Type, Content-Length');
     
     // Log pour débogage
     logger.info(`Configuration CORS spéciale appliquée pour ${req.path}`);

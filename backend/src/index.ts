@@ -24,13 +24,18 @@ app.use(corsForStripeWebhook);
 // Logging middleware
 app.use(morgan('dev'));
 
-// Activer CORS explicitement
+// Activer CORS explicitement avec une configuration très permissive pour résoudre les problèmes de téléchargement
 app.use(cors({
-  origin: config.cors.allowedOrigins,
+  origin: '*', // Autoriser toutes les origines pour le développement
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma', 'Expires', 'Origin', 'X-Requested-With', 'Accept'],
+  exposedHeaders: ['Content-Length', 'Content-Type', 'Content-Disposition'],
+  maxAge: 86400 // 24 heures
 }));
+
+// Middleware pour gérer les requêtes OPTIONS préflight
+app.options('*', cors());
 app.use(requestLogger);
 
 // Special handling for Stripe webhook routes (support both paths for compatibilité)

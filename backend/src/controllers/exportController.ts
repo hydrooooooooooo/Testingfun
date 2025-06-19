@@ -18,17 +18,25 @@ export class ExportController {
     
     try {
       // Récupérer et valider les paramètres
-      const { sessionId, format = 'excel' } = req.query;
+      // Accepter les deux formats de paramètres (sessionId et session_id) pour plus de compatibilité
+      const sessionIdParam = req.query.sessionId || req.query.session_id;
+      const format = req.query.format as string || 'excel';
+      const downloadToken = req.query.token as string || null;
       const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
       const userAgent = req.headers['user-agent'] || 'unknown';
       
-      logger.info(`[${requestId}] Requête d'exportation: format=${format}, sessionId=${sessionId}, IP=${clientIp}, UA=${userAgent}`);
+      // Log détaillé des paramètres reçus
+      logger.info(`[${requestId}] Paramètres reçus: ${JSON.stringify(req.query)}`);
+      logger.info(`[${requestId}] Requête d'exportation: format=${format}, sessionId=${sessionIdParam}, IP=${clientIp}, UA=${userAgent}`);
       
       // Vérifier que le sessionId est valide
-      if (!sessionId || typeof sessionId !== 'string') {
+      if (!sessionIdParam || typeof sessionIdParam !== 'string') {
         logger.warn(`[${requestId}] Tentative d'exportation sans sessionId valide`);
         throw new ApiError(400, 'Session ID is required');
       }
+      
+      // Utiliser une variable constante pour le reste du code
+      const sessionId = sessionIdParam;
       
       // Vérifier que le format est valide
       if (format !== 'excel' && format !== 'csv') {
@@ -63,12 +71,28 @@ export class ExportController {
         }
       }
       
-      // Vérifier si la session est payée ou temporaire (pour les tests)
-      const isPaid = session.isPaid || isTemporarySession;
+      // Vérifier si la session est payée, temporaire, ou si un token de téléchargement valide est fourni
+      const hasValidToken = downloadToken && session.downloadToken === downloadToken;
+      const isPaid = session.isPaid || isTemporarySession || hasValidToken;
+      
+      // Log pour le débogage des tokens
+      if (downloadToken) {
+        logger.info(`[${requestId}] Token de téléchargement fourni: ${downloadToken}`);
+        logger.info(`[${requestId}] Token stocké dans la session: ${session.downloadToken || 'aucun'}`);
+        logger.info(`[${requestId}] Token valide: ${hasValidToken}`);
+      }
       
       if (!isPaid) {
         logger.warn(`[${requestId}] Tentative d'exportation sans paiement pour la session ${sessionId}`);
         throw new ApiError(403, 'Payment required to export data');
+      }
+      
+      // Si le téléchargement est effectué avec un token valide, le marquer comme utilisé
+      // pour éviter les téléchargements multiples avec le même token (optionnel)
+      if (hasValidToken) {
+        logger.info(`[${requestId}] Téléchargement autorisé via token pour la session ${sessionId}`);
+        // On pourrait réinitialiser le token après utilisation si on veut limiter à un seul téléchargement
+        // sessionService.updateSession(sessionId, { downloadToken: null });
       }
       
       // Vérifier si la session a un datasetId (sauf pour les sessions temporaires)
@@ -128,8 +152,28 @@ export class ExportController {
       // Configurer les en-têtes CORS et envoyer le fichier
       this.sendFileWithHeaders(res, buffer, filename, contentType, requestId);
     } catch (error) {
-      logger.error(`[${requestId}] Erreur lors de l'exportation: ${error instanceof Error ? error.message : String(error)}`);
-      next(error);
+      // Log détaillé de l'erreur pour faciliter le débogage
+      logger.error(`[${requestId}] Erreur lors de la requête d'exportation: ${error instanceof Error ? error.message : String(error)}`);
+      
+      if (error instanceof Error) {
+        logger.error(`[${requestId}] Stack trace: ${error.stack}`);
+      }
+      
+      // Envoyer une réponse d'erreur avec les en-têtes CORS appropriés
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, HEAD');
+      res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma, Expires');
+      
+      // Envoyer une réponse d'erreur formatée
+      const statusCode = error instanceof ApiError ? error.statusCode : 500;
+      const message = error instanceof ApiError ? error.message : 'Une erreur est survenue lors de l\'exportation';
+      
+      res.status(statusCode).json({
+        success: false,
+        message,
+        requestId,
+        timestamp: new Date().toISOString()
+      });
     }
   }
   
@@ -176,8 +220,28 @@ export class ExportController {
       // Configurer les en-têtes CORS et envoyer le fichier
       this.sendFileWithHeaders(res, buffer, filename, contentType, requestId);
     } catch (error) {
+      // Log détaillé de l'erreur pour faciliter le débogage
       logger.error(`[${requestId}] Erreur lors de la génération du fichier de démonstration: ${error instanceof Error ? error.message : String(error)}`);
-      next(error);
+      
+      if (error instanceof Error) {
+        logger.error(`[${requestId}] Stack trace: ${error.stack}`);
+      }
+      
+      // Envoyer une réponse d'erreur avec les en-têtes CORS appropriés
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, HEAD');
+      res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma, Expires');
+      
+      // Envoyer une réponse d'erreur formatée
+      const statusCode = error instanceof ApiError ? error.statusCode : 500;
+      const message = error instanceof ApiError ? error.message : 'Une erreur est survenue lors de la génération du fichier de démonstration';
+      
+      res.status(statusCode).json({
+        success: false,
+        message,
+        requestId,
+        timestamp: new Date().toISOString()
+      });
     }
   }
   
@@ -243,26 +307,31 @@ export class ExportController {
    * Configure les en-têtes CORS et envoie le fichier
    */
   private sendFileWithHeaders(res: Response, buffer: Buffer, filename: string, contentType: string, requestId: string): void {
-    // Configurer les en-têtes CORS spécifiquement pour cette réponse
+    // Configurer les en-têtes CORS de manière permissive pour cette réponse
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, cache-control');
-    res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition, Content-Length');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, HEAD');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma, Expires');
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition, Content-Type, Content-Length');
+    res.setHeader('Access-Control-Max-Age', '86400'); // 24 heures
     
     // Supprimer les en-têtes de sécurité restrictifs pour permettre le téléchargement
     res.removeHeader('Content-Security-Policy');
     res.removeHeader('X-Frame-Options');
+    res.removeHeader('X-Content-Type-Options');
     
     // Définir les en-têtes pour le téléchargement du fichier
     res.setHeader('Content-Type', contentType);
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.setHeader('Content-Length', buffer.length);
+    
+    // En-têtes de cache pour éviter les problèmes avec les navigateurs
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
     
     // Log pour débogage
-    logger.info(`[${requestId}] Envoi du fichier ${filename} (${buffer.length} octets)`);
+    logger.info(`[${requestId}] Envoi du fichier ${filename} (${buffer.length} octets) avec en-têtes CORS améliorés`);
+    logger.info(`[${requestId}] En-têtes de réponse: ${JSON.stringify(res.getHeaders())}`);
     
     // Envoyer le fichier
     res.status(200).send(buffer);

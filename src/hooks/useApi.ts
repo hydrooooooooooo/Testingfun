@@ -210,11 +210,8 @@ export function useApi() {
       try {
         const response = await axios.get(`${API_BASE_URL}/api/payment/verify-payment`, {
           params: { sessionId },
-          timeout: 10000,
-          headers: {
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache'
-          }
+          timeout: 10000
+          // Suppression des en-têtes qui causent des problèmes CORS
         });
         
         console.log('Réponse de vérification (route spécifique):', response.data);
@@ -233,11 +230,8 @@ export function useApi() {
         // Fallback sur l'ancienne route
         const fallbackResponse = await axios.get(`${API_BASE_URL}/api/verify-payment`, {
           params: { sessionId },
-          timeout: 10000,
-          headers: {
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache'
-          }
+          timeout: 10000
+          // Suppression des en-têtes qui causent des problèmes CORS
         });
         
         console.log('Réponse de vérification (route fallback):', fallbackResponse.data);
