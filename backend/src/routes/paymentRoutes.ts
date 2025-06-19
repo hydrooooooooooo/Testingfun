@@ -1,8 +1,9 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { paymentController } from '../controllers/paymentController';
 import { body, query } from 'express-validator';
 import { validate } from '../middlewares/validationMiddleware';
 import express from 'express';
+import cors from 'cors';
 
 const router = Router();
 
@@ -41,6 +42,14 @@ router.post(
  */
 router.get(
   '/verify-payment',
+  // Utiliser cors() directement comme middleware pour cette route spécifique
+  cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma', 'Expires'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+  }),
   [
     query('sessionId').isString().withMessage('Session ID is required'),
   ],

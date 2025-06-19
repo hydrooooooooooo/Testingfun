@@ -12,18 +12,24 @@ export class StripeService {
   /**
    * Create a dynamic Stripe checkout session
    */
-  async createCheckoutSession(packId: string, sessionId: string): Promise<string> {
+  async createCheckoutSession(options: {
+    packId: string;
+    packName: string;
+    amount: number;
+    successUrl: string;
+    cancelUrl: string;
+    metadata?: Record<string, string>;
+    clientReferenceId?: string;
+  }): Promise<Stripe.Checkout.Session> {
     try {
-      // Find the pack by ID
+      // Extraire les options
+      const { packId, packName, amount, successUrl, cancelUrl, metadata = {}, clientReferenceId } = options;
+      
+      // Vérifier que le pack existe (pour la journalisation)
       const pack = PLANS.find(p => p.id === packId);
       if (!pack) {
-        throw new Error(`Pack with ID ${packId} not found`);
+        logger.warn(`Pack with ID ${packId} not found, but proceeding with custom amount`);
       }
-      
-      // Construire les URLs pour la redirection après paiement
-      const frontendUrl = config.server.frontendUrl || 'http://localhost:5173';
-      const successUrl = `${frontendUrl}/payment-success?session_id=${sessionId}&pack_id=${packId}`;
-      const cancelUrl = `${frontendUrl}/payment-cancel`;
       
       // Créer une session Stripe dynamique
       const session = await stripe.checkout.sessions.create({
@@ -33,10 +39,10 @@ export class StripeService {
             price_data: {
               currency: 'eur',
               product_data: {
-                name: pack.name,
-                description: pack.description,
+                name: packName,
+                description: pack?.description || `Pack ${packName}`,
               },
-              unit_amount: Math.round(pack.price * 100), // Stripe utilise les centimes
+              unit_amount: Math.round(amount * 100), // Stripe utilise les centimes
             },
             quantity: 1,
           },
@@ -45,34 +51,27 @@ export class StripeService {
         success_url: successUrl,
         cancel_url: cancelUrl,
         metadata: {
-          sessionId: sessionId,
-          packId: packId,
+          ...metadata,
+          packId: packId
         },
-        client_reference_id: sessionId,
+        client_reference_id: clientReferenceId || metadata.sessionId,
       });
       
-      // Stocker les informations de session dans la base de données locale
-      try {
-        // Marquer la session comme en attente de paiement
-        const sessionData = {
-          packId,
-          paymentPending: true,
-          paymentStartedAt: new Date().toISOString()
-        };
-        
-        // Nous allons vérifier le paiement plus tard via le webhook
-        logger.info(`Payment initiated for session ${sessionId} with pack ${packId}`);
-      } catch (err) {
-        logger.warn(`Could not update session data for payment: ${err}`);
+      // Récupérer le sessionId pour la journalisation
+      const sessionId = metadata.sessionId || clientReferenceId;
+      
+      // Journaliser la création de la session
+      if (sessionId) {
+        logger.info(`Created Stripe checkout session for pack ${packId}, session ${sessionId}`);
+      } else {
+        logger.info(`Created Stripe checkout session for pack ${packId} without sessionId`);
       }
-
-      logger.info(`Created Stripe checkout session for pack ${packId}, session ${sessionId}`);
       
       if (!session.url) {
         throw new Error('Stripe did not return a checkout URL');
       }
       
-      return session.url;
+      return session;
     } catch (error) {
       logger.error('Error creating Stripe checkout session:', error);
       throw new Error(`Failed to create checkout session: ${(error as Error).message}`);

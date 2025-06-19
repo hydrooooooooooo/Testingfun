@@ -29,6 +29,7 @@ export default function DownloadPage() {
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const [downloadHistory, setDownloadHistory] = useState<{format: string, timestamp: string}[]>([]);
   const [autoDownloadTriggered, setAutoDownloadTriggered] = useState(false);
+  const [downloadToken, setDownloadToken] = useState<string | null>(null);
   
   // Utiliser notre hook API
   const { getPreviewItems } = useApi();
@@ -39,20 +40,223 @@ export default function DownloadPage() {
       console.log('Téléchargement automatique déclenché');
       setAutoDownloadTriggered(true); // Marquer comme déclenché pour éviter les téléchargements multiples
       
+      // Récupérer le format de téléchargement depuis l'URL si spécifié
+      const formatParam = search.get("format") || 'excel';
+      
       // Ajouter un petit délai pour s'assurer que la page est complètement chargée
       const timer = setTimeout(() => {
-        handleDownload('excel');
+        handleDownload(formatParam as 'excel' | 'csv');
         // Notification pour informer l'utilisateur
         toast({
           title: "Téléchargement automatique",
-          description: "Votre fichier Excel est en cours de téléchargement suite à votre paiement réussi.",
+          description: `Votre fichier ${formatParam.toUpperCase()} est en cours de téléchargement suite à votre paiement réussi.`,
           variant: "default",
         });
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [paymentVerified, autoDownload, isLoading, autoDownloadTriggered]);
-  
+  }, [paymentVerified, autoDownload, isLoading, autoDownloadTriggered, search]);
+  // Télécharger le fichier Excel ou CSV depuis l'API
+  const handleDownload = async (format = 'excel') => {
+    if (!sessionId) {
+      toast({
+        title: "Erreur",
+        description: "Aucun identifiant de session trouvé",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
+      console.log(`Tentative de téléchargement au format ${format} pour la session ${sessionId}`);
+      
+      // Méthode 1: Essayer avec Fetch API d'abord (plus simple et moins de problèmes CORS)
+      try {
+        // Construire l'URL avec le token de téléchargement si disponible
+        let apiUrl = `${import.meta.env.VITE_API_URL}/api/export?sessionId=${sessionId}&session_id=${sessionId}&format=${format}&t=${Date.now()}`;
+        
+        // Ajouter le token de téléchargement s'il existe
+        if (downloadToken) {
+          apiUrl += `&token=${downloadToken}`;
+          console.log(`Utilisation du token de téléchargement: ${downloadToken}`);
+        }
+        
+        console.log(`Tentative avec Fetch API: ${apiUrl}`);
+        
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          mode: 'cors',
+          cache: 'no-cache',
+          headers: {
+            'Accept': '*/*',
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+        
+        // Récupérer le blob
+        const blob = await response.blob();
+        
+        // Créer un lien de téléchargement
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        
+        // Déterminer le nom du fichier en fonction du format
+        const extension = format === 'csv' ? 'csv' : 'xlsx';
+        const filename = `marketplace_data_${sessionId}.${extension}`;
+        a.download = filename;
+        
+        document.body.appendChild(a);
+        a.click();
+        
+        setTimeout(() => {
+          URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        }, 400);
+        
+        console.log(`Téléchargement réussi: ${filename}`);
+        
+        // Ajouter à l'historique des téléchargements
+        setDownloadHistory(prev => [...prev, {
+          format: format.toUpperCase(),
+          timestamp: new Date().toLocaleString('fr-FR')
+        }]);
+        
+        toast({
+          title: "Export réussi !",
+          description: `Votre fichier ${format.toUpperCase()} (${pack.nbDownloads} annonces) a été téléchargé.`,
+          variant: "default",
+        });
+        
+        return; // Succès, sortir de la fonction
+      } catch (fetchError) {
+        console.warn('Erreur avec Fetch API, tentative avec Axios:', fetchError);
+      }
+      
+      // Méthode 2: Essayer avec Axios si Fetch a échoué
+      try {
+        // Créer une instance Axios avec une configuration spécifique pour éviter les problèmes CORS
+        const downloadInstance = axios.create({
+          baseURL: import.meta.env.VITE_API_URL,
+          timeout: 60000, // 60 secondes de timeout
+          responseType: 'blob',
+          withCredentials: false,
+          headers: {
+            'Accept': '*/*'
+          }
+        });
+        
+        // Construire les paramètres pour la requête
+        const params: Record<string, any> = {
+          sessionId: sessionId,
+          session_id: sessionId, // Ajouter également ce paramètre pour la compatibilité
+          format: format,
+          t: Date.now()
+        };
+        
+        // Ajouter le token de téléchargement s'il existe
+        if (downloadToken) {
+          params.token = downloadToken;
+          console.log(`Utilisation du token de téléchargement avec Axios: ${downloadToken}`);
+        }
+        
+        console.log(`Téléchargement avec Axios et paramètres:`, params);
+        
+        const response = await downloadInstance.get(`/api/export`, { params });
+        
+        // Vérifier que nous avons bien reçu un blob
+        if (response.data instanceof Blob) {
+          // Créer un lien de téléchargement
+          const url = URL.createObjectURL(new Blob([response.data]));
+          const a = document.createElement('a');
+          a.href = url;
+          
+          // Déterminer le nom du fichier en fonction du format
+          const extension = format === 'csv' ? 'csv' : 'xlsx';
+          const filename = `marketplace_data_${sessionId}.${extension}`;
+          a.download = filename;
+          
+          document.body.appendChild(a);
+          a.click();
+          
+          setTimeout(() => {
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+          }, 400);
+          
+          console.log(`Téléchargement réussi avec Axios: ${filename}`);
+          
+          // Ajouter à l'historique des téléchargements
+          setDownloadHistory(prev => [...prev, {
+            format: format.toUpperCase(),
+            timestamp: new Date().toLocaleString('fr-FR')
+          }]);
+          
+          toast({
+            title: "Export réussi !",
+            description: `Votre fichier ${format.toUpperCase()} (${pack.nbDownloads} annonces) a été téléchargé.`,
+            variant: "default",
+          });
+          
+          return; // Succès, sortir de la fonction
+        } else {
+          console.warn('La réponse n\'est pas un blob:', response);
+          throw new Error('Format de réponse invalide');
+        }
+      } catch (axiosError) {
+        console.warn('Erreur avec Axios, tentative avec window.open:', axiosError);
+        throw axiosError; // Propager l'erreur pour le fallback
+      }
+    } catch (err) {
+      console.error('Erreur lors du téléchargement, tentative de fallback:', err);
+      
+      // Méthode 3: Fallback ultime - Ouvrir dans un nouvel onglet
+      try {
+        // Construire l'URL avec le token de téléchargement si disponible
+        let fallbackUrl = `${import.meta.env.VITE_API_URL}/api/export?sessionId=${sessionId}&session_id=${sessionId}&format=${format}&t=${Date.now()}`;
+        
+        // Ajouter le token de téléchargement s'il existe
+        if (downloadToken) {
+          fallbackUrl += `&token=${downloadToken}`;
+          console.log(`Utilisation du token de téléchargement pour le fallback: ${downloadToken}`);
+        }
+        
+        console.log(`Tentative de fallback avec window.open: ${fallbackUrl}`);
+        
+        const newTab = window.open(fallbackUrl, '_blank');
+        
+        if (newTab) {
+          toast({
+            title: "Téléchargement alternatif",
+            description: `Le fichier ${format.toUpperCase()} s'ouvre dans un nouvel onglet. Si le téléchargement ne démarre pas automatiquement, vérifiez les bloqueurs de popups.`,
+            variant: "default",
+          });
+          
+          // Même en cas de fallback, on considère que c'est un succès pour l'historique
+          setDownloadHistory(prev => [...prev, {
+            format: format.toUpperCase() + ' (alt)',
+            timestamp: new Date().toLocaleString('fr-FR')
+          }]);
+        } else {
+          throw new Error('Le navigateur a bloqué l\'ouverture d\'un nouvel onglet');
+        }
+      } catch (fallbackError) {
+        console.error('Échec de toutes les méthodes de téléchargement:', fallbackError);
+        toast({
+          title: "Erreur de téléchargement",
+          description: "Impossible de télécharger le fichier après plusieurs tentatives. Veuillez réessayer ou contacter le support.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
   // Vérifier le paiement au chargement de la page
   useEffect(() => {
     const verifyPayment = async () => {
@@ -83,12 +287,23 @@ export default function DownloadPage() {
       }
       
       try {
+        console.log(`Vérification du paiement pour la session ${sessionId}`);
+        
+        // Créer une instance Axios avec une configuration spécifique pour éviter les problèmes CORS
+        const axiosInstance = axios.create({
+          baseURL: import.meta.env.VITE_API_URL,
+          timeout: 10000,
+          withCredentials: false
+        });
+        
+        // Désactiver les en-têtes par défaut qui peuvent causer des problèmes CORS
+        delete axiosInstance.defaults.headers.common['Cache-Control'];
+        delete axiosInstance.defaults.headers.common['Pragma'];
+        
         // Essayer d'abord avec la route spécifique
         try {
-          console.log(`Vérification du paiement pour la session ${sessionId}`);
-          const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/payment/verify-payment`, {
-            params: { sessionId },
-            timeout: 10000 // 10 secondes de timeout
+          const response = await axiosInstance.get(`/api/payment/verify-payment`, {
+            params: { sessionId }
           });
           
           console.log('Réponse de vérification:', response.data);
@@ -105,6 +320,35 @@ export default function DownloadPage() {
             localStorage.setItem('lastSessionId', sessionId);
             localStorage.setItem('lastPackId', sessionPackId);
             
+            // Récupérer le token de téléchargement s'il existe
+            if (response.data.downloadToken) {
+              console.log('Token de téléchargement reçu du backend:', response.data.downloadToken);
+              setDownloadToken(response.data.downloadToken);
+            }
+            
+            // Vérifier si le backend a fourni une URL de téléchargement
+            if (response.data.downloadUrl) {
+              console.log('URL de téléchargement fournie par le backend:', response.data.downloadUrl);
+              
+              // Si l'URL contient autoDownload=true, déclencher le téléchargement automatiquement
+              if (response.data.downloadUrl.includes('autoDownload=true') && !autoDownloadTriggered) {
+                setAutoDownloadTriggered(true);
+                
+                // Récupérer le format de téléchargement depuis l'URL si spécifié
+                const urlParams = new URLSearchParams(response.data.downloadUrl.split('?')[1] || '');
+                const formatParam = urlParams.get('format') || 'excel';
+                
+                setTimeout(() => {
+                  handleDownload(formatParam as 'excel' | 'csv');
+                  toast({
+                    title: "Téléchargement automatique",
+                    description: `Votre fichier ${formatParam.toUpperCase()} est en cours de téléchargement suite à votre paiement réussi.`,
+                    variant: "default",
+                  });
+                }, 1000);
+              }
+            }
+            
             // Récupérer les éléments de prévisualisation
             fetchPreviewItems(sessionId);
           } else {
@@ -113,10 +357,9 @@ export default function DownloadPage() {
         } catch (apiError) {
           console.warn('Erreur avec la route spécifique, essai avec la route générique:', apiError);
           
-          // Fallback sur l'ancienne route
-          const fallbackResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/verify-payment`, {
-            params: { sessionId },
-            timeout: 10000 // 10 secondes de timeout
+          // Fallback sur l'ancienne route avec la même instance Axios configurée
+          const fallbackResponse = await axiosInstance.get(`/api/verify-payment`, {
+            params: { sessionId }
           });
           
           if (fallbackResponse.data.isPaid) {
@@ -137,9 +380,9 @@ export default function DownloadPage() {
             setError("Le paiement n'a pas encore été confirmé. Veuillez réessayer dans quelques instants.");
           }
         }
-      } catch (err) {
-        console.error('Erreur lors de la vérification du paiement:', err);
-        setError("Erreur lors de la vérification du paiement. Veuillez réessayer ou contacter le support.");
+      } catch (error) {
+        console.error('Erreur lors de la vérification du paiement:', error);
+        setError("Impossible de vérifier le statut du paiement. Veuillez réessayer ou contacter le support.");
       } finally {
         setIsVerifying(false);
       }
@@ -147,7 +390,6 @@ export default function DownloadPage() {
     
     verifyPayment();
   }, [sessionId, packId]);
-  
   // Récupérer les éléments de prévisualisation
   const fetchPreviewItems = async (sid: string) => {
     setIsLoadingPreview(true);
@@ -204,11 +446,7 @@ export default function DownloadPage() {
         const demoItems = generateDemoItems();
         setPreviewItems(demoItems);
       } else {
-        toast({
-          title: "Erreur de prévisualisation",
-          description: "Impossible de charger les éléments de prévisualisation. Les données restent disponibles au téléchargement.",
-          variant: "destructive",
-        });
+        setPreviewItems([]);
       }
     } finally {
       setIsLoadingPreview(false);
@@ -219,154 +457,51 @@ export default function DownloadPage() {
   const generateDemoItems = () => {
     return [
       {
-        title: "Appartement moderne 3 pièces",
-        price: "850 €",
-        desc: "Magnifique appartement rénové avec vue dégagée, proche des transports et commerces.",
-        location: "Paris 11ème",
-        url: "https://example.com/annonce1",
-        image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400"
+        title: "Appartement T3 avec balcon",
+        price: "950 €",
+        location: "Lyon 3ème",
+        area: "65 m²",
+        description: "Bel appartement lumineux avec balcon, proche des transports",
+        imageUrl: "https://picsum.photos/seed/apt1/300/200"
       },
       {
         title: "Studio meublé centre-ville",
-        price: "650 €",
-        desc: "Studio entièrement meublé, idéal étudiant ou jeune professionnel, charges comprises.",
-        location: "Lyon 2ème",
-        url: "https://example.com/annonce2",
-        image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400"
+        price: "580 €",
+        location: "Paris 11ème",
+        area: "28 m²",
+        description: "Studio entièrement rénové et meublé, idéal étudiant",
+        imageUrl: "https://picsum.photos/seed/apt2/300/200"
       },
       {
-        title: "Maison avec jardin 4 pièces",
-        price: "1200 €",
-        desc: "Belle maison avec jardin privatif, garage, proche écoles et parcs.",
-        location: "Marseille 8ème",
-        url: "https://example.com/annonce3",
-        image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400"
+        title: "Maison 4 pièces avec jardin",
+        price: "1 250 €",
+        location: "Toulouse",
+        area: "95 m²",
+        description: "Maison familiale avec jardin dans quartier calme et résidentiel",
+        imageUrl: "https://picsum.photos/seed/apt3/300/200"
       }
     ];
   };
-  
-  // Télécharger le fichier Excel ou CSV depuis l'API
-  const handleDownload = async (format = 'excel') => {
-    if (!sessionId) {
-      toast({
-        title: "Erreur",
-        description: "Aucun identifiant de session trouvé",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    setIsLoading(true);
-    
-    try {
-      console.log(`Tentative de téléchargement au format ${format} pour la session ${sessionId}`);
-      
-      // Construire l'URL avec tous les paramètres nécessaires
-      const downloadUrl = `${import.meta.env.VITE_API_URL}/api/export?sessionId=${sessionId}&format=${format}&t=${Date.now()}`;
-      console.log('URL de téléchargement:', downloadUrl);
-      
-      // Méthode 1: Téléchargement direct via axios
-      try {
-        // Appel à l'API pour télécharger le fichier
-        const response = await axios.get(downloadUrl, { 
-          responseType: 'blob',
-          headers: {
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache'
-          },
-          timeout: 30000 // 30 secondes de timeout
-        });
-        
-        // Vérifier que nous avons bien reçu un blob
-        if (response.data instanceof Blob) {
-          // Créer un lien de téléchargement
-          const url = URL.createObjectURL(new Blob([response.data]));
-          const a = document.createElement('a');
-          a.href = url;
-          
-          // Déterminer le nom du fichier en fonction du format
-          const extension = format === 'csv' ? 'csv' : 'xlsx';
-          const filename = `marketplace_data_${sessionId}.${extension}`;
-          a.download = filename;
-          
-          document.body.appendChild(a);
-          a.click();
-          
-          setTimeout(() => {
-            URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-          }, 400);
-          
-          console.log(`Téléchargement réussi: ${filename}`);
-          
-          // Ajouter à l'historique des téléchargements
-          setDownloadHistory(prev => [...prev, {
-            format: format.toUpperCase(),
-            timestamp: new Date().toLocaleString('fr-FR')
-          }]);
-          
-          toast({
-            title: "Export réussi !",
-            description: `Votre fichier ${format.toUpperCase()} (${pack.nbDownloads} annonces) a été téléchargé.`,
-            variant: "default",
-          });
-          
-          setIsLoading(false);
-          return;
-        } else {
-          console.warn('La réponse n\'est pas un blob:', response);
-          throw new Error('Format de réponse invalide');
-        }
-      } catch (axiosError) {
-        console.warn('Erreur avec la méthode axios, tentative avec la méthode window.open:', axiosError);
-        
-        // Méthode 2: Fallback - Ouvrir dans un nouvel onglet
-        const newTab = window.open(downloadUrl, '_blank');
-        
-        if (newTab) {
-          toast({
-            title: "Téléchargement en cours",
-            description: `Le fichier ${format.toUpperCase()} s'ouvre dans un nouvel onglet. Si le téléchargement ne démarre pas automatiquement, vérifiez les bloqueurs de popups.`,
-            variant: "default",
-          });
-        } else {
-          throw new Error('Le navigateur a bloqué l\'ouverture d\'un nouvel onglet');
-        }
-      }
-    } catch (err) {
-      console.error('Erreur lors du téléchargement:', err);
-      toast({
-        title: "Erreur de téléchargement",
-        description: "Impossible de télécharger le fichier. Veuillez réessayer ou contacter le support.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // Rendu du composant
   return (
     <Layout>
-      <section className="mx-auto w-full max-w-4xl my-10 px-4">
-        {/* Header avec navigation */}
-        <div className="mb-8">
-          <Button
-            variant="ghost"
-            onClick={() => navigate(-1)}
-            className="mb-4 flex items-center gap-2 text-blue-600 hover:text-blue-800"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Retour
-          </Button>
-          
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              📥 Téléchargement de vos données
-            </h1>
-            <p className="text-gray-600">
-              Votre paiement a été confirmé. Téléchargez vos {pack.nbDownloads} annonces au format Excel ou CSV.
-            </p>
-          </div>
+      <section className="container max-w-5xl py-8 px-4 sm:px-6">
+        <Button
+          variant="outline"
+          onClick={() => navigate(-1)}
+          className="mb-6 flex items-center gap-2"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Retour
+        </Button>
+        
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            📥 Téléchargement de vos données
+          </h1>
+          <p className="text-gray-600">
+            Votre paiement a été confirmé. Téléchargez vos {pack.nbDownloads} annonces au format Excel ou CSV.
+          </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
@@ -408,108 +543,104 @@ export default function DownloadPage() {
                     <h2 className="text-2xl font-extrabold text-green-700 text-center">Paiement confirmé !</h2>
                   </div>
                   <div className="text-center mb-6">
-                    <p className="text-md text-muted-foreground mb-2">
-                      Pack acheté : <b>{pack.name}</b>
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Session ID: <span className="font-mono text-xs bg-white px-2 py-1 rounded">{sessionId}</span>
-                    </p>
+                    <p className="text-md text-muted-foreground">Votre session est active et vos données sont prêtes.</p>
+                    <p className="text-sm text-muted-foreground mt-1">Session ID: <span className="font-mono text-xs bg-white px-2 py-1 rounded">{sessionId}</span></p>
                   </div>
                   
-                  <div className="w-full flex flex-col gap-3">
+                  <div className="flex flex-col gap-4">
                     <Button 
-                      className="w-full font-bold text-lg gap-2 bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800"
-                      onClick={() => handleDownload('excel')}
-                      disabled={isLoading}
-                      type="button"
+                      onClick={() => handleDownload('excel')} 
+                      disabled={isLoading} 
+                      className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700"
                     >
-                      {isLoading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <FileDown className="w-5 h-5" />}
-                      📊 Télécharger Excel ({pack.nbDownloads} annonces)
+                      {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileDown className="h-4 w-4" />}
+                      Télécharger en Excel ({pack.nbDownloads} annonces)
                     </Button>
+                    
                     <Button 
-                      className="w-full font-bold text-lg gap-2 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800"
-                      onClick={() => handleDownload('csv')}
-                      disabled={isLoading}
-                      type="button"
+                      onClick={() => handleDownload('csv')} 
+                      disabled={isLoading} 
+                      variant="outline" 
+                      className="w-full flex items-center justify-center gap-2"
                     >
-                      {isLoading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <FileDown className="w-5 h-5" />}
-                      📄 Télécharger CSV ({pack.nbDownloads} annonces)
+                      {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+                      Télécharger en CSV ({pack.nbDownloads} annonces)
                     </Button>
                   </div>
                 </>
               )}
             </div>
-
+            
             {/* Historique des téléchargements */}
             {downloadHistory.length > 0 && (
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                  <Download className="h-4 w-4" />
-                  Historique des téléchargements
-                </h3>
-                <div className="space-y-2">
-                  {downloadHistory.map((download, index) => (
-                    <div key={index} className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Fichier {download.format}</span>
-                      <span className="text-gray-500">{download.timestamp}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Section de prévisualisation */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl border p-6 shadow-lg">
-              <div className="flex items-center gap-2 mb-4">
-                <Eye className="h-5 w-5 text-blue-600" />
-                <h3 className="text-lg font-semibold text-gray-800">Aperçu des données</h3>
-              </div>
-              
-              {isLoadingPreview ? (
-                <div className="flex flex-col items-center gap-4 py-8">
-                  <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
-                  <p className="text-sm text-muted-foreground">Chargement de la prévisualisation...</p>
-                </div>
-              ) : previewItems && previewItems.length > 0 ? (
-                <>
-                  <ScrapePreview items={previewItems.slice(0, 3)} />
-                  <p className="text-xs text-center text-muted-foreground mt-3">
-                    Aperçu de {previewItems.slice(0, 3).length} éléments sur {pack.nbDownloads} disponibles
-                  </p>
-                </>
-              ) : (
-                <div className="p-4 bg-amber-50 rounded-lg border border-amber-200 text-center">
-                  <AlertTriangle className="h-5 w-5 mx-auto mb-2 text-amber-600" />
-                  <p className="text-sm text-amber-700">Aucun élément de prévisualisation disponible</p>
-                  <p className="text-xs text-amber-600 mt-1">Vous pouvez tout de même télécharger vos données</p>
-                </div>
-              )}
-            </div>
-
-            {/* Bannière de téléchargement automatique */}
-            {autoDownload && autoDownloadTriggered && (
-              <div className="bg-green-50 rounded-lg p-4 border border-green-200 mb-4 animate-pulse">
-                <div className="flex items-center gap-2">
+              <div className="bg-white rounded-xl border p-6 shadow-lg">
+                <div className="flex items-center gap-2 mb-4">
                   <CheckCircle className="h-5 w-5 text-green-600" />
-                  <h4 className="font-semibold text-green-800">Téléchargement automatique en cours</h4>
+                  <h3 className="text-lg font-semibold text-gray-800">Téléchargements effectués</h3>
                 </div>
-                <p className="text-sm text-green-700 mt-1 pl-7">
-                  Suite à votre paiement réussi, votre fichier Excel est en cours de téléchargement.
-                </p>
+                <ul className="space-y-2">
+                  {downloadHistory.map((item, index) => (
+                    <li key={index} className="text-sm flex items-center gap-2">
+                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-semibold">{item.format}</span>
+                      <span className="text-gray-600">{item.timestamp}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
             
-            {/* Informations supplémentaires */}
-            <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-              <h4 className="font-semibold text-blue-800 mb-2">💡 Conseils d'utilisation</h4>
-              <ul className="text-sm text-blue-700 space-y-1">
-                <li>• Les fichiers Excel sont optimisés pour l'analyse</li>
-                <li>• Les fichiers CSV sont compatibles avec tous les logiciels</li>
-                <li>• Vous pouvez télécharger plusieurs fois le même format</li>
-                <li>• Vos données restent disponibles pendant 30 jours</li>
-              </ul>
+            {/* Section de prévisualisation */}
+            <div className="space-y-6">
+              <div className="bg-white rounded-xl border p-6 shadow-lg">
+                <div className="flex items-center gap-2 mb-4">
+                  <Eye className="h-5 w-5 text-blue-600" />
+                  <h3 className="text-lg font-semibold text-gray-800">Aperçu des données</h3>
+                </div>
+                
+                {isLoadingPreview ? (
+                  <div className="flex flex-col items-center gap-4 py-8">
+                    <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+                    <p className="text-sm text-muted-foreground">Chargement de la prévisualisation...</p>
+                  </div>
+                ) : previewItems && previewItems.length > 0 ? (
+                  <>
+                    <ScrapePreview items={previewItems.slice(0, 3)} />
+                    <p className="text-xs text-center text-muted-foreground mt-3">
+                      Aperçu de {previewItems.slice(0, 3).length} éléments sur {pack.nbDownloads} disponibles
+                    </p>
+                  </>
+                ) : (
+                  <div className="p-4 bg-amber-50 rounded-lg border border-amber-200 text-center">
+                    <AlertTriangle className="h-5 w-5 mx-auto mb-2 text-amber-600" />
+                    <p className="text-sm text-amber-700">Aucun élément de prévisualisation disponible</p>
+                    <p className="text-xs text-amber-600 mt-1">Vous pouvez tout de même télécharger vos données</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Bannière de téléchargement automatique */}
+              {autoDownload && autoDownloadTriggered && (
+                <div className="bg-green-50 rounded-lg p-4 border border-green-200 mb-4 animate-pulse">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <h4 className="font-semibold text-green-800">Téléchargement automatique en cours</h4>
+                  </div>
+                  <p className="text-sm text-green-700 mt-1 pl-7">
+                    Suite à votre paiement réussi, votre fichier Excel est en cours de téléchargement.
+                  </p>
+                </div>
+              )}
+              
+              {/* Informations supplémentaires */}
+              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                <h4 className="font-semibold text-blue-800 mb-2">💡 Conseils d'utilisation</h4>
+                <ul className="text-sm text-blue-700 space-y-1">
+                  <li>• Les fichiers Excel sont optimisés pour l'analyse</li>
+                  <li>• Les fichiers CSV sont compatibles avec tous les logiciels</li>
+                  <li>• Vous pouvez télécharger plusieurs fois le même format</li>
+                  <li>• Vos données restent disponibles pendant 30 jours</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -524,4 +655,4 @@ export default function DownloadPage() {
       </section>
     </Layout>
   );
-} 
+}
