@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import ScrapePreview from "@/components/ScrapePreview";
 import ExcelDownloadButton from "@/components/ExcelDownloadButton";
@@ -7,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { Pack } from "@/lib/plans";
 import { toast } from "@/hooks/use-toast";
+import { useApi } from "@/hooks/useApi";
 import axios from "axios";
 
 type ScrapeResultSectionProps = {
@@ -29,24 +29,6 @@ type ListingItem = {
   postedAt?: string;
 };
 
-// Utiliser la variable d'environnement pour les liens Stripe
-const STRIPE_PAYMENT_LINK = import.meta.env.VITE_STRIPE_PAYMENT_LINK || "";
-
-// Construire les URLs de paiement en ajoutant les paramètres nécessaires
-const buildStripeUrl = (packSize: number, sessionId: string) => {
-  if (!STRIPE_PAYMENT_LINK) {
-    console.error("VITE_STRIPE_PAYMENT_LINK n'est pas configuré");
-    return "";
-  }
-  
-  // Ajouter les paramètres de session et de pack à l'URL
-  const url = new URL(STRIPE_PAYMENT_LINK);
-  url.searchParams.append("session_id", sessionId);
-  url.searchParams.append("pack_size", packSize.toString());
-  
-  return url.toString();
-};
-
 export default function ScrapeResultSection({
   showPreview,
   scrapeDone,
@@ -60,6 +42,9 @@ export default function ScrapeResultSection({
   const navigate = useNavigate();
   const [completeItems, setCompleteItems] = useState<any[]>([]);
   const [isLoadingCompleteItems, setIsLoadingCompleteItems] = useState(false);
+  
+  // Utiliser l'API hook pour le paiement
+  const { createPayment } = useApi();
   
   // Ajouter un log pour débugger
   console.log('ScrapeResultSection rendu avec:', { 
@@ -100,8 +85,8 @@ export default function ScrapeResultSection({
     fetchCompleteItems();
   }, [sessionId]);
 
-  // Callback universel des boutons : ouvre Stripe selon pack
-  const handlePay = () => {
+  // FONCTION DE PAIEMENT CORRIGÉE - utilise uniquement l'API backend
+  const handlePay = async () => {
     if (!sessionId) {
       toast({
         title: "Session manquante",
@@ -111,19 +96,22 @@ export default function ScrapeResultSection({
       return;
     }
     
-    const url = buildStripeUrl(selectedPack.nbDownloads, sessionId);
-    if (!url) {
+    try {
+      // Utiliser l'API backend au lieu du lien direct
+      const checkoutUrl = await createPayment(selectedPack.id, sessionId);
+      console.log('URL de paiement créée via API:', checkoutUrl);
+      
+      // Ouvrir dans la même fenêtre pour la redirection automatique
+      window.location.href = checkoutUrl;
+      
+    } catch (error) {
+      console.error('Error creating payment:', error);
       toast({
-        title: "Paiement indisponible",
-        description: "Le lien de paiement Stripe n'est pas configuré correctement.",
-        variant: "destructive"
+        title: "Erreur de paiement",
+        description: "Une erreur est survenue lors de la création du paiement. Veuillez réessayer.",
+        variant: "destructive",
       });
-      return;
     }
-    
-    console.log('Ouverture de la page de paiement:', url);
-    console.log('Paramètres:', { packSize: selectedPack.nbDownloads, sessionId });
-    window.open(url, "_blank");
   };
 
   // Logs détaillés pour le débogage

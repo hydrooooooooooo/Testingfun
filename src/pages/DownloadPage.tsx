@@ -14,10 +14,20 @@ export default function DownloadPage() {
   const navigate = useNavigate();
   const search = new URLSearchParams(location.search);
   
-  // Récupérer les paramètres de l'URL
-  const sessionId = search.get("session_id") || search.get("client_reference_id");
-  const packId = search.get("pack_id");
+  // Récupérer les paramètres de l'URL avec priorité sur session_id
+  const sessionId = search.get("session_id") || search.get("client_reference_id") || localStorage.getItem('lastSessionId');
+  const packId = search.get("pack_id") || localStorage.getItem('lastPackId');
   const autoDownload = search.get("autoDownload") === "true";
+
+  // Debug des paramètres reçus
+  useEffect(() => {
+    console.log('Paramètres URL reçus:', {
+      sessionId,
+      packId, 
+      autoDownload,
+      allParams: Object.fromEntries(search.entries())
+    });
+  }, [sessionId, packId, autoDownload]);
   
   // États pour gérer le chargement et les erreurs
   const [isLoading, setIsLoading] = useState(false);
@@ -34,28 +44,27 @@ export default function DownloadPage() {
   // Utiliser notre hook API
   const { getPreviewItems } = useApi();
   
-  // Déclencher automatiquement le téléchargement si autoDownload est présent
+  // Déclencher automatiquement le téléchargement APRÈS vérification
   useEffect(() => {
-    if (autoDownload && paymentVerified && !isLoading && !autoDownloadTriggered) {
-      console.log('Téléchargement automatique déclenché');
-      setAutoDownloadTriggered(true); // Marquer comme déclenché pour éviter les téléchargements multiples
+    if (autoDownload && paymentVerified && !autoDownloadTriggered && !isLoading) {
+      console.log('Téléchargement automatique déclenché pour session:', sessionId);
+      setAutoDownloadTriggered(true);
       
-      // Récupérer le format de téléchargement depuis l'URL si spécifié
       const formatParam = search.get("format") || 'excel';
       
-      // Ajouter un petit délai pour s'assurer que la page est complètement chargée
       const timer = setTimeout(() => {
+        console.log('Lancement du téléchargement automatique');
         handleDownload(formatParam as 'excel' | 'csv');
-        // Notification pour informer l'utilisateur
         toast({
           title: "Téléchargement automatique",
-          description: `Votre fichier ${formatParam.toUpperCase()} est en cours de téléchargement suite à votre paiement réussi.`,
+          description: `Votre fichier ${formatParam.toUpperCase()} est en cours de téléchargement.`,
           variant: "default",
         });
-      }, 1500);
+      }, 2000);
+      
       return () => clearTimeout(timer);
     }
-  }, [paymentVerified, autoDownload, isLoading, autoDownloadTriggered, search]);
+  }, [paymentVerified, autoDownload, autoDownloadTriggered, isLoading, sessionId]);
   // Télécharger le fichier Excel ou CSV depuis l'API
   const handleDownload = async (format = 'excel') => {
     if (!sessionId) {
@@ -265,29 +274,10 @@ export default function DownloadPage() {
         setIsVerifying(false);
         return;
       }
-      
-      // Si c'est une session temporaire, on la considère automatiquement comme payée
-      if (sessionId.startsWith('temp_')) {
-        console.log('Session temporaire détectée, considérée comme payée:', sessionId);
-        setPaymentVerified(true);
-        
-        // Trouver le pack correspondant
-        const sessionPackId = packId || 'pack-decouverte';
-        const foundPack = PLANS.find(p => p.id === sessionPackId) || PLANS[0];
-        setPack(foundPack);
-        
-        // Stocker la session ID dans le localStorage pour référence future
-        localStorage.setItem('lastSessionId', sessionId);
-        localStorage.setItem('lastPackId', sessionPackId);
-        
-        // Récupérer les éléments de prévisualisation
-        fetchPreviewItems(sessionId);
-        setIsVerifying(false);
-        return;
-      }
-      
+
       try {
-        console.log(`Vérification du paiement pour la session ${sessionId}`);
+        setIsVerifying(true);
+        console.log('Vérification du paiement pour:', { sessionId, packId });
         
         // Créer une instance Axios avec une configuration spécifique pour éviter les problèmes CORS
         const axiosInstance = axios.create({
@@ -296,98 +286,37 @@ export default function DownloadPage() {
           withCredentials: false
         });
         
-        // Désactiver les en-têtes par défaut qui peuvent causer des problèmes CORS
-        delete axiosInstance.defaults.headers.common['Cache-Control'];
-        delete axiosInstance.defaults.headers.common['Pragma'];
-        
-        // Essayer d'abord avec la route spécifique
-        try {
-          const response = await axiosInstance.get(`/api/payment/verify-payment`, {
-            params: { sessionId }
-          });
-          
-          console.log('Réponse de vérification:', response.data);
-          
-          if (response.data.isPaid) {
-            setPaymentVerified(true);
-            
-            // Trouver le pack correspondant
-            const sessionPackId = response.data.packId || packId || 'pack-decouverte';
-            const foundPack = PLANS.find(p => p.id === sessionPackId) || PLANS[0];
-            setPack(foundPack);
-            
-            // Stocker la session ID dans le localStorage pour référence future
-            localStorage.setItem('lastSessionId', sessionId);
-            localStorage.setItem('lastPackId', sessionPackId);
-            
-            // Récupérer le token de téléchargement s'il existe
-            if (response.data.downloadToken) {
-              console.log('Token de téléchargement reçu du backend:', response.data.downloadToken);
-              setDownloadToken(response.data.downloadToken);
-            }
-            
-            // Vérifier si le backend a fourni une URL de téléchargement
-            if (response.data.downloadUrl) {
-              console.log('URL de téléchargement fournie par le backend:', response.data.downloadUrl);
-              
-              // Si l'URL contient autoDownload=true, déclencher le téléchargement automatiquement
-              if (response.data.downloadUrl.includes('autoDownload=true') && !autoDownloadTriggered) {
-                setAutoDownloadTriggered(true);
-                
-                // Récupérer le format de téléchargement depuis l'URL si spécifié
-                const urlParams = new URLSearchParams(response.data.downloadUrl.split('?')[1] || '');
-                const formatParam = urlParams.get('format') || 'excel';
-                
-                setTimeout(() => {
-                  handleDownload(formatParam as 'excel' | 'csv');
-                  toast({
-                    title: "Téléchargement automatique",
-                    description: `Votre fichier ${formatParam.toUpperCase()} est en cours de téléchargement suite à votre paiement réussi.`,
-                    variant: "default",
-                  });
-                }, 1000);
-              }
-            }
-            
-            // Récupérer les éléments de prévisualisation
-            fetchPreviewItems(sessionId);
-          } else {
-            setError("Le paiement n'a pas encore été confirmé. Veuillez réessayer dans quelques instants.");
+        const response = await axiosInstance.get(`/api/verify-payment`, {
+          params: { 
+            sessionId,
+            ...(packId && { packId })
           }
-        } catch (apiError) {
-          console.warn('Erreur avec la route spécifique, essai avec la route générique:', apiError);
+        });
+
+        console.log('Réponse de vérification:', response.data);
+
+        if (response.data.isPaid) {
+          setPaymentVerified(true);
           
-          // Fallback sur l'ancienne route avec la même instance Axios configurée
-          const fallbackResponse = await axiosInstance.get(`/api/verify-payment`, {
-            params: { sessionId }
-          });
+          const sessionPackId = response.data.packId || packId || 'pack-decouverte';
+          const foundPack = PLANS.find(p => p.id === sessionPackId) || PLANS[0];
+          setPack(foundPack);
           
-          if (fallbackResponse.data.isPaid) {
-            setPaymentVerified(true);
-            
-            // Trouver le pack correspondant
-            const sessionPackId = fallbackResponse.data.packId || packId || 'pack-decouverte';
-            const foundPack = PLANS.find(p => p.id === sessionPackId) || PLANS[0];
-            setPack(foundPack);
-            
-            // Stocker la session ID dans le localStorage pour référence future
-            localStorage.setItem('lastSessionId', sessionId);
-            localStorage.setItem('lastPackId', sessionPackId);
-            
-            // Récupérer les éléments de prévisualisation
-            fetchPreviewItems(sessionId);
-          } else {
-            setError("Le paiement n'a pas encore été confirmé. Veuillez réessayer dans quelques instants.");
-          }
+          localStorage.setItem('lastSessionId', sessionId);
+          localStorage.setItem('lastPackId', sessionPackId);
+          
+          fetchPreviewItems(sessionId);
+        } else {
+          setError("Le paiement n'a pas encore été confirmé.");
         }
-      } catch (error) {
-        console.error('Erreur lors de la vérification du paiement:', error);
-        setError("Impossible de vérifier le statut du paiement. Veuillez réessayer ou contacter le support.");
+      } catch (err) {
+        console.error('Erreur lors de la vérification du paiement:', err);
+        setError("Erreur lors de la vérification du paiement.");
       } finally {
         setIsVerifying(false);
       }
     };
-    
+
     verifyPayment();
   }, [sessionId, packId]);
   // Récupérer les éléments de prévisualisation

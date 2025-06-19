@@ -10,6 +10,7 @@ import Support from "./pages/Support";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import DownloadPage from "./pages/DownloadPage";
 
+
 const queryClient = new QueryClient();
 
 const App = () => (
