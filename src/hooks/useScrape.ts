@@ -328,26 +328,7 @@ export function useScrape() {
     }
   }
 
-  // Fonctions de paiement et d'export inchangées
-  const STRIPE_PAYMENT_LINK = import.meta.env.VITE_STRIPE_PAYMENT_LINK || "";
-  
-  const buildStripeUrl = React.useCallback((packId: string, sid: string) => {
-    if (!STRIPE_PAYMENT_LINK) {
-      console.error("VITE_STRIPE_PAYMENT_LINK n'est pas configuré");
-      return "";
-    }
-    
-    try {
-      const url = new URL(STRIPE_PAYMENT_LINK);
-      url.searchParams.append("session_id", sid);
-      url.searchParams.append("pack_id", packId);
-      return url.toString();
-    } catch (error) {
-      console.error('Erreur lors de la construction de l\'URL Stripe:', error);
-      return "";
-    }
-  }, []);
-  
+  // FONCTION DE PAIEMENT CORRIGÉE
   const handlePayment = React.useCallback(async () => {
     if (!sessionId) {
       toast({
@@ -359,27 +340,18 @@ export function useScrape() {
     }
     
     try {
-      try {
-        const checkoutUrl = await api.createPayment(selectedPackId, sessionId);
-        console.log('URL de paiement créée via API:', checkoutUrl);
-        window.open(checkoutUrl, '_blank');
-        return;
-      } catch (apiError) {
-        console.warn('Erreur avec l\'API de paiement, utilisation du lien direct:', apiError);
-      }
+      // UNIQUEMENT utiliser l'API backend - supprimer le fallback vers le lien direct
+      const checkoutUrl = await api.createPayment(selectedPackId, sessionId);
+      console.log('URL de paiement créée via API:', checkoutUrl);
       
-      const directUrl = buildStripeUrl(selectedPackId, sessionId);
-      if (!directUrl) {
-        throw new Error("Impossible de créer l'URL de paiement");
-      }
+      // Ouvrir dans la même fenêtre plutôt qu'un nouvel onglet pour la redirection automatique
+      window.location.href = checkoutUrl;
       
-      console.log('Ouverture de l\'URL de paiement direct:', directUrl);
-      window.open(directUrl, '_blank');
     } catch (error) {
       console.error('Error creating payment:', error);
       toast({
         title: "Erreur de paiement",
-        description: "Une erreur est survenue lors de la création du paiement.",
+        description: "Une erreur est survenue lors de la création du paiement. Veuillez réessayer.",
         variant: "destructive",
       });
     }

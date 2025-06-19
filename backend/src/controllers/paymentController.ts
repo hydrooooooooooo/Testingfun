@@ -115,7 +115,7 @@ export class PaymentController {
         packId,
         packName: pack.name,
         amount: pack.price,
-        successUrl: `${config.server.frontendUrl}/download?session_id=${sessionId}&pack_id=${packId}&autoDownload=true`,
+        successUrl: `${config.server.frontendUrl}/download?session_id=${sessionId}&pack_id=${packId}&autoDownload=true&format=excel`,
         cancelUrl: `${config.server.frontendUrl}/payment?session_id=${sessionId}&pack_id=${packId}&status=cancelled`,
         metadata: {
           sessionId: sessionId,
@@ -233,6 +233,15 @@ export class PaymentController {
     let sessionId = null;
     const metadata = session.metadata || {};
     const packId = metadata.packId || 'pack-decouverte';
+    
+    // Logs de débogage pour la redirection
+    console.log('=== STRIPE CHECKOUT COMPLETED ===');
+    console.log('Session Stripe ID:', session.id);
+    console.log('Client Reference ID:', session.client_reference_id);
+    console.log('Metadata:', session.metadata);
+    console.log('Success URL:', session.success_url);
+    console.log('Payment Status:', session.payment_status);
+    console.log('=====================================');
     
     // 1. Vérifier les métadonnées
     if (metadata.sessionId) {

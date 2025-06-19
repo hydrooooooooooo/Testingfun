@@ -13,7 +13,7 @@ export const config = {
   server: {
     port: process.env.PORT || 3001,
     env: process.env.NODE_ENV || 'development',
-    frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
+    frontendUrl: process.env.FRONTEND_URL || 'http://localhost:8080', // CORRIGÉ
     isDev: process.env.NODE_ENV !== 'production',
   },
   
@@ -49,14 +49,22 @@ export const config = {
   // CORS configuration
   cors: {
     allowedOrigins: [
-      process.env.FRONTEND_URL || 'http://localhost:5173',
+      process.env.FRONTEND_URL || 'http://localhost:8080', // CORRIGÉ
+      'http://localhost:8080', // AJOUTÉ - ton frontend
+      'http://localhost:3001', // Ton backend
       'http://localhost:3000',
       'http://localhost:5173',
-      'http://localhost:8080',
       'https://checkout.stripe.com',
     ],
   },
 };
+
+// DEBUG TEMPORAIRE - À SUPPRIMER APRÈS TEST
+console.log('=== CONFIG DEBUG ===');
+console.log('FRONTEND_URL from env:', process.env.FRONTEND_URL);
+console.log('frontendUrl in config:', config.server.frontendUrl);
+console.log('CORS origins:', config.cors.allowedOrigins);
+console.log('===================');
 
 // Validate required configuration
 const validateConfig = () => {

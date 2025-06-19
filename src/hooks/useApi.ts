@@ -178,19 +178,21 @@ export function useApi() {
   };
 
   /**
-   * Create a payment session
+   * Create a payment session - CORRIGÉ
    */
   const createPayment = async (packId: string, sessionId: string) => {
     setLoading(true);
     setError(null);
     
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/create-payment`, {
+      // CORRECTION : Route correcte avec /payment/
+      const response = await axios.post(`${API_BASE_URL}/api/payment/create-payment`, {
         packId,
         sessionId
       });
       
-      return response.data.data.checkoutUrl;
+      // CORRECTION : Accès direct à response.data.url
+      return response.data.url;
     } catch (err: any) {
       setError(err.response?.data?.message || 'Une erreur est survenue lors de la création du paiement');
       throw err;
