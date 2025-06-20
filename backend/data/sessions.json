@@ -1388,5 +1388,58 @@
     "paymentStatus": "succeeded",
     "downloadUrl": "http://localhost:8080/download?session_id=sess_8xyZOAUz0i&pack_id=pack-decouverte&autoDownload=true&format=excel",
     "downloadToken": "c2Vzc184eHlaT0FVejBpOjE3NTAzNTQxNTg1Njc6cGFpZA=="
+  },
+  {
+    "id": "sess_2WH5U2O-MX",
+    "url": "https://www.facebook.com/marketplace/110080935687758/search/?query=appartement%20a%20louer",
+    "status": "completed",
+    "createdAt": "2025-06-20T08:27:24.897Z",
+    "isPaid": true,
+    "data": {
+      "nbItems": 10,
+      "startedAt": "2025-06-20T08:27:24.897Z",
+      "previewItems": [
+        {
+          "title": "🏡 À Louer : Appartement T2 Meublé & Équipé à Ankorondrano\n\n📍 Résidence Malaga ~ Proche Ivandry",
+          "price": "N/A",
+          "desc": "🏡 À Louer : Appartement T2 Meublé & Équipé à Ankorondrano\n\n📍 Résidence Malaga ~ Proche Ivandry & Marais Masay\nAccès facile vers Andraharo\n\n✨ Caractéristiques :\n🔹 Living meublé ~ Grand balcon\n🔹 Cuisine équipée\n🔹 1 chambre meublée\n🔹 1 salle d’eau ~ Toilettes\n🔹Buanderie \n\n⚡ Équipements :\nAscenseur ~ Parking ~ Surpresseur ~ Groupe électrogène\n\n📞Contact :\n• 📱 +261 34 11 142 00 (WhatsApp)\n• ✉️ [hidden information]\n\n🔗 Réseaux sociaux : Megoo Immobilier\n(FB, IG, TikTok, YouTube, Snapchat, LinkedIn, Airbnb)",
+          "image": "https://scontent.fman2-1.fna.fbcdn.net/v/t45.5328-4/485115262_1353426995694794_1592905253018303871_n.jpg?stp=c0.27.133.133a_dst-jpg_p133x133_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=pHLXyQDqvMcQ7kNvwFBKp7Z&_nc_oc=AdmsaS3vYlVVNQHOA62WzKqNpTKWU_gtq8TJrVtLhfYBbULXXeCs37B173F1U6Rk4w8&_nc_zt=23&_nc_ht=scontent.fman2-1.fna&_nc_gid=y8j4a5Q1hpwKYQzMh2dfEQ&oh=00_AfO5d7cZBCMsW5CWnXZIrzPvvrTh7gb4My5wn9DdN8Km5w&oe=685AE9F9",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/1104856061473827",
+          "postedAt": ""
+        },
+        {
+          "title": "À louer Appartement T2 meublé  à Analamahitsy Farango, Masay\n\nÀ proximité d’Ivandry Androhibe",
+          "price": "N/A",
+          "desc": "À louer Appartement T2 meublé et équipé à Analamahitsy Farango, Masay\n\nÀ proximité d’Ankorondrano et Ivandry \n\nLocation meublé\n\n•Living avec baie vitrée \n•Cuisine ouverte\n•1 chambre\n•Salle d'eau et toilettes\n\nGardiennage | Parking\nPiscine\n\nContact: +261 34 11 142 00 (WhatsApp)\n[hidden information]\n\n#appartementalouer #t2meublé #ascenseur #piscine #jardin #maraismasay #Ivandry #Analamahitsy #locationimmobiliere",
+          "image": "https://scontent.fcgh7-1.fna.fbcdn.net/v/t45.5328-4/472919169_1159405048933942_2889283766263240516_n.jpg?stp=c0.27.133.133a_dst-jpg_p133x133_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=rM4SM39LxEIQ7kNvwE7OiqB&_nc_oc=AdmICgnMM_x1MI4IIJzypvVRkYggxCU66DCqdJJxtJQ7L7bhEoye1uWd3fHCug4aEM2bzrT-SHUub2eZRk4b8VAO&_nc_zt=23&_nc_ht=scontent.fcgh7-1.fna&_nc_gid=q0NDznx6SBgABMvacom-kQ&oh=00_AfMdJ7_VJwPz4vNzFEzu7ItNVGSbaVTEGUf33yHAKvWbWA&oe=685AF0AB",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/3813246192246749",
+          "postedAt": ""
+        },
+        {
+          "title": "🏡 À Louer : Appartement T2 meublé et équipé à Ivandry\n📍 À 2 pas de l’école D – 1er étage\n\n🛋️",
+          "price": "N/A",
+          "desc": "🏡 À Louer : Appartement T2 meublé et équipé à Ivandry\n📍 À 2 pas de l’école D – 1er étage\n\n🛋️ Living meublé | 🍽️ Cuisine américaine équipée\n🛏️ 1 chambre placardée et climatisée\n🚿 1 salle de bain + 🚽 toilettes\n🌿 Balcon\n\n❄️ Climatisation | 🛗 Ascenseur\n🏊 Piscine | 💪 Salle de sport\n⚡ Groupe | 💧 Surpresseur\n\n📞 Contact :\n• 📱 +261 34 11 142 00 (WhatsApp)\n• ✉️ [hidden information]\n\n🔗 Réseaux sociaux : Megoo Immobilier\n(FB, IG, TikTok, YouTube, Snapchat, LinkedIn, Airbnb)",
+          "image": "https://scontent.fric1-2.fna.fbcdn.net/v/t45.5328-4/502805145_1292187712250605_5020146522494618750_n.jpg?stp=c0.27.133.133a_dst-jpg_p133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=EgG8_d14QkwQ7kNvwGqRJkQ&_nc_oc=AdnyvvNqgFOLJiNrRRFwLfN8fy8ZxaG5nZ4e9uW8UzA4gyfgo9VUFS7PjvcXDUUDUh8&_nc_zt=23&_nc_ht=scontent.fric1-2.fna&_nc_gid=8hqFlNsia5IYrr3DYOkqCA&oh=00_AfNPm4GgbDBkvrPkToYFxrk2mXeVd3UbqDzLKVSgYvSArw&oe=685AEDC3",
+          "location": "Antananarivo",
+          "url": "https://www.facebook.com/marketplace/item/706586055422023",
+          "postedAt": ""
+        }
+      ],
+      "finishedAt": "2025-06-20T08:27:57.242Z",
+      "totalItems": 10,
+      "totalItemsCount": 10
+    },
+    "datasetId": "fUxgbcFEHJlvSWIfv",
+    "actorRunId": "FUmbnxQJvjgnaJi1N",
+    "updatedAt": "2025-06-20T08:28:38.801Z",
+    "hasData": true,
+    "packId": "pack-decouverte",
+    "paymentIntentId": "pi_3Rc0JNP6UShCV9Fs1ugYelc5",
+    "paymentCompletedAt": "2025-06-20T08:28:38.800Z",
+    "paymentStatus": "succeeded",
+    "downloadUrl": "http://localhost:8080/download?session_id=sess_2WH5U2O-MX&pack_id=pack-decouverte&autoDownload=true&format=excel",
+    "downloadToken": "c2Vzc18yV0g1VTJPLU1YOjE3NTA0MDgxMTg4MDE6cGFpZA=="
   }
 ]
