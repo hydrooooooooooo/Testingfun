@@ -1441,5 +1441,58 @@
     "paymentStatus": "succeeded",
     "downloadUrl": "http://localhost:8080/download?session_id=sess_2WH5U2O-MX&pack_id=pack-decouverte&autoDownload=true&format=excel",
     "downloadToken": "c2Vzc18yV0g1VTJPLU1YOjE3NTA0MDgxMTg4MDE6cGFpZA=="
+  },
+  {
+    "id": "sess_0ExX-7S7iK",
+    "url": "https://www.facebook.com/marketplace/category/vehicles?minPrice=20000&exact=false",
+    "status": "completed",
+    "createdAt": "2025-06-21T04:27:46.022Z",
+    "isPaid": true,
+    "data": {
+      "nbItems": 21,
+      "startedAt": "2025-06-21T04:27:46.022Z",
+      "previewItems": [
+        {
+          "title": "2009 Ford F250 Super Duty Crew Cab",
+          "price": "$20 000",
+          "desc": "2009. F250 diesel. 140k miles. Sound system. Lots of work done to truck. Upgraded turbos, bigger intercooler, aluminum radiator, and high end radiator hoses. Rhino line bed, bumpers, and sides. 20k firM. Have put more in add ons/work done than asking price.  If interested please call or txt [hidden information] it’s my cousins truck",
+          "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-6/499828005_122130891704755047_8129289930503033063_n.jpg?stp=dst-jpg_s133x133_tt6&_nc_cat=109&ccb=1-7&_nc_sid=454cf4&_nc_ohc=TTPXObBbP8UQ7kNvwG0yKcQ&_nc_oc=AdllgEF_GkIJKqjN0VCbfdUHIAUu5Qk6OWEQO5tw4VsXdJRb7Sh5CkIQbOEqWDAjcuo&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=uaH4q1-datWL2HnyX436dg&oh=00_AfOjA6Z3146ZyWSOBgGyvtH06gyrINnlh3-P42UfGKqGUQ&oe=685C0ED6",
+          "location": "Unknown",
+          "url": "https://www.facebook.com/marketplace/item/706901708454372",
+          "postedAt": ""
+        },
+        {
+          "title": "2022 Polaris Ranger XP1000 Northstar Crew Cab",
+          "price": "$32 000",
+          "desc": "Premium Polaris Ranger XP1000 Northstar Crew Cab. Purchased Dec. 22. Less than 100 hours, never left our 2 acre property.\n\nAll the bells and whistles, AC, power windows, GPS, heated seats, lots of navigation and tech, etc. etc. Seats 6. 42K invested\nStill under warranty.\n",
+          "image": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.5328-4/497931941_1057310786305294_2081663279020071982_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=9IzEQ3Y9a6gQ7kNvwF-HPhP&_nc_oc=Adl0zp8Nf3L86sN10sxDSwUMBPONgfvcrwsqXWTHSps5X11quKcvmbGbkwgiM8Hs79OU2_Fafp6oNakUMJKp8uJ1&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=mRQb4vJlC3e94IFZAthswA&oh=00_AfMoXlTUGsPc9hcgy3PkKxwmHtQAtGFnDDeG46ETCmKyOQ&oe=685C0C5C",
+          "location": "Unknown",
+          "url": "https://www.facebook.com/marketplace/item/701489892287697",
+          "postedAt": ""
+        },
+        {
+          "title": "2016 Hino 268",
+          "price": "$42 500",
+          "desc": "For sale is a reliable and durable 26-feet box truck HINO 268 in excellent working condition, ideal for moving, logistics, or delivery services. This truck has been consistently maintained with only original OEM parts, ensuring top-level performance and long-term reliability. \n\nBox Size: 26 feet with an additional attic for extra overhead storage — great for maximizing cargo space\n • Liftgate: Heavy-duty Maxon liftgate, installed in 2024, operates smoothly and reliably\n • Ramp: Included for easy loading and unloading when a liftgate isn’t needed\n • Condition: Clean inside and out, both mechanically and cosmetically. No major damage or issues.\n • Maintenance: Always serviced with original parts only.\n • Tires & Brakes: In good condition, no immediate \nClear side panels for branding, spacious cab, good fuel economy for its size\n\nThis is a perfect solution for companies looking to expand their fleet with a truck that’s ready to generate income right away.",
+          "image": "https://scontent-yyz1-1.xx.fbcdn.net/v/t39.30808-6/497571403_2472227006457172_8490559104755866682_n.jpg?stp=c0.169.1537.1537a_dst-jpg_s133x133_tt6&_nc_cat=102&ccb=1-7&_nc_sid=454cf4&_nc_ohc=VwZIpTL5SfUQ7kNvwF7YqXi&_nc_oc=Adn8D_mBhwNTswcVn2GuveL_kWjeyMgNeK7qA69c7by_3hv7ACUKmTagVemdm8DfuTs&_nc_zt=23&_nc_ht=scontent-yyz1-1.xx&_nc_gid=CvmYzo34mCTCqkupN7lhQA&oh=00_AfOhbFipRxAt-q5litn0a5W0WFkKoIlarbnQJKInOvnH7w&oe=685BF14D",
+          "location": "Unknown",
+          "url": "https://www.facebook.com/marketplace/item/3974798612790745",
+          "postedAt": ""
+        }
+      ],
+      "finishedAt": "2025-06-21T04:28:12.310Z",
+      "totalItems": 21,
+      "totalItemsCount": 21
+    },
+    "datasetId": "uKVsBx0kEngoBXIPR",
+    "actorRunId": "g4h4pXjkVkfvUKJUe",
+    "updatedAt": "2025-06-21T04:28:41.812Z",
+    "hasData": true,
+    "packId": "pack-decouverte",
+    "paymentIntentId": "pi_3RcJ2hP6UShCV9Fs1H9E6HUI",
+    "paymentCompletedAt": "2025-06-21T04:28:41.810Z",
+    "paymentStatus": "succeeded",
+    "downloadUrl": "http://localhost:8080/download?session_id=sess_0ExX-7S7iK&pack_id=pack-decouverte&autoDownload=true&format=excel",
+    "downloadToken": "c2Vzc18wRXhYLTdTN2lLOjE3NTA0ODAxMjE4MTE6cGFpZA=="
   }
 ]
