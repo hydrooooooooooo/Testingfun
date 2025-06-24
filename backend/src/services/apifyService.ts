@@ -80,10 +80,29 @@ interface ApifyItem {
   redacted_description?: string | ApifyDescriptionObject;
   primary_listing_photo?: ApifyPrimaryListingPhoto;
   listingUrl?: string;
-  listing_photos?: Array<{image: {uri: string}}>;
+  listing_photos?: ApifyListingPhoto[];
+  
+  // Additional extractable fields
+  creation_time?: number;
+  attribute_data?: ApifyItemAttribute[];
+  product_item?: ApifyProductItem;
+  marketplace_listing_category?: ApifyMarketplaceCategory;
+  marketplace_listing_category_name?: string;
+  
+  // Status fields
+  is_live?: boolean;
+  is_pending?: boolean;
+  is_sold?: boolean;
+  is_hidden?: boolean;
+  
+  // Enhanced location data
+  item_location?: ApifyLocation;
+  location_text?: {
+    text?: string;
+  };
+  
   [key: string]: any;
 }
-
 // Initialize Apify client
 const apifyClient = new ApifyClient({
   token: config.api.apifyToken,

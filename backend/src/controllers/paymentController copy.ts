@@ -1,3 +1,4 @@
+// backend/src/controllers/paymentController.ts
 import { Request, Response, NextFunction } from 'express';
 import Stripe from 'stripe';
 import { stripeService } from '../services/stripeService';
@@ -23,7 +24,7 @@ export class PaymentController {
         return res.status(200).end();
       }
       
-      // Accepter les deux formats de paramètres (sessionId et session_id) pour plus de compatibilité
+      // CORRECTION : Accepter les deux formats de paramètres (sessionId et session_id) pour plus de compatibilité
       const sessionIdParam = req.query.sessionId || req.query.session_id;
       
       // Log détaillé des paramètres reçus
@@ -110,13 +111,13 @@ export class PaymentController {
         throw new ApiError(404, `Session with ID ${sessionId} not found`);
       }
 
-      // Create Stripe checkout session with metadata and client_reference_id
+      // CORRECTION : URLs cohérentes avec sessionId et packId (pas session_id et pack_id)
       const stripeSession = await stripeService.createCheckoutSession({
         packId,
         packName: pack.name,
         amount: pack.price,
-        successUrl: `${config.server.frontendUrl}/download?session_id=${sessionId}&pack_id=${packId}&autoDownload=true&format=excel`,
-        cancelUrl: `${config.server.frontendUrl}/payment?session_id=${sessionId}&pack_id=${packId}&status=cancelled`,
+        successUrl: `${config.server.frontendUrl}/download?sessionId=${sessionId}&packId=${packId}&autoDownload=true&format=excel`,
+        cancelUrl: `${config.server.frontendUrl}/payment?sessionId=${sessionId}&packId=${packId}&status=cancelled`,
         metadata: {
           sessionId: sessionId,
           packId: packId
@@ -135,7 +136,7 @@ export class PaymentController {
   }
 
   /**
-   * Handle Stripe webhook events - VERSION FINALE SANS VERIFICATION
+   * Handle Stripe webhook events
    */
   async handleWebhook(req: Request, res: Response, next: NextFunction) {
     try {
@@ -145,30 +146,35 @@ export class PaymentController {
       // Log l'URL de la requête pour le débogage
       logger.info(`Webhook Stripe reçu sur: ${req.originalUrl}`);
       logger.info(`Méthode: ${req.method}, IP: ${req.ip}`);
-      logger.info(`NODE_ENV actuel: ${process.env.NODE_ENV}`);
-      logger.info(`Signature présente: ${!!signature}`);
       
-      // **BYPASS TOTAL - PAS DE VERIFICATION DE SIGNATURE**
-      logger.info('🚀 BYPASS TOTAL DE LA VERIFICATION STRIPE ACTIVÉ');
-      
-      // Traiter le payload directement
-      let payload = req.body;
-      let event: Stripe.Event;
-      
-      if (Buffer.isBuffer(payload)) {
-        logger.info('Payload reçu comme Buffer, conversion en string');
-        event = JSON.parse(payload.toString());
-      } else if (typeof payload === 'string') {
-        logger.info('Payload reçu comme string, parsing JSON');
-        event = JSON.parse(payload);
-      } else if (typeof payload === 'object') {
-        logger.info('Payload reçu comme objet, utilisation directe');
-        event = payload;
-      } else {
-        throw new ApiError(400, 'Invalid payload format');
+      if (!signature) {
+        logger.warn('Aucune signature Stripe trouvée dans la requête');
+        throw new ApiError(400, 'Stripe signature is missing');
       }
       
-      logger.info(`✅ Processing Stripe webhook event: ${event.type} (ID: ${event.id})`);
+      // Pour les webhooks Stripe, le corps de la requête doit être brut (Buffer ou string)
+      // Vérifions si req.body est déjà un Buffer ou une chaîne
+      let payload = req.body;
+      
+      if (Buffer.isBuffer(payload)) {
+        // Si c'est un Buffer, c'est parfait
+        logger.info('Payload reçu comme Buffer, format correct');
+      } else if (typeof payload === 'string') {
+        // Si c'est une chaîne, c'est aussi bon
+        logger.info('Payload reçu comme string, format correct');
+      } else if (typeof payload === 'object') {
+        // Si c'est un objet, il a déjà été parsé par express.json()
+        logger.warn('Payload reçu comme objet JSON parsé, conversion en string');
+        payload = JSON.stringify(payload);
+      }
+      
+      // Verify the event with the signature and secret
+      const event = stripeService.constructEvent(
+        payload,
+        signature as string
+      );
+      
+      logger.info(`Processing Stripe webhook event: ${event.type} (ID: ${event.id})`);
       logger.info(`Webhook créé le: ${new Date(event.created * 1000).toISOString()}`);
       
       // Log des métadonnées de l'événement pour le débogage
@@ -177,151 +183,76 @@ export class PaymentController {
         if (metadata) {
           logger.info(`Métadonnées de l'événement: ${JSON.stringify(metadata)}`);
         }
-      } catch (error) {
-        logger.warn('Impossible de lire les métadonnées de l\'event');
+      } catch (metaError) {
+        logger.warn('Erreur lors de la lecture des métadonnées:', metaError);
       }
-
-      // Handle the event based on its type
+      
+      // Handle different event types
       switch (event.type) {
-        case 'checkout.session.completed': {
-          logger.info('🎯 Traitement checkout.session.completed');
-          await this.handleCheckoutSessionCompleted(event.data.object);
+        case 'checkout.session.completed':
+          await this.handleCheckoutSessionCompleted(event.data.object as Stripe.Checkout.Session);
           break;
-        }
-        case 'payment_intent.succeeded': {
-          logger.info('🎯 Traitement payment_intent.succeeded');
-          await this.handlePaymentIntentSucceeded(event.data.object);
+        case 'payment_intent.succeeded':
+          await this.handlePaymentIntentSucceeded(event.data.object as Stripe.PaymentIntent);
           break;
-        }
-        case 'payment_intent.payment_failed': {
-          logger.info('🎯 Traitement payment_intent.payment_failed');
-          await this.handlePaymentIntentFailed(event.data.object);
+        case 'payment_intent.payment_failed':
+          await this.handlePaymentIntentFailed(event.data.object as Stripe.PaymentIntent);
           break;
-        }
-        case 'charge.succeeded': {
+        case 'charge.succeeded':
           logger.info(`Charge succeeded: ${(event.data.object as Stripe.Charge).id}`);
           break;
-        }
-        case 'charge.failed': {
+        case 'charge.failed':
           logger.warn(`Charge failed: ${(event.data.object as Stripe.Charge).id}`);
           break;
-        }
         default:
           logger.info(`Unhandled event type: ${event.type}`);
       }
-
-      // Always respond with 200 to acknowledge receipt of the webhook
-      logger.info('✅ Webhook traité avec succès');
+      
+      // Respond to Stripe that we received the event
       res.status(200).json({ received: true });
     } catch (error) {
-      logger.error('❌ Error handling webhook:', error);
-      // Return a 400 error on a bad signature
-      res.status(400).json({ error: (error as Error).message });
+      logger.error('Error processing webhook:', error);
+      next(error);
     }
   }
 
   /**
    * Handle checkout.session.completed event
    */
-  private async handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
-    // Stratégie pour trouver le sessionId:
-    // 1. D'abord chercher dans les métadonnées
-    // 2. Ensuite chercher dans client_reference_id
-    // 3. En dernier recours, chercher la session la plus récente non payée
+  private async handleCheckoutSessionCompleted(checkoutSession: Stripe.Checkout.Session) {
+    const sessionId = checkoutSession.metadata?.sessionId || checkoutSession.client_reference_id;
+    const packId = checkoutSession.metadata?.packId;
     
-    let sessionId = null;
-    const metadata = session.metadata || {};
-    const packId = metadata.packId || 'pack-decouverte';
+    logger.info(`Traitement de checkout.session.completed pour la session: ${sessionId}, pack: ${packId}`);
     
-    // Logs de débogage pour la redirection
-    logger.info('=== STRIPE CHECKOUT COMPLETED ===');
-    logger.info('Session Stripe ID:', session.id);
-    logger.info('Client Reference ID:', session.client_reference_id);
-    logger.info('Metadata:', session.metadata);
-    logger.info('Success URL:', session.success_url);
-    logger.info('Payment Status:', session.payment_status);
-    logger.info('=====================================');
-    
-    // 1. Vérifier les métadonnées
-    if (metadata.sessionId) {
-      sessionId = metadata.sessionId;
-      logger.info(`✅ Session ID trouvé dans les métadonnées: ${sessionId}`);
-    } 
-    // 2. Vérifier client_reference_id
-    else if (session.client_reference_id) {
-      sessionId = session.client_reference_id;
-      logger.info(`✅ Session ID trouvé dans client_reference_id: ${sessionId}`);
-    } 
-    // 3. Chercher la session la plus récente non payée
-    else {
-      logger.warn('⚠️ Aucun sessionId trouvé dans les métadonnées ou client_reference_id, recherche de la session la plus récente non payée');
-      
-      // Trouver la session la plus récente non payée
-      const sessions = sessionService.getAllSessions();
-      const unpaidSessions = sessions.filter(s => !s.isPaid);
-      
-      if (unpaidSessions.length === 0) {
-        logger.warn('❌ Aucune session non payée trouvée lors du traitement du webhook de paiement');
-        return;
-      }
-      
-      // Trier par date de création (la plus récente d'abord)
-      unpaidSessions.sort((a, b) => {
-        const dateA = new Date(a.createdAt || 0);
-        const dateB = new Date(b.createdAt || 0);
-        return dateB.getTime() - dateA.getTime();
-      });
-      
-      // Utiliser la session non payée la plus récente
-      const mostRecentSession = unpaidSessions[0];
-      sessionId = mostRecentSession.id;
-      logger.info(`✅ Utilisation de la session non payée la plus récente: ${sessionId}`);
-    }
-    
-    // Récupérer la session de scraping
-    const scrapingSession = sessionService.getSession(sessionId);
-    
-    if (!scrapingSession) {
-      logger.warn(`❌ Session ${sessionId} not found when processing payment webhook`);
+    if (!sessionId) {
+      logger.warn(`No session ID found in checkout session metadata: ${checkoutSession.id}`);
       return;
     }
     
-    logger.info(`✅ Session de scraping trouvée: ${JSON.stringify(scrapingSession)}`);
-    
-    // Marquer la session comme ayant des données si elle a un datasetId
-    if (scrapingSession.datasetId && !scrapingSession.hasData) {
-      scrapingSession.hasData = true;
-      sessionService.updateSession(sessionId, { hasData: true });
-      logger.info(`✅ Session ${sessionId} marked as having data`);
-    }
-    
-    // Mark session as paid
     try {
-      // Générer l'URL de téléchargement automatique avec les paramètres corrects
-      const downloadUrl = `${config.server.frontendUrl}/download?session_id=${sessionId}&pack_id=${packId}&autoDownload=true&format=excel`;
-      logger.info(`🔗 Génération de l'URL de téléchargement automatique: ${downloadUrl}`);
-      
-      // Mettre à jour la session avec les informations de paiement
-      const updatedSession = sessionService.updateSession(sessionId, {
+      // Update session with payment success
+      sessionService.updateSession(sessionId, {
         isPaid: true,
-        packId,
-        paymentIntentId: typeof session.payment_intent === 'string' ? 
-          session.payment_intent : 'checkout_session_payment',
+        paymentIntentId: checkoutSession.id,
         paymentCompletedAt: new Date().toISOString(),
-        paymentStatus: 'succeeded',
-        downloadUrl
+        paymentStatus: 'succeeded'
       });
       
-      logger.info(`🎉 Session ${sessionId} marked as paid for pack ${packId}`);
-      logger.info(`📥 Download URL set to: ${updatedSession?.downloadUrl || 'undefined'}`);
+      // CORRECTION : Générer l'URL avec des paramètres cohérents (sessionId et packId)
+      const downloadUrl = `${config.server.frontendUrl}/download?sessionId=${sessionId}&packId=${packId}&autoDownload=true`;
       
-      // Générer un jeton de téléchargement temporaire
-      const downloadToken = Buffer.from(`${sessionId}:${new Date().getTime()}:paid`).toString('base64');
-      sessionService.updateSession(sessionId, { downloadToken });
-      logger.info(`🔑 Download token generated for session ${sessionId}: ${downloadToken}`);
+      // Mettre à jour la session avec l'URL de téléchargement
+      sessionService.updateSession(sessionId, {
+        downloadUrl,
+        downloadToken: Buffer.from(`${sessionId}:${Date.now()}:paid`).toString('base64')
+      });
       
+      logger.info(`Génération de l'URL de téléchargement automatique: ${downloadUrl}`);
+      logger.info(`Session ${sessionId} marked as paid for pack ${packId}`);
+      logger.info(`Téléchargement automatique configuré pour la session ${sessionId}`);
     } catch (error) {
-      logger.error(`❌ Failed to update session ${sessionId} when processing payment: ${error}`);
+      logger.error(`Failed to update session ${sessionId} for completed checkout: ${error}`);
     }
   }
 
@@ -332,8 +263,9 @@ export class PaymentController {
     const metadata = paymentIntent.metadata || {};
     let sessionId = metadata.sessionId;
     
+    // Si pas de sessionId dans les métadonnées, essayer de l'extraire de la description
     if (!sessionId && paymentIntent.description) {
-      const match = paymentIntent.description.match(/session[_\-]?id[:\s]?([\w\-]+)/i);
+      const match = paymentIntent.description.match(/session[_\s]*id[:\s]*([a-zA-Z0-9_\-]+)/i);
       if (match && match[1]) {
         sessionId = match[1];
         logger.info(`Session ID trouvé dans la description du payment intent: ${sessionId}`);
@@ -346,6 +278,7 @@ export class PaymentController {
     }
     
     try {
+      // Update session with payment success information
       sessionService.updateSession(sessionId, {
         isPaid: true,
         paymentIntentId: paymentIntent.id,
@@ -371,6 +304,7 @@ export class PaymentController {
     }
     
     try {
+      // Update session with payment failure information
       sessionService.updateSession(sessionId, {
         isPaid: false,
         paymentIntentId: paymentIntent.id,
