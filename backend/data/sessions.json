@@ -1724,5 +1724,58 @@
     "paymentStatus": "succeeded",
     "downloadUrl": "http://localhost:8080/download?session_id=sess__xnvvNh9xb&pack_id=pack-pro&autoDownload=true&format=excel",
     "downloadToken": "c2Vzc19feG52dk5oOXhiOjE3NTA3NjAwNzYzMDk6cGFpZA=="
+  },
+  {
+    "id": "sess_H1SyKas-W3",
+    "url": "https://www.facebook.com/marketplace/110080935687758/electronics?minPrice=20000&exact=false",
+    "status": "completed",
+    "createdAt": "2025-06-24T10:23:33.426Z",
+    "isPaid": true,
+    "data": {
+      "nbItems": 22,
+      "startedAt": "2025-06-24T10:23:33.426Z",
+      "previewItems": [
+        {
+          "title": "Répétiteur wifi CPL Devolo magic 🇫🇷",
+          "price": "200 000 MGA",
+          "desc": "Répétiteur Wifi Magic Devolo 🇫🇷\nVente flash 200.000ar  au lieu de 300.000ar 😱 Le kit réseau CPL+WiFi tout compris!! \nOffre valable jusqu’à demain seulement👌  \n\n✅Usage Professionnel Ou à Domicile , Qui n'a jamais voulu installer un ordinateur ou tout autre périphérique ayant besoin d'une connexion Internet dans une pièce trop éloignée du routeur de la maison ? Le Wi-Fi permet de régler ce problème, mais bien souvent, la qualité de la connexion en prend un coup en raison d'un signal trop faible. Alors plutôt que de percer des trous dans vos murs pour y passer des câbles Ethernet de plusieurs mètres, pensez à la solution du CPL !\nDerrière ces 3 lettres se cachent le concept de Courant Porteur en Ligne qui consiste tout simplement à faire passer votre réseau local via les prises électriques de votre logement. Il existe également d'autres solutions pour étendre votre réseau comme le répéteur Wi-Fi, le switch Ethernet ainsi que le routeur Wi-Fi.",
+          "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/510740554_590990210711754_552804722202545582_n.jpg?stp=c0.77.133.133a_dst-jpg_p133x133_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=82FPeYgCMDAQ7kNvwFxs9yt&_nc_oc=AdkC-yil2ePo2TETB4XJpc0V4LY1HUyzs9AxMEOObRJKn04E7BChHKAr3UmrfQsD_nM&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=MaGhQIOayLI2cmVVNwYESQ&oh=00_AfM8SzNp5nizJPnH0Mh0Tq0bHDCvRX2tJhFBnosUrAC1nQ&oe=68604E29",
+          "location": "Unknown",
+          "url": "https://www.facebook.com/marketplace/item/717281930895084",
+          "postedAt": ""
+        },
+        {
+          "title": "Disque dur externe 2 tera correct tsara",
+          "price": "250 000 MGA",
+          "desc": "Feno jeux pc",
+          "image": "https://scontent.fluk1-1.fna.fbcdn.net/v/t45.5328-4/510612444_652304047823777_519355760940640825_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=kN-kYjFuuZoQ7kNvwGWyauz&_nc_oc=Adlcz4dmVWDiT_Rh2NmWSAdk9pNCSmMknCIicpXteGDIvxWIl0DXZ64Wi7te_BNSZr0AaPJZ4koFUfZ3knic0MPh&_nc_zt=23&_nc_ht=scontent.fluk1-1.fna&_nc_gid=MKvWsoFzKcZ77J3OEqlGhg&oh=00_AfNKPLljGDMp5gz63RY1PSyI5saJYs9yVFN8RWwda1CMfw&oe=6860351E",
+          "location": "Unknown",
+          "url": "https://www.facebook.com/marketplace/item/1286248679891850",
+          "postedAt": ""
+        },
+        {
+          "title": "Micro cravate",
+          "price": "40 000 MGA",
+          "desc": "Micro Cravate Professionnel SANS FIL Rechargeable 🎤😻\n\n👉Double microphones: 2 émetteurs - 1 récepteur\n👉Distance de connections: 15 à  20 Mètres \n👉Compatibilité IOS/ tous les smartphone /Mixeur avec Adapteur \n👉Autonomie :8H \n    ✔️ Afaka anaovana : Live sur réseaux sociaux / Interview /Enregistrement vocal / etc...\n      Prix :40.000 ar \n\n  📞[hidden information] na mp direct  \n🛵Livraison possible toute les régions à Madagascar",
+          "image": "https://scontent-gig4-1.xx.fbcdn.net/v/t45.5328-4/511836322_1437661727682721_1899828111132494360_n.jpg?stp=c1.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=PR739EVb598Q7kNvwH6FHM4&_nc_oc=AdlA3qi1gzbn7UBec5izUsrOOy2Amoe4TchHA9FIAxt17lJgCXhQnB7dlRr2lf6bh3s&_nc_zt=23&_nc_ht=scontent-gig4-1.xx&_nc_gid=j48xaGHe5nFRjNVDoK_MfA&oh=00_AfMo9ggwI2raO-M50150-A96BmNzO3DIkQqGE6TXSn2kSA&oe=68603C98",
+          "location": "Unknown",
+          "url": "https://www.facebook.com/marketplace/item/2753841468146448",
+          "postedAt": ""
+        }
+      ],
+      "finishedAt": "2025-06-24T10:24:10.686Z",
+      "totalItems": 22,
+      "totalItemsCount": 22
+    },
+    "datasetId": "psy2BT5LDKE7OXIg4",
+    "actorRunId": "djK73UVTjHim3fRNH",
+    "updatedAt": "2025-06-24T10:25:19.138Z",
+    "hasData": true,
+    "packId": "pack-pro",
+    "paymentIntentId": "pi_test_1750760719124",
+    "paymentCompletedAt": "2025-06-24T10:25:19.137Z",
+    "paymentStatus": "succeeded",
+    "downloadUrl": "http://localhost:8080/download?session_id=sess_H1SyKas-W3&pack_id=pack-pro&autoDownload=true&format=excel",
+    "downloadToken": "c2Vzc19IMVN5S2FzLVczOjE3NTA3NjA3MTkxMzg6cGFpZA=="
   }
 ]
