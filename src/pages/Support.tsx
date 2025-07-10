@@ -1,5 +1,5 @@
 import React from "react";
-import Layout from "@/components/Layout";
+
 import { 
   Mail, 
   HelpCircle, 
@@ -45,7 +45,7 @@ Cordialement,
   };
 
   return (
-    <Layout>
+
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
         
         {/* Hero Section */}
@@ -362,6 +362,6 @@ Cordialement,
           </div>
         </section>
       </div>
-    </Layout>
+
   );
 }

@@ -4,15 +4,20 @@ import { paymentRoutes } from './paymentRoutes';
 import { exportRoutes } from './exportRoutes';
 import { adminRoutes } from './adminRoutes';
 import { previewRoutes } from './previewRoutes';
+import authRoutes from './authRoutes';
+import userRoutes from './userRoutes';
 import { logger } from '../utils/logger';
 import { paymentController } from '../controllers/paymentController';
 import cors from 'cors';
+import { errorHandler, securityHeaders, corsForStripeWebhook, requestLogger, protect, restrictTo } from '../middlewares';
 
 const router = Router();
 
 // Register all routes
+router.use('/auth', authRoutes);
 router.use('/scrape', scrapeRoutes);
 router.use('/payment', paymentRoutes);
+router.use('/user', userRoutes);
 
 // Routes de compatibilité avec les anciennes URLs
 router.post('/stripe/webhook', paymentController.handleWebhook.bind(paymentController));
@@ -59,7 +64,7 @@ router.use('/export',
   exportRoutes
 );
 
-router.use('/admin', adminRoutes);
+router.use('/admin', protect, restrictTo('admin'), adminRoutes);
 
 // Routes de prévisualisation avec log spécifique pour débogage
 router.use('/preview', (req, res, next) => {

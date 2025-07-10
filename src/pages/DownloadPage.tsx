@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Layout from "@/components/Layout";
+
 import { Button } from "@/components/ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PLANS } from "@/lib/plans";
@@ -212,7 +212,6 @@ export default function DownloadPage() {
 
   if (isVerifying) {
     return (
-      <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col items-center gap-4 py-8">
             <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
@@ -220,13 +219,11 @@ export default function DownloadPage() {
             <p className="text-sm text-muted-foreground">Session ID: <span className="font-mono text-xs bg-white px-2 py-1 rounded">{sessionId}</span></p>
           </div>
         </div>
-      </Layout>
     );
   }
 
   if (error) {
     return (
-      <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-2xl mx-auto">
             <Button
@@ -253,12 +250,10 @@ export default function DownloadPage() {
             </div>
           </div>
         </div>
-      </Layout>
     );
   }
 
   return (
-    <Layout>
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           {/* En-tête avec bouton retour */}
@@ -400,6 +395,5 @@ export default function DownloadPage() {
           </div>
         </div>
       </div>
-    </Layout>
   );
 }

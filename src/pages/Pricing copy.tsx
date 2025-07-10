@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Layout from "@/components/Layout";
+
 import PricingPlan from "@/components/PricingPlan";
 import PricingFeatures from "@/components/PricingFeatures";
 import { PLANS } from "@/lib/plans";
@@ -127,7 +127,7 @@ export default function PricingPage() {
   };
 
   return (
-    <Layout>
+
       <section className="mx-auto w-full max-w-5xl my-10 px-2 flex flex-col gap-6">
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl shadow-sm p-6 md:p-9 flex flex-col items-center">
           <h1 className="text-4xl font-extrabold text-primary text-center mb-2">
@@ -163,6 +163,6 @@ export default function PricingPage() {
           Crédit actif immédiatement. Aucun abonnement, aucun engagement.
         </p>
       </section>
-    </Layout>
+
   );
 }

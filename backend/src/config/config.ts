@@ -24,6 +24,7 @@ export const config = {
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
     stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
     adminApiKey: process.env.ADMIN_API_KEY,
+    jwtSecret: process.env.JWT_SECRET,
   },
   
   // Session storage configuration
@@ -73,6 +74,7 @@ const validateConfig = () => {
     { key: 'STRIPE_SECRET_KEY', value: config.api.stripeSecretKey },
     { key: 'STRIPE_WEBHOOK_SECRET', value: config.api.stripeWebhookSecret },
     { key: 'ADMIN_API_KEY', value: config.api.adminApiKey },
+    { key: 'JWT_SECRET', value: config.api.jwtSecret },
   ];
   
   const missingVars = requiredVars.filter(v => !v.value);

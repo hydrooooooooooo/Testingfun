@@ -76,23 +76,22 @@ const server = app.listen(port, () => {
   logger.info(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${port}`);
   logger.info(`Health check available at http://localhost:${port}/health`);
   
-  // Afficher toutes les routes enregistrées
+  // Afficher toutes les routes enregistrées de manière récursive
   logger.info('Registered routes:');
-  app._router.stack.forEach((middleware: any) => {
-    if (middleware.route) {
-      // Routes enregistrées directement
-      logger.info(`${Object.keys(middleware.route.methods).join(', ').toUpperCase()} ${middleware.route.path}`);
-    } else if (middleware.name === 'router') {
-      // Router middleware
-      middleware.handle.stack.forEach((handler: any) => {
-        if (handler.route) {
-          const path = handler.route.path;
-          const methods = Object.keys(handler.route.methods).join(', ').toUpperCase();
-          logger.info(`${methods} /api${path}`);
-        }
-      });
-    }
-  });
+  function printRoutes(stack: any[], parentPath: string) {
+    stack.forEach((layer) => {
+      if (layer.route) {
+        const methods = Object.keys(layer.route.methods).join(', ').toUpperCase();
+        logger.info(`  ${methods} ${parentPath}${layer.route.path}`);
+      } else if (layer.name === 'router' && layer.handle.stack) {
+        // C'est un routeur, on explore ses routes
+        // On essaie de reconstruire le chemin du sous-routeur
+        const newParentPath = parentPath + (layer.regexp.source.replace(/\//g, '/').replace('(?:\?.*)?$', '').replace('^', '').slice(0, -1) || '');
+        printRoutes(layer.handle.stack, newParentPath);
+      }
+    });
+  }
+  printRoutes(app._router.stack, '');
 });
 
 // Gestion de l'arrêt du serveur

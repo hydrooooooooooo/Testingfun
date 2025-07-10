@@ -1,0 +1,2323 @@
+{
+  "sessionId": "sess_6aL1ijzaMf",
+  "datasetId": "1vPlmO6UE3tp9iYfy",
+  "timestamp": "2025-07-07T08:34:22.442Z",
+  "totalItems": 21,
+  "processedPreview": [
+    {
+      "title": "mazda",
+      "price": "3 USD",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1649941639204353"
+    },
+    {
+      "title": "Voiture",
+      "price": "Gratuit",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1006786488175802"
+    },
+    {
+      "title": "Voiture",
+      "price": "22 USD",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1382583363253907"
+    }
+  ],
+  "rawItemsSample": [
+    {
+      "id": "1649941639204353",
+      "primary_listing_photo": {
+        "listing_image": {
+          "uri": "https://scontent-ord5-3.xx.fbcdn.net/v/t45.5328-4/513716622_557645673949854_4376770493252282653_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=e77UE8KApF4Q7kNvwF3rpTa&_nc_oc=AdmzOhMkO1lCWANzmswiKQ-XNzoK9v5Ym-SpfEzpQHD7VhpKlBXBwQt1q_84sfdvO42sIOV4KzFSxiKeBmu1loJb&_nc_zt=23&_nc_ht=scontent-ord5-3.xx&_nc_gid=dIU4rXXqdUsG6Vub06FeSA&oh=00_AfTLLpDxJ_ui8NiZNWm_ChrDi_75rtLHgozu8WZ2qwKC4A&oe=68714242"
+        },
+        "id": "557645670616521"
+      },
+      "listing_price": {
+        "amount_with_offset": "300",
+        "currency": "USD",
+        "amount": "3.00"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "latitude": -18.915710449219,
+        "longitude": 47.521362304688,
+        "reverse_geocode_detailed": {
+          "country_alpha_two": "MG",
+          "postal_code_trimmed": ""
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "807311116002614",
+      "marketplace_listing_title": "mazda",
+      "custom_title": null,
+      "custom_sub_titles_with_rendering_flags": [
+        {
+          "subtitle": ""
+        }
+      ],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/1649941639204353",
+      "if_viewer_is_buyer": {
+        "marketplace_pdp_integrity_banner_strings_rewrite": null,
+        "id": "1649941639204353"
+      },
+      "story": null,
+      "redacted_description": {
+        "text": "a vendre \nmazda bt 50 pro 3.2l  année 2019\nvitesse manuelle à 6 rapports \nsortie océan trade 🛻 🛻 \n\ncontact rapide: 033 14 586 05\n                            034 01 218 13\n\nvoiture en parfaite état \ntoutes options \nintérieur et extérieur d'origine impecc \nradar et caméra de recul \nrétroviseur électriques et rabattables \nclimatronique \ncommande au volant multifonction \nverrouillage centralisé avec commande à distance \nquatre vitres électriques \nmarche à pied \naudio USB bluetooth phone \netc...... As"
+      },
+      "creation_time": 1751818425,
+      "location_text": {
+        "text": "Antananarivo"
+      },
+      "location_vanity_or_id": "110080935687758",
+      "listing_inventory_type": "EVERGREEN",
+      "formatted_price": {
+        "text": "$3"
+      },
+      "payment_time_period": null,
+      "condition": "USED",
+      "logging_id": "24473112012273766",
+      "marketplace_lead_gen_form": null,
+      "listed_by": null,
+      "real_estate_listing_agent": null,
+      "inventory_count": -1,
+      "legal_reporting_cta_type": null,
+      "legal_reporting_uri": null,
+      "messaging_enabled": true,
+      "listing_is_rejected": false,
+      "product_item": {
+        "id": "24473112012273766",
+        "boosted_marketplace_listing": null,
+        "promoted_listing": null
+      },
+      "seller_message_thread": null,
+      "is_checkout_enabled": false,
+      "is_draft": false,
+      "can_seller_edit": false,
+      "default_variant_listing": null,
+      "primary_mp_ent": {
+        "id": "1649941639204353"
+      },
+      "reportable_seller_type": null,
+      "reportable_ent_id": "24473112012273766",
+      "hidden_from_friends": null,
+      "can_share": true,
+      "share_uri": "https://www.facebook.com/marketplace/item/1649941639204353/",
+      "can_seller_change_availability": false,
+      "is_on_marketplace": true,
+      "messagingEnabled": true,
+      "has_children": false,
+      "cross_post_info": {
+        "all_listings": [
+          {
+            "is_on_marketplace": true,
+            "id": "1649941639204353"
+          }
+        ]
+      },
+      "active_order": null,
+      "rebuy_order_receipt": null,
+      "c2c_shipping_eligible": false,
+      "is_shipping_offered": false,
+      "cross_post_sync_metadata": null,
+      "most_recent_active_order_as_buyer": null,
+      "order_summaries": [],
+      "should_hide_pdp_shipping_content": true,
+      "shipping_profile": null,
+      "is_seller_business_onboarded": false,
+      "is_buy_now_enabled": false,
+      "is_purchase_protected": false,
+      "can_buyer_make_checkout_offer": false,
+      "is_cart_enabled": false,
+      "seller_cms": null,
+      "vacation_mode": null,
+      "all_message_threads": {
+        "is_empty": true
+      },
+      "should_show_txn_survey_on_mas": false,
+      "incentive_campaign_for_free_shipping": null,
+      "first_message_suggested_value": null,
+      "sweepstake_enabled": false,
+      "sweepstake_status": "INVALID",
+      "sweepstake_content": null,
+      "marketplace_bump_info": null,
+      "fi_enhanced_appeal_data": {
+        "use_fi_appeals": true,
+        "enforcement_instance_id": null
+      },
+      "listing_seller_notices": [],
+      "is_email_communication_enabled": false,
+      "fair_market_value_data": null,
+      "vehicle_condition": null,
+      "vehicle_exterior_color": null,
+      "vehicle_features": [],
+      "vehicle_fuel_type": null,
+      "vehicle_identification_number": null,
+      "vehicle_interior_color": null,
+      "vehicle_is_paid_off": null,
+      "vehicle_make_display_name": null,
+      "vehicle_model_display_name": null,
+      "vehicle_number_of_owners": null,
+      "vehicle_odometer_data": {
+        "unit": null,
+        "value": null
+      },
+      "vehicle_registration_plate_information": null,
+      "vehicle_seller_type": null,
+      "vehicle_specifications": null,
+      "vehicle_title_status": null,
+      "vehicle_transmission_type": null,
+      "vehicle_trim_display_name": null,
+      "vehicle_carfax_report": null,
+      "attribute_data": [],
+      "origin_target": {
+        "id": "216802746735285"
+      },
+      "shipping_offered": false,
+      "legal_disclosure_impressum_url": null,
+      "commerce_badges_info": {
+        "source_summary": null,
+        "badges": []
+      },
+      "listing_address": null,
+      "seller_phone_number": null,
+      "vehicle_website_link": null,
+      "dealership_name": null,
+      "seller": null,
+      "energy_efficiency_class_eu": null,
+      "listing_photos": [
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fluk1-1.fna.fbcdn.net/v/t45.5328-4/513716622_557645673949854_4376770493252282653_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=e77UE8KApF4Q7kNvwGLiqNv&_nc_oc=Adm740C1gU21GKsDJVKBjBId9FICNFBavR8o5szfLtB1zzsju2s2c22Q9n4A4AMgOoJy6uEFviUyjuIiSUQcyaCL&_nc_zt=23&_nc_ht=scontent.fluk1-1.fna&_nc_gid=BuXtRAoFhxKI1fcZW8mchw&oh=00_AfQI66WS4Ro1662H_pQPn8j9-F4aDbflFG-408-R8EjecQ&oe=68714242"
+          },
+          "id": "557645670616521"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 960,
+            "width": 720,
+            "uri": "https://scontent.fluk1-1.fna.fbcdn.net/v/t45.5328-4/497919300_1795398421318991_2031723466344744860_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=coEZTn128ggQ7kNvwFC3zWq&_nc_oc=Adl7t8aB14DAJX2oi1Z8joCYDW6vtMR85t1KPI2I4mniO1GzP-XrEqP4u11xxYzu0tn1a3ARiIg50JvtG2KInTJ2&_nc_zt=23&_nc_ht=scontent.fluk1-1.fna&_nc_gid=BuXtRAoFhxKI1fcZW8mchw&oh=00_AfRWUJRr53U8mSyawErvABAMpsV4kvdq2lVwwirQwZgGwA&oe=68716CE7"
+          },
+          "id": "1795398417985658"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 960,
+            "width": 720,
+            "uri": "https://scontent.fluk1-1.fna.fbcdn.net/v/t45.5328-4/503413689_732993153014396_7052016650016496809_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=HSbhfU9cPnIQ7kNvwEyscql&_nc_oc=Admytk_6z9QR8FqKbiRBbTpp5IWJrKDKKQnmj8pJfXmbkgdTZcISd4qYYObQ9WKsynVswR2vWURJ5lQZ8Bn_pSWv&_nc_zt=23&_nc_ht=scontent.fluk1-1.fna&_nc_gid=BuXtRAoFhxKI1fcZW8mchw&oh=00_AfQdKS5Gr28eAtITP9k8nTGVzBfnDPjUNr_eckZyQ0aBsQ&oe=68714A9A"
+          },
+          "id": "732993146347730"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 960,
+            "width": 720,
+            "uri": "https://scontent.fluk1-1.fna.fbcdn.net/v/t45.5328-4/514034631_1670941970257478_5317719939857211761_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=605US-I0fKkQ7kNvwHAYiAg&_nc_oc=Adni_0g1UWiMp5axoLxKhPov0T158VcuYCNRFUwcEyCbc-smmJYz_tC82UAEdCZnHSasxeAiY13Yi7CPXBLHvbaX&_nc_zt=23&_nc_ht=scontent.fluk1-1.fna&_nc_gid=BuXtRAoFhxKI1fcZW8mchw&oh=00_AfQohtln95pvbtD4ryT7mk59K-62dWEuYclc2reVQWdFMQ&oe=687158B7"
+          },
+          "id": "1670941966924145"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 960,
+            "width": 720,
+            "uri": "https://scontent.fluk1-1.fna.fbcdn.net/v/t45.5328-4/514313163_648173454510814_2672169146757061983_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=dMJk-q0fPTEQ7kNvwGmzqei&_nc_oc=Adla3ZehMYAY_V-4NGfedJphL9lE2Al5lWRpPKHTSwQpvKJLnqoiLNwAinoP7WDJf0UMy5B8rdw4Ys6qKMRpLjMj&_nc_zt=23&_nc_ht=scontent.fluk1-1.fna&_nc_gid=BuXtRAoFhxKI1fcZW8mchw&oh=00_AfSnxt9Zb4h93PEJ4RgAwMyzU6nOdAOQbY1lCC69yGwF5w&oe=68715252"
+          },
+          "id": "648173451177481"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fluk1-1.fna.fbcdn.net/v/t45.5328-4/475460754_3212784845528206_2615602527630060989_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=iJFTXrR8mE0Q7kNvwH-92nA&_nc_oc=Adlddhfu_K5FnFn2QSbNf2VaMZFhsN9sT9-5ADCFLhGaAF-loJcRKvegFEhL93hKVfXGn--hb4Id0NdBDlhGk1Q3&_nc_zt=23&_nc_ht=scontent.fluk1-1.fna&_nc_gid=BuXtRAoFhxKI1fcZW8mchw&oh=00_AfRxaIrzKk-DbYjB21ed9IUzgT4unijSNKIopDj3uDK0Lw&oe=68715E8E"
+          },
+          "id": "3212784842194873"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fluk1-1.fna.fbcdn.net/v/t45.5328-4/498920212_1714169772559017_2867418791860044319_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=zEqQ6SDFGPsQ7kNvwGlGDJP&_nc_oc=Adm0xnkz8POu0hhn5PyaguN32zxrsgGCuJ82wMjmm1YQgbW8w5igQoPsOMMfw00unYCRAevi6ZXUF_sIo-5NQzBR&_nc_zt=23&_nc_ht=scontent.fluk1-1.fna&_nc_gid=BuXtRAoFhxKI1fcZW8mchw&oh=00_AfTBrP-iwvFSw96LoOtYT-K5HY4fEXb95IWGX9nWHV4cKw&oe=687152B2"
+          },
+          "id": "1714169769225684"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fluk1-1.fna.fbcdn.net/v/t45.5328-4/468118208_1113619916983369_1941572275698581482_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=5MqXXJFDHTMQ7kNvwFbPatG&_nc_oc=AdmOghyHCvGTqNjeuS6Z6b8Tj83xvRfGwyVEKObyobzNjE6d-cI5ulPAVne7646AgHVHiyB5fe0RnPGRRWizCLi1&_nc_zt=23&_nc_ht=scontent.fluk1-1.fna&_nc_gid=BuXtRAoFhxKI1fcZW8mchw&oh=00_AfRqlZIDZDh6t2qLeMk0UDIMpUXJ_QFXdf3JO_Lroot1Aw&oe=68717489"
+          },
+          "id": "1113619913650036"
+        }
+      ],
+      "pre_recorded_videos": []
+    },
+    {
+      "id": "1006786488175802",
+      "primary_listing_photo": {
+        "listing_image": {
+          "uri": "https://scontent-lhr6-1.xx.fbcdn.net/v/t45.5328-4/482560912_1030555145764702_8250066986456541395_n.jpg?stp=c39.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=1xrXrFei77YQ7kNvwEEWD12&_nc_oc=AdmXeO7vKwAwKgf83WXvWnJbiziL6aaB5p9J1hYgW6ncWuQTvkmRcUklwTX500_d4DhbIq_JaR8Knebh8BDe6dao&_nc_zt=23&_nc_ht=scontent-lhr6-1.xx&_nc_gid=Pq0QxOfADFWjhq9Ytv0GuQ&oh=00_AfRD_1XOwMSjlIbaQqg1zTAZM_rRa_T3Ixi5g_PyIgWi7w&oe=68716317"
+        },
+        "id": "1030555142431369"
+      },
+      "listing_price": {
+        "amount_with_offset": "0",
+        "currency": "USD",
+        "amount": "0.00"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "latitude": -18.915710449219,
+        "longitude": 47.521362304688,
+        "reverse_geocode_detailed": {
+          "country_alpha_two": "MG",
+          "postal_code_trimmed": ""
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "807311116002614",
+      "marketplace_listing_title": "Voiture",
+      "custom_title": null,
+      "custom_sub_titles_with_rendering_flags": [
+        {
+          "subtitle": ""
+        }
+      ],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/1006786488175802",
+      "if_viewer_is_buyer": {
+        "marketplace_pdp_integrity_banner_strings_rewrite": null,
+        "id": "1006786488175802"
+      },
+      "story": null,
+      "redacted_description": {
+        "text": "🚨 AMIDY MORA MAIKA VOLA🚨\n\nA VENDRE TOUT SIMPLEMENT \n💯 ZX LAND MARK 4WD 💯\n👉Moteur Turbo Diesel QD 32 Nissan\n👉 KILOMÉTRAGE: 75 xxx Km (Réel)\n👉4 Vitres électriques et Rétroviseurs électroniques\n👉7 place réel\n👉Année: 2009\n👉Avec Radar de Recul\n👉Acheter à Océan Trade\n👉👉[hidden information]👈👈"
+      },
+      "creation_time": 1741098336,
+      "location_text": {
+        "text": "Antananarivo"
+      },
+      "location_vanity_or_id": "110080935687758",
+      "listing_inventory_type": "EVERGREEN",
+      "formatted_price": {
+        "text": "FREE"
+      },
+      "payment_time_period": null,
+      "condition": "USED",
+      "logging_id": "9259012057512207",
+      "marketplace_lead_gen_form": null,
+      "listed_by": null,
+      "real_estate_listing_agent": null,
+      "inventory_count": -1,
+      "legal_reporting_cta_type": "ukosa",
+      "legal_reporting_uri": "/help/contact/467998746305653",
+      "messaging_enabled": true,
+      "listing_is_rejected": false,
+      "product_item": {
+        "id": "9259012057512207",
+        "boosted_marketplace_listing": null,
+        "promoted_listing": null
+      },
+      "seller_message_thread": null,
+      "is_checkout_enabled": false,
+      "is_draft": false,
+      "can_seller_edit": false,
+      "default_variant_listing": null,
+      "primary_mp_ent": {
+        "id": "1006786488175802"
+      },
+      "reportable_seller_type": null,
+      "reportable_ent_id": "9259012057512207",
+      "hidden_from_friends": null,
+      "can_share": true,
+      "share_uri": "https://www.facebook.com/marketplace/item/1006786488175802/",
+      "can_seller_change_availability": false,
+      "is_on_marketplace": true,
+      "messagingEnabled": true,
+      "has_children": false,
+      "cross_post_info": {
+        "all_listings": [
+          {
+            "is_on_marketplace": true,
+            "id": "1006786488175802"
+          }
+        ]
+      },
+      "active_order": null,
+      "rebuy_order_receipt": null,
+      "c2c_shipping_eligible": false,
+      "is_shipping_offered": false,
+      "cross_post_sync_metadata": null,
+      "most_recent_active_order_as_buyer": null,
+      "order_summaries": [],
+      "should_hide_pdp_shipping_content": true,
+      "shipping_profile": null,
+      "is_seller_business_onboarded": false,
+      "is_buy_now_enabled": false,
+      "is_purchase_protected": false,
+      "can_buyer_make_checkout_offer": false,
+      "is_cart_enabled": false,
+      "seller_cms": null,
+      "vacation_mode": null,
+      "all_message_threads": {
+        "is_empty": true
+      },
+      "should_show_txn_survey_on_mas": false,
+      "incentive_campaign_for_free_shipping": null,
+      "first_message_suggested_value": null,
+      "sweepstake_enabled": false,
+      "sweepstake_status": "INVALID",
+      "sweepstake_content": null,
+      "marketplace_bump_info": null,
+      "fi_enhanced_appeal_data": {
+        "use_fi_appeals": true,
+        "enforcement_instance_id": null
+      },
+      "listing_seller_notices": [],
+      "is_email_communication_enabled": false,
+      "fair_market_value_data": null,
+      "vehicle_condition": null,
+      "vehicle_exterior_color": null,
+      "vehicle_features": [],
+      "vehicle_fuel_type": null,
+      "vehicle_identification_number": null,
+      "vehicle_interior_color": null,
+      "vehicle_is_paid_off": null,
+      "vehicle_make_display_name": null,
+      "vehicle_model_display_name": null,
+      "vehicle_number_of_owners": null,
+      "vehicle_odometer_data": {
+        "unit": null,
+        "value": null
+      },
+      "vehicle_registration_plate_information": null,
+      "vehicle_seller_type": null,
+      "vehicle_specifications": null,
+      "vehicle_title_status": null,
+      "vehicle_transmission_type": null,
+      "vehicle_trim_display_name": null,
+      "vehicle_carfax_report": null,
+      "attribute_data": [],
+      "origin_target": {
+        "id": "216802746735285"
+      },
+      "shipping_offered": false,
+      "legal_disclosure_impressum_url": null,
+      "commerce_badges_info": {
+        "source_summary": null,
+        "badges": []
+      },
+      "listing_address": null,
+      "seller_phone_number": null,
+      "vehicle_website_link": null,
+      "dealership_name": null,
+      "seller": null,
+      "energy_efficiency_class_eu": null,
+      "listing_photos": [
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 578,
+            "width": 918,
+            "uri": "https://scontent.fhyd14-5.fna.fbcdn.net/v/t45.5328-4/482560912_1030555145764702_8250066986456541395_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=1xrXrFei77YQ7kNvwHXMmIO&_nc_oc=Adl2PrOYLL_Ax5pKa7dW3pZo5dE0bs5e30M76_2CV3-eIlF6m5JzM8z6ufrIvMe4DFsTWV23QxRNmZbZ46bxKD3p&_nc_zt=23&_nc_ht=scontent.fhyd14-5.fna&_nc_gid=Jh8iDQuZ3F1jZ20fTNroMg&oh=00_AfRd1eZVqk1qrL7RSrwDFwEy579Bp5gJ344TTDQm6kZxfA&oe=68716317"
+          },
+          "id": "1030555142431369"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 634,
+            "width": 952,
+            "uri": "https://scontent.fhyd14-3.fna.fbcdn.net/v/t45.5328-4/482736728_985769180190973_8456184397544029835_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=4dZ4Y_0Vfb8Q7kNvwGzdKwR&_nc_oc=AdnCHk8fWJ2dsCGjnPGcC9McvstNapVG9LbPIRlpy7iDlbB1NNivGjp9x4PExNSoRLmvQjiMoN9Gp_HuCSA90gQY&_nc_zt=23&_nc_ht=scontent.fhyd14-3.fna&_nc_gid=Jh8iDQuZ3F1jZ20fTNroMg&oh=00_AfQti0X40UbpI_OhrQnF5WbL-jJh56vl2NO7mDtmH4j76A&oe=6871474E"
+          },
+          "id": "985769176857640"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 464,
+            "width": 960,
+            "uri": "https://scontent.fhyd14-2.fna.fbcdn.net/v/t45.5328-4/482467450_526585550173735_2587378651080374120_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=C8CQdtCNNLIQ7kNvwH9VPSO&_nc_oc=AdlmxWfnaLpvvS0CvJ3K9wGRybp0IoVdHkxw2fwzd1HNtD9GA1GR8wR8xw4QuomMbDI7gZsf_JgZrBdTQgYShF-f&_nc_zt=23&_nc_ht=scontent.fhyd14-2.fna&_nc_gid=Jh8iDQuZ3F1jZ20fTNroMg&oh=00_AfQ6YEHe3B9th9NbZdKaaIGiGHzELPyZnxCG5_UpAX-KuA&oe=68717540"
+          },
+          "id": "526585543507069"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 540,
+            "width": 960,
+            "uri": "https://scontent.fhyd14-4.fna.fbcdn.net/v/t45.5328-4/482863153_1691361184923613_4524398276147742459_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=dUnq-9iVNi8Q7kNvwHF7f6T&_nc_oc=Adkaf1IhysrXo-jO5ksNWMWjsvCLtjGfuYiARblneEdFxiUaLB33dLeJwVmNjwAjnEWcnaX3NiGUwpedWj61rC_3&_nc_zt=23&_nc_ht=scontent.fhyd14-4.fna&_nc_gid=Jh8iDQuZ3F1jZ20fTNroMg&oh=00_AfRqeMcdsCZo4iFWcaaq83p8YLd08KFBQZQ_-kyyrSLczg&oe=6871650D"
+          },
+          "id": "1691361181590280"
+        }
+      ],
+      "pre_recorded_videos": []
+    },
+    {
+      "id": "1382583363253907",
+      "primary_listing_photo": {
+        "listing_image": {
+          "uri": "https://scontent-atl3-1.xx.fbcdn.net/v/t45.5328-4/513759274_23908903592110691_1917684057859219549_n.jpg?stp=c3.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=7Zy9TOoOjBIQ7kNvwHZmZjF&_nc_oc=AdmmIZoDtSYurOWs6XDrun7CxMClm8r8BzxQGkFBk5-qVuvVWjGF80Q_DnvAbB_P0PQ&_nc_zt=23&_nc_ht=scontent-atl3-1.xx&_nc_gid=0AfG0eajjyKH7E3WXMk1mQ&oh=00_AfSGBUo8kYjOnBCdYCM9SpYz-ozR9hzbFUNq4Ygmwxg_lA&oe=68716711"
+        },
+        "id": "23908903578777359"
+      },
+      "listing_price": {
+        "amount_with_offset": "2200",
+        "currency": "USD",
+        "amount": "22.00"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "latitude": -18.915710449219,
+        "longitude": 47.521362304688,
+        "reverse_geocode_detailed": {
+          "country_alpha_two": "MG",
+          "postal_code_trimmed": ""
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "807311116002614",
+      "marketplace_listing_title": "Voiture",
+      "custom_title": null,
+      "custom_sub_titles_with_rendering_flags": [
+        {
+          "subtitle": ""
+        }
+      ],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/1382583363253907",
+      "if_viewer_is_buyer": {
+        "marketplace_pdp_integrity_banner_strings_rewrite": null,
+        "id": "1382583363253907"
+      },
+      "story": null,
+      "redacted_description": {
+        "text": "⭕ Arrivage masaka b ty ry zareo🔥.\nKely sisa dia ho Tonga,d Alefako mora b ty ⏩Kia Pride SLX BVA bonne occasion de Korea ty!👌\nNB: Prix revendeur, Prix réservation,prix ho an'izay itaiza, mitovy daholo!! tsisy otrzany ty rzareo a!! .Aza tara ary e!!.\n\n Midira Mp ary fa omeko détails na [hidden information]"
+      },
+      "creation_time": 1751196908,
+      "location_text": {
+        "text": "Antananarivo"
+      },
+      "location_vanity_or_id": "110080935687758",
+      "listing_inventory_type": "EVERGREEN",
+      "formatted_price": {
+        "text": "$22"
+      },
+      "payment_time_period": null,
+      "condition": "USED",
+      "logging_id": "24872178459038029",
+      "marketplace_lead_gen_form": null,
+      "listed_by": null,
+      "real_estate_listing_agent": null,
+      "inventory_count": -1,
+      "legal_reporting_cta_type": null,
+      "legal_reporting_uri": null,
+      "messaging_enabled": true,
+      "listing_is_rejected": false,
+      "product_item": {
+        "id": "24872178459038029",
+        "boosted_marketplace_listing": null,
+        "promoted_listing": null
+      },
+      "seller_message_thread": null,
+      "is_checkout_enabled": false,
+      "is_draft": false,
+      "can_seller_edit": false,
+      "default_variant_listing": null,
+      "primary_mp_ent": {
+        "id": "1382583363253907"
+      },
+      "reportable_seller_type": null,
+      "reportable_ent_id": "24872178459038029",
+      "hidden_from_friends": null,
+      "can_share": true,
+      "share_uri": "https://www.facebook.com/marketplace/item/1382583363253907/",
+      "can_seller_change_availability": false,
+      "is_on_marketplace": true,
+      "messagingEnabled": true,
+      "has_children": false,
+      "cross_post_info": {
+        "all_listings": [
+          {
+            "is_on_marketplace": true,
+            "id": "1382583363253907"
+          }
+        ]
+      },
+      "active_order": null,
+      "rebuy_order_receipt": null,
+      "c2c_shipping_eligible": false,
+      "is_shipping_offered": false,
+      "cross_post_sync_metadata": null,
+      "most_recent_active_order_as_buyer": null,
+      "order_summaries": [],
+      "should_hide_pdp_shipping_content": true,
+      "shipping_profile": null,
+      "is_seller_business_onboarded": false,
+      "is_buy_now_enabled": false,
+      "is_purchase_protected": false,
+      "can_buyer_make_checkout_offer": false,
+      "is_cart_enabled": false,
+      "seller_cms": null,
+      "vacation_mode": null,
+      "all_message_threads": {
+        "is_empty": true
+      },
+      "should_show_txn_survey_on_mas": false,
+      "incentive_campaign_for_free_shipping": null,
+      "first_message_suggested_value": null,
+      "sweepstake_enabled": false,
+      "sweepstake_status": "INVALID",
+      "sweepstake_content": null,
+      "marketplace_bump_info": null,
+      "fi_enhanced_appeal_data": {
+        "use_fi_appeals": true,
+        "enforcement_instance_id": null
+      },
+      "listing_seller_notices": [],
+      "is_email_communication_enabled": false,
+      "fair_market_value_data": null,
+      "vehicle_condition": null,
+      "vehicle_exterior_color": null,
+      "vehicle_features": [],
+      "vehicle_fuel_type": null,
+      "vehicle_identification_number": null,
+      "vehicle_interior_color": null,
+      "vehicle_is_paid_off": null,
+      "vehicle_make_display_name": null,
+      "vehicle_model_display_name": null,
+      "vehicle_number_of_owners": null,
+      "vehicle_odometer_data": {
+        "unit": null,
+        "value": null
+      },
+      "vehicle_registration_plate_information": null,
+      "vehicle_seller_type": null,
+      "vehicle_specifications": null,
+      "vehicle_title_status": null,
+      "vehicle_transmission_type": null,
+      "vehicle_trim_display_name": null,
+      "vehicle_carfax_report": null,
+      "attribute_data": [],
+      "origin_target": {
+        "id": "216802746735285"
+      },
+      "shipping_offered": false,
+      "legal_disclosure_impressum_url": null,
+      "commerce_badges_info": {
+        "source_summary": null,
+        "badges": []
+      },
+      "listing_address": null,
+      "seller_phone_number": null,
+      "vehicle_website_link": null,
+      "dealership_name": null,
+      "seller": null,
+      "energy_efficiency_class_eu": null,
+      "listing_photos": [
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 910,
+            "width": 960,
+            "uri": "https://scontent.fotp3-4.fna.fbcdn.net/v/t45.5328-4/513759274_23908903592110691_1917684057859219549_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=7Zy9TOoOjBIQ7kNvwG0uXrg&_nc_oc=AdlF89zDlj6U4jmvTIHQg59NM-0hIWL7dvr23e_PhfZkTFwMTuSgVXaP1DEwrRLJi5o&_nc_zt=23&_nc_ht=scontent.fotp3-4.fna&_nc_gid=r2YoX_uuAuZDw8-fZBKtKA&oh=00_AfTFjR7hAmDo0Un8eaPF1IOLdcZVE5ACfsCvuFHTUGlG2w&oe=68716711"
+          },
+          "id": "23908903578777359"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 781,
+            "width": 740,
+            "uri": "https://scontent.fotp3-1.fna.fbcdn.net/v/t45.5328-4/513452103_753499600364340_2239652538342257521_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=MTX9jDxgwqkQ7kNvwHpgXdG&_nc_oc=AdnjXlnvMbjjw5KfDVZfsxBZgaAG1OIHYLwo5JnAGarBQ5ISY2_j56FqJvpMgBJhgYY&_nc_zt=23&_nc_ht=scontent.fotp3-1.fna&_nc_gid=r2YoX_uuAuZDw8-fZBKtKA&oh=00_AfT-QJpAyYgyV1RnWMeYoUW3iaXEmkLodCSmq5hHmI4CWA&oe=687140F8"
+          },
+          "id": "753499597031007"
+        }
+      ],
+      "pre_recorded_videos": []
+    },
+    {
+      "id": "1045162473701107",
+      "primary_listing_photo": {
+        "listing_image": {
+          "uri": "https://scontent-ord5-1.xx.fbcdn.net/v/t45.5328-4/501360281_1849007405941384_3029726419079639117_n.jpg?stp=c11.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=ubbudHXCBJEQ7kNvwHP2eAS&_nc_oc=AdnGs4Q_61t4rb7mzMjiJPgMne6ZuBBka7s52rqmCNyHN2tD4bhGtrevKHFllYQx4Yk&_nc_zt=23&_nc_ht=scontent-ord5-1.xx&_nc_gid=iTBmJ8IGfeETIUOEFUHpZg&oh=00_AfTWG93EFNZaBXXcDyX5OlkUSO78Lw0swEJ3ImNyl9wAnA&oe=68716107"
+        },
+        "id": "1849007402608051"
+      },
+      "listing_price": {
+        "amount_with_offset": "3700",
+        "currency": "USD",
+        "amount": "37.00"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "latitude": -18.915710449219,
+        "longitude": 47.521362304688,
+        "reverse_geocode_detailed": {
+          "country_alpha_two": "MG",
+          "postal_code_trimmed": ""
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "807311116002614",
+      "marketplace_listing_title": "Voiture",
+      "custom_title": null,
+      "custom_sub_titles_with_rendering_flags": [
+        {
+          "subtitle": ""
+        }
+      ],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/1045162473701107",
+      "if_viewer_is_buyer": {
+        "marketplace_pdp_integrity_banner_strings_rewrite": null,
+        "id": "1045162473701107"
+      },
+      "story": null,
+      "redacted_description": {
+        "text": "I40 saloon"
+      },
+      "creation_time": 1748315316,
+      "location_text": {
+        "text": "Antananarivo"
+      },
+      "location_vanity_or_id": "110080935687758",
+      "listing_inventory_type": "EVERGREEN",
+      "formatted_price": {
+        "text": "$37"
+      },
+      "payment_time_period": null,
+      "condition": "USED",
+      "logging_id": "24036730889278009",
+      "marketplace_lead_gen_form": null,
+      "listed_by": null,
+      "real_estate_listing_agent": null,
+      "inventory_count": -1,
+      "legal_reporting_cta_type": null,
+      "legal_reporting_uri": null,
+      "messaging_enabled": true,
+      "listing_is_rejected": false,
+      "product_item": {
+        "id": "24036730889278009",
+        "boosted_marketplace_listing": null,
+        "promoted_listing": null
+      },
+      "seller_message_thread": null,
+      "is_checkout_enabled": false,
+      "is_draft": false,
+      "can_seller_edit": false,
+      "default_variant_listing": null,
+      "primary_mp_ent": {
+        "id": "1045162473701107"
+      },
+      "reportable_seller_type": null,
+      "reportable_ent_id": "24036730889278009",
+      "hidden_from_friends": null,
+      "can_share": true,
+      "share_uri": "https://www.facebook.com/marketplace/item/1045162473701107/",
+      "can_seller_change_availability": false,
+      "is_on_marketplace": true,
+      "messagingEnabled": true,
+      "has_children": false,
+      "cross_post_info": {
+        "all_listings": [
+          {
+            "is_on_marketplace": true,
+            "id": "1045162473701107"
+          }
+        ]
+      },
+      "active_order": null,
+      "rebuy_order_receipt": null,
+      "c2c_shipping_eligible": false,
+      "is_shipping_offered": false,
+      "cross_post_sync_metadata": null,
+      "most_recent_active_order_as_buyer": null,
+      "order_summaries": [],
+      "should_hide_pdp_shipping_content": true,
+      "shipping_profile": null,
+      "is_seller_business_onboarded": false,
+      "is_buy_now_enabled": false,
+      "is_purchase_protected": false,
+      "can_buyer_make_checkout_offer": false,
+      "is_cart_enabled": false,
+      "seller_cms": null,
+      "vacation_mode": null,
+      "all_message_threads": {
+        "is_empty": true
+      },
+      "should_show_txn_survey_on_mas": false,
+      "incentive_campaign_for_free_shipping": null,
+      "first_message_suggested_value": null,
+      "sweepstake_enabled": false,
+      "sweepstake_status": "INVALID",
+      "sweepstake_content": null,
+      "marketplace_bump_info": null,
+      "fi_enhanced_appeal_data": {
+        "use_fi_appeals": true,
+        "enforcement_instance_id": null
+      },
+      "listing_seller_notices": [],
+      "is_email_communication_enabled": false,
+      "fair_market_value_data": null,
+      "vehicle_condition": null,
+      "vehicle_exterior_color": null,
+      "vehicle_features": [],
+      "vehicle_fuel_type": null,
+      "vehicle_identification_number": null,
+      "vehicle_interior_color": null,
+      "vehicle_is_paid_off": null,
+      "vehicle_make_display_name": null,
+      "vehicle_model_display_name": null,
+      "vehicle_number_of_owners": null,
+      "vehicle_odometer_data": {
+        "unit": null,
+        "value": null
+      },
+      "vehicle_registration_plate_information": null,
+      "vehicle_seller_type": null,
+      "vehicle_specifications": null,
+      "vehicle_title_status": null,
+      "vehicle_transmission_type": null,
+      "vehicle_trim_display_name": null,
+      "vehicle_carfax_report": null,
+      "attribute_data": [],
+      "origin_target": {
+        "id": "216802746735285"
+      },
+      "shipping_offered": false,
+      "legal_disclosure_impressum_url": null,
+      "commerce_badges_info": {
+        "source_summary": null,
+        "badges": []
+      },
+      "listing_address": null,
+      "seller_phone_number": null,
+      "vehicle_website_link": null,
+      "dealership_name": null,
+      "seller": null,
+      "energy_efficiency_class_eu": null,
+      "listing_photos": [
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 819,
+            "width": 960,
+            "uri": "https://scontent.ftia5-1.fna.fbcdn.net/v/t45.5328-4/501360281_1849007405941384_3029726419079639117_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=ubbudHXCBJEQ7kNvwHY9tTl&_nc_oc=AdlV8P7KpmjhrxZ2e3w3jEmAGafnAOxsoe414SHe9Olmowj2vtTUcXGMnJd2xpxnNpc&_nc_zt=23&_nc_ht=scontent.ftia5-1.fna&_nc_gid=pVXnJFq84Aq1KAg56x0NEA&oh=00_AfSamBTJZqCJnu3Ze_fVHTICt3f9rmFX0Alu6D_aXVCp9Q&oe=68716107"
+          },
+          "id": "1849007402608051"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.ftia5-1.fna.fbcdn.net/v/t45.5328-4/500838875_1906105140124806_3646212930356711111_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=B_sJ96vI-QkQ7kNvwFr0NQ6&_nc_oc=AdlBIQTJdpxJb3VNhTnKU7mGOGQ1Ap-cpXf5cDm2C7o6ZgK0rvZ4LMtkVARPV_y7KdY&_nc_zt=23&_nc_ht=scontent.ftia5-1.fna&_nc_gid=pVXnJFq84Aq1KAg56x0NEA&oh=00_AfRn2LDWy48r87reX1-ufffZtjf1HrRmxZ5s8ckT3nkh2g&oe=6871716C"
+          },
+          "id": "1906105136791473"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.ftia5-1.fna.fbcdn.net/v/t45.5328-4/500799026_569837516172454_3964415858527392306_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=mXzU8DOqpCwQ7kNvwG16WAn&_nc_oc=Adl27F2yziu0ccyR1V31XZgbl00iZ6cw3taP9w5Za2bL3tm_3UoOozFWCJgjkIxq3hM&_nc_zt=23&_nc_ht=scontent.ftia5-1.fna&_nc_gid=pVXnJFq84Aq1KAg56x0NEA&oh=00_AfQ_YKja-uwLY6zb1zhnm3TsUxG9A4O_KYTx7sTj2K89CA&oe=68716582"
+          },
+          "id": "569837512839121"
+        }
+      ],
+      "pre_recorded_videos": []
+    },
+    {
+      "id": "1875856273177895",
+      "primary_listing_photo": {
+        "listing_image": {
+          "uri": "https://scontent-hou1-1.xx.fbcdn.net/v/t39.30808-6/516738323_24046052251751319_6359902044749997642_n.jpg?stp=c136.0.816.816a_dst-jpg_s133x133_tt6&_nc_cat=105&ccb=1-7&_nc_sid=454cf4&_nc_ohc=HqJzZHUksCwQ7kNvwFLjHJC&_nc_oc=AdnmltkcUa0LioL56hBtwhrOcs3hkSUH7wKEOEh-XJvGTIV65-pCrMbnDr10IQ9-0tk&_nc_zt=23&_nc_ht=scontent-hou1-1.xx&_nc_gid=eAK_-CsXIltLi2Yzp-dblg&oh=00_AfRsm2u3gxZpH05ji38DL8vwt2PSA0WVb2sxx-safjD-gg&oe=68715630"
+        },
+        "id": "10063360397113740"
+      },
+      "listing_price": {
+        "amount_with_offset": "3000",
+        "currency": "MGA",
+        "amount": "30.0"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "latitude": -18.915710449219,
+        "longitude": 47.521362304688,
+        "reverse_geocode_detailed": {
+          "country_alpha_two": "MG",
+          "postal_code_trimmed": ""
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "807311116002614",
+      "marketplace_listing_title": "Voiture",
+      "custom_title": null,
+      "custom_sub_titles_with_rendering_flags": [
+        {
+          "subtitle": ""
+        }
+      ],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/1875856273177895",
+      "if_viewer_is_buyer": {
+        "marketplace_pdp_integrity_banner_strings_rewrite": null,
+        "id": "1875856273177895"
+      },
+      "story": null,
+      "redacted_description": {
+        "text": "Ho an'ilay hitaiza sy mitady an'ilay gisa mainty😅\nGolf type 6 \nDescriptif:\n👉Boite manuel\n👉Moteur diesel 2.0 tdi  avec 158xxx km réel d'origine be mbola tsisy dihana clé\n👉Imm TBP,Ex Allemagne 2eme main ho an'ilay mandray anazy \n👉 Année 2009\nOptions :\n👉4 vitre électrique avec commande par bouton extérieur \n👉 Rétroviseurs rabattables électriques\n👉volant réglable en hauteur et profondeur\n👉 ordinateur de bord\n👉Ecran tactile d'origine Volkswagen tsara son be \n👉 Assistante de parking \n👉4 frein a disc avec système ABS et ESP \n👉 Régulateur et limitateur de vitesse\n👉capteur de pluie\n👉 Intérieur vitsy mpanana d'origine be avec finition isofix \n👉Clim intégrale \n👉Chaises chauffants \n👉jante alu 15\" d'origine avec 4 pneu en très bonne état\n👉 Verrouillage centralisé avec commande a distance+fermeture des portes automatiques à 20 km/h\n👉 surveillance des pressions des pneus\n👉 Livré avec manuel de secours\n....\nTsara ny fiara \nVoiture en très bonne etat rien à prévoir \nPapier a jour 0 devoir ny fiara \nLivré avec kit de secours miaraka @ antivol\nPrix:efa miala \n[hidden information]"
+      },
+      "creation_time": 1749214223,
+      "location_text": {
+        "text": "Antananarivo"
+      },
+      "location_vanity_or_id": "110080935687758",
+      "listing_inventory_type": "SINGLE_QUANTITY",
+      "formatted_price": {
+        "text": "MGA30"
+      },
+      "payment_time_period": null,
+      "condition": "USED",
+      "logging_id": "23947945808171564",
+      "marketplace_lead_gen_form": null,
+      "listed_by": null,
+      "real_estate_listing_agent": null,
+      "inventory_count": null,
+      "legal_reporting_cta_type": null,
+      "legal_reporting_uri": null,
+      "messaging_enabled": true,
+      "listing_is_rejected": false,
+      "product_item": {
+        "id": "23947945808171564",
+        "boosted_marketplace_listing": null,
+        "promoted_listing": null
+      },
+      "seller_message_thread": null,
+      "is_checkout_enabled": false,
+      "is_draft": false,
+      "can_seller_edit": false,
+      "default_variant_listing": null,
+      "primary_mp_ent": {
+        "id": "1875856273177895"
+      },
+      "reportable_seller_type": null,
+      "reportable_ent_id": "23947945808171564",
+      "hidden_from_friends": null,
+      "can_share": true,
+      "share_uri": "https://www.facebook.com/marketplace/item/1875856273177895/",
+      "can_seller_change_availability": false,
+      "is_on_marketplace": true,
+      "messagingEnabled": true,
+      "has_children": false,
+      "cross_post_info": {
+        "all_listings": [
+          {
+            "is_on_marketplace": true,
+            "id": "1875856273177895"
+          }
+        ]
+      },
+      "active_order": null,
+      "rebuy_order_receipt": null,
+      "c2c_shipping_eligible": false,
+      "is_shipping_offered": false,
+      "cross_post_sync_metadata": null,
+      "most_recent_active_order_as_buyer": null,
+      "order_summaries": [],
+      "should_hide_pdp_shipping_content": true,
+      "shipping_profile": null,
+      "is_seller_business_onboarded": false,
+      "is_buy_now_enabled": false,
+      "is_purchase_protected": false,
+      "can_buyer_make_checkout_offer": false,
+      "is_cart_enabled": false,
+      "seller_cms": null,
+      "vacation_mode": null,
+      "all_message_threads": {
+        "is_empty": true
+      },
+      "should_show_txn_survey_on_mas": false,
+      "incentive_campaign_for_free_shipping": null,
+      "first_message_suggested_value": null,
+      "sweepstake_enabled": false,
+      "sweepstake_status": "INVALID",
+      "sweepstake_content": null,
+      "marketplace_bump_info": null,
+      "fi_enhanced_appeal_data": {
+        "use_fi_appeals": true,
+        "enforcement_instance_id": null
+      },
+      "listing_seller_notices": [],
+      "is_email_communication_enabled": false,
+      "fair_market_value_data": null,
+      "vehicle_condition": null,
+      "vehicle_exterior_color": null,
+      "vehicle_features": [],
+      "vehicle_fuel_type": null,
+      "vehicle_identification_number": null,
+      "vehicle_interior_color": null,
+      "vehicle_is_paid_off": null,
+      "vehicle_make_display_name": null,
+      "vehicle_model_display_name": null,
+      "vehicle_number_of_owners": null,
+      "vehicle_odometer_data": {
+        "unit": null,
+        "value": null
+      },
+      "vehicle_registration_plate_information": null,
+      "vehicle_seller_type": null,
+      "vehicle_specifications": null,
+      "vehicle_title_status": null,
+      "vehicle_transmission_type": null,
+      "vehicle_trim_display_name": null,
+      "vehicle_carfax_report": null,
+      "attribute_data": [],
+      "origin_target": {
+        "id": "216802746735285"
+      },
+      "shipping_offered": false,
+      "legal_disclosure_impressum_url": null,
+      "commerce_badges_info": {
+        "source_summary": null,
+        "badges": []
+      },
+      "listing_address": null,
+      "seller_phone_number": null,
+      "vehicle_website_link": null,
+      "dealership_name": null,
+      "seller": null,
+      "energy_efficiency_class_eu": null,
+      "listing_photos": [
+        {
+          "accessibility_caption": "May be an image of car and text",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fist19-1.fna.fbcdn.net/v/t39.30808-6/516738323_24046052251751319_6359902044749997642_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=105&ccb=1-7&_nc_sid=454cf4&_nc_ohc=HqJzZHUksCwQ7kNvwE5p5nS&_nc_oc=AdldxMj9ppYz4vOWv_Sg2MRPEYZesbWrnmtsJVQNaJ4zzjsgjkjsaFb_yT-nYOJYRY0&_nc_zt=23&_nc_ht=scontent.fist19-1.fna&_nc_gid=BPs8Hws0cOywiv688Oc_1A&oh=00_AfSOAKLZAOVGqyAAyUHcfT3Pd1CiGwox0ciH-oAgHlTljw&oe=68715630"
+          },
+          "id": "10063360397113740"
+        },
+        {
+          "accessibility_caption": "May be an image of car",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fist19-1.fna.fbcdn.net/v/t39.30808-6/503721849_10063345547115225_7335939821795401746_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=103&ccb=1-7&_nc_sid=946e27&_nc_ohc=gLJAafDozwEQ7kNvwFh-3tR&_nc_oc=Adm6Csve-LUDc-GFyPXFiW6_gZ3pBZN1CEyLsakaxN4dEGfvB72I-XiwOSLzkL8DGjE&_nc_zt=23&_nc_ht=scontent.fist19-1.fna&_nc_gid=BPs8Hws0cOywiv688Oc_1A&oh=00_AfQm14uXhzSXe1ouVyRfbW0FMXEdQMxtYUv0ni0yEeVckw&oe=6871644A"
+          },
+          "id": "10063345537115226"
+        },
+        {
+          "accessibility_caption": "May be an image of car and text",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fist19-1.fna.fbcdn.net/v/t39.30808-6/504359733_10063344443782002_5142966988370705796_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=101&ccb=1-7&_nc_sid=946e27&_nc_ohc=cG6GS0C3_scQ7kNvwFckL9F&_nc_oc=Admb1m_qpHUlhBruKwmTu1TiQo15RxKvSr8gudqjpgeeIwRhzwu6qAEQoHGeennQjXw&_nc_zt=23&_nc_ht=scontent.fist19-1.fna&_nc_gid=BPs8Hws0cOywiv688Oc_1A&oh=00_AfQ0Dr92Xy9T8oy8yP77X9y8hg7AHET_lhEx0Dhx_bO7Qg&oe=68715B24"
+          },
+          "id": "10063344437115336"
+        },
+        {
+          "accessibility_caption": "May be an image of car and text",
+          "image": {
+            "height": 721,
+            "width": 960,
+            "uri": "https://scontent.fist19-1.fna.fbcdn.net/v/t39.30808-6/504058189_10063344257115354_5706728547439799964_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=106&ccb=1-7&_nc_sid=946e27&_nc_ohc=0wVR0Lfc6UkQ7kNvwHhjcRM&_nc_oc=AdkB4xODozZS47Ri2KELvpWIuW-Mk-zq48tCfZDU9rt6ZZWHqKsDWOD0WROOcn-acE8&_nc_zt=23&_nc_ht=scontent.fist19-1.fna&_nc_gid=BPs8Hws0cOywiv688Oc_1A&oh=00_AfRb3kVDxjzsUNV0idD_8-N0njh48upimbaUZeQbLax0Jw&oe=6871745F"
+          },
+          "id": "10063344250448688"
+        },
+        {
+          "accessibility_caption": "May be an image of car and text",
+          "image": {
+            "height": 721,
+            "width": 960,
+            "uri": "https://scontent.fist19-1.fna.fbcdn.net/v/t39.30808-6/503744685_10063346583781788_8247112512456672195_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=109&ccb=1-7&_nc_sid=946e27&_nc_ohc=ZPzwhFi_vuUQ7kNvwHwLsWi&_nc_oc=AdlaK54rmgh-XZ9um-rRO3wC3D-qfrNaxIKyJqgXJF84VCTTEZ7bXR0ihZ3YE-AHr-s&_nc_zt=23&_nc_ht=scontent.fist19-1.fna&_nc_gid=BPs8Hws0cOywiv688Oc_1A&oh=00_AfT2JlGLS8EeF_xj_ZTTtWQct_YaYWxpnUJNOt4lQLzmgw&oe=68714E12"
+          },
+          "id": "10063346580448455"
+        },
+        {
+          "accessibility_caption": "May be an image of car and text",
+          "image": {
+            "height": 721,
+            "width": 960,
+            "uri": "https://scontent.fist19-1.fna.fbcdn.net/v/t39.30808-6/504518569_10063345100448603_3931128170175420367_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=107&ccb=1-7&_nc_sid=946e27&_nc_ohc=UHLXkPO59_AQ7kNvwENMQqZ&_nc_oc=AdkcpE92x2CAeJPty0OGpRPzF7846mJbXV7SofmfHAyMYB6jEKuAti_4HwHxMtlKpCo&_nc_zt=23&_nc_ht=scontent.fist19-1.fna&_nc_gid=BPs8Hws0cOywiv688Oc_1A&oh=00_AfS60m2tUcIhrvpbb01hz8oRYNHI2YTed5L-BPUuweyafw&oe=6871568D"
+          },
+          "id": "10063345090448604"
+        },
+        {
+          "accessibility_caption": "May be an image of text",
+          "image": {
+            "height": 724,
+            "width": 960,
+            "uri": "https://scontent.fist19-1.fna.fbcdn.net/v/t39.30808-6/504150516_10063345333781913_3103939599206512182_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=107&ccb=1-7&_nc_sid=946e27&_nc_ohc=q_8D58-u8gkQ7kNvwE6j1H5&_nc_oc=AdnTQrXml8hpbv8i5mIpiYejoLTeRNvQurbO_uZMIrpni6Ba1TJbuSiMjeUSLbedm3I&_nc_zt=23&_nc_ht=scontent.fist19-1.fna&_nc_gid=BPs8Hws0cOywiv688Oc_1A&oh=00_AfT31s1DrhwcXyK_8aFfkc1E3zEdn059z8n5pmHhVoKYHA&oe=68714869"
+          },
+          "id": "10063345317115248"
+        },
+        {
+          "accessibility_caption": "May be an image of car",
+          "image": {
+            "height": 670,
+            "width": 960,
+            "uri": "https://scontent.fist19-1.fna.fbcdn.net/v/t39.30808-6/503459325_10063344890448624_2603728022340357311_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=103&ccb=1-7&_nc_sid=946e27&_nc_ohc=yQi6LYiNFqEQ7kNvwHaVftg&_nc_oc=Adk-bwR6arx_zUK23XW_T_Ewz1b02X5T45onyOD36gY5ErRnztxHWAmjSgySFPcyfU8&_nc_zt=23&_nc_ht=scontent.fist19-1.fna&_nc_gid=BPs8Hws0cOywiv688Oc_1A&oh=00_AfTA_-BCxJdljhHP-nKum71s9VrsYA6KJNRqwEGU0idfHQ&oe=6871540D"
+          },
+          "id": "10063344883781958"
+        },
+        {
+          "accessibility_caption": "May be an image of car",
+          "image": {
+            "height": 681,
+            "width": 960,
+            "uri": "https://scontent.fist19-1.fna.fbcdn.net/v/t39.30808-6/503578859_10063344700448643_8136679799794440023_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=107&ccb=1-7&_nc_sid=946e27&_nc_ohc=0ZczCFZ5qMoQ7kNvwH6Dh-e&_nc_oc=Adm32wMX1Zke-9TqJej5pxqQnAzGMOa8NpKaacTYq00gGpOp9FHiUz5Y0J_t-VSwkYs&_nc_zt=23&_nc_ht=scontent.fist19-1.fna&_nc_gid=BPs8Hws0cOywiv688Oc_1A&oh=00_AfRNCOu34bPaIK_ZULiyL8FvMI5Mk7sZEvyZN0fKcPq1Yg&oe=687142B4"
+          },
+          "id": "10063344690448644"
+        },
+        {
+          "accessibility_caption": "May be an image of text that says \"LF6 6\"",
+          "image": {
+            "height": 670,
+            "width": 960,
+            "uri": "https://scontent.fist19-1.fna.fbcdn.net/v/t39.30808-6/503572522_10063345993781847_8599557865964488505_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=111&ccb=1-7&_nc_sid=946e27&_nc_ohc=J5gnXxkhWrAQ7kNvwFsbb-k&_nc_oc=Adl_WOm0nbTSApre0PaTTsD84EHIZrnu1tOfx4D-ypuQR0XKaqSrz5HC1yyNQlGDbUU&_nc_zt=23&_nc_ht=scontent.fist19-1.fna&_nc_gid=BPs8Hws0cOywiv688Oc_1A&oh=00_AfT6Q3cST1GBDiXqHdnHDAxwYgH5mqkUFGs67MCMzZd31A&oe=687157AC"
+          },
+          "id": "10063345990448514"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 934,
+            "width": 960,
+            "uri": "https://scontent.fist19-1.fna.fbcdn.net/v/t39.30808-6/503597296_10063345800448533_4927020861742048029_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=105&ccb=1-7&_nc_sid=946e27&_nc_ohc=Nqhc88dMeJcQ7kNvwF33SQg&_nc_oc=Adm6py3k_IcObtw_WuE9oh_l1TUgMWnwioCX8Kw8GYqYbwkZI2l2qOEel5N-9ssgK8c&_nc_zt=23&_nc_ht=scontent.fist19-1.fna&_nc_gid=BPs8Hws0cOywiv688Oc_1A&oh=00_AfQlMKEQ7rr6RcSRhSFQ-cbkVGJEzqnxT1rAl2lIdayIPA&oe=68716DC2"
+          },
+          "id": "10063345780448535"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 676,
+            "width": 960,
+            "uri": "https://scontent.fist19-1.fna.fbcdn.net/v/t39.30808-6/504184048_10063346393781807_639762892235452407_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=109&ccb=1-7&_nc_sid=946e27&_nc_ohc=SH7K5xf0qVEQ7kNvwETXbAg&_nc_oc=AdlxU_WIqLDbulp8HL1uMqSRhf-oTALOHMmnq0UOjgiBMUhoLXvJjVjheuRPaVltsb4&_nc_zt=23&_nc_ht=scontent.fist19-1.fna&_nc_gid=BPs8Hws0cOywiv688Oc_1A&oh=00_AfQECpmM0piwLJoqy3cNcoEoD_Yfev_XhSXJjos28fQ3Cw&oe=6871687C"
+          },
+          "id": "10063346383781808"
+        }
+      ],
+      "pre_recorded_videos": []
+    },
+    {
+      "id": "1811560159691091",
+      "primary_listing_photo": {
+        "listing_image": {
+          "uri": "https://scontent.fvlc1-2.fna.fbcdn.net/v/t45.5328-4/484134839_624966596985591_1012987994848710101_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=2n36HthdpK8Q7kNvwEMF8NH&_nc_oc=Adn2qMe-1bvsZ3I64E96ing1IOrijB5flRdppaKddzzkMxYZso3KRpx94ePoElARE08&_nc_zt=23&_nc_ht=scontent.fvlc1-2.fna&_nc_gid=J3VzXgFhHfVYskckYqIV9w&oh=00_AfS7wy9mGmtdbg2f-uEEYN3kJBjuFslo3LGgh5Odbv0hfw&oe=68716A77"
+        },
+        "id": "624966593652258"
+      },
+      "listing_price": {
+        "amount_with_offset": "6000",
+        "currency": "USD",
+        "amount": "60.00"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "latitude": -18.915710449219,
+        "longitude": 47.521362304688,
+        "reverse_geocode_detailed": {
+          "country_alpha_two": "MG",
+          "postal_code_trimmed": ""
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "807311116002614",
+      "marketplace_listing_title": "Voiture",
+      "custom_title": null,
+      "custom_sub_titles_with_rendering_flags": [
+        {
+          "subtitle": ""
+        }
+      ],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/1811560159691091",
+      "if_viewer_is_buyer": {
+        "marketplace_pdp_integrity_banner_strings_rewrite": null,
+        "id": "1811560159691091"
+      },
+      "story": null,
+      "redacted_description": {
+        "text": "Mercedes limousine type W124\nSans devoir \n[hidden information]"
+      },
+      "creation_time": 1741886654,
+      "location_text": {
+        "text": "Antananarivo"
+      },
+      "location_vanity_or_id": "110080935687758",
+      "listing_inventory_type": "EVERGREEN",
+      "formatted_price": {
+        "text": "$60"
+      },
+      "payment_time_period": null,
+      "condition": "USED",
+      "logging_id": "9401876399891034",
+      "marketplace_lead_gen_form": null,
+      "listed_by": null,
+      "real_estate_listing_agent": null,
+      "inventory_count": -1,
+      "legal_reporting_cta_type": "dsa",
+      "legal_reporting_uri": "/help/contact/319149701968527?URLs1=https%3A%2F%2Fwww.facebook.com%2Fmarketplace%2Fitem%2F1811560159691091%2F&gb_country=Spain&IP_CF_redirect=%7B%22copyright_form_redirect%22%3A%22%7B%5C%22content_urls%5C%22%3A%5C%22https%3A%5C%5C%5C%2F%5C%5C%5C%2Fwww.facebook.com%5C%5C%5C%2Fmarketplace%5C%5C%5C%2Fitem%5C%5C%5C%2F1811560159691091%5C%5C%5C%2F%5C%22%2C%5C%22source%5C%22%3A%5C%22frx_logged_out%5C%22%7D%22%2C%22trademark_form_redirect%22%3A%22%7B%5C%22content_urls%5C%22%3A%5C%22https%3A%5C%5C%5C%2F%5C%5C%5C%2Fwww.facebook.com%5C%5C%5C%2Fmarketplace%5C%5C%5C%2Fitem%5C%5C%5C%2F1811560159691091%5C%5C%5C%2F%5C%22%2C%5C%22counterfeitredirect%5C%22%3A%5C%22%7B%5C%5C%5C%22content_urls%5C%5C%5C%22%3A%5C%5C%5C%22https%3A%5C%5C%5C%5C%5C%5C%5C%2F%5C%5C%5C%5C%5C%5C%5C%2Fwww.facebook.com%5C%5C%5C%5C%5C%5C%5C%2Fmarketplace%5C%5C%5C%5C%5C%5C%5C%2Fitem%5C%5C%5C%5C%5C%5C%5C%2F1811560159691091%5C%5C%5C%5C%5C%5C%5C%2F%5C%5C%5C%22%2C%5C%5C%5C%22source%5C%5C%5C%22%3A%5C%5C%5C%22frx_logged_out%5C%5C%5C%22%7D%5C%22%2C%5C%22source%5C%22%3A%5C%22frx_logged_out%5C%22%7D%22%2C%22source%22%3A%22frx_logged_out%22%7D&Erasure_Redirect=%7B%22erasure_cf_redirect%22%3A%22%7B%5C%22URLs%5C%22%3A%5C%22https%3A%5C%5C%5C%2F%5C%5C%5C%2Fwww.facebook.com%5C%5C%5C%2Fmarketplace%5C%5C%5C%2Fitem%5C%5C%5C%2F1811560159691091%5C%5C%5C%2F%5C%22%2C%5C%22Jurisdiction%5C%22%3A%5C%22Spain%5C%22%2C%5C%22source%5C%22%3A%5C%22frx_logged_out%5C%22%7D%22%2C%22ipr_cf_redirect%22%3A%22%7B%5C%22us_photo_redirect%5C%22%3A%5C%22%7B%5C%5C%5C%22content_url%5C%5C%5C%22%3A%5C%5C%5C%22https%3A%5C%5C%5C%5C%5C%5C%5C%2F%5C%5C%5C%5C%5C%5C%5C%2Fwww.facebook.com%5C%5C%5C%5C%5C%5C%5C%2Fmarketplace%5C%5C%5C%5C%5C%5C%5C%2Fitem%5C%5C%5C%5C%5C%5C%5C%2F1811560159691091%5C%5C%5C%5C%5C%5C%5C%2F%5C%5C%5C%22%7D%5C%22%2C%5C%22us_video_redirect%5C%22%3A%5C%22%7B%5C%5C%5C%22content_url%5C%5C%5C%22%3A%5C%5C%5C%22https%3A%5C%5C%5C%5C%5C%5C%5C%2F%5C%5C%5C%5C%5C%5C%5C%2Fwww.facebook.com%5C%5C%5C%5C%5C%5C%5C%2Fmarketplace%5C%5C%5C%5C%5C%5C%5C%2Fitem%5C%5C%5C%5C%5C%5C%5C%2F1811560159691091%5C%5C%5C%5C%5C%5C%5C%2F%5C%5C%5C%22%7D%5C%22%2C%5C%22profile_photo_redirect%5C%22%3A%5C%22%7B%5C%5C%5C%22content_url%5C%5C%5C%22%3A%5C%5C%5C%22https%3A%5C%5C%5C%5C%5C%5C%5C%2F%5C%5C%5C%5C%5C%5C%5C%2Fwww.facebook.com%5C%5C%5C%5C%5C%5C%5C%2Fmarketplace%5C%5C%5C%5C%5C%5C%5C%2Fitem%5C%5C%5C%5C%5C%5C%5C%2F1811560159691091%5C%5C%5C%5C%5C%5C%5C%2F%5C%5C%5C%22%7D%5C%22%2C%5C%22nonUSphotoredirect%5C%22%3A%5C%22%7B%5C%5C%5C%22content_url%5C%5C%5C%22%3A%5C%5C%5C%22https%3A%5C%5C%5C%5C%5C%5C%5C%2F%5C%5C%5C%5C%5C%5C%5C%2Fwww.facebook.com%5C%5C%5C%5C%5C%5C%5C%2Fmarketplace%5C%5C%5C%5C%5C%5C%5C%2Fitem%5C%5C%5C%5C%5C%5C%5C%2F1811560159691091%5C%5C%5C%5C%5C%5C%5C%2F%5C%5C%5C%22%7D%5C%22%2C%5C%22nonUSvideoredirect%5C%22%3A%5C%22%7B%5C%5C%5C%22content_url%5C%5C%5C%22%3A%5C%5C%5C%22https%3A%5C%5C%5C%5C%5C%5C%5C%2F%5C%5C%5C%5C%5C%5C%5C%2Fwww.facebook.com%5C%5C%5C%5C%5C%5C%5C%2Fmarketplace%5C%5C%5C%5C%5C%5C%5C%2Fitem%5C%5C%5C%5C%5C%5C%5C%2F1811560159691091%5C%5C%5C%5C%5C%5C%5C%2F%5C%5C%5C%22%7D%5C%22%2C%5C%22source%5C%22%3A%5C%22frx_logged_out%5C%22%7D%22%2C%22source%22%3A%22frx_logged_out%22%7D&new_defamation_cf_redirect=%7B%22URLs1%22%3A%22https%3A%5C%2F%5C%2Fwww.facebook.com%5C%2Fmarketplace%5C%2Fitem%5C%2F1811560159691091%5C%2F%22%2C%22gb_country%22%3A%22Spain%22%2C%22source%22%3A%22frx_logged_out%22%7D&France_LRRP_redirect=%7B%22URLs1%22%3A%22https%3A%5C%2F%5C%2Fwww.facebook.com%5C%2Fmarketplace%5C%2Fitem%5C%2F1811560159691091%5C%2F%22%2C%22source%22%3A%22frx_logged_out%22%7D&source=frx_logged_out",
+      "messaging_enabled": true,
+      "listing_is_rejected": false,
+      "product_item": {
+        "id": "9401876399891034",
+        "boosted_marketplace_listing": null,
+        "promoted_listing": null
+      },
+      "seller_message_thread": null,
+      "is_checkout_enabled": false,
+      "is_draft": false,
+      "can_seller_edit": false,
+      "default_variant_listing": null,
+      "primary_mp_ent": {
+        "id": "1811560159691091"
+      },
+      "reportable_seller_type": null,
+      "reportable_ent_id": "9401876399891034",
+      "hidden_from_friends": null,
+      "can_share": true,
+      "share_uri": "https://www.facebook.com/marketplace/item/1811560159691091/",
+      "can_seller_change_availability": false,
+      "is_on_marketplace": true,
+      "messagingEnabled": true,
+      "has_children": false,
+      "cross_post_info": {
+        "all_listings": [
+          {
+            "is_on_marketplace": true,
+            "id": "1811560159691091"
+          }
+        ]
+      },
+      "active_order": null,
+      "rebuy_order_receipt": null,
+      "c2c_shipping_eligible": false,
+      "is_shipping_offered": false,
+      "cross_post_sync_metadata": null,
+      "most_recent_active_order_as_buyer": null,
+      "order_summaries": [],
+      "should_hide_pdp_shipping_content": true,
+      "shipping_profile": null,
+      "is_seller_business_onboarded": false,
+      "is_buy_now_enabled": false,
+      "is_purchase_protected": false,
+      "can_buyer_make_checkout_offer": false,
+      "is_cart_enabled": false,
+      "seller_cms": null,
+      "vacation_mode": null,
+      "all_message_threads": {
+        "is_empty": true
+      },
+      "should_show_txn_survey_on_mas": false,
+      "incentive_campaign_for_free_shipping": null,
+      "first_message_suggested_value": null,
+      "sweepstake_enabled": false,
+      "sweepstake_status": "INVALID",
+      "sweepstake_content": null,
+      "marketplace_bump_info": null,
+      "fi_enhanced_appeal_data": {
+        "use_fi_appeals": true,
+        "enforcement_instance_id": null
+      },
+      "listing_seller_notices": [],
+      "is_email_communication_enabled": false,
+      "fair_market_value_data": null,
+      "vehicle_condition": null,
+      "vehicle_exterior_color": null,
+      "vehicle_features": [],
+      "vehicle_fuel_type": null,
+      "vehicle_identification_number": null,
+      "vehicle_interior_color": null,
+      "vehicle_is_paid_off": null,
+      "vehicle_make_display_name": null,
+      "vehicle_model_display_name": null,
+      "vehicle_number_of_owners": null,
+      "vehicle_odometer_data": {
+        "unit": null,
+        "value": null
+      },
+      "vehicle_registration_plate_information": null,
+      "vehicle_seller_type": null,
+      "vehicle_specifications": null,
+      "vehicle_title_status": null,
+      "vehicle_transmission_type": null,
+      "vehicle_trim_display_name": null,
+      "vehicle_carfax_report": null,
+      "attribute_data": [],
+      "origin_target": {
+        "id": "216802746735285"
+      },
+      "shipping_offered": false,
+      "legal_disclosure_impressum_url": null,
+      "commerce_badges_info": {
+        "source_summary": null,
+        "badges": []
+      },
+      "listing_address": null,
+      "seller_phone_number": null,
+      "vehicle_website_link": null,
+      "dealership_name": null,
+      "seller": null,
+      "energy_efficiency_class_eu": null,
+      "listing_photos": [
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 960,
+            "width": 720,
+            "uri": "https://scontent-atl3-1.xx.fbcdn.net/v/t45.5328-4/484134839_624966596985591_1012987994848710101_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=2n36HthdpK8Q7kNvwEon_gv&_nc_oc=Adkl1SKAn8l7WjUONBX751z4SGQpCyyT5kfGjxp4M8d-BRM8C9VdDEhG1qBIbaFLmTE&_nc_zt=23&_nc_ht=scontent-atl3-1.xx&_nc_gid=Of6xi2dbOZ-z_I365LqmqA&oh=00_AfR4tEacf7Z9hQIPmf5QvHcGGTUj2m8rO3d0kFG6Q4GWtw&oe=68716A77"
+          },
+          "id": "624966593652258"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 960,
+            "width": 720,
+            "uri": "https://scontent-atl3-2.xx.fbcdn.net/v/t45.5328-4/484323352_604468919249635_5994205844016983720_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=VLBXMe1Uo94Q7kNvwEHjPBi&_nc_oc=Adk5aYZvoF6_ujT6uGqHePalFIFEKdHYYTiGlR3ypkZ48iPRc3kPbv_BMqFCwHqliDk&_nc_zt=23&_nc_ht=scontent-atl3-2.xx&_nc_gid=Of6xi2dbOZ-z_I365LqmqA&oh=00_AfQ1uASjuLzQHetQa6yfFft6hhaczVZDh3YAWE3dUZCbTA&oe=68716D93"
+          },
+          "id": "604468915916302"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent-atl3-3.xx.fbcdn.net/v/t45.5328-4/484549224_1624417141769197_4922692322418600367_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=FX09RwCdlHkQ7kNvwHIXAxa&_nc_oc=AdlNuAKIPkTlYm8m86K37t-jvT8ZOgjoqTKFwZh8k54_C0E5JBt6Gr7zZ-jXfLvz7ds&_nc_zt=23&_nc_ht=scontent-atl3-3.xx&_nc_gid=Of6xi2dbOZ-z_I365LqmqA&oh=00_AfRmnOBDw-Zd5o1AhxgSnGwGrcuxyCt_D6ZXVb2CPnKV5A&oe=68714FAE"
+          },
+          "id": "1624417138435864"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 960,
+            "width": 720,
+            "uri": "https://scontent-atl3-2.xx.fbcdn.net/v/t45.5328-4/484516511_3880568522192620_3891203964175259867_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=eEriy1z2essQ7kNvwF0KpNP&_nc_oc=AdmTmXARJbf44__Tgk-65lmpqMkVqKkao6uwjZS6BCkfKWDVbOTT94yXsBbwQCEh7_k&_nc_zt=23&_nc_ht=scontent-atl3-2.xx&_nc_gid=Of6xi2dbOZ-z_I365LqmqA&oh=00_AfTH4cSZCWvBfh_330zjqiysvXrjNFsVF876CJjsYwMNmw&oe=687162CE"
+          },
+          "id": "3880568518859287"
+        }
+      ],
+      "pre_recorded_videos": []
+    },
+    {
+      "id": "1124744842848265",
+      "primary_listing_photo": {
+        "listing_image": {
+          "uri": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/510013391_1382049259713290_1209117626632997365_n.jpg?stp=c0.21.133.133a_dst-jpg_p133x133_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=3DGYnmPh6fEQ7kNvwFHBpge&_nc_oc=AdnVisBy2Egbje40wAl4YUKV1g7D-d_KNOSRDpARhka-lW5vPlIIfUEBopSmLp6YRybN4Y3YKc4XMFljx9iv1-qB&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=iTi1B5WHI9LWn3ZVUOxZ9g&oh=00_AfQWBLclo2BkITjt9U32cgqrx-ScYyEeeFG8HbOmvjBazw&oe=68715B96"
+        },
+        "id": "1382049256379957"
+      },
+      "listing_price": {
+        "amount_with_offset": "0",
+        "currency": "USD",
+        "amount": "0.00"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "latitude": -18.915710449219,
+        "longitude": 47.521362304688,
+        "reverse_geocode_detailed": {
+          "country_alpha_two": "MG",
+          "postal_code_trimmed": ""
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "807311116002614",
+      "marketplace_listing_title": "HYUNDAI I30 PHASE 2 VGT",
+      "custom_title": null,
+      "custom_sub_titles_with_rendering_flags": [
+        {
+          "subtitle": ""
+        }
+      ],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/1124744842848265",
+      "if_viewer_is_buyer": {
+        "marketplace_pdp_integrity_banner_strings_rewrite": null,
+        "id": "1124744842848265"
+      },
+      "story": null,
+      "redacted_description": {
+        "text": "🔥NEW HYUNDAI i30 Phase 2 VGT🔥 - Année 2013 - Full options - faible kilométrage \n\n🔹Moteur 1,6 VGT 16V Diesel (Vidange déjà fait) - Consommation mixte 5L au 100 ,Active Eco drive - Démarrage sans clé start&Stop\n🔹Boite de vitesse automatique et séquentielle 6 rapports \n🔹Intérieurs / extérieur d’origine , 5 places et reposes tête , chaise en cuir véritable (électrique et chauffante) \n🔹Jantes allu R17 - 4 freins disque ABS , Direction assistée - Volont Multifonctions (Fonction Appel) \n🔹Verrouillages centralisé - vitré électrique - Commande à distance - rétroviseur électrique et rabattable  automatique \n🔹Airbag - Climatronique Bizone (bien frais🥶🥶) \n🔹Ecran tactile d’origine (FM,AUX,USB,BLUETOOTH…Etc) avec caméra de recul et commande au volant - haut parleur d’origine - détecteur de pluie - détecteur de luminosité (Allumage automatique des feux) - feux antibrouillards - feux cristal avant (LED du jour) et arrière \n🔹Voiture en excellent état👌🏽 très classe et agréable a conduire \n🔹Livrée avec cric - clé de roue - pneu de secours \nManuel d’utilisation - rien à prévoir \nVISIBLE UNIQUEMENT SUR RENDEZ-VOUS\nCONTACT [hidden information]what's app)"
+      },
+      "creation_time": 1750747261,
+      "location_text": {
+        "text": "Antananarivo"
+      },
+      "location_vanity_or_id": "110080935687758",
+      "listing_inventory_type": "EVERGREEN",
+      "formatted_price": {
+        "text": "FREE"
+      },
+      "payment_time_period": null,
+      "condition": "USED",
+      "logging_id": "30139405042341741",
+      "marketplace_lead_gen_form": null,
+      "listed_by": null,
+      "real_estate_listing_agent": null,
+      "inventory_count": -1,
+      "legal_reporting_cta_type": null,
+      "legal_reporting_uri": null,
+      "messaging_enabled": true,
+      "listing_is_rejected": false,
+      "product_item": {
+        "id": "30139405042341741",
+        "boosted_marketplace_listing": null,
+        "promoted_listing": null
+      },
+      "seller_message_thread": null,
+      "is_checkout_enabled": false,
+      "is_draft": false,
+      "can_seller_edit": false,
+      "default_variant_listing": null,
+      "primary_mp_ent": {
+        "id": "1124744842848265"
+      },
+      "reportable_seller_type": null,
+      "reportable_ent_id": "30139405042341741",
+      "hidden_from_friends": null,
+      "can_share": true,
+      "share_uri": "https://www.facebook.com/marketplace/item/1124744842848265/",
+      "can_seller_change_availability": false,
+      "is_on_marketplace": true,
+      "messagingEnabled": true,
+      "has_children": false,
+      "cross_post_info": {
+        "all_listings": [
+          {
+            "is_on_marketplace": true,
+            "id": "1124744842848265"
+          }
+        ]
+      },
+      "active_order": null,
+      "rebuy_order_receipt": null,
+      "c2c_shipping_eligible": false,
+      "is_shipping_offered": false,
+      "cross_post_sync_metadata": null,
+      "most_recent_active_order_as_buyer": null,
+      "order_summaries": [],
+      "should_hide_pdp_shipping_content": true,
+      "shipping_profile": null,
+      "is_seller_business_onboarded": false,
+      "is_buy_now_enabled": false,
+      "is_purchase_protected": false,
+      "can_buyer_make_checkout_offer": false,
+      "is_cart_enabled": false,
+      "seller_cms": null,
+      "vacation_mode": null,
+      "all_message_threads": {
+        "is_empty": true
+      },
+      "should_show_txn_survey_on_mas": false,
+      "incentive_campaign_for_free_shipping": null,
+      "first_message_suggested_value": null,
+      "sweepstake_enabled": false,
+      "sweepstake_status": "INVALID",
+      "sweepstake_content": null,
+      "marketplace_bump_info": null,
+      "fi_enhanced_appeal_data": {
+        "use_fi_appeals": true,
+        "enforcement_instance_id": null
+      },
+      "listing_seller_notices": [],
+      "is_email_communication_enabled": false,
+      "fair_market_value_data": null,
+      "vehicle_condition": null,
+      "vehicle_exterior_color": null,
+      "vehicle_features": [],
+      "vehicle_fuel_type": null,
+      "vehicle_identification_number": null,
+      "vehicle_interior_color": null,
+      "vehicle_is_paid_off": null,
+      "vehicle_make_display_name": null,
+      "vehicle_model_display_name": null,
+      "vehicle_number_of_owners": null,
+      "vehicle_odometer_data": {
+        "unit": null,
+        "value": null
+      },
+      "vehicle_registration_plate_information": null,
+      "vehicle_seller_type": null,
+      "vehicle_specifications": null,
+      "vehicle_title_status": null,
+      "vehicle_transmission_type": null,
+      "vehicle_trim_display_name": null,
+      "vehicle_carfax_report": null,
+      "attribute_data": [],
+      "origin_target": {
+        "id": "216802746735285"
+      },
+      "shipping_offered": false,
+      "legal_disclosure_impressum_url": null,
+      "commerce_badges_info": {
+        "source_summary": null,
+        "badges": []
+      },
+      "listing_address": null,
+      "seller_phone_number": null,
+      "vehicle_website_link": null,
+      "dealership_name": null,
+      "seller": null,
+      "energy_efficiency_class_eu": null,
+      "listing_photos": [
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 960,
+            "width": 722,
+            "uri": "https://scontent.fosu2-1.fna.fbcdn.net/v/t45.5328-4/510013391_1382049259713290_1209117626632997365_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=3DGYnmPh6fEQ7kNvwGedJEF&_nc_oc=Adk7ehUZyJUkoByee3PzOpMldu0xyivDFLGcfanXGJCDEOp7rMPyAcXWB3l3L67PVl3x-Hy-OWMvu95JmI9v8csX&_nc_zt=23&_nc_ht=scontent.fosu2-1.fna&_nc_gid=ZcpMQGz-_kK0BTJgrNR4fg&oh=00_AfT7XgQFNAmPkmv2Lw03541IRnlO-485PWFvqB4vZ1u2hA&oe=68715B96"
+          },
+          "id": "1382049256379957"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 960,
+            "width": 722,
+            "uri": "https://scontent.fosu2-1.fna.fbcdn.net/v/t45.5328-4/510788846_1943303232740499_8979613784129397308_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=5yBVrqu2XmcQ7kNvwGwNqkF&_nc_oc=AdnHMn7lAbywJ6VT0JcWovcuBXOJTBJYHquWna1ycQIc9RFwImiovudnMaWItNcuQ0AQo2_Ay9QD1C_G1eIxZqtn&_nc_zt=23&_nc_ht=scontent.fosu2-1.fna&_nc_gid=ZcpMQGz-_kK0BTJgrNR4fg&oh=00_AfTEBrgquQhvr8kiEmP1CrK9Anb4QX0yWl2KW4vXOVg9Dg&oe=6871457B"
+          },
+          "id": "1943303229407166"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 722,
+            "width": 960,
+            "uri": "https://scontent.fosu2-1.fna.fbcdn.net/v/t45.5328-4/510746553_589616997140313_4844967206436643737_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=UP1JO4wTEGEQ7kNvwHzX8Kl&_nc_oc=Adl8Nh9Mh2MbD9PkeJfzs9dOuQwiY64CyUIQoJrhfQ5FLc5DDS6QoYrFWFGqfb4ieyv_l9otFoYoXgip2TGo9fxS&_nc_zt=23&_nc_ht=scontent.fosu2-1.fna&_nc_gid=ZcpMQGz-_kK0BTJgrNR4fg&oh=00_AfTVh_ze49caKfIqf898ZQ-3F4E6T6k0x0R7Lmi0qPGzoA&oe=6871430E"
+          },
+          "id": "589616993806980"
+        }
+      ],
+      "pre_recorded_videos": []
+    },
+    {
+      "id": "692248546930108",
+      "primary_listing_photo": {
+        "listing_image": {
+          "uri": "https://scontent.fdxb3-3.fna.fbcdn.net/v/t45.5328-4/504350164_1077463870976707_4724546347241287999_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=ab44rhEMCG4Q7kNvwEKs_nu&_nc_oc=AdllThK_NIbM7eruN4erxShA7UqWU3CUVaR_L4FrgvgBVEgM12boapzYmLgVpFqKBM8&_nc_zt=23&_nc_ht=scontent.fdxb3-3.fna&_nc_gid=waQhCcZV7dpKYVHLtkTSfg&oh=00_AfQQFzfBUNtJQrqSP-kgTLTbTYCJB6VKbkssnSf64Cm1mQ&oe=68715C23"
+        },
+        "id": "1077463867643374"
+      },
+      "listing_price": {
+        "amount_with_offset": "0",
+        "currency": "USD",
+        "amount": "0.00"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "latitude": -18.915710449219,
+        "longitude": 47.521362304688,
+        "reverse_geocode_detailed": {
+          "country_alpha_two": "MG",
+          "postal_code_trimmed": ""
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "807311116002614",
+      "marketplace_listing_title": "Voiture",
+      "custom_title": null,
+      "custom_sub_titles_with_rendering_flags": [
+        {
+          "subtitle": ""
+        }
+      ],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/692248546930108",
+      "if_viewer_is_buyer": {
+        "marketplace_pdp_integrity_banner_strings_rewrite": null,
+        "id": "692248546930108"
+      },
+      "story": null,
+      "redacted_description": {
+        "text": "A VENDRE\n      FIAT FIORINO\n🔹5 places\n🔹semi fourgon\n🔹Moteur 1,7l diesel origine\n🔹Misy demi moteur standar miaraka @boite ampiarahana aminy\nPrix: 7M Ariary\n[hidden information]"
+      },
+      "creation_time": 1750319010,
+      "location_text": {
+        "text": "Antananarivo"
+      },
+      "location_vanity_or_id": "110080935687758",
+      "listing_inventory_type": "EVERGREEN",
+      "formatted_price": {
+        "text": "FREE"
+      },
+      "payment_time_period": null,
+      "condition": "USED",
+      "logging_id": "10099954190060247",
+      "marketplace_lead_gen_form": null,
+      "listed_by": null,
+      "real_estate_listing_agent": null,
+      "inventory_count": -1,
+      "legal_reporting_cta_type": null,
+      "legal_reporting_uri": null,
+      "messaging_enabled": true,
+      "listing_is_rejected": false,
+      "product_item": {
+        "id": "10099954190060247",
+        "boosted_marketplace_listing": null,
+        "promoted_listing": null
+      },
+      "seller_message_thread": null,
+      "is_checkout_enabled": false,
+      "is_draft": false,
+      "can_seller_edit": false,
+      "default_variant_listing": null,
+      "primary_mp_ent": {
+        "id": "692248546930108"
+      },
+      "reportable_seller_type": null,
+      "reportable_ent_id": "10099954190060247",
+      "hidden_from_friends": null,
+      "can_share": true,
+      "share_uri": "https://www.facebook.com/marketplace/item/692248546930108/",
+      "can_seller_change_availability": false,
+      "is_on_marketplace": true,
+      "messagingEnabled": true,
+      "has_children": false,
+      "cross_post_info": {
+        "all_listings": [
+          {
+            "is_on_marketplace": true,
+            "id": "692248546930108"
+          }
+        ]
+      },
+      "active_order": null,
+      "rebuy_order_receipt": null,
+      "c2c_shipping_eligible": false,
+      "is_shipping_offered": false,
+      "cross_post_sync_metadata": null,
+      "most_recent_active_order_as_buyer": null,
+      "order_summaries": [],
+      "should_hide_pdp_shipping_content": true,
+      "shipping_profile": null,
+      "is_seller_business_onboarded": false,
+      "is_buy_now_enabled": false,
+      "is_purchase_protected": false,
+      "can_buyer_make_checkout_offer": false,
+      "is_cart_enabled": false,
+      "seller_cms": null,
+      "vacation_mode": null,
+      "all_message_threads": {
+        "is_empty": true
+      },
+      "should_show_txn_survey_on_mas": false,
+      "incentive_campaign_for_free_shipping": null,
+      "first_message_suggested_value": null,
+      "sweepstake_enabled": false,
+      "sweepstake_status": "INVALID",
+      "sweepstake_content": null,
+      "marketplace_bump_info": null,
+      "fi_enhanced_appeal_data": {
+        "use_fi_appeals": true,
+        "enforcement_instance_id": null
+      },
+      "listing_seller_notices": [],
+      "is_email_communication_enabled": false,
+      "fair_market_value_data": null,
+      "vehicle_condition": null,
+      "vehicle_exterior_color": null,
+      "vehicle_features": [],
+      "vehicle_fuel_type": null,
+      "vehicle_identification_number": null,
+      "vehicle_interior_color": null,
+      "vehicle_is_paid_off": null,
+      "vehicle_make_display_name": null,
+      "vehicle_model_display_name": null,
+      "vehicle_number_of_owners": null,
+      "vehicle_odometer_data": {
+        "unit": null,
+        "value": null
+      },
+      "vehicle_registration_plate_information": null,
+      "vehicle_seller_type": null,
+      "vehicle_specifications": null,
+      "vehicle_title_status": null,
+      "vehicle_transmission_type": null,
+      "vehicle_trim_display_name": null,
+      "vehicle_carfax_report": null,
+      "attribute_data": [],
+      "origin_target": {
+        "id": "216802746735285"
+      },
+      "shipping_offered": false,
+      "legal_disclosure_impressum_url": null,
+      "commerce_badges_info": {
+        "source_summary": "Very Responsive on Marketplace",
+        "badges": [
+          {
+            "image_grayscale_uri": "https://static.xx.fbcdn.net/rsrc.php/v4/ye/r/E8TjeP6BzgJ.png"
+          }
+        ]
+      },
+      "listing_address": null,
+      "seller_phone_number": null,
+      "vehicle_website_link": null,
+      "dealership_name": null,
+      "seller": null,
+      "energy_efficiency_class_eu": null,
+      "listing_photos": [
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent-ord5-3.xx.fbcdn.net/v/t45.5328-4/504350164_1077463870976707_4724546347241287999_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=ab44rhEMCG4Q7kNvwGuoeiB&_nc_oc=Adka8UByBItd4M0ARUGLInJLtzVwKvlkn5l3FouBhzucLc7NXWbLheO4KvXfDSa1K_ZLNrv6usaT8ZBExnuuM2Fz&_nc_zt=23&_nc_ht=scontent-ord5-3.xx&_nc_gid=P2d7wwJKBXsDVVZmWcIvNg&oh=00_AfS9ESBWBydQ1I5VSuBCBZLbxP88YIhZOjVZM2SHxXoFSg&oe=68715C23"
+          },
+          "id": "1077463867643374"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent-ord5-1.xx.fbcdn.net/v/t45.5328-4/513837122_744047728277295_2293982283161464829_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=vNzsXkrNJwkQ7kNvwFiENpU&_nc_oc=AdmdqroyF-SwPFJWQTwsGVfAY3F9Ls0YA-iIZlOkOv3AlPwiPvw8VqxVoAYfwPeZG7Gxq8mxCjlwhK1ebDM7kwqD&_nc_zt=23&_nc_ht=scontent-ord5-1.xx&_nc_gid=P2d7wwJKBXsDVVZmWcIvNg&oh=00_AfSCrG5Sf_YPvKOOilqahrM_sLyzfCZRnAJewo4ZwDXYKw&oe=68716357"
+          },
+          "id": "744047724943962"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent-ord5-3.xx.fbcdn.net/v/t45.5328-4/513877628_762352459457621_4332955594210896258_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=nKEf2730nIAQ7kNvwHuc1vD&_nc_oc=AdnTWfq7hXGPh6qCa7cuPlCxxr0QpHPeEAtrkdon7ce2z3rVqCO_PgjP0oZwp2X_PcA1tOoTuKfMm6-gUhSB-EzT&_nc_zt=23&_nc_ht=scontent-ord5-3.xx&_nc_gid=P2d7wwJKBXsDVVZmWcIvNg&oh=00_AfTt3TZ234Xs_AtKtN3xgbg0-j1XxlasTZVs_8gigwalXA&oe=6871572C"
+          },
+          "id": "762352456124288"
+        }
+      ],
+      "pre_recorded_videos": []
+    },
+    {
+      "id": "2132647043882998",
+      "primary_listing_photo": {
+        "listing_image": {
+          "uri": "https://scontent.fthe11-1.fna.fbcdn.net/v/t45.5328-4/505768988_1100019522032323_1000735210912022892_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=0wlSXO4ycV8Q7kNvwEODzAu&_nc_oc=AdluBuowr8imRRi3RhnJ2CJW8SUKHpAuUFUHpvrbjGwDjNLBp7m5g8zrrueG7rtZpaOEH8suQBVbfohMS4ZmMGtf&_nc_zt=23&_nc_ht=scontent.fthe11-1.fna&_nc_gid=C496IbTBim9goALw3DFF8w&oh=00_AfQ2Lhm5OaEnwAj_zoL9KeWoZ6dhHErQSjj9ytyUYpieUQ&oe=6871703A"
+        },
+        "id": "1100019518698990"
+      },
+      "listing_price": {
+        "amount_with_offset": "0",
+        "currency": "USD",
+        "amount": "0.00"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "latitude": -18.915710449219,
+        "longitude": 47.521362304688,
+        "reverse_geocode_detailed": {
+          "country_alpha_two": "MG",
+          "postal_code_trimmed": ""
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "807311116002614",
+      "marketplace_listing_title": "Ford fiesta",
+      "custom_title": null,
+      "custom_sub_titles_with_rendering_flags": [
+        {
+          "subtitle": ""
+        }
+      ],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/2132647043882998",
+      "if_viewer_is_buyer": {
+        "marketplace_pdp_integrity_banner_strings_rewrite": null,
+        "id": "2132647043882998"
+      },
+      "story": null,
+      "redacted_description": {
+        "text": "A vendre:ford fiesta mk7,Année 2015, voiture impec, moteur  zetec SE 1.6 16 v essence ecoboost, rien a prevoir...infoline:[hidden information] "
+      },
+      "creation_time": 1749889612,
+      "location_text": {
+        "text": "Antananarivo"
+      },
+      "location_vanity_or_id": "110080935687758",
+      "listing_inventory_type": "EVERGREEN",
+      "formatted_price": {
+        "text": "FREE"
+      },
+      "payment_time_period": null,
+      "condition": "USED",
+      "logging_id": "23896480906674616",
+      "marketplace_lead_gen_form": null,
+      "listed_by": null,
+      "real_estate_listing_agent": null,
+      "inventory_count": -1,
+      "legal_reporting_cta_type": null,
+      "legal_reporting_uri": null,
+      "messaging_enabled": true,
+      "listing_is_rejected": false,
+      "product_item": {
+        "id": "23896480906674616",
+        "boosted_marketplace_listing": null,
+        "promoted_listing": null
+      },
+      "seller_message_thread": null,
+      "is_checkout_enabled": false,
+      "is_draft": false,
+      "can_seller_edit": false,
+      "default_variant_listing": null,
+      "primary_mp_ent": {
+        "id": "2132647043882998"
+      },
+      "reportable_seller_type": null,
+      "reportable_ent_id": "23896480906674616",
+      "hidden_from_friends": null,
+      "can_share": true,
+      "share_uri": "https://www.facebook.com/marketplace/item/2132647043882998/",
+      "can_seller_change_availability": false,
+      "is_on_marketplace": true,
+      "messagingEnabled": true,
+      "has_children": false,
+      "cross_post_info": {
+        "all_listings": [
+          {
+            "is_on_marketplace": true,
+            "id": "2132647043882998"
+          }
+        ]
+      },
+      "active_order": null,
+      "rebuy_order_receipt": null,
+      "c2c_shipping_eligible": false,
+      "is_shipping_offered": false,
+      "cross_post_sync_metadata": null,
+      "most_recent_active_order_as_buyer": null,
+      "order_summaries": [],
+      "should_hide_pdp_shipping_content": true,
+      "shipping_profile": null,
+      "is_seller_business_onboarded": false,
+      "is_buy_now_enabled": false,
+      "is_purchase_protected": false,
+      "can_buyer_make_checkout_offer": false,
+      "is_cart_enabled": false,
+      "seller_cms": null,
+      "vacation_mode": null,
+      "all_message_threads": {
+        "is_empty": true
+      },
+      "should_show_txn_survey_on_mas": false,
+      "incentive_campaign_for_free_shipping": null,
+      "first_message_suggested_value": null,
+      "sweepstake_enabled": false,
+      "sweepstake_status": "INVALID",
+      "sweepstake_content": null,
+      "marketplace_bump_info": null,
+      "fi_enhanced_appeal_data": {
+        "use_fi_appeals": true,
+        "enforcement_instance_id": null
+      },
+      "listing_seller_notices": [],
+      "is_email_communication_enabled": false,
+      "fair_market_value_data": null,
+      "vehicle_condition": null,
+      "vehicle_exterior_color": null,
+      "vehicle_features": [],
+      "vehicle_fuel_type": null,
+      "vehicle_identification_number": null,
+      "vehicle_interior_color": null,
+      "vehicle_is_paid_off": null,
+      "vehicle_make_display_name": null,
+      "vehicle_model_display_name": null,
+      "vehicle_number_of_owners": null,
+      "vehicle_odometer_data": {
+        "unit": null,
+        "value": null
+      },
+      "vehicle_registration_plate_information": null,
+      "vehicle_seller_type": null,
+      "vehicle_specifications": null,
+      "vehicle_title_status": null,
+      "vehicle_transmission_type": null,
+      "vehicle_trim_display_name": null,
+      "vehicle_carfax_report": null,
+      "attribute_data": [],
+      "origin_target": {
+        "id": "216802746735285"
+      },
+      "shipping_offered": false,
+      "legal_disclosure_impressum_url": null,
+      "commerce_badges_info": {
+        "source_summary": null,
+        "badges": []
+      },
+      "listing_address": null,
+      "seller_phone_number": null,
+      "vehicle_website_link": null,
+      "dealership_name": null,
+      "seller": null,
+      "energy_efficiency_class_eu": null,
+      "listing_photos": [
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 953,
+            "width": 715,
+            "uri": "https://scontent-mia3-3.xx.fbcdn.net/v/t45.5328-4/505768988_1100019522032323_1000735210912022892_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=0wlSXO4ycV8Q7kNvwEt-pax&_nc_oc=AdlvjVo_3ZiKJmIstX1IZwtiLPZwHcX3fQUWm0l6eB_lL4IyqYHjqDmHNUXzg1A6Z9s&_nc_zt=23&_nc_ht=scontent-mia3-3.xx&_nc_gid=0oMm74jndsCBzOtdHuj0kA&oh=00_AfSpC7t1CaovCkLJhUOcjSsOvJVwMHTEwL9QSqRvQTyY6Q&oe=6871703A"
+          },
+          "id": "1100019518698990"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 953,
+            "width": 715,
+            "uri": "https://scontent-mia5-1.xx.fbcdn.net/v/t45.5328-4/505725191_601449123062191_221360721214375777_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=TqGdy4AUW_8Q7kNvwHe633N&_nc_oc=Adn-eN51OLPpln5iD81QLcwsjwoSnW3P53INe4yUu3gNdf5kB5qIl3DesMczYdOgYPw&_nc_zt=23&_nc_ht=scontent-mia5-1.xx&_nc_gid=0oMm74jndsCBzOtdHuj0kA&oh=00_AfQG3FXbOY7uY-4bn9jbudY4vUEVYeQWkUpLbUnvUi0jug&oe=68714D8B"
+          },
+          "id": "601449116395525"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 953,
+            "width": 715,
+            "uri": "https://scontent-mia3-1.xx.fbcdn.net/v/t45.5328-4/503659953_692830730271754_3268068312336381669_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=6u3SQ9bvEtoQ7kNvwGGAEmZ&_nc_oc=AdkklSevA9RUcNOQ8vbdktI6fNPk_GJQ5fGlyq2-iQDOOa2e8tzye7xjmc_ttQT920E&_nc_zt=23&_nc_ht=scontent-mia3-1.xx&_nc_gid=0oMm74jndsCBzOtdHuj0kA&oh=00_AfTWFe8pp_yRSd4SjPg2STZXpDzz5o0VnQnzkSGhAn8pEQ&oe=68717426"
+          },
+          "id": "692830726938421"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 953,
+            "width": 715,
+            "uri": "https://scontent-mia3-1.xx.fbcdn.net/v/t45.5328-4/507205487_699538476275831_5361922398955169740_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=X_3e82YOPTcQ7kNvwGh6gUd&_nc_oc=AdnPd5FyiZv-2ziEmmWrpgEoPgcEF4Cf67-g48JsGvS9yjqD7iNwSNHm3rpSQUPgwYE&_nc_zt=23&_nc_ht=scontent-mia3-1.xx&_nc_gid=0oMm74jndsCBzOtdHuj0kA&oh=00_AfSn3nFWCc2zitJtamgvIiwU9_mX6Uk-Pyr4SFRFG-7cqg&oe=687155D5"
+          },
+          "id": "699538472942498"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 953,
+            "width": 715,
+            "uri": "https://scontent-mia3-2.xx.fbcdn.net/v/t45.5328-4/505770890_2783384851857242_727135558791285852_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=zvTkk95rodAQ7kNvwFDTUyz&_nc_oc=AdmCTohhjAnO8vvabGk7RfiDDIqCzA3-9JddnvwLzxP04o1DMJJBY31XoRerN9f4Lvw&_nc_zt=23&_nc_ht=scontent-mia3-2.xx&_nc_gid=0oMm74jndsCBzOtdHuj0kA&oh=00_AfRXOqv1_OLZ-SwTV73OeFsXDkelZNyjEaTDI4TTtqe9_w&oe=68716C59"
+          },
+          "id": "2783384848523909"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 953,
+            "width": 715,
+            "uri": "https://scontent-mia3-3.xx.fbcdn.net/v/t45.5328-4/503740925_717178857560845_8122891536724304416_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=twbxz2ICyY0Q7kNvwGMGHNf&_nc_oc=AdmBD3YRcntDOp2bARx6V814tXZ4fdKnhalwaGinlCrWDaO5F00-8PuLqqgDrp1DxtQ&_nc_zt=23&_nc_ht=scontent-mia3-3.xx&_nc_gid=0oMm74jndsCBzOtdHuj0kA&oh=00_AfQngB6W-qaBuilzRWwbz-3Kz9c1ivH5AgpnbvYIDKQ4-A&oe=68716233"
+          },
+          "id": "717178854227512"
+        }
+      ],
+      "pre_recorded_videos": []
+    },
+    {
+      "id": "1507422723954551",
+      "primary_listing_photo": {
+        "listing_image": {
+          "uri": "https://scontent.fbom16-1.fna.fbcdn.net/v/t45.5328-4/517249776_1370113337431241_966979129750870333_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=KMM958ylrbAQ7kNvwEfOpLs&_nc_oc=Adm5s2BqxX43da9_xR1WopzbQpKf5f-ngO2-96yUO4VxneeIkZoffCh21BJDyd7YuBQ&_nc_zt=23&_nc_ht=scontent.fbom16-1.fna&_nc_gid=prDOnAPI-JZObpF7Gc_rBw&oh=00_AfSSr0pRWWrHNY5PZjw6xoNL4PHKTVtsGuIH2EFQRgC7CQ&oe=687151DD"
+        },
+        "id": "1370113334097908"
+      },
+      "listing_price": {
+        "amount_with_offset": "100",
+        "currency": "MGA",
+        "amount": "1.0"
+      },
+      "strikethrough_price": null,
+      "comparable_price": null,
+      "comparable_price_type": null,
+      "location": {
+        "latitude": -18.899230957031,
+        "longitude": 47.521362304688,
+        "reverse_geocode_detailed": {
+          "country_alpha_two": "MG",
+          "postal_code_trimmed": ""
+        }
+      },
+      "is_hidden": false,
+      "is_live": true,
+      "is_pending": false,
+      "is_sold": false,
+      "is_viewer_seller": false,
+      "min_listing_price": null,
+      "max_listing_price": null,
+      "marketplace_listing_category_id": "807311116002614",
+      "marketplace_listing_title": "𝗧𝗼𝘆𝗼𝘁𝗮 𝗛𝗶𝗹𝘂𝘅 𝗦𝗥𝟱",
+      "custom_title": null,
+      "custom_sub_titles_with_rendering_flags": [
+        {
+          "subtitle": ""
+        }
+      ],
+      "origin_group": null,
+      "listing_video": null,
+      "parent_listing": null,
+      "marketplace_listing_seller": null,
+      "delivery_types": [
+        "IN_PERSON"
+      ],
+      "listingUrl": "https://www.facebook.com/marketplace/item/1507422723954551",
+      "if_viewer_is_buyer": {
+        "marketplace_pdp_integrity_banner_strings_rewrite": null,
+        "id": "1507422723954551"
+      },
+      "story": null,
+      "redacted_description": {
+        "text": "𝗧𝗼𝘆𝗼𝘁𝗮 𝗛𝗶𝗹𝘂𝘅 𝗦𝗥𝟱 |  A vendre \n☎️Contact : [hidden information] \n\n🇫🇷ʙᴏɴɴᴇ ᴏᴄᴄᴀꜱɪᴏɴ Européenne \nMoteur d4d turbo diesel \n4x4 offroad (4H, 4L, 2H) fonctionnel \n\n𝐓𝐨𝐮𝐭𝐞𝐬 𝐨𝐩𝐭𝐢𝐨𝐧𝐬 \n✅ Climatisation \n✅ 4 vitres électriques \n✅ Rétroviseur électrique \n✅ Verrouillage centralisé \n✅ Autoradio \n✅ 5 jantes alu \n\n𝗩𝗼𝗶𝘁𝘂𝗿𝗲 𝗲𝗻 𝘁𝗿è𝘀 𝗯𝗼𝗻𝗻𝗲 é𝘁𝗮𝘁 𝗱’𝗼𝗿𝗶𝗴𝗶𝗻𝗲 \n☎️ Contact : [hidden information] / [hidden information]\n📍Visible : Rocade Ambohimahitsy - Nanisana\n\n🙏🙏 Tsara toade miantso fa tsy connecté matetika"
+      },
+      "creation_time": 1751738941,
+      "location_text": {
+        "text": "Antananarivo"
+      },
+      "location_vanity_or_id": "110080935687758",
+      "listing_inventory_type": "SINGLE_QUANTITY",
+      "formatted_price": {
+        "text": "MGA1"
+      },
+      "payment_time_period": null,
+      "condition": "PC_USED_GOOD",
+      "logging_id": "30765292453084482",
+      "marketplace_lead_gen_form": null,
+      "listed_by": null,
+      "real_estate_listing_agent": null,
+      "inventory_count": null,
+      "legal_reporting_cta_type": null,
+      "legal_reporting_uri": null,
+      "messaging_enabled": true,
+      "listing_is_rejected": false,
+      "product_item": {
+        "id": "30765292453084482",
+        "boosted_marketplace_listing": null,
+        "promoted_listing": null
+      },
+      "seller_message_thread": null,
+      "is_checkout_enabled": false,
+      "is_draft": false,
+      "can_seller_edit": false,
+      "default_variant_listing": null,
+      "primary_mp_ent": {
+        "id": "1507422723954551"
+      },
+      "reportable_seller_type": null,
+      "reportable_ent_id": "30765292453084482",
+      "hidden_from_friends": "VISIBLE_TO_EVERYONE",
+      "can_share": true,
+      "share_uri": "https://www.facebook.com/marketplace/item/1507422723954551/",
+      "can_seller_change_availability": false,
+      "is_on_marketplace": true,
+      "messagingEnabled": true,
+      "has_children": false,
+      "cross_post_info": {
+        "all_listings": [
+          {
+            "is_on_marketplace": true,
+            "id": "1507422723954551"
+          }
+        ]
+      },
+      "active_order": null,
+      "rebuy_order_receipt": null,
+      "c2c_shipping_eligible": false,
+      "is_shipping_offered": false,
+      "cross_post_sync_metadata": null,
+      "most_recent_active_order_as_buyer": null,
+      "order_summaries": [],
+      "should_hide_pdp_shipping_content": true,
+      "shipping_profile": null,
+      "is_seller_business_onboarded": false,
+      "is_buy_now_enabled": false,
+      "is_purchase_protected": false,
+      "can_buyer_make_checkout_offer": false,
+      "is_cart_enabled": false,
+      "seller_cms": null,
+      "vacation_mode": null,
+      "all_message_threads": {
+        "is_empty": true
+      },
+      "should_show_txn_survey_on_mas": false,
+      "incentive_campaign_for_free_shipping": null,
+      "first_message_suggested_value": null,
+      "sweepstake_enabled": false,
+      "sweepstake_status": "INVALID",
+      "sweepstake_content": null,
+      "marketplace_bump_info": null,
+      "fi_enhanced_appeal_data": {
+        "use_fi_appeals": true,
+        "enforcement_instance_id": null
+      },
+      "listing_seller_notices": [],
+      "is_email_communication_enabled": false,
+      "fair_market_value_data": null,
+      "vehicle_condition": null,
+      "vehicle_exterior_color": null,
+      "vehicle_features": [],
+      "vehicle_fuel_type": null,
+      "vehicle_identification_number": null,
+      "vehicle_interior_color": null,
+      "vehicle_is_paid_off": null,
+      "vehicle_make_display_name": null,
+      "vehicle_model_display_name": null,
+      "vehicle_number_of_owners": null,
+      "vehicle_odometer_data": {
+        "unit": null,
+        "value": null
+      },
+      "vehicle_registration_plate_information": null,
+      "vehicle_seller_type": null,
+      "vehicle_specifications": null,
+      "vehicle_title_status": null,
+      "vehicle_transmission_type": null,
+      "vehicle_trim_display_name": null,
+      "vehicle_carfax_report": null,
+      "attribute_data": [
+        {
+          "attribute_name": "Condition",
+          "value": "used_good",
+          "label": "Used – good"
+        }
+      ],
+      "origin_target": {
+        "id": "216802746735285"
+      },
+      "shipping_offered": false,
+      "legal_disclosure_impressum_url": null,
+      "commerce_badges_info": {
+        "source_summary": null,
+        "badges": []
+      },
+      "listing_address": null,
+      "seller_phone_number": null,
+      "vehicle_website_link": null,
+      "dealership_name": null,
+      "seller": null,
+      "energy_efficiency_class_eu": null,
+      "listing_photos": [
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fceb1-1.fna.fbcdn.net/v/t45.5328-4/517249776_1370113337431241_966979129750870333_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=KMM958ylrbAQ7kNvwGjuigy&_nc_oc=Adm5Gn37U9ebEHKd9GXlv33x_vB4EjNFDUTzCQCgoU8FUpUX_e49paAhiZ3CgCyl1gc&_nc_zt=23&_nc_ht=scontent.fceb1-1.fna&_nc_gid=nE8HV0YHpJs5eGxA458jWA&oh=00_AfRdeczXeLl80wUtoK8f9M5r-QdYQXecPdJW77npLeWQww&oe=687151DD"
+          },
+          "id": "1370113334097908"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fceb1-5.fna.fbcdn.net/v/t45.5328-4/515962063_1161349355757448_2295527961977139772_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=eMflNNrXRoQQ7kNvwFew5i4&_nc_oc=AdkYS1x_Dy-FXdLjCL8w-Qe2TwhXAbnBm9xZUwsHoG6oli341gicT_MnkweqIPQ5T7c&_nc_zt=23&_nc_ht=scontent.fceb1-5.fna&_nc_gid=nE8HV0YHpJs5eGxA458jWA&oh=00_AfRRZAOCmZlY1rU6zooel0ZNbVfNrStkMXvC4X3tcs5t3g&oe=687169F7"
+          },
+          "id": "1161349352424115"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fceb1-3.fna.fbcdn.net/v/t45.5328-4/515367970_707639922164518_6274718156183344670_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=x0_yTo4enncQ7kNvwGYU-D2&_nc_oc=Adm_WksP5x7jdoYR7UqbBhztFOIXQ5_FNAebJn6KbDz0sxPTo23uuKPud4IZIhMb1qw&_nc_zt=23&_nc_ht=scontent.fceb1-3.fna&_nc_gid=nE8HV0YHpJs5eGxA458jWA&oh=00_AfT97e2Jz3QAkWo2SuHDA58NRRsajtMxZbBu1d_tmiJ91g&oe=687146E3"
+          },
+          "id": "707639918831185"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fceb1-2.fna.fbcdn.net/v/t45.5328-4/515260751_1816918995536368_5621846461696939249_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=Jtnq6Q8K5VwQ7kNvwHCZFyq&_nc_oc=Admz32HQ6Cae4PHa1qX2PFBmC_jwX-x8cvMNrDBPUDLctpZrJJiyqtzKTQHiT8U-dYg&_nc_zt=23&_nc_ht=scontent.fceb1-2.fna&_nc_gid=nE8HV0YHpJs5eGxA458jWA&oh=00_AfS6gbwmfJNlqCFWbWqa_BH1eHnU3fPNK_jODogGFYKS_w&oe=68717456"
+          },
+          "id": "1816918992203035"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fceb1-3.fna.fbcdn.net/v/t45.5328-4/516133581_715213734806231_1409293140918486421_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=106&ccb=1-7&_nc_sid=247b10&_nc_ohc=owKhCWRy6h0Q7kNvwH3ZHZI&_nc_oc=AdltTHCbV1Ocw00_t_yRy-cq8HUVPQN8zgy68d4eij3Wl-tHo2q5J27q5-AKteJ6jqE&_nc_zt=23&_nc_ht=scontent.fceb1-3.fna&_nc_gid=nE8HV0YHpJs5eGxA458jWA&oh=00_AfQmAsoRJHjFDb-yJvnpZ18cu5QQ3wjArxgR7IJN-R_1Mg&oe=68715445"
+          },
+          "id": "715213731472898"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 960,
+            "width": 960,
+            "uri": "https://scontent.fceb1-2.fna.fbcdn.net/v/t45.5328-4/516503859_1064975655211826_6115724100189746671_n.jpg?stp=dst-jpg_p960x960_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=c5l8U6XM4DMQ7kNvwFDeVWx&_nc_oc=Adm7yK-Csu8FGeO_DB_2syxQi5y0Kx21qy2HzRdX1JrJhNLq2T6BcUJYJDcH0iu7960&_nc_zt=23&_nc_ht=scontent.fceb1-2.fna&_nc_gid=nE8HV0YHpJs5eGxA458jWA&oh=00_AfT2HGk01rfYZ1weHaGq_iZa63zqErKkhf44eI5cr7Gwtg&oe=687144CF"
+          },
+          "id": "1064975651878493"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fceb1-3.fna.fbcdn.net/v/t45.5328-4/516800433_734565495785045_489471760243967572_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=BhqW7jLU7ooQ7kNvwFokvbV&_nc_oc=Adm6S6XppfCa1KSoH01zHSP_hMbbOd9leZwKVPlykUxwwj7jZsaNt_g-msvsBrxEH8M&_nc_zt=23&_nc_ht=scontent.fceb1-3.fna&_nc_gid=nE8HV0YHpJs5eGxA458jWA&oh=00_AfT71VJsRI9KZNtEwWU1A0b4XBsJAzBXE4wQunfr8PTOOg&oe=6871570D"
+          },
+          "id": "734565492451712"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fceb1-4.fna.fbcdn.net/v/t45.5328-4/516123384_1407677850450256_2106591921678146625_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=rJwKSdX0t0kQ7kNvwHB4uh5&_nc_oc=AdkrONPEfmIyo9ovMpdXFeroGGiCs-um3gKk9DFHYidb0kl-NFusSVmriCUgW-j1eFc&_nc_zt=23&_nc_ht=scontent.fceb1-4.fna&_nc_gid=nE8HV0YHpJs5eGxA458jWA&oh=00_AfSawVisdsJQScv2AoRRbgdtYreNV5m1Zs0Yh3r-8TQZJw&oe=687167BF"
+          },
+          "id": "1407677847116923"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fceb1-5.fna.fbcdn.net/v/t45.5328-4/515409726_1750200085703057_4144508903455087535_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=X5Sk1yWF0KIQ7kNvwEW_kDt&_nc_oc=AdlneE0UAADx3xVfHWtE9npV7FRvFA8GybXwfG17sQk-r0qpYj21O7WVsO7-UbAvc-U&_nc_zt=23&_nc_ht=scontent.fceb1-5.fna&_nc_gid=nE8HV0YHpJs5eGxA458jWA&oh=00_AfTwjwJUFSr1oHxvd0QBNmedacJQjb6J99QAjtY8kuxV3A&oe=68717430"
+          },
+          "id": "1750200082369724"
+        },
+        {
+          "accessibility_caption": "No photo description available.",
+          "image": {
+            "height": 720,
+            "width": 960,
+            "uri": "https://scontent.fceb1-1.fna.fbcdn.net/v/t45.5328-4/516158685_1242322717371508_9216227526425052535_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=JoV6PNuO2gsQ7kNvwFzqO-h&_nc_oc=AdmD1AfKjesVw6gl4aqJv8AUiAw1D6virouPQSxbCnS4oe64a3j2YofmUDRDcDqrmC4&_nc_zt=23&_nc_ht=scontent.fceb1-1.fna&_nc_gid=nE8HV0YHpJs5eGxA458jWA&oh=00_AfSZjiptAP8Jp2R_hFxIXkkQ5Rdtl04wwlimEMVFdAg1pQ&oe=687141D0"
+          },
+          "id": "1242322714038175"
+        }
+      ],
+      "pre_recorded_videos": []
+    }
+  ]
+}

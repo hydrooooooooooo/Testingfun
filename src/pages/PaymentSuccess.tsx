@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Layout from "@/components/Layout";
+
 import { Button } from "@/components/ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PLANS } from "@/lib/plans";
@@ -325,7 +325,7 @@ export default function PaymentSuccessPage() {
   };
 
   return (
-    <Layout>
+
       <section className="mx-auto w-full max-w-xl my-20 px-2 flex flex-col items-center gap-6">
         <div className={`rounded-xl border p-8 shadow-lg flex flex-col items-center gap-2 ${isVerifying ? 'bg-blue-50 border-blue-200' : error ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
           {isVerifying ? (
@@ -426,6 +426,6 @@ export default function PaymentSuccessPage() {
           ) : null}
         </div>
       </section>
-    </Layout>
+
   );
 }

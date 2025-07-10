@@ -1,0 +1,20 @@
+{
+  "sessionId": "sess_oow6ppysqP",
+  "datasetId": "cg1SV98eg0US0H46U",
+  "timestamp": "2025-07-02T14:36:32.990Z",
+  "totalItems": 1,
+  "previewItems": [
+    {
+      "title": "Titre non disponible",
+      "price": "Prix non disponible",
+      "location": "Localisation non disponible"
+    }
+  ],
+  "allItems": [
+    {
+      "title": "Titre non disponible",
+      "price": "Prix non disponible",
+      "location": "Localisation non disponible"
+    }
+  ]
+}

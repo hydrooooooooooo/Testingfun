@@ -10,35 +10,24 @@ export class AdminController {
    */
   async getAllSessions(req: Request, res: Response, next: NextFunction) {
     try {
-      // Simple API key check for admin access
-      const apiKey = req.headers['x-api-key'];
-      
-      if (!apiKey || apiKey !== config.api.adminApiKey) {
-        throw new ApiError(401, 'Unauthorized');
-      }
-      
+
       // Get all sessions
-      const sessions = sessionService.getAllSessions();
+      const sessions = await sessionService.getAllSessions();
       
       // Map sessions to a more readable format
       const formattedSessions = sessions.map(session => ({
         id: session.id,
-        url: session.url,
         status: session.status,
-        createdAt: session.createdAt,
-        updatedAt: session.updatedAt || session.createdAt, // Fallback to createdAt if updatedAt doesn't exist
         isPaid: session.isPaid,
-        packId: session.packId,
-        datasetId: session.datasetId,
-        stats: session.data || {}
+        created_at: session.created_at,
+        updated_at: session.updated_at || session.created_at,
+        user: session.user_id || 'N/A',
+        packId: session.packId || 'N/A',
+        totalItems: session.totalItems || 0,
+        hasData: session.hasData
       }));
       
-      res.status(200).json({
-        status: 'success',
-        data: {
-          sessions: formattedSessions
-        }
-      });
+      res.status(200).json(formattedSessions);
     } catch (error) {
       next(error);
     }
@@ -49,27 +38,15 @@ export class AdminController {
    */
   async getSessionById(req: Request, res: Response, next: NextFunction) {
     try {
-      // Simple API key check for admin access
-      const apiKey = req.headers['x-api-key'];
-      
-      if (!apiKey || apiKey !== config.api.adminApiKey) {
-        throw new ApiError(401, 'Unauthorized');
-      }
-      
       const { sessionId } = req.params;
       
       // Get session from service
-      const session = sessionService.getSession(sessionId);
+      const session = await sessionService.getSession(sessionId);
       if (!session) {
         throw new ApiError(404, `Session with ID ${sessionId} not found`);
       }
       
-      res.status(200).json({
-        status: 'success',
-        data: {
-          session
-        }
-      });
+      res.status(200).json(session);
     } catch (error) {
       next(error);
     }
@@ -80,15 +57,9 @@ export class AdminController {
    */
   async getDashboardStats(req: Request, res: Response, next: NextFunction) {
     try {
-      // Simple API key check for admin access
-      const apiKey = req.headers['x-api-key'];
-      
-      if (!apiKey || apiKey !== config.api.adminApiKey) {
-        throw new ApiError(401, 'Unauthorized');
-      }
-      
+
       // Get all sessions
-      const sessions = sessionService.getAllSessions();
+      const sessions = await sessionService.getAllSessions();
       
       // Calculate statistics
       const totalSessions = sessions.length;

@@ -1,6 +1,6 @@
 import { logger } from '../../utils/logger';
 import { ApifyService } from '../../services/apifyService';
-import { sessionService } from '../../services/sessionService';
+import { sessionService, SessionStatus } from '../../services/sessionService';
 import dotenv from 'dotenv';
 
 // Load environment variables
@@ -66,14 +66,11 @@ async function testApifyExtraction() {
       // Update existing session
       logger.info(`Updating existing session ${sessionId} with ${previewItems.length} items`);
       
-      // Store preview items in session data field
-      if (!existingSession.data) {
-        existingSession.data = {};
-      }
-      existingSession.data.previewItems = previewItems;
-      existingSession.data.datasetId = datasetId;
-      
-      await sessionService.updateSession(sessionId, existingSession);
+      await sessionService.updateSession(sessionId, {
+        previewItems,
+        datasetId,
+        status: SessionStatus.FINISHED, // Also update status
+      });
       logger.info(`Session ${sessionId} updated successfully`);
     } else {
       // Create new session
@@ -81,14 +78,10 @@ async function testApifyExtraction() {
       
       await sessionService.createSession({
         id: sessionId,
-        url: 'https://www.facebook.com/marketplace/category/propertyrentals',
-        createdAt: new Date(),
-        status: 'completed',
+        status: SessionStatus.FINISHED,
         isPaid: false,
-        data: {
-          previewItems,
-          datasetId
-        }
+        previewItems,
+        datasetId
       });
       
       logger.info(`Session ${sessionId} created successfully`);

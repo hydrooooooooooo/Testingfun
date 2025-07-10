@@ -1,5 +1,7 @@
 
-import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Link, useLocation, Outlet } from "react-router-dom";
 
 const nav = [
   { path: "/", label: "Accueil" },
@@ -8,8 +10,9 @@ const nav = [
   { path: "/models", label: "Modèles" }
 ];
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function PublicLayout() {
   const { pathname } = useLocation();
+  const { isAuthenticated, user, logout } = useAuth();
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -32,8 +35,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </Link>
           ))}
         </nav>
+        <div className="ml-auto flex items-center gap-4">
+          {isAuthenticated() ? (
+            <>
+              <span className="text-sm text-muted-foreground hidden sm:inline">
+                {user?.email}
+              </span>
+              <Link to="/dashboard">
+                <Button variant="outline">Dashboard</Button>
+              </Link>
+              <Button onClick={logout}>Déconnexion</Button>
+            </>
+          ) : (
+            <Link to="/login">
+              <Button>Se connecter</Button>
+            </Link>
+          )}
+        </div>
       </header>
-      <main className="flex-1 flex flex-col px-0">{children}</main>
+      <main className="flex-1 flex flex-col px-0"><Outlet /></main>
       <footer className="border-t border-border py-3 mt-6 text-center text-xs text-muted-foreground tracking-wide">
         &copy; {new Date().getFullYear()} easyscrapy.com &mdash; Tous droits réservés.
       </footer>

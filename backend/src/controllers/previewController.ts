@@ -16,7 +16,7 @@ export class PreviewController {
         throw new ApiError(400, 'Session ID is required');
       }
       
-      const session = sessionService.getSession(sessionId);
+      const session = await sessionService.getSession(sessionId);
       if (!session) {
         throw new ApiError(404, `Session with ID ${sessionId} not found`);
       }
@@ -30,14 +30,17 @@ export class PreviewController {
       }
       
       // Récupérer les éléments de prévisualisation
-      const previewItems = session.data?.previewItems || [];
+      const previewItems = session.previewItems || [];
+      const totalItems = session.totalItems || 0;
       
       logger.info(`Envoi de ${previewItems.length} éléments de prévisualisation pour la session ${sessionId}`);
       
       res.status(200).json({
         success: true,
         previewItems,
-        totalItems: session.data?.totalItemsCount || previewItems.length,
+        stats: {
+          totalItems: session.totalItems,
+        },
         packId: session.packId || 'pack-decouverte'
       });
     } catch (error) {

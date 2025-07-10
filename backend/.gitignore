@@ -1,0 +1,20 @@
+# Fichiers de dépendances et de compilation
+node_modules
+dist
+
+# Fichiers d'environnement - NE JAMAIS COMMIT
+.env
+.env.*
+!.env.example
+
+# Fichiers de logs
+npm-debug.log*
+*.log
+
+# Fichiers de session
+*.session
+
+# Fichiers de cache et de rapport
+.npm
+.eslintcache
+coverage
