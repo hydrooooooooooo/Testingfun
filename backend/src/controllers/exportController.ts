@@ -45,7 +45,7 @@ export class ExportController {
       }
       
       // Récupérer la session
-      const session = sessionService.getSession(sessionId);
+      const session = await sessionService.getSession(sessionId);
       const isTemporarySession = sessionId.startsWith('temp_');
       
       // Gérer le cas où la session n'existe pas
@@ -53,16 +53,14 @@ export class ExportController {
         if (isTemporarySession) {
           // Pour les sessions temporaires, on crée une session à la volée
           logger.info(`[${requestId}] Création d'une session temporaire pour ${sessionId}`);
-          const newSession: Session = {
+          const newSession: Partial<Session> = {
             id: sessionId,
-            url: 'https://demo.marketplace-scraper.com',  // URL fictive pour les sessions temporaires
             isPaid: true,
             packId: 'pack-decouverte',
-            createdAt: new Date(),
             status: SessionStatus.FINISHED,  // La session est considérée comme terminée
-            data: { isTemporary: true }     // Stockage de l'information temporaire dans data
+            hasData: true // On considère qu'une session temporaire a des données
           };
-          sessionService.createSession(newSession);
+          await sessionService.createSession(newSession);
           return this.handleTemporaryExport(sessionId, format as 'excel' | 'csv', requestId, res, next);
         } else {
           // Pour les sessions normales, on renvoie une erreur
@@ -92,7 +90,8 @@ export class ExportController {
       if (hasValidToken) {
         logger.info(`[${requestId}] Téléchargement autorisé via token pour la session ${sessionId}`);
         // On pourrait réinitialiser le token après utilisation si on veut limiter à un seul téléchargement
-        // sessionService.updateSession(sessionId, { downloadToken: null });
+        await sessionService.updateSession(sessionId, { downloadToken: undefined });
+        logger.info(`[${requestId}] Token de téléchargement effacé pour la session ${sessionId}`);
       }
       
       // Vérifier si la session a un datasetId (sauf pour les sessions temporaires)
@@ -107,7 +106,7 @@ export class ExportController {
         logger.info(`[${requestId}] Utilisation du pack par défaut ${defaultPack} pour la session ${sessionId}`);
         
         // Mettre à jour la session avec le pack par défaut
-        sessionService.updateSession(sessionId, {
+        await sessionService.updateSession(sessionId, {
           packId: defaultPack
         });
       }
@@ -187,7 +186,7 @@ export class ExportController {
     res: Response,
     next: NextFunction,
     isFallback: boolean = false
-  ) {
+  ): Promise<void> {
     try {
       // Déterminer le pack à utiliser (par défaut pack-decouverte)
       const packId = 'pack-decouverte';

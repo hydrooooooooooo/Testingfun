@@ -21,7 +21,7 @@ export interface ApifyLocation {
 }
 
 export interface ApifyListingPrice {
-  amount?: string;
+  amount?: string | number;
   currency?: string;
 }
 
@@ -31,6 +31,7 @@ export interface ApifyListingImage {
 
 export interface ApifyPrimaryListingPhoto {
   listing_image?: ApifyListingImage;
+  image?: ApifyListingImage;
   id?: string;
 }
 
@@ -42,7 +43,8 @@ export interface ApifyDescriptionObject {
 export interface ApifyItem {
   // Standard fields we were using before
   title?: string;
-  price?: string;
+  price?: string | number;
+  prix?: string | number;
   description?: string;
   imageUrl?: string;
   location?: string | ApifyLocation;
@@ -59,5 +61,13 @@ export interface ApifyItem {
   primary_listing_photo?: ApifyPrimaryListingPhoto;
   listingUrl?: string;
   listing_photos?: Array<{image: {uri: string}}>;  
+  [key: string]: any;
+}
+
+export interface ApifyActorInput {
+  startUrls: { url: string }[];
+  proxyConfiguration?: { useApifyProxy: boolean };
+  maxRequestRetries?: number;
+  maxItems?: number;
   [key: string]: any;
 }

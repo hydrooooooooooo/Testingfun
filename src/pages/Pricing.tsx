@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Layout from "@/components/Layout";
+
 import PricingPlan from "@/components/PricingPlan";
 import { PLANS } from "@/lib/plans";
 import { toast } from "@/hooks/use-toast";
@@ -172,7 +172,7 @@ ${data.nom}
   };
 
   return (
-    <Layout>
+
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
         {/* Hero Section */}
         <section className="w-full max-w-6xl mx-auto px-4 py-16">
@@ -390,6 +390,6 @@ ${data.nom}
           </div>
         </section>
       </div>
-    </Layout>
+
   );
 }

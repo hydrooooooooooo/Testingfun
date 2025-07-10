@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+
 import ScrapePreview from "@/components/ScrapePreview";
 import ScrapeProgress from "@/components/ScrapeProgress";
 import ExcelDownloadButton from "@/components/ExcelDownloadButton";
@@ -83,7 +83,7 @@ export default function Index() {
   }, [searchParams, setSelectedPackId]);
 
   return (
-    <Layout>
+
       <div className="flex flex-col items-center min-h-screen w-full bg-gradient-to-b from-slate-50 to-white">
         
         {/* Hero Section */}
@@ -479,6 +479,6 @@ export default function Index() {
           </div>
         </section>
       </div>
-    </Layout>
+
   );
 }

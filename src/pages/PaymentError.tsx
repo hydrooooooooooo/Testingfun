@@ -1,6 +1,6 @@
 // src/pages/PaymentError.tsx
 import React, { useEffect, useState } from "react";
-import Layout from "@/components/Layout";
+
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { PLANS } from "@/lib/plans";
@@ -148,7 +148,7 @@ export default function PaymentErrorPage() {
   };
 
   return (
-    <Layout>
+
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
           {/* En-tête d'erreur */}
@@ -204,7 +204,7 @@ export default function PaymentErrorPage() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Nombre d'annonces</p>
-                  <p className="font-semibold">{pack.limits.results} éléments</p>
+                  <p className="font-semibold">{pack.nbDownloads} éléments</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Session ID</p>
@@ -300,6 +300,6 @@ export default function PaymentErrorPage() {
           )}
         </div>
       </div>
-    </Layout>
+
   );
 }

@@ -1,88 +1,19 @@
 import { ApifyClient } from 'apify-client';
+import { nanoid } from 'nanoid';
+import { ScrapingJob } from '../models/ScrapingJob';
 import { logger } from '../utils/logger';
 import { config } from '../config/config';
-
-// Define types for Apify data structure
-interface ApifyItemAttribute {
-  name: string;
-  value: string;
-}
-
-interface ApifyLocationDetail {
-  city?: string;
-  state?: string;
-  postal_code?: string;
-}
-
-interface ApifyLocation {
-  latitude?: number;
-  longitude?: number;
-  reverse_geocode_detailed?: ApifyLocationDetail;
-  reverse_geocode?: {
-    city?: string;
-    state?: string;
-    city_page?: {
-      display_name?: string;
-      id?: string;
-    };
-  };
-  [key: string]: any;
-}
-
-interface ApifyListingPrice {
-  amount?: string | number;
-  currency?: string;
-  formatted_amount?: string;
-}
-
-interface ApifyListingImage {
-  uri?: string;
-}
-
-interface ApifyPrimaryListingPhoto {
-  listing_image?: ApifyListingImage;
-  image?: ApifyListingImage;
-  id?: string;
-}
-
-interface ApifyDescriptionObject {
-  text?: string;
-  [key: string]: any;
-}
-
-interface ApifyItem {
-  // Standard fields we were using before
-  title?: string;
-  name?: string;
-  price?: string | number;
-  prix?: string | number;
-  description?: string;
-  desc?: string;
-  imageUrl?: string;
-  image?: string | { uri: string };
-  img?: string;
-  thumbnail?: string;
-  location?: string | ApifyLocation;
-  lieu?: string;
-  url?: string;
-  link?: string;
-  href?: string;
-  uri?: string;
-  postedAt?: string;
-  date?: string;
-  attributes?: ApifyItemAttribute[];
-  
-  // New fields from raw data
-  id?: string;
-  marketplace_listing_title?: string;
-  custom_title?: string;
-  listing_price?: ApifyListingPrice;
-  redacted_description?: string | ApifyDescriptionObject;
-  primary_listing_photo?: ApifyPrimaryListingPhoto;
-  listingUrl?: string;
-  listing_photos?: Array<{image: {uri: string}}>;
-  [key: string]: any;
-}
+import {
+  ApifyActorInput,
+  ApifyItem,
+  ApifyLocation,
+  ApifyItemAttribute,
+  ApifyLocationDetail,
+  ApifyListingPrice,
+  ApifyListingImage,
+  ApifyDescriptionObject,
+  ApifyPrimaryListingPhoto
+} from '../types/apifyTypes';
 
 // Initialize Apify client
 const apifyClient = new ApifyClient({
@@ -242,6 +173,41 @@ export class ApifyService {
         progress: 0
       };
     }
+  }
+
+  async startScrapingForUser(
+    userId: number,
+    url: string,
+    options: ApifyActorInput
+  ): Promise<ScrapingJob> {
+    // 1. Créer session avec user_id
+    // 2. Lancer scraping
+    // 3. Enregistrer job en base (sans paiement initial)
+    // Note: Le paiement se fait au moment du téléchargement
+    throw new Error('Method not implemented.');
+  }
+
+  async linkPaymentToJob(jobId: number, paymentId: number): Promise<void> {
+    // Associer un paiement à un job de scraping
+    throw new Error('Method not implemented.');
+  }
+
+  async getUserScrapingHistory(
+    userId: number,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<{
+    jobs: ScrapingJob[];
+    total: number;
+    hasMore: boolean;
+  }> {
+    // Historique paginé des scrapes utilisateur
+    throw new Error('Method not implemented.');
+  }
+
+  async getScrapingJobDetails(jobId: number, userId: number): Promise<ScrapingJob | null> {
+    // Détails d'un job spécifique
+    throw new Error('Method not implemented.');
   }
 
   /**

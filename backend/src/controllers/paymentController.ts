@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import Stripe from 'stripe';
 import { stripeService } from '../services/stripeService';
 import { sessionService, Session } from '../services/sessionService';
+import { auditService } from '../services/auditService';
 import { ApiError } from '../middlewares/errorHandler';
 import { logger } from '../utils/logger';
 import { PLANS } from '../config/plans';
@@ -39,12 +40,13 @@ export class PaymentController {
       logger.info(`Vérification du paiement pour la session: ${sessionId}`);
       
       // Récupérer la session
-      const session = sessionService.getSession(sessionId);
+      const session = await sessionService.getSession(sessionId);
       
-      if (!session) {
-        logger.warn(`Session with ID ${sessionId} not found during payment verification`);
-        throw new ApiError(404, `Session with ID ${sessionId} not found`);
+      if (!session || !session.totalItems) {
+        throw new ApiError(400, 'Session ID is required');
       }
+      
+      logger.info(`Vérification du paiement pour la session: ${sessionId}`);
       
       // Vérifier si c'est une session temporaire
       const isTemporarySession = sessionId.startsWith('temp_');
@@ -58,7 +60,7 @@ export class PaymentController {
       // Si la session a un downloadUrl mais n'est pas marquée comme payée, la mettre à jour
       if (hasPaidDownloadUrl && !session.isPaid) {
         logger.info(`Session ${sessionId} a une URL de téléchargement mais n'est pas marquée comme payée. Mise à jour...`);
-        sessionService.updateSession(sessionId, { isPaid: true });
+        await sessionService.updateSession(sessionId, { isPaid: true });
       }
       
       // Renvoyer le statut de paiement et les informations de la session
@@ -66,7 +68,7 @@ export class PaymentController {
         isPaid,
         packId: session.packId || 'pack-decouverte',
         datasetId: session.datasetId || null,
-        createdAt: session.createdAt || new Date(),
+        createdAt: session.created_at || new Date(),
         downloadUrl: session.downloadUrl || null,
         downloadToken: session.downloadToken || null
       };
@@ -74,7 +76,7 @@ export class PaymentController {
       // Si la session est payée mais n'a pas de token de téléchargement, en générer un
       if (isPaid && !session.downloadToken) {
         const downloadToken = Buffer.from(`${sessionId}:${new Date().getTime()}:paid`).toString('base64');
-        sessionService.updateSession(sessionId, { downloadToken });
+        await sessionService.updateSession(sessionId, { downloadToken });
         response.downloadToken = downloadToken;
         logger.info(`Génération d'un nouveau token de téléchargement pour la session ${sessionId}: ${downloadToken}`);
       }
@@ -105,13 +107,13 @@ export class PaymentController {
       }
 
       // Check if session exists
-      const session = sessionService.getSession(sessionId);
+      const session = await sessionService.getSession(sessionId);
       if (!session) {
         throw new ApiError(404, `Session with ID ${sessionId} not found`);
       }
 
       // Create Stripe checkout session with metadata and client_reference_id
-      const stripeSession = await stripeService.createCheckoutSession({
+      const checkoutSession = await stripeService.createCheckoutSession({
         packId,
         packName: pack.name,
         amount: pack.price,
@@ -126,8 +128,8 @@ export class PaymentController {
 
       // Return the session ID and URL
       res.status(200).json({
-        sessionId: stripeSession.id,
-        url: stripeSession.url
+        sessionId: checkoutSession.id,
+        url: checkoutSession.url
       });
     } catch (error) {
       next(error);
@@ -223,7 +225,7 @@ export class PaymentController {
   /**
    * Handle checkout.session.completed event
    */
-  private async handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
+  private async handleCheckoutSessionCompleted(session: Stripe.Checkout.Session): Promise<void> {
     // Stratégie pour trouver le sessionId:
     // 1. D'abord chercher dans les métadonnées
     // 2. Ensuite chercher dans client_reference_id
@@ -256,30 +258,31 @@ export class PaymentController {
     else {
       logger.warn('⚠️ Aucun sessionId trouvé dans les métadonnées ou client_reference_id, recherche de la session la plus récente non payée');
       
-      // Trouver la session la plus récente non payée
-      const sessions = sessionService.getAllSessions();
-      const unpaidSessions = sessions.filter(s => !s.isPaid);
-      
-      if (unpaidSessions.length === 0) {
-        logger.warn('❌ Aucune session non payée trouvée lors du traitement du webhook de paiement');
-        return;
+      // Si pas de session ID dans les métadonnées, essayer de le trouver dans les sessions existantes
+      if (!sessionId) {
+        const allSessions = await sessionService.getAllSessions();
+        const potentialSessions = allSessions.filter((s: Session) => s.payment_intent_id === session.payment_intent);
+        
+        if (potentialSessions.length > 0) {
+          // Trier par date de création pour prendre la plus récente
+          potentialSessions.sort((a: Session, b: Session) => {
+            const dateA = new Date(a.created_at || 0).getTime();
+            const dateB = new Date(b.created_at || 0).getTime();
+            return dateB - dateA;
+          });
+          sessionId = potentialSessions[0].id;
+          logger.info(`Session ID trouvé par recherche inversée: ${sessionId}`);
+        }
       }
-      
-      // Trier par date de création (la plus récente d'abord)
-      unpaidSessions.sort((a, b) => {
-        const dateA = new Date(a.createdAt || 0);
-        const dateB = new Date(b.createdAt || 0);
-        return dateB.getTime() - dateA.getTime();
-      });
-      
-      // Utiliser la session non payée la plus récente
-      const mostRecentSession = unpaidSessions[0];
-      sessionId = mostRecentSession.id;
-      logger.info(`✅ Utilisation de la session non payée la plus récente: ${sessionId}`);
     }
     
+    if (!sessionId) {
+      logger.error('❌ No sessionId found after all checks in handleCheckoutSessionCompleted');
+      return;
+    }
+
     // Récupérer la session de scraping
-    const scrapingSession = sessionService.getSession(sessionId);
+    const scrapingSession = await sessionService.getSession(sessionId);
     
     if (!scrapingSession) {
       logger.warn(`❌ Session ${sessionId} not found when processing payment webhook`);
@@ -291,7 +294,7 @@ export class PaymentController {
     // Marquer la session comme ayant des données si elle a un datasetId
     if (scrapingSession.datasetId && !scrapingSession.hasData) {
       scrapingSession.hasData = true;
-      sessionService.updateSession(sessionId, { hasData: true });
+      await sessionService.updateSession(sessionId, { hasData: true });
       logger.info(`✅ Session ${sessionId} marked as having data`);
     }
     
@@ -302,13 +305,9 @@ export class PaymentController {
       logger.info(`🔗 Génération de l'URL de téléchargement automatique: ${downloadUrl}`);
       
       // Mettre à jour la session avec les informations de paiement
-      const updatedSession = sessionService.updateSession(sessionId, {
+      const updatedSession = await sessionService.updateSession(sessionId, {
         isPaid: true,
         packId,
-        paymentIntentId: typeof session.payment_intent === 'string' ? 
-          session.payment_intent : 'checkout_session_payment',
-        paymentCompletedAt: new Date().toISOString(),
-        paymentStatus: 'succeeded',
         downloadUrl
       });
       
@@ -317,7 +316,7 @@ export class PaymentController {
       
       // Générer un jeton de téléchargement temporaire
       const downloadToken = Buffer.from(`${sessionId}:${new Date().getTime()}:paid`).toString('base64');
-      sessionService.updateSession(sessionId, { downloadToken });
+      await sessionService.updateSession(sessionId, { downloadToken });
       logger.info(`🔑 Download token generated for session ${sessionId}: ${downloadToken}`);
       
     } catch (error) {
@@ -331,30 +330,54 @@ export class PaymentController {
   private async handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent) {
     const metadata = paymentIntent.metadata || {};
     let sessionId = metadata.sessionId;
-    
+
     if (!sessionId && paymentIntent.description) {
       const match = paymentIntent.description.match(/session[_\-]?id[:\s]?([\w\-]+)/i);
       if (match && match[1]) {
         sessionId = match[1];
-        logger.info(`Session ID trouvé dans la description du payment intent: ${sessionId}`);
+        logger.info(`Session ID found in payment intent description: ${sessionId}`);
       }
     }
-    
+
     if (!sessionId) {
-      logger.warn(`Aucun session ID trouvé dans les métadonnées du payment intent: ${paymentIntent.id}`);
+      logger.warn(`No session ID found in payment intent metadata: ${paymentIntent.id}`);
       return;
     }
-    
+
     try {
-      sessionService.updateSession(sessionId, {
+      const session = await sessionService.getSession(sessionId);
+      if (!session) {
+        logger.warn(`Session ${sessionId} not found for successful payment.`);
+        return;
+      }
+
+      // Update session to mark as paid
+      await sessionService.updateSession(sessionId, {
         isPaid: true,
-        paymentIntentId: paymentIntent.id,
-        paymentCompletedAt: new Date().toISOString(),
-        paymentStatus: 'succeeded'
+        payment_intent_id: paymentIntent.id,
       });
+
       logger.info(`Payment succeeded for session ${sessionId}, payment intent: ${paymentIntent.id}`);
+
+      // Record the purchase in the audit table
+      if (session.user_id && session.packId && session.downloadUrl) {
+        await auditService.recordPurchase({
+          user_id: session.user_id,
+          session_id: sessionId,
+          pack_id: session.packId,
+          payment_intent_id: paymentIntent.id,
+          amount_paid: paymentIntent.amount / 100, // Stripe amount is in cents
+          currency: paymentIntent.currency,
+          download_url: session.downloadUrl,
+        });
+        logger.info(`Purchase for session ${sessionId} successfully recorded in audit log.`);
+      } else {
+        logger.warn(`Could not record purchase for session ${sessionId} due to missing data: `,
+          { userId: session.user_id, packId: session.packId, downloadUrl: session.downloadUrl });
+      }
+
     } catch (error) {
-      logger.warn(`Failed to update session ${sessionId} for successful payment: ${error}`);
+      logger.error(`Failed to process successful payment for session ${sessionId}:`, error);
     }
   }
 
@@ -371,12 +394,12 @@ export class PaymentController {
     }
     
     try {
-      sessionService.updateSession(sessionId, {
-        isPaid: false,
-        paymentIntentId: paymentIntent.id,
-        paymentStatus: 'failed',
-        paymentError: paymentIntent.last_payment_error?.message || 'Payment failed'
-      });
+      if (sessionId) {
+        await sessionService.updateSession(sessionId, {
+          isPaid: false,
+          payment_intent_id: paymentIntent.id
+        });
+      }
       logger.warn(`Payment failed for session ${sessionId}, payment intent: ${paymentIntent.id}`);
     } catch (error) {
       logger.warn(`Failed to update session ${sessionId} for failed payment: ${error}`);

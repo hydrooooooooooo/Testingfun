@@ -7,6 +7,9 @@ import cors from 'cors';
 import { sessionService } from '../services/sessionService';
 import { logger } from '../utils/logger';
 import { config } from '../config/config';
+import { protect } from '../middlewares/authMiddleware';
+import db from '../database';
+import { PLANS } from '../config/plans';
 
 const router = Router();
 
@@ -72,6 +75,7 @@ router.post(
     preflightContinue: false,
     optionsSuccessStatus: 204
   }),
+  protect, // Protéger la route
   [
     body('sessionId').isString().withMessage('Session ID is required'),
     body('packId').optional().isString(),
@@ -84,6 +88,8 @@ router.post(
         return res.status(403).json({ error: 'Force payment only available in development' });
       }
       
+      // @ts-ignore
+      const userId = req.user.id as number;
       const { sessionId, packId = 'pack-pro' } = req.body;
       
       logger.info(`🔧 FORCE PAYMENT demandé pour session: ${sessionId}`);
@@ -98,6 +104,33 @@ router.post(
       const downloadUrl = `${config.server.frontendUrl}/download?session_id=${sessionId}&pack_id=${packId}&autoDownload=true&format=excel`;
       const downloadToken = Buffer.from(`${sessionId}:${Date.now()}:paid`).toString('base64');
       
+      // Mettre à jour la base de données utilisateur avec Knex
+      const plan = PLANS.find(p => p.id === packId);
+      if (plan) {
+        await db.transaction(async trx => {
+          // Incrémenter les crédits de l'utilisateur
+          await trx('users')
+            .where({ id: userId })
+            .increment('credits', plan.nbDownloads);
+
+          // Créer un enregistrement de paiement
+          await trx('payments').insert({
+            user_id: userId,
+            amount: plan.price,
+            currency: plan.currency,
+            stripeCheckoutId: `force_${sessionId}`,
+            status: 'succeeded',
+            packId: plan.id,
+            creditsPurchased: plan.nbDownloads,
+            created_at: new Date(),
+            updated_at: new Date(),
+          });
+        });
+        logger.info(`Crédits et paiement ajoutés pour l'utilisateur ${userId} pour le pack ${packId}`);
+      } else {
+        logger.warn(`Plan ${packId} non trouvé, les crédits utilisateur n'ont pas été mis à jour.`);
+      }
+
       const updatedSession = sessionService.updateSession(sessionId, {
         isPaid: true,
         packId,

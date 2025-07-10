@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { adminController } from '../controllers/adminController';
-import { apiKeyAuth } from '../middlewares/apiKeyAuth';
 import { param } from 'express-validator';
 import { validate } from '../middlewares/validationMiddleware';
 
@@ -15,7 +14,7 @@ const router = Router();
  */
 router.get(
   '/sessions',
-  apiKeyAuth,
+
   adminController.getAllSessions.bind(adminController)
 );
 
@@ -26,7 +25,7 @@ router.get(
  */
 router.get(
   '/sessions/:sessionId',
-  apiKeyAuth,
+
   [
     param('sessionId').isString().withMessage('Session ID is required'),
   ],
@@ -41,7 +40,7 @@ router.get(
  */
 router.get(
   '/stats',
-  apiKeyAuth,
+
   adminController.getDashboardStats.bind(adminController)
 );
 

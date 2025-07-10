@@ -1,8 +1,6 @@
 import { nanoid } from 'nanoid';
 import { logger } from '../utils/logger';
-import fs from 'fs';
-import path from 'path';
-import { config } from '../config/config';
+import db from '../database';
 
 // Session status enum
 export enum SessionStatus {
@@ -12,321 +10,185 @@ export enum SessionStatus {
   FAILED = 'failed'
 }
 
-// Session interface
+// Session interface matching the database table
 export interface Session {
   id: string;
-  url: string;
-  createdAt: Date;
-  updatedAt?: Date;
+  user_id?: number;
   status: 'pending' | 'running' | 'completed' | 'failed';
-  data?: any;
-  error?: string;
-  isPaid: boolean;
-  paymentIntentId?: string;
-  exportUrl?: string;
-  datasetId?: string;
   actorRunId?: string;
+  datasetId?: string;
+  isPaid: boolean;
   packId?: string;
-  // Nouveaux champs pour la gestion des paiements
-  paymentCompletedAt?: string;
-  paymentStatus?: 'pending' | 'succeeded' | 'failed';
-  paymentError?: string;
-  paymentPending?: boolean;
-  paymentStartedAt?: string;
-  // URL de téléchargement automatique après paiement
   downloadUrl?: string;
-  // Indique si la session contient des données de scraping
-  hasData?: boolean;
-  // Token de téléchargement unique pour autoriser un téléchargement sans nouvelle vérification
   downloadToken?: string;
+  totalItems?: number;
+  previewItems?: any; // JSON field
+  hasData: boolean;
+  payment_intent_id?: string | null;
+  created_at: Date;
+  updated_at: Date;
 }
 
 /**
- * Session service for managing scraping sessions
- * Uses file-based persistent storage with in-memory cache
+ * Session service for managing scraping sessions in the database.
  */
 class SessionService {
-  private sessions: Map<string, Session>;
-  private readonly storagePath: string;
-  private readonly storageType: string;
-
-  constructor() {
-    this.sessions = new Map<string, Session>();
-    this.storageType = config.session.storage;
-    this.storagePath = path.join(process.cwd(), 'data', 'sessions.json');
-    
-    // Initialize storage
-    this.initializeStorage();
-    logger.info(`Session service initialized with ${this.storageType} storage`);
-  }
 
   /**
-   * Initialize storage based on configuration
+   * Create a new session in the database.
+   * @param sessionData Data for the new session, including an optional user_id.
+   * @returns The newly created session object.
    */
-  private initializeStorage(): void {
-    if (this.storageType === 'file') {
-      try {
-        this.loadSessionsFromFile();
-      } catch (error: any) {
-        logger.error(`Failed to load sessions from file: ${error?.message || 'Unknown error'}`);
-        // Create empty sessions file if it doesn't exist
-        this.saveSessionsToFile();
-      }
-    }
-  }
-
-  /**
-   * Load sessions from file
-   */
-  private loadSessionsFromFile(): void {
-    try {
-      // Check if file exists
-      if (!fs.existsSync(this.storagePath)) {
-        logger.info(`Sessions file not found at ${this.storagePath}, creating new file`);
-        this.saveSessionsToFile();
-        return;
-      }
-
-      // Read and parse file
-      const data = fs.readFileSync(this.storagePath, 'utf8');
-      const sessionsArray: Session[] = JSON.parse(data);
-      
-      // Convert dates from strings back to Date objects
-      sessionsArray.forEach(session => {
-        session.createdAt = new Date(session.createdAt);
-        if (session.updatedAt) {
-          session.updatedAt = new Date(session.updatedAt);
-        }
-      });
-
-      // Populate the in-memory map
-      this.sessions.clear();
-      sessionsArray.forEach(session => {
-        this.sessions.set(session.id, session);
-      });
-
-      logger.info(`Loaded ${sessionsArray.length} sessions from file`);
-    } catch (error: any) {
-      logger.error(`Error loading sessions from file: ${error?.message || 'Unknown error'}`);
-      throw error;
-    }
-  }
-
-  /**
-   * Save sessions to file
-   */
-  private saveSessionsToFile(): void {
-    if (this.storageType !== 'file') return;
-    
-    try {
-      // Ensure directory exists
-      const dir = path.dirname(this.storagePath);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
-
-      // Convert sessions map to array and save to file
-      const sessionsArray = Array.from(this.sessions.values());
-      fs.writeFileSync(this.storagePath, JSON.stringify(sessionsArray, null, 2), 'utf8');
-      logger.info(`Saved ${sessionsArray.length} sessions to file`);
-    } catch (error: any) {
-      logger.error(`Error saving sessions to file: ${error?.message || 'Unknown error'}`);
-    }
-  }
-
-  /**
-   * Create a new session
-   * @param sessionData Session data or URL to scrape
-   * @returns Session object
-   */
-  createSession(sessionData: Session | string): Session {
-    // If sessionData is a string, treat it as a URL
-    if (typeof sessionData === 'string') {
-      const id = nanoid(10);
-      const session: Session = {
-        id,
-        url: sessionData,
-        createdAt: new Date(),
-        status: 'pending',
-        isPaid: false
-      };
-
-      this.sessions.set(id, session);
-      logger.info(`Session created: ${id} for URL: ${sessionData}`);
-      
-      // Persist to storage
-      if (this.storageType === 'file') {
-        this.saveSessionsToFile();
-      }
-      
-      return session;
-    }
-    
-    // If sessionData is a Session object
-    const session = sessionData;
-    if (!session.id) {
-      session.id = nanoid(10);
-    }
-    if (!session.createdAt) {
-      session.createdAt = new Date();
-    }
-    if (session.status === undefined) {
-      session.status = 'pending';
-    }
-    if (session.isPaid === undefined) {
-      session.isPaid = false;
-    }
-
-    this.sessions.set(session.id, session);
-    logger.info(`Session created: ${session.id} for URL: ${session.url}`);
-    
-    // Persist to storage
-    if (this.storageType === 'file') {
-      this.saveSessionsToFile();
-    }
-    
-    return session;
-  }
-
-  /**
-   * Get a session by ID
-   * @param id Session ID
-   * @returns Session object or null if not found
-   */
-  getSession(id: string): Session | null {
-    const session = this.sessions.get(id);
-    if (!session) {
-      logger.warn(`Session not found: ${id}`);
-      return null;
-    }
-    return session;
-  }
-
-  /**
-   * Get the most recent session that has data but is not paid yet
-   * @returns Most recent unpaid session with data or null if none found
-   */
-  getMostRecentUnpaidSession(): Session | null {
-    let mostRecent: Session | null = null;
-    let mostRecentDate = new Date(0); // Start with oldest possible date
-
-    // Iterate through all sessions to find the most recent unpaid one with data
-    for (const [id, session] of this.sessions.entries()) {
-      // Considérer une session comme ayant des données si elle a un datasetId ou si hasData est explicitement true
-      const hasData = session.hasData === true || (session.datasetId !== undefined && session.datasetId !== null);
-      
-      if (!session.isPaid && hasData && session.createdAt > mostRecentDate) {
-        mostRecent = session;
-        mostRecentDate = session.createdAt;
-      }
-    }
-
-    if (mostRecent) {
-      logger.info(`Found most recent unpaid session: ${mostRecent.id} created at ${mostRecent.createdAt.toISOString()}`);
-    } else {
-      logger.warn('No unpaid sessions with data found');
-    }
-
-    return mostRecent;
-  }
-
-  /**
-   * Update a session
-   * @param id Session ID
-   * @param updates Partial session object with updates
-   * @returns Updated session or null if not found
-   */
-  updateSession(id: string, updates: Partial<Session>): Session | null {
-    const session = this.getSession(id);
-    if (!session) {
-      return null;
-    }
-
-    const updatedSession = { 
-      ...session, 
-      ...updates,
-      updatedAt: new Date() // Always set updatedAt when updating a session
+  async createSession(sessionData: Partial<Session> & { user_id?: number }): Promise<Session> {
+    const id = `sess_${nanoid()}`;
+    const newSessionData: Omit<Session, 'created_at' | 'updated_at'> = {
+      id,
+      status: SessionStatus.PENDING,
+      isPaid: false,
+      hasData: false,
+      ...sessionData,
     };
-    this.sessions.set(id, updatedSession);
-    logger.info(`Session updated: ${id}`);
-    
-    // Persist to storage
-    if (this.storageType === 'file') {
-      this.saveSessionsToFile();
+
+    const [createdSession] = await db('scraping_sessions').insert(newSessionData).returning('*');
+    logger.info(`Session created in DB: ${createdSession.id}`);
+    return createdSession;
+  }
+
+  /**
+   * Get a session by its ID from the database.
+   * @param id Session ID.
+   * @returns The session object or null if not found.
+   */
+  async getSession(id: string): Promise<Session | null> {
+    const session = await db('scraping_sessions').where({ id }).first();
+    if (!session) {
+      logger.warn(`Session not found in DB: ${id}`);
+      return null;
     }
-    
+    // Knex returns JSON as string, parse it.
+    if (typeof session.previewItems === 'string') {
+      try {
+        session.previewItems = JSON.parse(session.previewItems);
+      } catch (error) {
+        logger.error(`Failed to parse previewItems for session ${id}`, error);
+        session.previewItems = null;
+      }
+    }
+    return session;
+  }
+
+  /**
+   * Get the most recent session that has data but is not paid yet.
+   * @returns The most recent unpaid session with data or null if none found.
+   */
+  async getMostRecentUnpaidSession(): Promise<Session | null> {
+    const session = await db('scraping_sessions')
+      .where('isPaid', false)
+      .andWhere('hasData', true)
+      .orderBy('created_at', 'desc')
+      .first();
+
+    if (session) {
+      logger.info(`Found most recent unpaid session from DB: ${session.id}`);
+      return session;
+    } else {
+      logger.info('No unpaid sessions with data found in DB');
+      return null;
+    }
+  }
+
+  /**
+   * Update a session in the database.
+   * @param id Session ID.
+   * @param updates Partial session object with updates.
+   * @returns The updated session or null if not found.
+   */
+  async updateSession(id: string, updates: Partial<Session>): Promise<Session | null> {
+    // Stringify JSON fields before updating
+    if (updates.previewItems) {
+      updates.previewItems = JSON.stringify(updates.previewItems);
+    }
+
+    const [updatedSession] = await db('scraping_sessions')
+      .where({ id })
+      .update({
+        ...updates,
+        updated_at: new Date(),
+      })
+      .returning('*');
+
+    if (!updatedSession) {
+      logger.warn(`Failed to update session in DB (not found): ${id}`);
+      return null;
+    }
+
+    logger.info(`Session updated in DB: ${id}`);
     return updatedSession;
   }
 
   /**
-   * Delete a session
-   * @param id Session ID
-   * @returns true if deleted, false if not found
+   * Delete a session from the database.
+   * @param id Session ID.
+   * @returns true if deleted, false if not found.
    */
-  deleteSession(id: string): boolean {
-    const deleted = this.sessions.delete(id);
-    if (deleted) {
-      logger.info(`Session deleted: ${id}`);
-      
-      // Persist to storage
-      if (this.storageType === 'file') {
-        this.saveSessionsToFile();
-      }
-    } else {
-      logger.warn(`Failed to delete session (not found): ${id}`);
+  async deleteSession(id: string): Promise<boolean> {
+    const deletedCount = await db('scraping_sessions').where({ id }).del();
+    if (deletedCount > 0) {
+      logger.info(`Session deleted from DB: ${id}`);
+      return true;
     }
-    return deleted;
+    logger.warn(`Failed to delete session from DB (not found): ${id}`);
+    return false;
   }
 
   /**
-   * Get all sessions
-   * @returns Array of all sessions
+   * Get all sessions from the database.
+   * @returns Array of all sessions.
    */
-  getAllSessions(): Session[] {
-    return Array.from(this.sessions.values());
+  async getAllSessions(): Promise<Session[]> {
+    return db('scraping_sessions').select('*').orderBy('created_at', 'desc');
   }
 
   /**
-   * Mark a session as paid
-   * @param id Session ID
-   * @param paymentIntentId Stripe payment intent ID
-   * @returns Updated session or null if not found
+   * Mark a session as paid.
+   * @param id Session ID.
+   * @returns The updated session or null if not found.
    */
-  markSessionAsPaid(id: string, paymentIntentId: string): Session | null {
-    return this.updateSession(id, { 
-      isPaid: true, 
-      paymentIntentId 
-    });
+  async markSessionAsPaid(id: string): Promise<Session | null> {
+    return this.updateSession(id, { isPaid: true });
   }
 
   /**
-   * Set session export URL
-   * @param id Session ID
-   * @param exportUrl URL to download the export
-   * @returns Updated session or null if not found
+   * Set session download URL.
+   * @param id Session ID.
+   * @param downloadUrl URL to download the export.
+   * @returns The updated session or null if not found.
    */
-  setExportUrl(id: string, exportUrl: string): Session | null {
-    return this.updateSession(id, { exportUrl });
+  async setDownloadUrl(id: string, downloadUrl: string): Promise<Session | null> {
+    return this.updateSession(id, { downloadUrl });
   }
 
   /**
-   * Get dashboard statistics
-   * @returns Object with statistics
+   * Get dashboard statistics from the database.
+   * @returns Object with statistics.
    */
-  getStats() {
-    const sessions = this.getAllSessions();
-    const totalSessions = sessions.length;
-    const completedSessions = sessions.filter(s => s.status === 'completed').length;
-    const paidSessions = sessions.filter(s => s.isPaid).length;
-    const failedSessions = sessions.filter(s => s.status === 'failed').length;
-    
+  async getStats() {
+    const totalSessions = await db('scraping_sessions').count('id as count').first();
+    const completedSessions = await db('scraping_sessions').where('status', 'completed').count('id as count').first();
+    const paidSessions = await db('scraping_sessions').where('isPaid', true).count('id as count').first();
+    const failedSessions = await db('scraping_sessions').where('status', 'failed').count('id as count').first();
+
+    const total = Number(totalSessions?.count || 0);
+    const completed = Number(completedSessions?.count || 0);
+
     return {
-      totalSessions,
-      completedSessions,
-      paidSessions,
-      failedSessions,
-      revenue: paidSessions * 9.99, // Assuming €9.99 per paid session
-      successRate: totalSessions > 0 ? (completedSessions / totalSessions) * 100 : 0
+      totalSessions: total,
+      completedSessions: completed,
+      paidSessions: Number(paidSessions?.count || 0),
+      failedSessions: Number(failedSessions?.count || 0),
+      // Revenue calculation should be implemented based on the payments table
+      revenue: 0, 
+      successRate: total > 0 ? (completed / total) * 100 : 0
     };
   }
 }

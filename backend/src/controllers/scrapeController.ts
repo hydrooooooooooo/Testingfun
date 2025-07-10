@@ -41,24 +41,18 @@ export class ScrapeController {
       logger.info(`Starting scrape for URL: ${url}, sessionId: ${sessionId}, options:`, scrapingOptions);
 
       // Create session record with PENDING status first
-      session = sessionService.createSession({
+      session = await sessionService.createSession({
         id: sessionId,
-        url,
         status: SessionStatus.PENDING,
-        createdAt: new Date(),
         isPaid: false,
-        data: {
-          nbItems: 0,
-          startedAt: new Date().toISOString(),
-          previewItems: []
-        }
+        user_id: (req as any).user?.id, // Attach user if available
       });
 
       // Start APIFY scraping job with options
       const { datasetId, actorRunId } = await apifyService.startScraping(url, sessionId, validLimit, scrapingOptions);
 
       // Update session with RUNNING status and Apify details
-      session = sessionService.updateSession(sessionId, {
+      session = await sessionService.updateSession(sessionId, {
         datasetId,
         actorRunId,
         status: SessionStatus.RUNNING
@@ -76,9 +70,8 @@ export class ScrapeController {
     } catch (error) {
       // If we have a session, update it with FAILED status
       if (session && sessionId) {
-        sessionService.updateSession(sessionId, {
-          status: SessionStatus.FAILED,
-          error: error instanceof Error ? error.message : 'Unknown error'
+        await sessionService.updateSession(sessionId, {
+          status: SessionStatus.FAILED
         });
       }
 
@@ -102,7 +95,7 @@ export class ScrapeController {
       logger.info(`Récupération des résultats pour la session ${sessionId}`);
 
       // Get session from service
-      let session = sessionService.getSession(sessionId);
+      let session = await sessionService.getSession(sessionId);
       if (!session) {
         logger.error(`Session avec ID ${sessionId} non trouvée`);
         throw new ApiError(404, `Session with ID ${sessionId} not found`);
@@ -114,45 +107,33 @@ export class ScrapeController {
         datasetId: session.datasetId,
         actorRunId: session.actorRunId,
         isPaid: session.isPaid,
-        hasData: !!session.data
+        hasData: session.hasData
       })}`);
 
       // Si la session a un actorRunId, vérifier le statut auprès d'APIFY
       // Mais d'abord, s'assurer que nous avons des données de base même si APIFY échoue
-      if (!session.data) {
-        session = sessionService.updateSession(sessionId, {
-          data: {
-            nbItems: 0,
-            startedAt: new Date().toISOString(),
-            previewItems: []
-          }
+      if (!session.previewItems) {
+        session = await sessionService.updateSession(sessionId, {
+          previewItems: []
         }) || session;
       }
       
       // Si la session a un actorRunId, vérifier le statut auprès d'APIFY
       if (session.actorRunId) {
         logger.info(`Récupération du statut Apify pour l'acteur ${session.actorRunId}`);
-        const runStatus = await apifyService.getRunStatus(session.actorRunId);
-        logger.info(`Statut Apify reçu: ${runStatus.status}`);
+        const { status: runStatus } = await apifyService.getRunStatus(session.actorRunId);
+        logger.info(`Statut Apify reçu: ${runStatus}`);
         
         // Update session status based on APIFY run status
         // Vérifier si le statut indique que le job est terminé
-        const finishedStatuses = ['SUCCEEDED', 'FAILED', 'ABORTED', 'TIMED-OUT'];
-        const isFinished = finishedStatuses.includes(runStatus.status);
-        
+        const isFinished = runStatus === 'SUCCEEDED' || runStatus === 'FAILED' || runStatus === 'TIMED-OUT' || runStatus === 'ABORTED';
+
         if (isFinished) {
-          const status = runStatus.status === 'SUCCEEDED' ? SessionStatus.FINISHED : SessionStatus.FAILED;
-          
-          // Initialize data object if it doesn't exist
-          const sessionData = session.data || {};
+          const status = runStatus === 'SUCCEEDED' ? SessionStatus.FINISHED : SessionStatus.FAILED;
           
           // Update session with new status and stats
-          sessionService.updateSession(sessionId, { 
-            status,
-            data: {
-              ...sessionData,
-              finishedAt: new Date().toISOString()
-            }
+          await sessionService.updateSession(sessionId, { 
+            status: SessionStatus.FINISHED
           });
 
           // If finished successfully, get preview items
@@ -173,27 +154,18 @@ export class ScrapeController {
               this.createBackupFile(sessionId, session.datasetId, totalItemsCount, previewItems, allItems.slice(0, 10));
               
               // Update session with preview items and accurate statistics
-              sessionService.updateSession(sessionId, { 
-                data: {
-                  ...sessionData,
-                  finishedAt: new Date().toISOString(),
-                  previewItems,
-                  nbItems: totalItemsCount,
-                  totalItems: totalItemsCount,
-                  totalItemsCount: totalItemsCount
-                }
+              await sessionService.updateSession(sessionId, { 
+                previewItems,
+                totalItems: totalItemsCount,
+                hasData: true
               });
               
               logger.info(`Session ${sessionId} mise à jour avec ${previewItems.length} éléments de prévisualisation sur ${totalItemsCount} éléments au total`);
             } catch (error) {
               logger.error(`Error getting preview items for session ${sessionId}:`, error);
               // Still update the session with finished status even if preview items failed
-              sessionService.updateSession(sessionId, { 
-                data: {
-                  ...sessionData,
-                  finishedAt: new Date().toISOString(),
-                  error: error instanceof Error ? error.message : 'Error getting preview items'
-                }
+              await sessionService.updateSession(sessionId, { 
+                status: SessionStatus.FAILED
               });
             }
           }
@@ -201,7 +173,7 @@ export class ScrapeController {
       }
 
       // Get the updated session
-      const updatedSession = sessionService.getSession(sessionId);
+      const updatedSession = await sessionService.getSession(sessionId);
       
       res.status(200).json({
         status: 'success',
@@ -209,9 +181,11 @@ export class ScrapeController {
           sessionId: updatedSession?.id,
           datasetId: updatedSession?.datasetId,
           status: updatedSession?.status,
-          stats: updatedSession?.data || {},
+          stats: {
+            totalItems: updatedSession?.totalItems || 0
+          },
           isPaid: updatedSession?.isPaid,
-          previewItems: updatedSession?.data?.previewItems || []
+          previewItems: updatedSession?.previewItems || []
         }
       });
     } catch (error) {
