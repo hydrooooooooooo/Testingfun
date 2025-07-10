@@ -20,19 +20,22 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { FileDown } from 'lucide-react';
 
-// Interface for a single payment
-interface Payment {
+// Interface for a single purchase, aligned with backend's `user_purchases` table
+interface Purchase {
   id: number;
-  created_at: string;
-  pack_name: string;
-  amount: string;
-  status: 'succeeded' | 'pending' | 'failed';
-  stripe_payment_id: string;
+  user_id: number;
+  session_id: string;
+  pack_id: string;
+  payment_intent_id: string;
+  amount_paid: number;
+  currency: string;
+  download_url: string;
+  purchased_at: string; // ISO date string
 }
 
 // Interface for the component's props
 interface PaymentsTabProps {
-  payments: Payment[];
+  payments: Purchase[];
 }
 
 const PaymentsTab: React.FC<PaymentsTabProps> = ({ payments }) => {
@@ -62,35 +65,29 @@ const PaymentsTab: React.FC<PaymentsTabProps> = ({ payments }) => {
             </TableHeader>
             <TableBody>
               {payments.length > 0 ? (
-                payments.map((payment) => (
-                  <TableRow key={payment.id}>
+                payments.map((purchase) => (
+                  <TableRow key={purchase.id}>
                     <TableCell>
-                      {format(new Date(payment.created_at), 'd MMM yyyy', {
+                      {format(new Date(purchase.purchased_at), 'd MMM yyyy, HH:mm', {
                         locale: fr,
                       })}
                     </TableCell>
                     <TableCell className="font-medium">
-                      {payment.pack_name || 'Achat de crédits'}
+                      {purchase.pack_id.replace(/-/g, ' ')}
                     </TableCell>
-                    <TableCell>{parseFloat(payment.amount).toFixed(2)}€</TableCell>
+                    <TableCell>{purchase.amount_paid.toFixed(2)} {purchase.currency.toUpperCase()}</TableCell>
                     <TableCell>
-                      <Badge
-                        variant={
-                          payment.status === 'succeeded'
-                            ? 'default' // 'success' variant might not exist, using 'default'
-                            : 'secondary'
-                        }
-                      >
-                        {payment.status === 'succeeded'
-                          ? 'Réussi'
-                          : 'En attente'}
+                      <Badge variant={'default'}>
+                        Réussi
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="outline" size="sm" disabled>
-                        <FileDown className="mr-2 h-4 w-4" />
-                        Facture
-                      </Button>
+                      <a href={purchase.download_url} target="_blank" rel="noopener noreferrer">
+                        <Button variant="outline" size="sm">
+                          <FileDown className="mr-2 h-4 w-4" />
+                          Télécharger
+                        </Button>
+                      </a>
                     </TableCell>
                   </TableRow>
                 ))
