@@ -17,24 +17,40 @@ interface ApifyScrapeOptions {
   extendOutputFunction?: string;
 }
 
-interface ScrapeResult {
+export interface PreviewItem {
+  title: string;
+  price: string;
+  image: string;
+  location: string;
+  url: string;
+  desc: string;
+  profileUrl?: string | null;
+  date?: string;
+  [key: string]: any; // Pour les autres champs potentiels
+}
+
+export type ScrapeStats = {
+  nbItems: number; // Nombre total d'items scrapés
+  totalItems?: number;
+  startedAt?: string; // Timestamp de début
+  finishedAt?: string; // Timestamp de fin
+  previewItems?: PreviewItem[];
+  [key: string]: any; // Pour les autres champs potentiels
+}
+
+export interface ScrapeResult {
   sessionId: string;
-  datasetId: string;
+  datasetId?: string; // Rendu optionnel car pas toujours présent
   status: string;
   progress?: number;
-  stats?: {
-    nbItems: number;
-    startedAt: string;
-    finishedAt?: string;
-    previewItems?: any[];
-    totalItems?: number;
-  };
-  previewItems?: any[];
+  stats?: ScrapeStats;
+  previewItems?: PreviewItem[];
   isPaid?: boolean;
   apifyRunId?: string;
   deepScrapeEnabled?: boolean;
   profileUrlsEnabled?: boolean;
   error?: string;
+  message?: string; // Pour les messages d'erreur du backend
 }
 
 /**
@@ -119,31 +135,24 @@ export function useApi() {
     setError(null);
     
     try {
-      console.log(`Récupération des résultats APIFY pour la session: ${sessionId}`);
+      console.log(`API: Fetching results for session ${sessionId}`);
+      const response = await axios.get(`${API_BASE_URL}/api/scrape/result`, { params: { sessionId } });
       
-      const response = await axios.get(`${API_BASE_URL}/api/scrape/result`, {
-        params: { sessionId },
-        timeout: 15000 // 15 secondes
-      });
-      
-      const result = response.data.data;
-      console.log('Résultats APIFY reçus:', result);
-      
-      // Normalisation des données APIFY
-      if (result.apifyRunId) {
-        console.log(`Run APIFY actif: ${result.apifyRunId}`);
-      }
-      
-      // Gestion des statuts APIFY spécifiques
-      if (result.status === 'READY') {
-        result.status = 'finished';
-      } else if (result.status === 'RUNNING') {
-        result.status = 'running';
-      }
-      
-      return result;
+      const session = response.data;
+
+      return {
+        sessionId: sessionId,
+        status: session.status || 'unknown',
+        stats: session.stats || (session.totalItems ? { nbItems: session.totalItems } : null),
+        previewItems: session.previewItems || [],
+        isPaid: session.isPaid || false,
+        progress: session.progress || 0,
+        error: session.error || null,
+        datasetId: session.datasetId,
+        apifyRunId: session.actorRunId
+      };
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Une erreur est survenue lors de la récupération des résultats';
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors de la récupération des résultats';
       setError(errorMessage);
       throw new Error(errorMessage);
     } finally {
@@ -172,7 +181,7 @@ export function useApi() {
       const response = await axios.post(`${API_BASE_URL}/api/apify/run/${runId}/abort`);
       return response.data;
     } catch (err: any) {
-      console.error('Erreur lors de l\'annulation du run APIFY:', err);
+      console.error("Erreur lors de l'annulation du run APIFY:", err);
       throw err;
     }
   };
@@ -185,13 +194,11 @@ export function useApi() {
     setError(null);
     
     try {
-      // CORRECTION : Route correcte avec /payment/
       const response = await axios.post(`${API_BASE_URL}/api/payment/create-payment`, {
         packId,
         sessionId
       });
       
-      // CORRECTION : Accès direct à response.data.url
       return response.data.url;
     } catch (err: any) {
       setError(err.response?.data?.message || 'Une erreur est survenue lors de la création du paiement');
@@ -208,12 +215,10 @@ export function useApi() {
     try {
       console.log(`Vérification du paiement pour la session ${sessionId}`);
       
-      // Essayer d'abord avec la route spécifique
       try {
         const response = await axios.get(`${API_BASE_URL}/api/payment/verify-payment`, {
           params: { sessionId },
           timeout: 10000
-          // Suppression des en-têtes qui causent des problèmes CORS
         });
         
         console.log('Réponse de vérification (route spécifique):', response.data);
@@ -229,11 +234,9 @@ export function useApi() {
       } catch (error) {
         console.warn('Erreur avec la route spécifique, essai avec la route générique:', error);
         
-        // Fallback sur l'ancienne route
         const fallbackResponse = await axios.get(`${API_BASE_URL}/api/verify-payment`, {
           params: { sessionId },
           timeout: 10000
-          // Suppression des en-têtes qui causent des problèmes CORS
         });
         
         console.log('Réponse de vérification (route fallback):', fallbackResponse.data);
@@ -260,172 +263,15 @@ export function useApi() {
     return `${API_BASE_URL}/api/export?sessionId=${sessionId}&format=${format}`;
   };
 
-  /**
-   * Get preview items for a session with APIFY support
-   */
-  const getPreviewItems = async (sessionId: string) => {
-    setLoading(true);
-    setError(null);
-    
-    try {
-      console.log(`Récupération des éléments de prévisualisation pour la session: ${sessionId}`);
-      
-      const response = await axios.get(`${API_BASE_URL}/api/preview-items`, {
-        params: { sessionId },
-        timeout: 8000,
-        headers: {
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache'
-        }
-      });
-      
-      let previewData = response.data;
-      console.log('Données reçues de l\'API:', previewData);
-      
-      // Normaliser les éléments de prévisualisation
-      if (previewData.previewItems && Array.isArray(previewData.previewItems)) {
-        console.log(`Normalisation de ${previewData.previewItems.length} éléments`);
-        previewData.previewItems = previewData.previewItems.map(normalizePreviewItem);
-      } else {
-        console.warn('Format de réponse API invalide');
-        previewData = { previewItems: [] };
-      }
-      
-      return previewData;
-    } catch (err: any) {
-      console.error('Erreur lors de la récupération des éléments de prévisualisation:', err);
-      setError(err.response?.data?.message || 'Une erreur est survenue lors de la récupération des éléments de prévisualisation');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  /**
-   * Normalise un élément de prévisualisation pour assurer la cohérence des propriétés
-   */
-  const normalizePreviewItem = (item: any) => {
-    if (!item || typeof item !== 'object') {
-      console.warn('normalizePreviewItem: Item invalide reçu', item);
-      return {
-        title: 'Annonce sans détails',
-        price: 'Prix non disponible',
-        desc: 'Pas de description disponible',
-        image: '',
-        location: 'Lieu non spécifié',
-        url: '#',
-        date: new Date().toISOString(),
-        profileUrl: null
-      };
-    }
-    
-    const normalized = { ...item };
-    
-    // Normaliser le titre
-    const rawTitle = item.title || item.name || item.titre || item.marketplace_listing_title;
-    normalized.title = typeof rawTitle === 'string' ? rawTitle : 'Sans titre';
-    
-    // Normaliser le prix avec support des formats APIFY
-    const rawPrice = item.price || item.prix || item.listing_price || item.priceAmount;
-    normalized.price = formatPrice(rawPrice);
-    
-    // Normaliser l'image avec support des formats APIFY
-    const rawImage = item.image || item.img || item.imageUrl || item.photo || item.primaryPhoto;
-    normalized.image = typeof rawImage === 'string' ? rawImage : '';
-    
-    // Normaliser la localisation avec support APIFY
-    const rawLocation = item.location || item.lieu || item.address || item.adresse || 
-                        (item.locationText ? item.locationText : null);
-    normalized.location = typeof rawLocation === 'string' ? rawLocation : 'Lieu non spécifié';
-    
-    // Normaliser l'URL
-    const rawUrl = item.url || item.link || item.lien || item.listingUrl;
-    normalized.url = typeof rawUrl === 'string' ? rawUrl : '#';
-    
-    // Normaliser la description avec support APIFY
-    const rawDesc = item.desc || item.description || item.content || item.contenu || 
-                   item.descriptionText || item.marketplace_listing_description;
-    normalized.desc = typeof rawDesc === 'string' ? rawDesc : 'Pas de description';
-    
-    // Ajouter l'URL du profil si disponible (spécifique APIFY)
-    const rawProfileUrl = item.profileUrl || item.sellerUrl || item.merchantUrl;
-    normalized.profileUrl = typeof rawProfileUrl === 'string' ? rawProfileUrl : null;
-    
-    // Ajouter une date si elle n'existe pas
-    if (!normalized.date) {
-      normalized.date = new Date().toISOString();
-    }
-    
-    return normalized;
-  };
-  
-  /**
-   * Formater un prix pour l'affichage avec support universel des devises
-   */
-  const formatPrice = (price: any): string => {
-    if (!price) return 'Prix non disponible';
-    
-    // Support des objets de prix APIFY
-    if (typeof price === 'object' && price !== null) {
-      if (price.amount && price.currency) {
-        const amount = typeof price.amount === 'number' ? price.amount : parseFloat(price.amount);
-        if (!isNaN(amount)) {
-          // Mappage des devises principales
-          const currencySymbols: { [key: string]: string } = {
-            'USD': '$',
-            'EUR': '€',
-            'GBP': '£',
-            'MGA': 'Ar',
-            'JPY': '¥',
-            'CNY': '¥',
-            'CHF': 'CHF',
-            'CAD': 'C$',
-            'AUD': 'A$'
-          };
-          
-          const symbol = currencySymbols[price.currency] || price.currency;
-          return `${amount.toLocaleString('fr-FR')} ${symbol}`;
-        }
-      }
-      if (price.formatted) {
-        return price.formatted;
-      }
-    }
-    
-    // Si c'est déjà une chaîne formatée
-    if (typeof price === 'string') {
-      // Si elle contient déjà un symbole ou indication de devise
-      if (/[€$£¥₹₦₵₡₪₽₩₨₴₸₦Ar]|\b(USD|EUR|GBP|MGA|JPY|CNY|CHF|CAD|AUD|XOF|XAF|CFA|FCFA)\b/i.test(price)) {
-        return price;
-      }
-      
-      // Essayer d'extraire un nombre
-      const numericPrice = parseFloat(price.replace(/[^0-9,.]/g, '').replace(',', '.'));
-      if (!isNaN(numericPrice)) {
-        return `${numericPrice.toLocaleString('fr-FR')} €`;
-      }
-      
-      return price;
-    }
-    
-    // Si c'est un nombre simple
-    if (typeof price === 'number') {
-      return `${price.toLocaleString('fr-FR')} €`;
-    }
-    
-    return 'Prix non disponible';
-  };
-
-  return {
-    loading,
-    error,
-    startScraping,
-    getScrapeResults,
-    getApifyRunStatus,
-    cancelApifyRun,
-    createPayment,
-    verifyPayment,
-    getExportUrl,
-    getPreviewItems
+  return { 
+    loading, 
+    error, 
+    startScraping, 
+    getScrapeResults, 
+    getApifyRunStatus, 
+    cancelApifyRun, 
+    createPayment, 
+    verifyPayment, 
+    getExportUrl 
   };
 }

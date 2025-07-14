@@ -1,382 +1,193 @@
-import React from "react";
-import { PLANS, Pack } from "@/lib/plans";
-import { toast } from "@/hooks/use-toast";
-import { useApi } from "@/hooks/useApi";
+import { useState, useEffect, useCallback } from 'react';
+import { useToast } from '@/components/ui/use-toast';
+import { useApi, ScrapeResult, ScrapeStats, PreviewItem } from './useApi';
 
-type ScrapeStats = {
-  nbItems: number,
-  startedAt: string,
-  finishedAt?: string,
-  previewItems?: any[],
-  totalItems?: number,
-  apifyRunId?: string,
-  deepScrapeEnabled?: boolean,
-  profileUrlsEnabled?: boolean
-};
+const POLLING_INTERVAL = 3000; // 3 secondes
 
-type ScrapeOptions = {
-  singleItem?: boolean;
-  deepScrape?: boolean;
-  getProfileUrls?: boolean;
-  maxItems?: number;
-};
+export function useScrape(initialSessionId?: string) {
+  const { getScrapeResults, startScraping: apiStartScraping, createPayment, getExportUrl } = useApi();
+  
+  const { toast } = useToast();
 
-export function useScrape() {
-  const [url, setUrl] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
-  const [showPreview, setShowPreview] = React.useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(initialSessionId || null);
+  const [status, setStatus] = useState<string>('idle');
+  const [progress, setProgress] = useState<number>(0);
+  const [stats, setStats] = useState<ScrapeStats | null>(null);
+  const [previewItems, setPreviewItems] = useState<PreviewItem[]>([]);
+  const [scrapeDone, setScrapeDone] = useState<boolean>(false);
+  const [isPaid, setIsPaid] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isPolling, setIsPolling] = useState<boolean>(false);
 
-  const [scrapePercent, setScrapePercent] = React.useState(0);
-  const [scrapeDone, setScrapeDone] = React.useState(false);
-  const [sessionId, setSessionId] = React.useState("");
-  const [datasetId, setDatasetId] = React.useState("");
-  const [stats, setStats] = React.useState<ScrapeStats | null>(null);
-
-  // État de paiement
-  const [hasPaid, setHasPaid] = React.useState(false);
-
-  const [selectedPackId, setSelectedPackId] = React.useState(PLANS[0].id);
-  const [previewItems, setPreviewItems] = React.useState<any[]>([]);
-
-  // Utiliser notre hook API
-  const api = useApi();
-
-  const selectedPack = React.useMemo(
-    () => PLANS.find(p => p.id === selectedPackId) ?? PLANS[0],
-    [selectedPackId]
-  );
-
-  function validateUrl(u: string) {
-    return /^https:\/\/(www\.)?(facebook|linkedin)\.com\/marketplace\/[\w-]+/.test(u.trim());
-  }
-
-  // Vérifier le statut du scraping avec support APIFY
-  const checkScrapeStatus = React.useCallback(async (sid: string) => {
-    try {
-      console.log(`Vérification du statut pour la session ${sid}...`);
-      const result = await api.getScrapeResults(sid);
-      console.log('Résultat de la vérification:', result);
-      
-      // Mettre à jour les états
-      if (result.datasetId) {
-        setDatasetId(result.datasetId);
-        console.log(`Dataset ID mis à jour: ${result.datasetId}`);
-      }
-      
-      // Gérer les run APIFY
-      if (result.apifyRunId) {
-        console.log(`APIFY Run ID: ${result.apifyRunId}`);
-      }
-      
-      // Traiter les previewItems
-      if (result.previewItems && Array.isArray(result.previewItems) && result.previewItems.length > 0) {
-        console.log(`${result.previewItems.length} éléments de prévisualisation trouvés`);
-        setPreviewItems(result.previewItems);
-        setShowPreview(true);
-      }
-      
-      // Mettre à jour les stats avec les nouvelles propriétés APIFY
-      if (result.stats) {
-        const updatedStats = {
-          ...result.stats,
-          previewItems: result.previewItems || result.stats.previewItems || [],
-          apifyRunId: result.apifyRunId,
-          deepScrapeEnabled: result.deepScrapeEnabled,
-          profileUrlsEnabled: result.profileUrlsEnabled
-        };
-        
-        setStats(updatedStats);
-        console.log('Stats mises à jour:', updatedStats);
-        
-        if (!result.previewItems && updatedStats.previewItems && updatedStats.previewItems.length > 0) {
-          setPreviewItems(updatedStats.previewItems);
-          setShowPreview(true);
-        }
-      }
-      
-      // Vérifier le statut de paiement
-      if (result.isPaid !== undefined) {
-        console.log(`Statut de paiement reçu: isPaid=${result.isPaid}`);
-        setHasPaid(result.isPaid);
-      }
-      
-      // Gérer les différents statuts avec support APIFY
-      if (result.status === 'running' || result.status === 'RUNNING') {
-        console.log('Statut: running - Mise à jour de la progression');
-        
-        // Pour APIFY, on peut avoir des informations plus précises sur la progression
-        if (result.progress && typeof result.progress === 'number') {
-          setScrapePercent(Math.min(result.progress, 95));
-        } else {
-          setScrapePercent(prev => {
-            const newPercent = prev + Math.floor(Math.random() * 5) + 1;
-            return Math.min(newPercent, 90);
-          });
-        }
-      } else if (result.status === 'finished' || result.status === 'FINISHED' || result.status === 'SUCCESS' || result.status === 'completed') {
-        console.log('Statut: finished/completed - Scraping terminé');
-        
-        setScrapePercent(100);
-        setScrapeDone(true);
-        setShowPreview(true);
-        setLoading(false);
-        
-        if (result.previewItems && Array.isArray(result.previewItems)) {
-          console.log(`Mise à jour des previewItems avec ${result.previewItems.length} éléments`);
-          setPreviewItems([...result.previewItems]);
-        }
-        
-        // Message de succès personnalisé selon les options utilisées
-        let successMessage = `${result.stats?.nbItems || 0} éléments extraits avec succès.`;
-        if (result.deepScrapeEnabled) {
-          successMessage += " Mode deep scrape activé.";
-        }
-        if (result.profileUrlsEnabled) {
-          successMessage += " URLs de profils incluses.";
-        }
-        
-        toast({
-          title: "Scraping terminé",
-          description: successMessage,
-          variant: "default",
-        });
-        
-      } else if (result.status === 'failed' || result.status === 'FAILED') {
-        console.log('Statut: failed - Scraping échoué');
-        setScrapePercent(0);
-        setLoading(false);
-        
-        // Message d'erreur plus spécifique selon le contexte APIFY
-        let errorMessage = "Le scraping a échoué. Veuillez réessayer.";
-        if (result.error) {
-          if (result.error.includes('rate limit')) {
-            errorMessage = "Limite de taux atteinte. Veuillez attendre quelques minutes avant de réessayer.";
-          } else if (result.error.includes('timeout')) {
-            errorMessage = "Timeout dépassé. Essayez avec moins d'éléments ou désactivez le mode deep scrape.";
-          }
-        }
-        
-        toast({
-          title: "Erreur de scraping",
-          description: errorMessage,
-          variant: "destructive",
-        });
-      }
-      
-      // Vérifier à nouveau le statut de paiement si terminé
-      if (result.status === 'finished' || result.status === 'completed') {
-        try {
-          const paymentStatus = await api.verifyPayment(sid);
-          if (paymentStatus.isPaid) {
-            setHasPaid(true);
-          }
-        } catch (paymentError) {
-          console.error('Erreur lors de la vérification du paiement:', paymentError);
-        }
-      }
-      
-      const isDone = ['finished', 'FINISHED', 'SUCCESS', 'completed', 'failed', 'FAILED'].includes(result.status);
-      if (isDone) {
-        setLoading(false);
-      }
-      return isDone;
-    } catch (error) {
-      console.error('Error checking scrape status:', error);
-      setLoading(false);
-      return false;
-    }
-  }, [api, toast]);
-
-  // Fonction pour démarrer le polling (inchangée)
-  const startPolling = React.useCallback((sid: string) => {
-    console.log(`Démarrage du polling pour la session ${sid}`);
-    
-    const pollInterval = setInterval(async () => {
-      try {
-        const isDone = await checkScrapeStatus(sid);
-        
-        if (isDone) {
-          console.log('Polling terminé, nettoyage de l\'intervalle');
-          clearInterval(pollInterval);
-          setLoading(false);
-          
-          setTimeout(() => {
-            setShowPreview(true);
-          }, 500);
-        }
-      } catch (error) {
-        console.error('Erreur pendant le polling:', error);
-        clearInterval(pollInterval);
-        setLoading(false);
-        toast({
-          title: "Erreur de communication",
-          description: "Impossible de vérifier l'état du scraping. Veuillez rafraîchir la page.",
-          variant: "destructive",
-        });
-      }
-    }, 3000); // Augmenté à 3 secondes pour APIFY
-    
-    const safetyTimeout = setTimeout(() => {
-      clearInterval(pollInterval);
-      setLoading(false);
-      setScrapePercent(0);
-      toast({
-        title: "Timeout",
-        description: "Le scraping prend plus de temps que prévu. Les données peuvent être disponibles dans votre compte APIFY.",
-        variant: "default",
-      });
-    }, 10 * 60 * 1000); // Augmenté à 10 minutes pour APIFY
-    
-    return () => {
-      clearInterval(pollInterval);
-      clearTimeout(safetyTimeout);
-      setLoading(false);
-    };
-  }, [checkScrapeStatus, toast]);
-
-  // Gérer le scraping avec les nouvelles options APIFY
-  async function handleScrape(e: React.FormEvent, options: ScrapeOptions = {}) {
-    e.preventDefault();
-    if (!validateUrl(url)) {
-      toast({
-        title: "URL invalide",
-        description: "Merci de saisir un lien Marketplace (Facebook ou LinkedIn) valide.",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    // Réinitialiser tous les états
-    setLoading(true);
-    setShowPreview(false);
-    setScrapePercent(5);
-    setScrapeDone(false);
-    setHasPaid(false);
-    setPreviewItems([]);
+  const resetScrape = useCallback(() => {
+    setSessionId(null);
+    setStatus('idle');
+    setProgress(0);
     setStats(null);
-    
-    console.log('Démarrage du scraping avec options:', options);
-    
+    setPreviewItems([]);
+    setScrapeDone(false);
+    setIsPaid(false);
+    setError(null);
+    setLoading(false); // Ensure loading is reset
+    setIsPolling(false);
+    console.log('Scrape state reset.');
+  }, []);
+
+  const checkScrapeStatus = useCallback(async () => {
+    if (!sessionId || isPolling) return;
+
+    setIsPolling(true);
+    console.log(`Polling for session: ${sessionId}`);
+
     try {
-      // Préparer les options pour l'API APIFY
-      const apifyOptions = {
-        resultsLimit: options.singleItem ? 1 : options.maxItems,
-        deepScrape: options.deepScrape || false,
-        getProfileUrls: options.getProfileUrls || false,
-        maxItems: options.maxItems || selectedPack.nbDownloads
-      };
-      
-      // Validation des options
-      if (apifyOptions.deepScrape && apifyOptions.maxItems && apifyOptions.maxItems > 200) {
+      const result: ScrapeResult = await getScrapeResults(sessionId);
+      console.log('Poll result:', result);
+
+      setStatus(result.status);
+      setStats(result.stats || { nbItems: 0 });
+      // Ne pas mettre à jour previewItems ici, car ils peuvent être incomplets
+      if (result.isPaid) {
+        setIsPaid(true);
+      }
+      setProgress(result.progress || 0);
+
+      const isFinished = ['finished', 'COMPLETED', 'SUCCEEDED'].includes(result.status.toUpperCase());
+      const isFailed = ['failed', 'FAILED', 'ABORTED'].includes(result.status.toUpperCase());
+
+      if (isFinished) {
+        console.log('Scraping finished. Setting final state...');
+        setPreviewItems(result.previewItems || []);
+        setStats(result.stats || { nbItems: 0 });
+        setLoading(false);
+        setScrapeDone(true);
         toast({
-          title: "Attention",
-          description: "Le mode deep scrape est limité à 200 éléments maximum pour éviter les timeouts.",
-          variant: "default",
+          title: 'Scraping terminé!',
+          description: `Le scraping est terminé avec ${result.stats?.nbItems || 0} éléments trouvés.`,
         });
-        apifyOptions.maxItems = 200;
+      } else if (isFailed) {
+        console.error('Scraping failed or was aborted. Stopping poll.');
+        setLoading(false);
+        setError(result.error || 'Le scraping a échoué.');
+        setScrapeDone(true);
+        toast({
+          title: 'Erreur de Scraping',
+          description: result.error || 'Une erreur inattendue est survenue.',
+          variant: 'destructive',
+        });
       }
-      
-      // Appeler l'API pour démarrer le scraping avec les bonnes options
-      const result = await api.startScraping(url, apifyOptions);
-      console.log('Résultat du démarrage du scraping:', result);
-      
-      setSessionId(result.sessionId);
-      setDatasetId(result.datasetId);
-      
-      // Message de début personnalisé
-      let startMessage = "Scraping démarré";
-      if (apifyOptions.deepScrape) startMessage += " (mode avancé)";
-      if (apifyOptions.getProfileUrls) startMessage += " avec extraction des profils";
-      
-      toast({
-        title: startMessage,
-        description: `Extraction de ${apifyOptions.maxItems || 'tous les'} éléments en cours...`,
-        variant: "default",
-      });
-      
-      startPolling(result.sessionId);
-      
-      // Vérifier le statut de paiement initial
-      try {
-        const paymentStatus = await api.verifyPayment(result.sessionId);
-        if (paymentStatus.isPaid) {
-          setHasPaid(true);
-        }
-      } catch (error) {
-        console.warn('Erreur lors de la vérification initiale du paiement:', error);
-      }
-    } catch (error) {
-      console.error('Error starting scrape:', error);
+    } catch (err: any) {
+      console.error('Error during polling:', err);
       setLoading(false);
-      setScrapePercent(0);
-      
-      // Message d'erreur spécifique selon le type d'erreur
-      let errorMessage = "Une erreur est survenue lors du démarrage du scraping.";
-      if (error instanceof Error) {
-        if (error.message.includes('rate limit')) {
-          errorMessage = "Limite de taux atteinte. Veuillez attendre avant de relancer.";
-        } else if (error.message.includes('quota')) {
-          errorMessage = "Quota APIFY dépassé. Veuillez vérifier votre compte APIFY.";
-        }
-      }
-      
+      setError(err.message || 'Erreur de communication avec le serveur.');
+      setScrapeDone(true); // Arrêter le polling en cas d'erreur réseau
       toast({
-        title: "Erreur de scraping",
-        description: errorMessage,
-        variant: "destructive",
+        title: 'Erreur Réseau',
+        description: 'Impossible de vérifier le statut du scraping.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsPolling(false);
+    }
+  }, [sessionId, isPolling, getScrapeResults, toast]);
+
+  useEffect(() => {
+    if (sessionId && !scrapeDone) {
+      const intervalId = setInterval(checkScrapeStatus, POLLING_INTERVAL);
+      return () => clearInterval(intervalId);
+    }
+  }, [sessionId, scrapeDone, checkScrapeStatus]);
+
+  type ScrapeOptions = {
+    singleItem?: boolean;
+    deepScrape?: boolean;
+    getProfileUrls?: boolean;
+    maxItems?: number;
+  };
+
+  const startScrape = async (url: string, options: ScrapeOptions = {}) => {
+    resetScrape();
+    setLoading(true);
+    setStatus('starting');
+    console.log(`Starting scrape for URL: ${url}`);
+
+    try {
+      const result = await apiStartScraping(url, options);
+      console.log('Scrape started successfully:', result);
+      setSessionId(result.sessionId);
+      setStatus(result.status);
+      // setLoading(false) a été retiré ici pour que le chargement continue
+      toast({
+        title: 'Scraping en cours...',
+        description: 'Le processus de scraping a commencé.',
+      });
+    } catch (err: any) {
+      console.error('Failed to start scrape:', err);
+      setError(err.message || 'Impossible de démarrer le scraping.');
+      setStatus('failed');
+      setLoading(false); // On arrête le chargement si le démarrage échoue
+      toast({
+        title: 'Erreur au démarrage',
+        description: err.message || 'Le scraping n\'a pas pu être lancé.',
+        variant: 'destructive',
       });
     }
-  }
+  };
 
-  // FONCTION DE PAIEMENT CORRIGÉE
-  const handlePayment = React.useCallback(async () => {
+  const handlePayment = async () => {
     if (!sessionId) {
-      toast({
-        title: "Erreur",
-        description: "Aucune session de scraping active.",
-        variant: "destructive",
-      });
+      toast({ title: 'Erreur', description: 'Aucune session de scraping active.', variant: 'destructive' });
       return;
     }
-    
-    try {
-      // UNIQUEMENT utiliser l'API backend - supprimer le fallback vers le lien direct
-      const checkoutUrl = await api.createPayment(selectedPackId, sessionId);
-      console.log('URL de paiement créée via API:', checkoutUrl);
-      
-      // Ouvrir dans la même fenêtre plutôt qu'un nouvel onglet pour la redirection automatique
-      window.location.href = checkoutUrl;
-      
-    } catch (error) {
-      console.error('Error creating payment:', error);
-      toast({
-        title: "Erreur de paiement",
-        description: "Une erreur est survenue lors de la création du paiement. Veuillez réessayer.",
-        variant: "destructive",
-      });
-    }
-  }, [api, sessionId, selectedPackId]);
 
-  const getExportUrl = React.useCallback((format: 'excel' | 'csv' = 'excel') => {
-    return api.getExportUrl(sessionId, format);
-  }, [api, sessionId]);
+    setLoading(true);
+    try {
+      // Le packId est pour l'instant statique, on pourrait le rendre dynamique plus tard
+      const packId = 'pack-decouverte'; 
+      const checkoutUrl = await createPayment(packId, sessionId);
+      if (checkoutUrl) {
+        console.log(`Redirecting to Stripe checkout: ${checkoutUrl}`);
+        window.location.href = checkoutUrl;
+      } else {
+        throw new Error('Aucune URL de paiement n-a été retournée.');
+      }
+      
+      
+    } catch (err: any) {
+      console.error('Payment creation failed:', err);
+      toast({
+        title: 'Erreur de paiement',
+        description: err.message || 'Impossible de créer la session de paiement.',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const exportData = (format: 'excel' | 'csv') => {
+    if (!sessionId || !scrapeDone) {
+      toast({ title: 'Erreur', description: 'Le scraping doit être terminé pour exporter.', variant: 'destructive' });
+      return;
+    }
+    console.log(`Exporting data in ${format} format for session ${sessionId}...`);
+    const url = getExportUrl(sessionId, format);
+    window.open(url, '_blank');
+  };
 
   return {
-    url, setUrl,
-    loading,
-    showPreview,
-    setShowPreview,
-    scrapePercent, setScrapePercent,
-    scrapeDone, setScrapeDone,
-    sessionId, setSessionId,
-    datasetId, setDatasetId,
-    stats, setStats,
-    hasPaid, setHasPaid,
-    selectedPackId, setSelectedPackId,
-    selectedPack,
+    sessionId,
+    status,
+    progress,
+    stats,
     previewItems,
-    handleScrape,
+    scrapeDone,
+    isPaid,
+    error,
+    loading,
+    startScrape,
+    resetScrape,
     handlePayment,
-    getExportUrl
+    exportData,
   };
 }
