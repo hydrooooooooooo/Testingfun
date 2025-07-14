@@ -30,28 +30,31 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+  const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (token) {
-      try {
-        const decodedToken = jwtDecode<DecodedToken>(token);
-        // Vérifier si le token est expiré
-        if (decodedToken.exp * 1000 > Date.now()) {
-          setUser({ id: decodedToken.id, email: decodedToken.email, role: decodedToken.role });
-          localStorage.setItem('token', token);
-        } else {
-          // Le token est expiré
-          logout();
+    const initializeAuth = () => {
+      const storedToken = localStorage.getItem('token');
+      if (storedToken) {
+        try {
+          const decodedToken = jwtDecode<DecodedToken>(storedToken);
+          if (decodedToken.exp * 1000 > Date.now()) {
+            setUser({ id: decodedToken.id, email: decodedToken.email, role: decodedToken.role });
+            setToken(storedToken);
+          } else {
+            localStorage.removeItem('token');
+          }
+        } catch (error) {
+          console.error('Failed to decode token:', error);
+          localStorage.removeItem('token');
         }
-      } catch (error) {
-        console.error('Failed to decode token:', error);
-        logout();
       }
-    } else {
-      localStorage.removeItem('token');
-    }
-  }, [token]);
+      setLoading(false);
+    };
+
+    initializeAuth();
+  }, []);
 
   const login = (newToken: string) => {
     setToken(newToken);
@@ -61,15 +64,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     setToken(null);
     localStorage.removeItem('token');
-    window.location.href = '/login'; // Rediriger vers la page de connexion
+    // La redirection sera gérée par le composant ProtectedRoute
   };
 
   const isAuthenticated = () => {
     return !!token;
   };
 
+  const value = { user, token, login, logout, isAuthenticated };
+
+  if (loading) {
+    return <div>Chargement de l'application...</div>; // Ou un composant de chargement plus sophistiqué
+  }
+
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isAuthenticated }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

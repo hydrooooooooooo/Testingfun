@@ -39,6 +39,7 @@ export class PreviewController {
         success: true,
         previewItems,
         stats: {
+          nbItems: previewItems.length,
           totalItems: session.totalItems,
         },
         packId: session.packId || 'pack-decouverte'

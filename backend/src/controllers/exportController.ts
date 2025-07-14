@@ -84,6 +84,13 @@ export class ExportController {
         logger.warn(`[${requestId}] Tentative d'exportation sans paiement pour la session ${sessionId}`);
         throw new ApiError(403, 'Payment required to export data');
       }
+
+      // Vérifier également que le scraping est terminé
+      if (session.status !== SessionStatus.FINISHED) {
+        logger.warn(`[${requestId}] Tentative d'exportation pour une session non terminée (Status: ${session.status})`);
+        // Le code 425 (Too Early) indique au frontend que la ressource n'est pas encore prête.
+        throw new ApiError(425, 'Vos données sont en cours de préparation. Veuillez réessayer dans quelques instants.');
+      }
       
       // Si le téléchargement est effectué avec un token valide, le marquer comme utilisé
       // pour éviter les téléchargements multiples avec le même token (optionnel)

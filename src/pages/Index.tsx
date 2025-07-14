@@ -7,7 +7,7 @@ import ScrapeForm from "@/components/ScrapeForm";
 import SelectedPackInfos from "@/components/SelectedPackInfos";
 import ScrapeResultSection from "@/components/ScrapeResultSection";
 import React, { useEffect } from "react";
-import { useScrape } from "@/hooks/useScrape";
+import { useScrapeContext } from "@/contexts/ScrapeContext";
 import { useSearchParams } from "react-router-dom";
 import { PLANS, Pack } from "@/lib/plans";
 import { 
@@ -49,38 +49,43 @@ if (typeof document !== "undefined" && !document.getElementById("google-inter"))
 export default function Index() {
   const [searchParams] = useSearchParams();
   const {
-    url, setUrl,
     loading,
-    showPreview,
-    scrapePercent,
     scrapeDone,
-    sessionId,
-    datasetId,
     stats,
-    hasPaid,
-    selectedPackId,
-    setSelectedPackId,
-    selectedPack,
     previewItems,
-    handleScrape
-  } = useScrape();
+    progress,
+    status,
+    startScrape,
+    resetScrape,
+    handlePayment,
+    exportData,
+    sessionId,
+    isPaid,
+  } = useScrapeContext();
+
+  const [url, setUrl] = React.useState("");
+  const [selectedPackId, setSelectedPackId] = React.useState(PLANS[0].id);
+
+  const selectedPack = React.useMemo(() => 
+    PLANS.find(p => p.id === selectedPackId) || PLANS[0],
+    [selectedPackId]
+  );
 
   // Gérer le pré-remplissage depuis la page pricing
   useEffect(() => {
     const packParam = searchParams.get('pack');
-    const extractionsParam = searchParams.get('extractions');
-    
-    if (packParam && extractionsParam) {
+    if (packParam) {
       setSelectedPackId(packParam);
-      // Scroll vers le formulaire
       setTimeout(() => {
-        const formElement = document.getElementById('scraping-form');
-        if (formElement) {
-          formElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        document.getElementById('scraping-form')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 500);
     }
-  }, [searchParams, setSelectedPackId]);
+  }, [searchParams]);
+
+  const handleScrape = React.useCallback((e: React.FormEvent, options: any) => {
+    e.preventDefault();
+    startScrape(url, options);
+  }, [url, startScrape]);
 
   return (
 
@@ -121,27 +126,22 @@ export default function Index() {
             
             {loading && (
               <ScrapeProgress 
-                percent={scrapePercent} 
-                stepLabel={
-                  scrapePercent < 100
-                    ? "Extraction en cours..."
-                    : "Finalisation..."
-                }
+                percent={progress} 
+                stepLabel={status}
               />
             )}
           </div>
         </section>
 
-        {/* Results Section - Unchanged */}
+        {/* Results Section */}
         <ScrapeResultSection
-          showPreview={showPreview}
           scrapeDone={scrapeDone}
-          hasPaid={hasPaid}
-          selectedPack={selectedPack}
+          isPaid={isPaid}
           stats={stats}
-          previewItems={previewItems}
-          sessionId={sessionId}
-          datasetId={datasetId}
+          propPreviewItems={previewItems}
+          onPayment={handlePayment}
+          exportData={exportData}
+          resetScrape={resetScrape}
         />
 
         {/* Comment ça fonctionne + Value Proposition Cards - Fusionnés */}

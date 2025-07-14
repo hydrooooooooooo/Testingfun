@@ -72,9 +72,13 @@ export const getDashboardData = async (req: AuthenticatedRequest, res: Response)
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     }
 
-    const [totalDownloadsResult, totalScrapesResult, purchases, downloads] = await Promise.all([
+    // Récupérer les sessions de scraping de l'utilisateur
+    const scrapingSessions = await db('scraping_sessions')
+      .where({ user_id: userId })
+      .orderBy('created_at', 'desc');
+
+    const [totalDownloadsResult, purchases, downloads] = await Promise.all([
       db('downloads').where({ user_id: userId }).count('id as count').first(),
-      db('scraping_jobs').where({ user_id: userId }).count('id as count').first(),
       auditService.getUserPurchases(userId),
       db('downloads').where({ user_id: userId }).select('*').orderBy('downloaded_at', 'desc')
     ]);
@@ -82,9 +86,10 @@ export const getDashboardData = async (req: AuthenticatedRequest, res: Response)
     res.status(200).json({
       user,
       stats: {
-        totalScrapes: Number(totalScrapesResult?.count || 0),
+        totalScrapes: scrapingSessions.length,
         totalDownloads: Number(totalDownloadsResult?.count || 0),
       },
+      sessions: scrapingSessions, // Envoyer les sessions complètes au frontend
       payments: purchases, // Renamed to 'payments' for frontend compatibility
       downloads
     });

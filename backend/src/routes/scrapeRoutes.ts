@@ -36,4 +36,14 @@ router.get(
   scrapeController.getScrapeResult.bind(scrapeController)
 );
 
+/**
+ * @route   POST /api/scrape/webhook
+ * @desc    Handle Apify webhook events
+ * @access  Public (called by Apify)
+ */
+router.post(
+  '/webhook',
+  scrapeController.handleApifyWebhook.bind(scrapeController)
+);
+
 export { router as scrapeRoutes };

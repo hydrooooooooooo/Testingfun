@@ -109,11 +109,11 @@ export class ApifyService {
       logger.info(`Configuration du scraper avec limite de ${resultsLimit} résultats`);
       logger.info('Configuration du scraper', { input });
 
-      // Lancer l'acteur en mode asynchrone sans attendre la fin du job
+      // Lancer l'acteur en mode asynchrone
       const runResult = await apifyClient.actor(actorId).start(input, {
         memory: 2048,
         build: 'latest',
-        waitForFinish: 10 // Attendre seulement 10 secondes pour le démarrage
+        waitForFinish: 10, // Attendre seulement 10 secondes pour le démarrage
       });
       
       // Convert to the expected structure

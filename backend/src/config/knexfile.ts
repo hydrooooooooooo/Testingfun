@@ -1,9 +1,11 @@
 import type { Knex } from 'knex';
 import path from 'path';
 import dotenv from 'dotenv';
+import { parse as parsePgConnectionString } from 'pg-connection-string';
 
-// Load environment variables from .env file at the root of backend
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+// Determine which .env file to load based on NODE_ENV
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env';
+dotenv.config({ path: path.resolve(__dirname, `../../${envFile}`) });
 
 // Construire un chemin absolu vers la racine du projet, puis vers le fichier de BDD
 const projectRoot = path.resolve(__dirname, '../../');
@@ -28,17 +30,33 @@ const config: { [key: string]: Knex.Config } = {
 
   production: {
     client: 'pg',
-    connection: {
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false } // Necessary for services like Heroku
+    connection: () => {
+      const connectionString = process.env.DATABASE_URL || '';
+      const parsed = parsePgConnectionString(connectionString);
+
+      const connectionConfig: Knex.PgConnectionConfig = {
+        host: parsed.host ?? undefined,
+        port: parsed.port ? parseInt(parsed.port, 10) : undefined,
+        user: parsed.user ?? undefined,
+        password: parsed.password ?? undefined,
+        database: parsed.database ?? undefined,
+      };
+
+      if (connectionConfig.host === 'localhost' || connectionConfig.host === '127.0.0.1') {
+        connectionConfig.ssl = false;
+      } else {
+        connectionConfig.ssl = { rejectUnauthorized: false };
+      }
+      
+      return connectionConfig;
     },
     migrations: {
-      directory: path.resolve(__dirname, '../database/migrations')
+      directory: path.resolve(__dirname, '../database/migrations'),
     },
     seeds: {
-      directory: path.resolve(__dirname, '../database/seeds')
-    }
-  }
+      directory: path.resolve(__dirname, '../database/seeds'),
+    },
+  },
 };
 
 export default config;

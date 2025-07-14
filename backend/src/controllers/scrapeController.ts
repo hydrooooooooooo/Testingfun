@@ -40,12 +40,15 @@ export class ScrapeController {
 
       logger.info(`Starting scrape for URL: ${url}, sessionId: ${sessionId}, options:`, scrapingOptions);
 
+      // Get user ID from authenticated request
+      const userId = (req as any).user?.id;
+
       // Create session record with PENDING status first
       session = await sessionService.createSession({
         id: sessionId,
         status: SessionStatus.PENDING,
         isPaid: false,
-        user_id: (req as any).user?.id, // Attach user if available
+        user_id: userId, // Attach user if available
       });
 
       // Start APIFY scraping job with options
@@ -84,112 +87,148 @@ export class ScrapeController {
   /**
    * Get scraping job results
    */
-  async getScrapeResult(req: Request, res: Response, next: NextFunction) {
+  public getScrapeResult = async (req: Request, res: Response, next: NextFunction) => {
+    const sessionId = req.query.sessionId as string;
     try {
-      const { sessionId } = req.query;
+      logger.info(`Attempting to fetch results for session: ${sessionId}`);
 
-      if (!sessionId || typeof sessionId !== 'string') {
-        throw new ApiError(400, 'Session ID is required');
+      if (!sessionId) {
+        // Cette erreur est normalement attrapée par le validateur en amont, mais c'est une double sécurité.
+        throw new ApiError(400, 'Session ID is required.');
       }
 
-      logger.info(`Récupération des résultats pour la session ${sessionId}`);
-
-      // Get session from service
       let session = await sessionService.getSession(sessionId);
       if (!session) {
-        logger.error(`Session avec ID ${sessionId} non trouvée`);
         throw new ApiError(404, `Session with ID ${sessionId} not found`);
       }
-      
-      logger.info(`Session trouvée: ${JSON.stringify({
-        id: session.id,
-        status: session.status,
-        datasetId: session.datasetId,
-        actorRunId: session.actorRunId,
-        isPaid: session.isPaid,
-        hasData: session.hasData
-      })}`);
 
-      // Si la session a un actorRunId, vérifier le statut auprès d'APIFY
-      // Mais d'abord, s'assurer que nous avons des données de base même si APIFY échoue
-      if (!session.previewItems) {
-        session = await sessionService.updateSession(sessionId, {
-          previewItems: []
-        }) || session;
-      }
-      
-      // Si la session a un actorRunId, vérifier le statut auprès d'APIFY
-      if (session.actorRunId) {
-        logger.info(`Récupération du statut Apify pour l'acteur ${session.actorRunId}`);
-        const { status: runStatus } = await apifyService.getRunStatus(session.actorRunId);
-        logger.info(`Statut Apify reçu: ${runStatus}`);
-        
-        // Update session status based on APIFY run status
-        // Vérifier si le statut indique que le job est terminé
-        const isFinished = runStatus === 'SUCCEEDED' || runStatus === 'FAILED' || runStatus === 'TIMED-OUT' || runStatus === 'ABORTED';
+      // Si le scraping n'est pas terminé, on vérifie l'état sur Apify
+      if (session.status === SessionStatus.PENDING || session.status === SessionStatus.RUNNING) {
+        if (!session.actorRunId) {
+          throw new ApiError(400, 'Scraping run ID not found for this session.');
+        }
 
-        if (isFinished) {
-          const status = runStatus === 'SUCCEEDED' ? SessionStatus.FINISHED : SessionStatus.FAILED;
+        const runStatus = await apifyService.getRunStatus(session.actorRunId);
+
+        // Statuts considérés comme terminés avec succès
+        const successStatuses = ['SUCCEEDED', 'FINISHED'];
+        // Statuts considérés comme en échec
+        const failedStatuses = ['FAILED', 'TIMED-OUT', 'ABORTED'];
+
+        if (successStatuses.includes(runStatus.status.toUpperCase())) {
+          logger.info(`Scraping for session ${sessionId} succeeded. Fetching data from dataset ${session.datasetId}.`);
+          if (!session.datasetId) {
+            throw new ApiError(500, 'Dataset ID is missing from the session.');
+          }
+          // Récupérer les items du dataset
+          const rawItems = await apifyService.getDatasetItems(session.datasetId);
           
-          // Update session with new status and stats
-          await sessionService.updateSession(sessionId, { 
-            status: SessionStatus.FINISHED
+          // Normaliser les données pour avoir une structure cohérente
+          const normalizedItems = this.normalizeApifyData(rawItems);
+          const previewItems = normalizedItems.slice(0, 3);
+
+          // Créer le fichier de backup
+          this.createBackupFile(sessionId, session.datasetId, normalizedItems.length, previewItems, normalizedItems);
+          
+          // Mettre à jour la session avec les données finales et le statut FINISHED
+          const updatedSession = await sessionService.updateSession(sessionId, {
+            status: SessionStatus.FINISHED,
+            totalItems: normalizedItems.length,
+            previewItems: previewItems,
+            hasData: normalizedItems.length > 0,
           });
 
-          // If finished successfully, get preview items
-          if (status === SessionStatus.FINISHED && session.datasetId) {
-            try {
-              logger.info(`Récupération des éléments pour le dataset ${session.datasetId}`);
-              
-              // Get all available items count first
-              const allItems = await apifyService.getDatasetItems(session.datasetId);
-              const totalItemsCount = allItems.length;
-              logger.info(`Nombre total d'éléments trouvés: ${totalItemsCount}`);
-              
-              // Get preview items with improved extraction
-              const previewItems = await apifyService.getPreviewItems(session.datasetId, 3);
-              logger.info(`Éléments de prévisualisation extraits: ${previewItems.length}`);
-              
-              // Créer un fichier de backup avec les données réelles et la structure corrigée
-              this.createBackupFile(sessionId, session.datasetId, totalItemsCount, previewItems, allItems.slice(0, 10));
-              
-              // Update session with preview items and accurate statistics
-              await sessionService.updateSession(sessionId, { 
-                previewItems,
-                totalItems: totalItemsCount,
-                hasData: true
-              });
-              
-              logger.info(`Session ${sessionId} mise à jour avec ${previewItems.length} éléments de prévisualisation sur ${totalItemsCount} éléments au total`);
-            } catch (error) {
-              logger.error(`Error getting preview items for session ${sessionId}:`, error);
-              // Still update the session with finished status even if preview items failed
-              await sessionService.updateSession(sessionId, { 
-                status: SessionStatus.FAILED
-              });
-            }
+          if (!updatedSession) {
+            throw new ApiError(500, 'Failed to update session after scraping.');
           }
+
+          logger.info(`Session ${sessionId} updated with ${normalizedItems.length} results.`);
+          // Renvoyer la session mise à jour
+          session = updatedSession;
+
+        } else if (failedStatuses.includes(runStatus.status.toUpperCase())) {
+          logger.error(`Scraping for session ${sessionId} failed with status: ${runStatus.status}`);
+          const updatedSession = await sessionService.updateSession(sessionId, { status: SessionStatus.FAILED });
+          session = updatedSession!;
+          throw new ApiError(500, `Scraping failed with status: ${runStatus.status}`);
+
+        } else {
+          // Le scraping est toujours en cours (ex: RUNNING, READY)
+          logger.info(`Scraping for session ${sessionId} is still in progress with status: ${runStatus.status}`);
+          return res.status(202).json({
+            message: 'Scraping in progress.',
+            status: session.status,
+            progress: runStatus.progress,
+          });
         }
       }
 
-      // Get the updated session
-      const updatedSession = await sessionService.getSession(sessionId);
-      
-      res.status(200).json({
-        status: 'success',
-        data: {
-          sessionId: updatedSession?.id,
-          datasetId: updatedSession?.datasetId,
-          status: updatedSession?.status,
-          stats: {
-            totalItems: updatedSession?.totalItems || 0
-          },
-          isPaid: updatedSession?.isPaid,
-          previewItems: updatedSession?.previewItems || []
-        }
-      });
+      // Toujours renvoyer l'état le plus récent de la session
+      // On recharge la session pour être sûr d'avoir les dernières données, surtout si le webhook a tourné entre-temps
+      const finalSession = await sessionService.getSession(sessionId);
+      res.status(200).json(finalSession);
+
     } catch (error) {
+      logger.error(`Error fetching results for session ${sessionId}:`, error);
+      // Propage l'erreur pour que le middleware de gestion des erreurs la traite
       next(error);
+    }
+  };
+
+  /**
+   * Handle Apify webhook events to process scraping results automatically.
+   */
+  async handleApifyWebhook(req: Request, res: Response, next: NextFunction) {
+    try {
+      logger.info('Received Apify webhook:', req.body);
+
+      const { sessionId, resource, eventData } = req.body;
+
+      if (!sessionId || !resource || !eventData) {
+        logger.warn('Invalid Apify webhook payload received.');
+        return res.status(400).send('Invalid payload');
+      }
+
+      const { status: runStatus } = eventData;
+      const { defaultDatasetId: datasetId } = resource;
+
+      const isSucceeded = runStatus === 'SUCCEEDED';
+      const isFailed = ['FAILED', 'TIMED_OUT', 'ABORTED'].includes(runStatus);
+
+      if (isSucceeded && datasetId) {
+        logger.info(`Scraping for session ${sessionId} SUCCEEDED. Processing results from dataset ${datasetId}...`);
+
+        // Get all items to count them
+        const allItems = await apifyService.getDatasetItems(datasetId);
+        const totalItemsCount = allItems.length;
+
+        // Get preview items
+        const previewItems = await apifyService.getPreviewItems(datasetId, 3);
+
+        // Update session in DB
+        await sessionService.updateSession(sessionId, {
+          status: SessionStatus.FINISHED,
+          totalItems: totalItemsCount,
+          previewItems: previewItems,
+          hasData: totalItemsCount > 0,
+        });
+
+        logger.info(`Session ${sessionId} successfully updated with ${totalItemsCount} items.`);
+
+      } else if (isFailed) {
+        logger.warn(`Scraping for session ${sessionId} FAILED with status: ${runStatus}.`);
+        await sessionService.updateSession(sessionId, {
+          status: SessionStatus.FAILED,
+        });
+      } else {
+        logger.info(`Received non-final webhook status '${runStatus}' for session ${sessionId}. Ignoring.`);
+      }
+
+      res.status(200).send('Webhook received');
+    } catch (error) {
+      logger.error('Error handling Apify webhook:', error);
+      // Important to not pass to next() to avoid sending a generic error response to Apify
+      res.status(500).send('Internal Server Error');
     }
   }
 
@@ -205,7 +244,8 @@ export class ScrapeController {
   ): void {
     try {
       const backupDir = path.join(process.cwd(), 'data', 'backups');
-      const backupPath = path.join(backupDir, `sess_${sessionId}.json`);
+      // Le sessionId inclut déjà 'sess_', donc on l'utilise directement
+      const backupPath = path.join(backupDir, `${sessionId}.json`);
       
       // Vérifier si le fichier existe déjà
       if (fs.existsSync(backupPath)) {
@@ -256,6 +296,43 @@ export class ScrapeController {
    */
   private isValidMarketplaceUrl(url: string): boolean {
     return /^https:\/\/(www\.)?(facebook|linkedin)\.com\/marketplace\/[\w-]+/.test(url.trim());
+  }
+
+  /**
+   * Normalise les données brutes d'Apify en une structure de données simple.
+   */
+  private normalizeApifyData(items: any[]): any[] {
+    if (!items || !Array.isArray(items)) {
+        return [];
+    }
+
+    return items.map(item => {
+        // Gérer les variations de noms de champs
+        const title = item.title || item.name || item.marketplace_listing_title || item.custom_title || 'Titre non disponible';
+        
+        // Gérer la structure de prix imbriquée
+        let price = 'Prix non disponible';
+        if (item.listing_price && item.listing_price.amount && item.listing_price.currency) {
+            price = `${parseFloat(item.listing_price.amount).toFixed(2)} ${item.listing_price.currency}`;
+        } else if (item.price) {
+            price = item.price;
+        }
+
+        // Gérer la structure d'image imbriquée
+        const image = item.primary_listing_photo?.listing_image?.uri || item.image || item.imageUrl || null;
+
+        return {
+            title: title,
+            price: price,
+            desc: item.desc || item.description || '',
+            image: image,
+            location: item.location?.reverse_geocode?.city || item.location || 'Lieu non disponible',
+            url: item.url || item.listing_url || '#',
+            postedAt: item.postedAt || item.creation_time || null,
+            // Inclure d'autres champs si nécessaire
+            ...item 
+        };
+    });
   }
 }
 
