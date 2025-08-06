@@ -7,6 +7,7 @@ import { previewRoutes } from './previewRoutes';
 import { sessionRoutes } from './sessionRoutes';
 import authRoutes from './authRoutes';
 import userRoutes from './userRoutes';
+import mvolaRoutes from './mvolaRoutes';
 import { logger } from '../utils/logger';
 import { paymentController } from '../controllers/paymentController';
 import cors from 'cors';
@@ -20,6 +21,7 @@ router.use('/scrape', scrapeRoutes);
 router.use('/payment', paymentRoutes);
 router.use('/user', userRoutes);
 router.use('/sessions', sessionRoutes);
+router.use('/mvola', mvolaRoutes);
 
 // Routes d'export avec CORS spécifique et log pour débogage
 router.use('/export', 

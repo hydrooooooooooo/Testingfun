@@ -1,14 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { X, CreditCard, Smartphone } from 'lucide-react';
 
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
   onStripePay: () => void;
+  onMvolaPay: () => Promise<void>; // Ajout de la prop pour le paiement Mvola
   planName: string;
 }
 
-const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onStripePay, planName }) => {
+const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onStripePay, onMvolaPay, planName }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleMvolaPayment = async () => {
+    setIsLoading(true);
+    try {
+      await onMvolaPay();
+      // Gérer le succès ici (par exemple, afficher une notification)
+      alert('Paiement MVola initié avec succès !');
+    } catch (error) {
+      // Gérer l'erreur ici (par exemple, afficher une notification d'erreur)
+      alert('Erreur lors du paiement MVola.');
+      console.error('Mvola payment error:', error);
+    } finally {
+      setIsLoading(false);
+      onClose(); // Fermer la modale après la tentative
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -39,12 +58,16 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onStripePa
           </button>
 
           {/* Mvola */}
-          <button className="w-full flex items-center justify-between p-5 rounded-lg bg-gray-100 text-gray-800 hover:bg-gray-200 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-gray-300">
+          <button 
+            onClick={handleMvolaPayment}
+            disabled={isLoading}
+            className="w-full flex items-center justify-between p-5 rounded-lg bg-yellow-400 text-white hover:bg-yellow-500 transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
             <div className="flex items-center gap-4">
-              <Smartphone className="w-7 h-7 text-yellow-500" />
-              <span className="text-lg font-semibold">MVola</span>
+              <Smartphone className="w-7 h-7" />
+              <span className="text-lg font-semibold">{isLoading ? 'Traitement...' : 'MVola'}</span>
             </div>
-            <span className="text-sm font-light text-gray-500">Bientôt</span>
+            {!isLoading && <span className="text-sm font-light opacity-90">Mobile Money</span>}
           </button>
 
           {/* Orange Money */}

@@ -80,6 +80,53 @@ export default function PricingPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlanForModal, setSelectedPlanForModal] = useState<PricingPlanDisplay | null>(null);
 
+  const proceedToMvolaPayment = async () => {
+    if (!selectedPlanForModal || !selectedPlanForModal.packId) {
+      toast({ title: "Erreur", description: "Aucun pack sélectionné.", variant: "destructive" });
+      return;
+    }
+
+    setLoading(true);
+    setSelectedPlanId(selectedPlanForModal.packId);
+    setIsModalOpen(false);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/mvola/initiate-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        // Vous pouvez passer des détails de la commande ici si nécessaire
+        body: JSON.stringify({ packId: selectedPlanForModal.packId }), 
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'L\'initiation du paiement MVola a échoué.');
+      }
+
+      const result = await response.json();
+      toast({
+        title: "Paiement MVola Réussi",
+        description: "La transaction a été complétée avec succès.",
+      });
+      // Rediriger ou mettre à jour l'UI si nécessaire
+      // navigate('/payment-success');
+
+    } catch (error) {
+      console.error("MVola payment error:", error);
+      toast({
+        title: "Erreur de paiement MVola",
+        description: error instanceof Error ? error.message : "Une erreur inconnue est survenue.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+      setSelectedPlanId(null);
+    }
+  };
+
   const handlePay = (plan: PricingPlanDisplay) => {
     if (!token) {
       toast({ 
@@ -186,6 +233,7 @@ ${data.nom}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onStripePay={proceedToStripePayment}
+        onMvolaPay={proceedToMvolaPayment}
         planName={selectedPlanForModal?.name || ''}
       />
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
