@@ -2,8 +2,9 @@ import { Router } from 'express';
 import { scrapeRoutes } from './scrapeRoutes';
 import { paymentRoutes } from './paymentRoutes';
 import { exportRoutes } from './exportRoutes';
-import { adminRoutes } from './adminRoutes';
+
 import { previewRoutes } from './previewRoutes';
+import { sessionRoutes } from './sessionRoutes';
 import authRoutes from './authRoutes';
 import userRoutes from './userRoutes';
 import { logger } from '../utils/logger';
@@ -18,21 +19,7 @@ router.use('/auth', authRoutes);
 router.use('/scrape', scrapeRoutes);
 router.use('/payment', paymentRoutes);
 router.use('/user', userRoutes);
-
-// Routes de compatibilité avec les anciennes URLs
-router.post('/stripe/webhook', paymentController.handleWebhook.bind(paymentController));
-
-// Route de compatibilité pour la vérification de paiement avec CORS spécifique
-router.get('/verify-payment', 
-  cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma', 'Expires'],
-    preflightContinue: false,
-    optionsSuccessStatus: 204
-  }),
-  paymentController.verifyPayment.bind(paymentController)
-);
+router.use('/sessions', sessionRoutes);
 
 // Routes d'export avec CORS spécifique et log pour débogage
 router.use('/export', 
@@ -64,7 +51,7 @@ router.use('/export',
   exportRoutes
 );
 
-router.use('/admin', protect, restrictTo('admin'), adminRoutes);
+
 
 // Routes de prévisualisation avec log spécifique pour débogage
 router.use('/preview', (req, res, next) => {

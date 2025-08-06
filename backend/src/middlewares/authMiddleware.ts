@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
 
 // Étendre le type Request de Express pour inclure notre propriété `user`
-interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Request {
   user?: { 
     id: number; 
     email: string; 

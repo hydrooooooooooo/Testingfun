@@ -3,25 +3,23 @@
  */
 
 export interface Session {
+  url: string; // L'URL de la session de scraping
   id: string;
-  url: string;
-  createdAt: Date | string;
-  updatedAt?: Date | string;
-  status: 'pending' | 'running' | 'completed' | 'failed';
-  data?: any;
-  error?: string;
-  isPaid: boolean;
-  paymentIntentId?: string;
-  exportUrl?: string;
-  datasetId?: string;
+  user_id?: number; // L'ID de l'utilisateur associé
+  status: 'pending' | 'running' | 'finished' | 'failed';
   actorRunId?: string;
+  datasetId?: string;
+  isPaid: boolean;
   packId?: string;
-  // Nouveaux champs pour la gestion des paiements
-  paymentCompletedAt?: string;
-  paymentStatus?: 'pending' | 'succeeded' | 'failed';
-  paymentError?: string;
-  paymentPending?: boolean;
-  paymentStartedAt?: string;
+  downloadUrl?: string;
+  downloadToken?: string; // Le token pour le téléchargement sécurisé
+  totalItems?: number;
+  previewItems?: any[];
+  hasData?: boolean;
+  paymentIntentId?: string; // L'ID de l'intention de paiement Stripe
+  data?: any[]; // Les données scrappées, si disponibles
+  created_at: string;
+  updated_at: string;
 }
 
 export interface SessionStats {

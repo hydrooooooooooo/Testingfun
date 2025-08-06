@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { AuthProvider } from "./context/AuthContext";
 import { ScrapeProvider } from "./contexts/ScrapeContext"; // Importer le nouveau provider
+import { DashboardProvider } from "./context/DashboardContext";
 
 // Pages
 import Index from "./pages/Index";
@@ -32,7 +33,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <AuthProvider>
-          <ScrapeProvider>
+          <DashboardProvider>
+            <ScrapeProvider>
             <BrowserRouter>
               <Toaster />
               <Sonner />
@@ -60,7 +62,8 @@ function App() {
               </Routes>
             </BrowserRouter>
           </ScrapeProvider>
-        </AuthProvider>
+        </DashboardProvider>
+      </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

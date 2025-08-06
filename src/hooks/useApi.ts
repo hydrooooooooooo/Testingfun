@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 
 // API base URL - should be set in environment variables
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
 // Types pour les options de scraping APIFY
 interface ApifyScrapeOptions {
@@ -96,7 +96,7 @@ export function useApi() {
 
       console.log('Démarrage du scraping APIFY avec options:', apifyOptions);
 
-      const response = await axios.post(`${API_BASE_URL}/api/scrape`, {
+      const response = await axios.post(`${API_BASE_URL}/scrape`, {
         url,
         sessionId,
         apifyOptions,
@@ -136,7 +136,7 @@ export function useApi() {
     
     try {
       console.log(`API: Fetching results for session ${sessionId}`);
-      const response = await axios.get(`${API_BASE_URL}/api/scrape/result`, { params: { sessionId } });
+      const response = await axios.get(`${API_BASE_URL}/scrape/result`, { params: { sessionId } });
       
       const session = response.data;
 
@@ -165,7 +165,7 @@ export function useApi() {
    */
   const getApifyRunStatus = async (runId: string) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/apify/run/${runId}/status`);
+      const response = await axios.get(`${API_BASE_URL}/apify/run/${runId}/status`);
       return response.data;
     } catch (err: any) {
       console.error('Erreur lors de la récupération du statut APIFY:', err);
@@ -178,7 +178,7 @@ export function useApi() {
    */
   const cancelApifyRun = async (runId: string) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/apify/run/${runId}/abort`);
+      const response = await axios.post(`${API_BASE_URL}/apify/run/${runId}/abort`);
       return response.data;
     } catch (err: any) {
       console.error("Erreur lors de l'annulation du run APIFY:", err);
@@ -194,7 +194,7 @@ export function useApi() {
     setError(null);
     
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/payment/create-payment`, {
+      const response = await axios.post(`${API_BASE_URL}/payment/create-payment`, {
         packId,
         sessionId
       });
@@ -216,7 +216,7 @@ export function useApi() {
       console.log(`Vérification du paiement pour la session ${sessionId}`);
       
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/payment/verify-payment`, {
+        const response = await axios.get(`${API_BASE_URL}/payment/verify-payment`, {
           params: { sessionId },
           timeout: 10000
         });
@@ -234,7 +234,7 @@ export function useApi() {
       } catch (error) {
         console.warn('Erreur avec la route spécifique, essai avec la route générique:', error);
         
-        const fallbackResponse = await axios.get(`${API_BASE_URL}/api/verify-payment`, {
+        const fallbackResponse = await axios.get(`${API_BASE_URL}/verify-payment`, {
           params: { sessionId },
           timeout: 10000
         });
@@ -260,7 +260,7 @@ export function useApi() {
    * Get export URL
    */
   const getExportUrl = (sessionId: string, format: 'excel' | 'csv' = 'excel') => {
-    return `${API_BASE_URL}/api/export?sessionId=${sessionId}&format=${format}`;
+    return `${API_BASE_URL}/export?sessionId=${sessionId}&format=${format}`;
   };
 
   return { 

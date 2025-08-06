@@ -27,7 +27,7 @@ const forcePayment = async (sessionId: string) => {
 
     const downloadToken = nanoid(32);
     const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
-    const downloadUrl = `${backendUrl}/api/export/download/${downloadToken}`;
+    const downloadUrl = `${backendUrl}/export/download/${downloadToken}`;
 
     const updatedSession = await sessionService.updateSession(sessionId, {
       isPaid: true,

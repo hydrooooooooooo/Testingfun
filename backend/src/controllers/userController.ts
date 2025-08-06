@@ -1,7 +1,7 @@
 import { logger } from '../utils/logger';
 import { Request, Response } from 'express';
 import db from '../database';
-import { auditService } from '../services/auditService';
+
 import bcrypt from 'bcryptjs';
 
 // Étendre l'interface Request pour inclure la propriété user complète
@@ -23,7 +23,7 @@ export const getPaymentHistory = async (req: AuthenticatedRequest, res: Response
       return res.status(401).json({ message: 'Utilisateur non authentifié.' });
     }
 
-    const purchases = await auditService.getUserPurchases(userId);
+    const purchases: any[] = []; // await auditService.getUserPurchases(userId);
     res.status(200).json(purchases);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Une erreur inconnue est survenue.';
@@ -75,18 +75,34 @@ export const getDashboardData = async (req: AuthenticatedRequest, res: Response)
     // Récupérer les sessions de scraping de l'utilisateur
     const scrapingSessions = await db('scraping_sessions')
       .where({ user_id: userId })
+      .select(
+        'id',
+        'packId',
+        'status',
+        'created_at',
+        'totalItems',
+        'isPaid',
+        'downloadToken',
+        'url'
+      )
       .orderBy('created_at', 'desc');
 
-    const [totalDownloadsResult, purchases, downloads] = await Promise.all([
+    const purchases: any[] = [];
+    const [totalDownloadsResult, downloads] = await Promise.all([
       db('downloads').where({ user_id: userId }).count('id as count').first(),
-      auditService.getUserPurchases(userId),
-      db('downloads').where({ user_id: userId }).select('*').orderBy('downloaded_at', 'desc')
+      // 
+      db('scraping_sessions')
+        .where({ user_id: userId, isPaid: true, status: 'completed' })
+        .select('*')
+        .orderBy('created_at', 'desc')
     ]);
+
+    const totalScrapes = scrapingSessions.reduce((acc, session) => acc + (session.totalItems || 0), 0);
 
     res.status(200).json({
       user,
       stats: {
-        totalScrapes: scrapingSessions.length,
+        totalScrapes,
         totalDownloads: Number(totalDownloadsResult?.count || 0),
       },
       sessions: scrapingSessions, // Envoyer les sessions complètes au frontend

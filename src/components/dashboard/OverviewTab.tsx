@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart2, Download, CreditCard, Activity } from 'lucide-react';
+import { BarChart2, Download, CreditCard, Activity as ActivityIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { UserData } from '@/types';
+import { UserData, Activity } from '@/types';
 
 interface OverviewTabProps {
   userData: UserData | null;
@@ -16,10 +16,10 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ userData }) => {
 
   const { stats, payments, downloads } = userData;
 
-  const combinedActivity = [
-    ...payments.map(p => ({ ...p, type: 'payment' })),
-    ...downloads.map(d => ({ ...d, type: 'download' }))
-  ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  const combinedActivity: Activity[] = [
+    ...payments.map(p => ({ ...p, type: 'payment' as const, date: p.created_at })),
+    ...downloads.map(d => ({ ...d, type: 'download' as const, date: d.downloaded_at }))
+  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const recentActivity = combinedActivity.slice(0, 5);
 
@@ -32,7 +32,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ userData }) => {
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats?.totalPayments?.count || 0}</div>
+            <div className="text-2xl font-bold">{payments?.length || 0}</div>
           </CardContent>
         </Card>
         <Card>
@@ -41,7 +41,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ userData }) => {
             <Download className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats?.totalDownloads?.count || 0}</div>
+            <div className="text-2xl font-bold">{stats.totalDownloads || 0}</div>
           </CardContent>
         </Card>
         <Card>
@@ -50,7 +50,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ userData }) => {
             <BarChart2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats?.totalScrapingJobs?.count || 0}</div>
+            <div className="text-2xl font-bold">{stats.totalScrapes || 0}</div>
           </CardContent>
         </Card>
       </div>
@@ -58,7 +58,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ userData }) => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center">
-            <Activity className="mr-2 h-5 w-5" />
+            <ActivityIcon className="mr-2 h-5 w-5" />
             Activité Récente
           </CardTitle>
         </CardHeader>
@@ -71,15 +71,21 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ userData }) => {
                     {activity.type === 'payment' ? <CreditCard className="h-5 w-5" /> : <Download className="h-5 w-5" />}
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium">
-                      {activity.type === 'payment' ? `Paiement de ${activity.amount}€` : `Téléchargement de fichier`}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {activity.type === 'download' ? activity.scraped_url : `ID de transaction: ${activity.stripe_payment_id}`}
-                    </p>
+                    {activity.type === 'payment' && (
+                      <>
+                        <p className="text-sm font-medium">Paiement de {activity.amount}€</p>
+                        <p className="text-xs text-muted-foreground">ID de transaction: {activity.stripe_payment_id}</p>
+                      </>
+                    )}
+                    {activity.type === 'download' && (
+                      <>
+                        <p className="text-sm font-medium">Fichier : {activity.scraped_url}</p>
+                        <p className="text-xs text-muted-foreground">Fichier téléchargé</p>
+                      </>
+                    )}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {format(new Date(activity.created_at), "d MMM yyyy 'à' HH:mm", { locale: fr })}
+                    {format(new Date(activity.date), "d MMM yyyy 'à' HH:mm", { locale: fr })}
                   </p>
                 </li>
               ))

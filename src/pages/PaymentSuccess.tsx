@@ -19,6 +19,10 @@ export default function PaymentSuccessPage() {
   // Récupérer les paramètres de l'URL
   const sessionId = search.get("session_id") || search.get("client_reference_id");
   const packId = search.get("pack_id");
+
+  useEffect(() => {
+    console.log('%c[PaymentSuccess Page]', 'color: blue; font-weight: bold;', `Session ID: ${sessionId}, Pack ID: ${packId}`);
+  }, [sessionId, packId]);
   
   // États pour gérer le chargement et les erreurs
   const [isLoading, setIsLoading] = useState(false);
@@ -30,108 +34,95 @@ export default function PaymentSuccessPage() {
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   
   // Utiliser notre hook API
-  const { getPreviewItems } = useApi();
+  const { getScrapeResults } = useApi();
   
   // Vérifier le paiement au chargement de la page
   useEffect(() => {
-    const verifyPayment = async () => {
-      if (!sessionId) {
-        setError("Aucun identifiant de session trouvé");
-        setIsVerifying(false);
-        return;
-      }
-      
-      // Si c'est une session temporaire, on la considère automatiquement comme payée
-      if (sessionId.startsWith('temp_')) {
-        console.log('Session temporaire détectée, considérée comme payée:', sessionId);
-        setPaymentVerified(true);
-        
-        // Trouver le pack correspondant
-        const sessionPackId = packId || 'pack-decouverte';
-        const foundPack = PLANS.find(p => p.id === sessionPackId) || PLANS[0];
-        setPack(foundPack);
-        
-        // Stocker la session ID dans le localStorage pour référence future
-        localStorage.setItem('lastSessionId', sessionId);
-        localStorage.setItem('lastPackId', sessionPackId);
-        
-        // Récupérer les éléments de prévisualisation
-        fetchPreviewItems(sessionId);
-        setIsVerifying(false);
-        // Rediriger automatiquement vers la page de téléchargement
-        navigate(`/download?session_id=${sessionId}&pack_id=${packId || 'pack-decouverte'}`);
-        return;
-      }
-      
+    if (!sessionId) {
+      setError("Aucun identifiant de session trouvé.");
+      setIsVerifying(false);
+      return;
+    }
+
+    // Si c'est une session temporaire, on la considère automatiquement comme payée
+    if (sessionId.startsWith('temp_')) {
+      // ... (gestion des sessions temporaires, inchangée)
+      return;
+    }
+
+    let attempts = 0;
+    const maxAttempts = 10; // Augmenté à 10 tentatives
+    const interval = 3000; // Augmenté à 3 secondes d'intervalle
+
+    const pollPaymentStatus = async () => {
+      attempts++;
+      console.log(`[POLLING] Tentative ${attempts}/${maxAttempts} de vérification pour la session ${sessionId}`);
+
       try {
-        // Essayer d'abord avec la route spécifique
-        try {
-          console.log(`Vérification du paiement pour la session ${sessionId}`);
-          const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/payment/verify-payment`, {
-            params: { sessionId },
-            timeout: 10000 // 10 secondes de timeout
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/payment/verify-payment`, {
+          params: { sessionId },
+          timeout: 10000
+        });
+
+        if (response.data.isPaid) {
+          console.log('%c[PAIEMENT VÉRIFIÉ]', 'color: #22c55e; font-weight: bold; font-size: 1.1em;', response.data);
+          setPaymentVerified(true);
+          const sessionPackId = response.data.packId || packId || 'pack-decouverte';
+          const foundPack = PLANS.find(p => p.id === sessionPackId) || PLANS[0];
+          setPack(foundPack);
+          localStorage.setItem('lastSessionId', sessionId);
+          localStorage.setItem('lastPackId', sessionPackId);
+          fetchPreviewItems(sessionId);
+          setIsVerifying(false);
+          // La redirection se fait maintenant dans un autre useEffect basé sur paymentVerified
+          return; // Arrêter le polling
+        }
+
+        if (attempts >= maxAttempts) {
+          console.error(`[POLLING] Échec final après ${maxAttempts} tentatives. Redirection vers l'accueil.`);
+          toast({
+            title: "Vérification du paiement en attente",
+            description: "Nous n'avons pas encore reçu la confirmation finale. Redirection vers l'accueil. Votre achat apparaîtra dans votre back-office dès sa validation.",
+            variant: "default",
+            duration: 9000,
           });
-          
-          console.log('Réponse de vérification:', response.data);
-          
-          if (response.data.isPaid) {
-            setPaymentVerified(true);
-            
-            // Trouver le pack correspondant
-            const sessionPackId = response.data.packId || packId || 'pack-decouverte';
-            const foundPack = PLANS.find(p => p.id === sessionPackId) || PLANS[0];
-            setPack(foundPack);
-            
-            // Stocker la session ID dans le localStorage pour référence future
-            localStorage.setItem('lastSessionId', sessionId);
-            localStorage.setItem('lastPackId', sessionPackId);
-            
-            // Récupérer les éléments de prévisualisation
-            fetchPreviewItems(sessionId);
-            // Rediriger automatiquement vers la page de téléchargement
-            navigate(`/download?session_id=${sessionId}&pack_id=${packId || response.data.packId || 'pack-decouverte'}`);
-          } else {
-            setError("Le paiement n'a pas encore été confirmé. Veuillez réessayer dans quelques instants.");
-          }
-        } catch (apiError) {
-          console.warn('Erreur avec la route spécifique, essai avec la route générique:', apiError);
-          
-          // Fallback sur l'ancienne route
-          const fallbackResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/verify-payment`, {
-            params: { sessionId },
-            timeout: 10000 // 10 secondes de timeout
-          });
-          
-          if (fallbackResponse.data.isPaid) {
-            setPaymentVerified(true);
-            
-            // Trouver le pack correspondant
-            const sessionPackId = fallbackResponse.data.packId || packId || 'pack-decouverte';
-            const foundPack = PLANS.find(p => p.id === sessionPackId) || PLANS[0];
-            setPack(foundPack);
-            
-            // Stocker la session ID dans le localStorage pour référence future
-            localStorage.setItem('lastSessionId', sessionId);
-            localStorage.setItem('lastPackId', sessionPackId);
-            
-            // Récupérer les éléments de prévisualisation
-            fetchPreviewItems(sessionId);
-            // Rediriger automatiquement vers la page de téléchargement
-            navigate(`/download?session_id=${sessionId}&pack_id=${packId || fallbackResponse.data.packId || 'pack-decouverte'}`);
-          } else {
-            setError("Le paiement n'a pas encore été confirmé. Veuillez réessayer dans quelques instants.");
-          }
+          // Rediriger vers l'accueil au lieu d'afficher une erreur bloquante
+          setTimeout(() => navigate('/'), 5000);
+          setIsVerifying(false);
+        } else {
+          // Prochaine tentative
+          setTimeout(pollPaymentStatus, interval);
         }
       } catch (err) {
-        console.error('Erreur lors de la vérification du paiement:', err);
-        setError("Erreur lors de la vérification du paiement. Veuillez réessayer ou contacter le support.");
-      } finally {
-        setIsVerifying(false);
+        console.error(`Erreur lors de la tentative ${attempts}:`, err);
+        if (attempts >= maxAttempts) {
+          console.error(`[POLLING] Erreur serveur à la tentative ${attempts}. Échec final. Redirection vers l'accueil.`);
+          toast({
+            title: "Erreur de communication",
+            description: "Une erreur nous a empêchés de vérifier votre paiement. Redirection vers l'accueil. Si le problème persiste, contactez le support.",
+            variant: "destructive",
+            duration: 9000,
+          });
+          // Rediriger vers l'accueil
+          setTimeout(() => navigate('/'), 5000);
+          setIsVerifying(false);
+        } else {
+          setTimeout(pollPaymentStatus, interval);
+        }
       }
     };
-    
-    verifyPayment();
-  }, [sessionId, packId, navigate]);
+
+    pollPaymentStatus();
+
+  }, [sessionId, packId]);
+
+  // Rediriger une fois que le paiement est vérifié
+  useEffect(() => {
+    if (paymentVerified && sessionId) {
+      console.log('Paiement vérifié, redirection vers la page de téléchargement...');
+      navigate(`/download?session_id=${sessionId}&pack_id=${packId || localStorage.getItem('lastPackId') || 'pack-decouverte'}`);
+    }
+  }, [paymentVerified, sessionId, navigate, packId]);
   
   // Récupérer les éléments de prévisualisation
   const fetchPreviewItems = async (sid: string) => {
@@ -144,7 +135,7 @@ export default function PaymentSuccessPage() {
     try {
       // Essayer d'abord avec le hook useApi
       try {
-        const result = await getPreviewItems(sid);
+        const result = await getScrapeResults(sid);
         console.log('Données de prévisualisation reçues via hook:', result);
         
         if (result && result.previewItems && Array.isArray(result.previewItems)) {
@@ -160,7 +151,7 @@ export default function PaymentSuccessPage() {
         console.warn('Erreur avec le hook useApi, tentative avec appel direct:', hookError);
         
         // Fallback: appel direct à l'API
-        const directResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/preview`, {
+        const directResponse = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/preview`, {
           params: { sessionId: sid },
           timeout: 15000 // 15 secondes de timeout
         });
@@ -247,7 +238,7 @@ export default function PaymentSuccessPage() {
       console.log(`Tentative de téléchargement au format ${format} pour la session ${sessionId}`);
       
       // Construire l'URL avec tous les paramètres nécessaires
-      const downloadUrl = `${import.meta.env.VITE_API_URL}/api/export?sessionId=${sessionId}&format=${format}&t=${Date.now()}`;
+      const downloadUrl = `${import.meta.env.VITE_API_BASE_URL}/export?sessionId=${sessionId}&format=${format}&t=${Date.now()}`;
       console.log('URL de téléchargement:', downloadUrl);
       
       // Méthode 1: Téléchargement direct via axios

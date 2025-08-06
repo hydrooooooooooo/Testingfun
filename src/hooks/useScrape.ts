@@ -1,11 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { useApi, ScrapeResult, ScrapeStats, PreviewItem } from './useApi';
+import { PLANS } from '@/lib/plans';
+import { useDashboard } from '@/context/DashboardContext';
 
 const POLLING_INTERVAL = 3000; // 3 secondes
 
 export function useScrape(initialSessionId?: string) {
   const { getScrapeResults, startScraping: apiStartScraping, createPayment, getExportUrl } = useApi();
+  const { fetchDashboardData } = useDashboard();
   
   const { toast } = useToast();
 
@@ -56,11 +59,12 @@ export function useScrape(initialSessionId?: string) {
       const isFailed = ['failed', 'FAILED', 'ABORTED'].includes(result.status.toUpperCase());
 
       if (isFinished) {
-        console.log('Scraping finished. Setting final state...');
+        console.log('Scraping finished. Refreshing dashboard and setting final state...');
         setPreviewItems(result.previewItems || []);
         setStats(result.stats || { nbItems: 0 });
         setLoading(false);
         setScrapeDone(true);
+        fetchDashboardData(); // Met à jour les données du tableau de bord
         toast({
           title: 'Scraping terminé!',
           description: `Le scraping est terminé avec ${result.stats?.nbItems || 0} éléments trouvés.`,
@@ -89,7 +93,7 @@ export function useScrape(initialSessionId?: string) {
     } finally {
       setIsPolling(false);
     }
-  }, [sessionId, isPolling, getScrapeResults, toast]);
+  }, [sessionId, isPolling, getScrapeResults, toast, fetchDashboardData]);
 
   useEffect(() => {
     if (sessionId && !scrapeDone) {
@@ -134,30 +138,32 @@ export function useScrape(initialSessionId?: string) {
     }
   };
 
-  const handlePayment = async () => {
+  const handlePayment = async (packId: string) => {
     if (!sessionId) {
       toast({ title: 'Erreur', description: 'Aucune session de scraping active.', variant: 'destructive' });
       return;
     }
 
+    const selectedPlan = PLANS.find(p => p.id === packId);
+
+    if (!selectedPlan || !selectedPlan.stripeBuyLink) {
+      toast({ title: 'Erreur de configuration', description: 'Lien de paiement introuvable pour ce pack.', variant: 'destructive' });
+      return;
+    }
+
     setLoading(true);
     try {
-      // Le packId est pour l'instant statique, on pourrait le rendre dynamique plus tard
-      const packId = 'pack-decouverte'; 
-      const checkoutUrl = await createPayment(packId, sessionId);
-      if (checkoutUrl) {
-        console.log(`Redirecting to Stripe checkout: ${checkoutUrl}`);
-        window.location.href = checkoutUrl;
-      } else {
-        throw new Error('Aucune URL de paiement n-a été retournée.');
-      }
+      // Ajoute le sessionId comme client_reference_id pour le suivi dans Stripe
+      const checkoutUrl = `${selectedPlan.stripeBuyLink}?client_reference_id=${sessionId}`;
       
-      
+      console.log(`Redirecting to Stripe checkout: ${checkoutUrl}`);
+      window.location.href = checkoutUrl;
+
     } catch (err: any) {
-      console.error('Payment creation failed:', err);
+      console.error('Payment redirection failed:', err);
       toast({
         title: 'Erreur de paiement',
-        description: err.message || 'Impossible de créer la session de paiement.',
+        description: err.message || 'Impossible de vous rediriger vers la page de paiement.',
         variant: 'destructive',
       });
     } finally {
@@ -173,6 +179,11 @@ export function useScrape(initialSessionId?: string) {
     console.log(`Exporting data in ${format} format for session ${sessionId}...`);
     const url = getExportUrl(sessionId, format);
     window.open(url, '_blank');
+    // Met à jour les données du dashboard après un court délai pour laisser le temps au backend de traiter le téléchargement
+    setTimeout(() => {
+      console.log('Refreshing dashboard data after export...');
+      fetchDashboardData();
+    }, 2000);
   };
 
   return {

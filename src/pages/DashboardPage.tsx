@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import React, { useEffect } from 'react';
+import { useDashboard } from '@/context/DashboardContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OverviewTab from '@/components/dashboard/OverviewTab';
 import PaymentsTab from '@/components/dashboard/PaymentsTab';
@@ -11,43 +11,11 @@ import { User, CreditCard, Download } from 'lucide-react';
 import { UserData } from '@/types';
 
 const DashboardPage: React.FC = () => {
-  const { token } = useAuth();
-  const [userData, setUserData] = useState<UserData | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { userData, error, isLoading, fetchDashboardData } = useDashboard();
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      setIsLoading(true);
-      if (!token) {
-        setError('Vous n\'êtes pas authentifié.');
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/dashboard`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Erreur lors de la récupération des données.');
-        }
-
-        const data: UserData = await response.json();
-        setUserData(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Une erreur inconnue est survenue.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchDashboardData();
-  }, [token]);
+  }, [fetchDashboardData]);
 
   if (isLoading) {
     return <div className="flex items-center justify-center h-screen">Chargement du tableau de bord...</div>;
@@ -99,7 +67,7 @@ const DashboardPage: React.FC = () => {
           <PaymentsTab payments={userData?.payments || []} />
         </TabsContent>
         <TabsContent value="files">
-          <FilesTab downloads={userData.downloads} />
+          <FilesTab sessions={userData.downloads} />
         </TabsContent>
         <TabsContent value="settings">
           <SettingsTab />
