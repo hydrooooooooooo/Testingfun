@@ -1,3 +1,11 @@
+import { Request } from 'express';
+
+export interface AuthenticatedRequest extends Request {
+  user?: {
+    id: number;
+  };
+}
+
 export interface ScrapedItem {
     id: string;
     title: string;

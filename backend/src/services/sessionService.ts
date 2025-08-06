@@ -7,14 +7,15 @@ export enum SessionStatus {
   PENDING = 'pending',
   RUNNING = 'running',
   FINISHED = 'completed',
-  FAILED = 'failed'
+  FAILED = 'failed',
+  PAYMENT_FAILED = 'payment_failed',
 }
 
 // Session interface matching the database table
 export interface Session {
   id: string;
   user_id?: number;
-  status: 'pending' | 'running' | 'completed' | 'failed';
+  status: SessionStatus;
   actorRunId?: string;
   datasetId?: string;
   isPaid: boolean;

@@ -1,21 +1,46 @@
 export interface Purchase {
   id: number;
   user_id: number;
-  session_id: string;
-  pack_id: string;
-  payment_intent_id: string;
-  amount_paid: number;
+  amount: number;
   currency: string;
-  download_url: string;
-  purchased_at: string;
+  status: string;
+  description: string;
+  credits_purchased: number;
+  stripe_payment_id: string;
+  created_at: string;
 }
 
 export interface Download {
   id: number;
   user_id: number;
   session_id: string;
+  file_path: string;
+  scraped_url: string;
+  results_count: number;
+  file_size: number;
   file_format: 'excel' | 'csv' | 'json';
   downloaded_at: string;
+}
+
+export type PaymentActivity = Purchase & { type: 'payment'; date: string; };
+export type DownloadActivity = Download & { type: 'download'; date: string; };
+export type Activity = PaymentActivity | DownloadActivity;
+
+export interface Session {
+  id: string;
+  user_id: number;
+  status: 'pending' | 'running' | 'completed' | 'failed';
+  actorRunId?: string;
+  datasetId?: string;
+  isPaid: boolean;
+  packId?: string;
+  totalItems?: number;
+  downloadUrl?: string;
+  downloadToken?: string;
+  payment_intent_id?: string | null;
+  url?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface UserData {
@@ -30,5 +55,5 @@ export interface UserData {
     totalDownloads: number;
   };
   payments: Purchase[];
-  downloads: Download[];
+  downloads: Session[]; // Changed from Download[] to Session[] to reflect API changes
 }

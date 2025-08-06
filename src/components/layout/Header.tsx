@@ -1,72 +1,98 @@
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '../ui/button';
-import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Menu } from 'lucide-react';
+
+const navItems = [
+  { path: '/', label: 'Accueil' },
+  { path: '/pricing', label: 'Tarifs' },
+  { path: '/support', label: 'Support' },
+  { path: '/models', label: 'Modèles' },
+];
 
 const Header = () => {
-  const { user, logout } = useAuth();
+  const { pathname } = useLocation();
+  const { isAuthenticated, user, logout } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <header className="bg-background border-b px-4 md:px-6 h-16 flex items-center justify-between">
-      <Link to="/dashboard" className="flex items-center gap-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-6 w-6"
-        >
-          <path d="M12.22 2h-4.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.44.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 0 2l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.44.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h4.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.44-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1 0-2l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.44-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-          <circle cx="12" cy="12" r="3" />
-        </svg>
-        <span className="font-semibold text-lg">EasyScrapy</span>
+    <header className="sticky top-0 z-20 w-full bg-white border-b border-border shadow-sm flex items-center justify-between px-4 md:px-8 h-20">
+      <Link to="/" className="text-2xl font-extrabold tracking-tight text-primary uppercase mr-8 select-none">
+        EASYSCrapy<span className="text-primary font-black">.COM</span>
       </Link>
-      <div className="flex items-center gap-4">
-        {user ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-9 w-9">
-                  <AvatarImage src="/placeholder-user.jpg" alt={user.email} />
-                  <AvatarFallback>{user.email.charAt(0).toUpperCase()}</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user.email}</p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    {user.role}
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link to="/dashboard?tab=settings">Paramètres</Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={logout}>Se déconnecter</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+
+      {/* Desktop Navigation */}
+      <nav className="hidden md:flex items-center gap-4 text-lg">
+        {navItems.map(({ path, label }) => (
+          <Link
+            key={path}
+            to={path}
+            className={`px-3 py-2 rounded transition-colors duration-150 ${
+              pathname === path
+                ? 'bg-primary text-primary-foreground'
+                : 'hover:bg-muted/70 text-muted-foreground'
+            }`}
+          >
+            {label}
+          </Link>
+        ))}
+      </nav>
+
+      {/* Desktop Auth Buttons */}
+      <div className="hidden md:flex items-center gap-4 ml-auto">
+        {isAuthenticated() ? (
+          <>
+            <span className="text-sm text-muted-foreground hidden lg:inline">
+              {user?.email}
+            </span>
+            <Link to="/dashboard">
+              <Button variant="outline">Dashboard</Button>
+            </Link>
+            <Button onClick={logout}>Déconnexion</Button>
+          </>
         ) : (
-          <Button asChild>
-            <Link to="/login">Se connecter</Link>
-          </Button>
+          <Link to="/login">
+            <Button>Se connecter</Button>
+          </Link>
         )}
+      </div>
+
+      {/* Mobile Menu */}
+      <div className="md:hidden ml-auto">
+        <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon">
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Ouvrir le menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left">
+            <nav className="grid gap-6 text-lg font-medium mt-10">
+              {navItems.map(({ path, label }) => (
+                <Link key={path} to={path} onClick={closeMenu} className="hover:text-primary transition-colors">
+                  {label}
+                </Link>
+              ))}
+              <hr className="my-4" />
+              {isAuthenticated() ? (
+                <div className="flex flex-col gap-4">
+                  <Link to="/dashboard" onClick={closeMenu}>
+                    <Button variant="outline" className="w-full">Dashboard</Button>
+                  </Link>
+                  <Button onClick={() => { logout(); closeMenu(); }}>Déconnexion</Button>
+                </div>
+              ) : (
+                <Link to="/login" onClick={closeMenu}>
+                  <Button className="w-full">Se connecter</Button>
+                </Link>
+              )}
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );

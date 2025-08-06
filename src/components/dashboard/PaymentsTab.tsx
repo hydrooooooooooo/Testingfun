@@ -19,26 +19,42 @@ import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { FileDown } from 'lucide-react';
+import { Purchase } from '@/types';
 
-// Interface for a single purchase, aligned with backend's `user_purchases` table
-interface Purchase {
-  id: number;
-  user_id: number;
-  session_id: string;
-  pack_id: string;
-  payment_intent_id: string;
-  amount_paid: number;
-  currency: string;
-  download_url: string;
-  purchased_at: string; // ISO date string
-}
-
-// Interface for the component's props
 interface PaymentsTabProps {
   payments: Purchase[];
 }
 
 const PaymentsTab: React.FC<PaymentsTabProps> = ({ payments }) => {
+  const getStatusVariant = (status: string): 'default' | 'destructive' | 'secondary' => {
+    switch (status.toLowerCase()) {
+      case 'succeeded':
+        return 'default';
+      case 'failed':
+      case 'refused':
+      case 'error':
+        return 'destructive';
+      case 'canceled':
+        return 'secondary';
+      default:
+        return 'secondary';
+    }
+  };
+
+  const getStatusText = (status: string): string => {
+    switch (status.toLowerCase()) {
+      case 'succeeded':
+        return 'Réussi';
+      case 'failed':
+      case 'refused':
+      case 'error':
+        return 'Échoué';
+      case 'canceled':
+        return 'Annulé';
+      default:
+        return status.charAt(0).toUpperCase() + status.slice(1);
+    }
+  };
   if (!payments) {
     return <div>Chargement des paiements...</div>;
   }
@@ -68,26 +84,21 @@ const PaymentsTab: React.FC<PaymentsTabProps> = ({ payments }) => {
                 payments.map((purchase) => (
                   <TableRow key={purchase.id}>
                     <TableCell>
-                      {format(new Date(purchase.purchased_at), 'd MMM yyyy, HH:mm', {
+                      {format(new Date(purchase.created_at), 'd MMM yyyy, HH:mm', {
                         locale: fr,
                       })}
                     </TableCell>
                     <TableCell className="font-medium">
-                      {purchase.pack_id.replace(/-/g, ' ')}
+                      {purchase.description}
                     </TableCell>
-                    <TableCell>{purchase.amount_paid.toFixed(2)} {purchase.currency.toUpperCase()}</TableCell>
+                    <TableCell>{purchase.amount.toFixed(2)} {purchase.currency.toUpperCase()}</TableCell>
                     <TableCell>
-                      <Badge variant={'default'}>
-                        Réussi
+                      <Badge variant={getStatusVariant(purchase.status)}>
+                        {getStatusText(purchase.status)}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <a href={purchase.download_url} target="_blank" rel="noopener noreferrer">
-                        <Button variant="outline" size="sm">
-                          <FileDown className="mr-2 h-4 w-4" />
-                          Télécharger
-                        </Button>
-                      </a>
+                      {/* TODO: Re-implement download logic. The download URL is not available directly on the payment object anymore. */}
                     </TableCell>
                   </TableRow>
                 ))

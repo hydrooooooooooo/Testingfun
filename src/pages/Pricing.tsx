@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import PaymentModal from "@/components/PaymentModal";
 
 import PricingPlan from "@/components/PricingPlan";
 import { PLANS } from "@/lib/plans";
 import { toast } from "@/hooks/use-toast";
 import { CheckCircle, Star, Shield, Clock, Users, Smartphone, Mail, ArrowRight, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
+import { Loader2 } from "lucide-react";
 import type { Pack } from "@/lib/plans";
 import type { PricingPlanDisplay } from "@/components/PricingPlan";
 
@@ -71,57 +74,63 @@ const PRICING_PLANS: PricingPlanDisplay[] = PLANS.map(plan => {
 
 export default function PricingPage() {
   const navigate = useNavigate();
+  const { token } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [sessionId, setSessionId] = useState<string>("");
-  
-  useEffect(() => {
-    const tempSessionId = generateSessionId();
-    setSessionId(tempSessionId);
-  }, []);
-  
-  const handlePay = async (plan: PricingPlanDisplay) => {
-    try {
-      const packId = plan.packId;
-      
-      if (!packId) {
-        toast({
-          title: "Erreur de configuration",
-          description: "Impossible de trouver l'identifiant du pack sélectionné.",
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      setLoading(true);
-      
-      // Stocker les informations du pack sélectionné
-      localStorage.setItem('selectedPackId', packId);
-      localStorage.setItem('currentSessionId', sessionId);
-      localStorage.setItem('selectedPackInfo', JSON.stringify({
-        name: plan.name,
-        price: plan.price,
-        nbDownloads: plan.nbDownloads
-      }));
-      
-      toast({
-        title: "Pack sélectionné",
-        description: `${plan.name} - Redirection vers l'accueil pour commencer...`,
-      });
-      
-      // Redirection vers l'accueil avec paramètres pour pré-remplir
-      setTimeout(() => {
-        navigate(`/?pack=${packId}&extractions=${plan.nbDownloads}`);
-        setLoading(false);
-      }, 1000);
-      
-    } catch (error) {
-      console.error('Erreur lors de la sélection du pack:', error);
-      toast({
-        title: "Erreur",
-        description: "Une erreur est survenue. Veuillez réessayer.",
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlanForModal, setSelectedPlanForModal] = useState<PricingPlanDisplay | null>(null);
+
+  const handlePay = (plan: PricingPlanDisplay) => {
+    if (!token) {
+      toast({ 
+        title: "Connexion requise", 
+        description: "Vous devez être connecté pour acheter un pack.",
         variant: "destructive"
       });
+      navigate('/login');
+      return;
+    }
+    setSelectedPlanForModal(plan);
+    setIsModalOpen(true);
+  };
+
+  const proceedToStripePayment = async () => {
+    if (!selectedPlanForModal || !selectedPlanForModal.packId) {
+      toast({ title: "Erreur", description: "Aucun pack sélectionné.", variant: "destructive" });
+      return;
+    }
+
+    setLoading(true);
+    setSelectedPlanId(selectedPlanForModal.packId);
+    setIsModalOpen(false);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/payment/create-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ packId: selectedPlanForModal.packId }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'La création de la session de paiement a échoué.');
+      }
+
+      const { url } = await response.json();
+      window.location.href = url;
+
+    } catch (error) {
+      console.error("Payment creation error:", error);
+      toast({
+        title: "Erreur de paiement",
+        description: error instanceof Error ? error.message : "Une erreur inconnue est survenue.",
+        variant: "destructive",
+      });
       setLoading(false);
+      setSelectedPlanId(null);
     }
   };
 
@@ -172,7 +181,13 @@ ${data.nom}
   };
 
   return (
-
+    <>
+      <PaymentModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onStripePay={proceedToStripePayment}
+        planName={selectedPlanForModal?.name || ''}
+      />
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
         {/* Hero Section */}
         <section className="w-full max-w-6xl mx-auto px-4 py-16">
@@ -222,7 +237,7 @@ ${data.nom}
             
             <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 justify-items-center items-stretch">
               {PRICING_PLANS.map((plan, i) => (
-                <PricingPlan key={i} plan={plan} onClickPay={handlePay} />
+                <PricingPlan key={i} plan={plan} onClickPay={handlePay} isLoading={loading && selectedPlanId === plan.packId} />
               ))}
             </div>
           </div>
@@ -390,6 +405,6 @@ ${data.nom}
           </div>
         </section>
       </div>
-
+    </>
   );
 }

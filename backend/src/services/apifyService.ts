@@ -1,6 +1,8 @@
 import { ApifyClient } from 'apify-client';
 import { nanoid } from 'nanoid';
 import { ScrapingJob } from '../models/ScrapingJob';
+import knex from 'knex';
+import knexConfig from '../config/knexfile';
 import { logger } from '../utils/logger';
 import { config } from '../config/config';
 import {
@@ -128,6 +130,11 @@ export class ApifyService {
         datasetId: run.defaultDatasetId,
         status: run.status 
       });
+
+      // Enregistrer l'URL dans la session
+            const environment = process.env.NODE_ENV || 'development';
+            const db = knex(knexConfig[environment]);
+      await db('scraping_sessions').where({ id: sessionId }).update({ url: url });
       
       return {
         datasetId: run.defaultDatasetId,

@@ -40,7 +40,7 @@ SESSION_STORAGE=file # 'file' ou 'memory'. 'file' persiste après redémarrage.
 
 ```env
 # URL de l'API backend de production
-VITE_API_URL=https://votre-domaine-backend.com
+VITE_API_BASE_URL=https://votre-domaine-backend.com
 
 # Clé publique Stripe (Mode LIVE)
 VITE_STRIPE_PUBLISHABLE_KEY=pk_live_************************

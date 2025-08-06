@@ -1,6 +1,6 @@
 import type { Knex } from 'knex';
-import path from 'path';
-import dotenv from 'dotenv';
+import * as path from 'path';
+import * as dotenv from 'dotenv';
 import { parse as parsePgConnectionString } from 'pg-connection-string';
 
 // Determine which .env file to load based on NODE_ENV

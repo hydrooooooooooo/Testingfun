@@ -139,7 +139,7 @@ export default function Index() {
           isPaid={isPaid}
           stats={stats}
           propPreviewItems={previewItems}
-          onPayment={handlePayment}
+          onPayment={() => handlePayment(selectedPackId)}
           exportData={exportData}
           resetScrape={resetScrape}
         />

@@ -1,7 +1,5 @@
-
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Lock } from "lucide-react";
-import { Pack } from "@/lib/plans";
+import { CheckCircle, Lock, Loader2 } from "lucide-react";
 
 // Type pour l'affichage des plans dans l'interface
 export type PricingPlanDisplay = {
@@ -10,18 +8,20 @@ export type PricingPlanDisplay = {
   desc: string;
   features: string[];
   cta: string;
-  popular?: boolean;
+  popular: boolean;
   packId: string;
-  disabled?: boolean;
   nbDownloads: number;
+  disabled?: boolean;
 };
 
 export default function PricingPlan({
   plan,
   onClickPay,
+  isLoading = false,
 }: {
   plan: PricingPlanDisplay;
   onClickPay: (plan: PricingPlanDisplay) => void;
+  isLoading?: boolean;
 }) {
   return (
     <div
@@ -47,11 +47,11 @@ export default function PricingPlan({
       <Button
         className="mt-auto w-full"
         onClick={() => onClickPay(plan)}
-        disabled={plan.disabled}
+        disabled={plan.disabled || isLoading}
         variant={plan.popular ? "default" : "secondary"}
       >
-        {plan.cta}
-        {plan.disabled && <Lock className="inline-block ml-2 w-4 h-4" />}
+        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : plan.cta}
+        {plan.disabled && !isLoading && <Lock className="inline-block ml-2 w-4 h-4" />}
       </Button>
     </div>
   );

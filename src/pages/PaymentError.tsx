@@ -96,7 +96,7 @@ export default function PaymentErrorPage() {
       if (!sessionId) return;
       
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/payment/verify-payment?sessionId=${sessionId}`);
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/payment/verify-payment?sessionId=${sessionId}`);
         if (response.ok) {
           setSessionValid(true);
         }

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { toast } from '@/hooks/use-toast';
 import {
   Card,
   CardContent,
@@ -18,21 +20,18 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { DownloadCloud } from 'lucide-react';
+import { DownloadCloud, Loader2, MoreVertical } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Session } from '@/types'; // Importer le type Session
 
-// Interface for a single download
-interface Download {
-  id: number;
-  file_path: string;
-  scraped_url: string;
-  downloaded_at: string;
-  results_count: number;
-  file_size: number;
-}
-
-// Interface for the component's props
+// Mettre à jour les props pour accepter un tableau de sessions
 interface FilesTabProps {
-  downloads: Download[];
+  sessions: Session[];
 }
 
 const formatBytes = (bytes: number, decimals = 2) => {
@@ -44,8 +43,43 @@ const formatBytes = (bytes: number, decimals = 2) => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 };
 
-const FilesTab: React.FC<FilesTabProps> = ({ downloads }) => {
-  if (!downloads) {
+const FilesTab: React.FC<FilesTabProps> = ({ sessions }) => {
+  const [loadingSessionId, setLoadingSessionId] = useState<string | null>(null);
+
+  const handleDownload = async (session: Session, format: 'excel' | 'csv') => {
+    if (!session.id || !session.downloadToken) {
+      toast({ title: "Erreur", description: "Informations de session invalides.", variant: "destructive" });
+      return;
+    }
+
+    setLoadingSessionId(session.id);
+    toast({ title: "Préparation du fichier", description: `Le téléchargement de votre fichier ${format.toUpperCase()} va bientôt commencer...` });
+
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/sessions/${session.id}/download`, {
+        params: { format, token: session.downloadToken },
+        responseType: 'blob',
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      const extension = format === 'excel' ? 'xlsx' : 'csv';
+      const filename = `session-${session.id}.${extension}`;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      toast({ title: "Téléchargement réussi", description: `Le fichier ${filename} a bien été téléchargé.` });
+    } catch (error) {
+      console.error(`Erreur lors du téléchargement du fichier ${format}:`, error);
+      toast({ title: "Erreur de téléchargement", description: "Impossible de télécharger le fichier. Veuillez réessayer.", variant: "destructive" });
+    } finally {
+      setLoadingSessionId(null);
+    }
+  };
+  if (!sessions) {
     return <div>Chargement des fichiers...</div>;
   }
 
@@ -62,34 +96,50 @@ const FilesTab: React.FC<FilesTabProps> = ({ downloads }) => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Source</TableHead>
+                <TableHead>Session ID</TableHead>
+                <TableHead>URL Scannée</TableHead>
                 <TableHead>Date</TableHead>
-                <TableHead>Résultats</TableHead>
-                <TableHead>Taille</TableHead>
                 <TableHead className="text-right">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {downloads.length > 0 ? (
-                downloads.map((download) => (
-                  <TableRow key={download.id}>
-                    <TableCell className="font-medium">
-                      <a href={download.scraped_url} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                        {new URL(download.scraped_url).hostname.replace('www.', '')}
+              {sessions.length > 0 ? (
+                sessions.map((session) => (
+                  <TableRow key={session.id}>
+                    <TableCell className="font-mono text-xs">{session.id}</TableCell>
+                    <TableCell>
+                      <a href={session.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline truncate block max-w-xs">
+                        {session.url}
                       </a>
                     </TableCell>
                     <TableCell>
-                      {format(new Date(download.downloaded_at), 'd MMM yyyy', { locale: fr })}
+                      {format(new Date(session.created_at), 'd MMM yyyy, HH:mm', { locale: fr })}
                     </TableCell>
-                    <TableCell>{download.results_count}</TableCell>
-                    <TableCell>{formatBytes(download.file_size)}</TableCell>
                     <TableCell className="text-right">
-                      <Button asChild variant="outline" size="sm">
-                        <a href={`${import.meta.env.VITE_API_BASE_URL}/downloads/${download.file_path}`}>
-                          <DownloadCloud className="mr-2 h-4 w-4" />
-                          Télécharger
-                        </a>
-                      </Button>
+                      {loadingSessionId === session.id ? (
+                        <Button variant="outline" size="sm" disabled>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          En cours...
+                        </Button>
+                      ) : (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuItem onClick={() => handleDownload(session, 'excel')}>
+                              <DownloadCloud className="mr-2 h-4 w-4" />
+                              <span>Télécharger (Excel)</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleDownload(session, 'csv')}>
+                              <DownloadCloud className="mr-2 h-4 w-4" />
+                              <span>Télécharger (CSV)</span>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))

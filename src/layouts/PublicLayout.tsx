@@ -1,62 +1,20 @@
 
-import { useAuth } from "@/context/AuthContext";
-import { Button } from "@/components/ui/button";
-import { Link, useLocation, Outlet } from "react-router-dom";
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import Header from '../components/layout/Header';
 
-const nav = [
-  { path: "/", label: "Accueil" },
-  { path: "/pricing", label: "Tarifs" },
-  { path: "/support", label: "Support" },
-  { path: "/models", label: "Modèles" }
-];
-
-export default function PublicLayout() {
-  const { pathname } = useLocation();
-  const { isAuthenticated, user, logout } = useAuth();
-
+const PublicLayout: React.FC = () => {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="sticky top-0 z-20 w-full bg-white border-b border-border shadow-sm flex items-center px-8 h-20">
-        <span className="text-2xl font-extrabold tracking-tight text-primary uppercase mr-8 select-none">
-          easyscrapy<span className="text-primary font-black">.com</span>
-        </span>
-        <nav className="flex gap-4 text-lg">
-          {nav.map(({ path, label }) => (
-            <Link
-              key={path}
-              to={path}
-              className={`px-3 py-2 rounded transition-colors duration-150 ${
-                pathname === path
-                  ? "bg-primary text-primary-foreground"
-                  : "hover:bg-muted/70 text-muted-foreground"
-              }`}
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
-        <div className="ml-auto flex items-center gap-4">
-          {isAuthenticated() ? (
-            <>
-              <span className="text-sm text-muted-foreground hidden sm:inline">
-                {user?.email}
-              </span>
-              <Link to="/dashboard">
-                <Button variant="outline">Dashboard</Button>
-              </Link>
-              <Button onClick={logout}>Déconnexion</Button>
-            </>
-          ) : (
-            <Link to="/login">
-              <Button>Se connecter</Button>
-            </Link>
-          )}
-        </div>
-      </header>
-      <main className="flex-1 flex flex-col px-0"><Outlet /></main>
+      <Header />
+      <main className="flex-1 flex flex-col px-0">
+        <Outlet />
+      </main>
       <footer className="border-t border-border py-3 mt-6 text-center text-xs text-muted-foreground tracking-wide">
         &copy; {new Date().getFullYear()} easyscrapy.com &mdash; Tous droits réservés.
       </footer>
     </div>
   );
-}
+};
+
+export default PublicLayout;

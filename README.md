@@ -1,4 +1,251 @@
-# Documentation de l'Application Marketplace Scraper
+# Marketplace Scraper Pro
+
+## 1. Description
+
+Marketplace Scraper Pro est une application web full-stack conçue pour automatiser la collecte de données depuis diverses marketplaces. Elle offre une interface utilisateur pour gérer les tâches de scraping, visualiser les données collectées et configurer les paramètres. Le backend gère la logique de scraping, l'authentification et la communication avec la base de données, tandis que le frontend offre une expérience utilisateur réactive pour interagir avec le système.
+
+L'application est conçue pour être déployée dans un environnement de production et utilise Stripe pour la gestion des paiements.
+
+## 2. Architecture et Technologies
+
+L'application est divisée en deux composants principaux : un backend en Node.js/TypeScript et un frontend en React/Vite.
+
+### Backend
+
+*   **Framework** : Node.js avec Express.js
+*   **Langage** : TypeScript
+*   **Gestion de la base de données** : Knex.js (ORM)
+*   **Base de données** :
+    *   **Développement** : SQLite3
+    *   **Production** : PostgreSQL
+*   **Authentification** : Gestion de session basée sur les fichiers
+*   **Paiements** : Intégration Stripe (via webhooks)
+*   **Dépendances clés** : `express`, `knex`, `sqlite3`, `pg`, `stripe`, `cors`, `dotenv`, `ts-node-dev`
+
+### Frontend
+
+*   **Framework** : React
+*   **Outil de build** : Vite
+*   **Langage** : TypeScript
+*   **Styling** : Tailwind CSS
+*   **Dépendances clés** : `react`, `react-dom`, `axios`, `@stripe/react-stripe-js`
+
+## 3. Prérequis
+
+Avant de commencer, assurez-vous d'avoir installé les logiciels suivants sur votre machine :
+
+*   [Node.js](https://nodejs.org/) (version 18.x ou supérieure recommandée)
+*   [npm](https://www.npmjs.com/) (généralement inclus avec Node.js)
+*   Un client de base de données compatible PostgreSQL (pour la production), comme [DBeaver](https://dbeaver.io/) ou [pgAdmin](https://www.pgadmin.org/).
+
+## 4. Installation et Lancement en Développement
+
+Suivez ces étapes pour configurer et lancer l'application sur votre machine locale.
+
+### 4.1. Configuration du Projet
+
+1.  **Clonez le dépôt :**
+    ```bash
+    git clone <URL_DU_DEPOT>
+    cd git-marketplace-scraper-pro
+    ```
+
+2.  **Installez les dépendances du Frontend :**
+    ```bash
+    npm install
+    ```
+
+3.  **Installez les dépendances du Backend :**
+    ```bash
+    cd backend
+    npm install
+    cd ..
+    ```
+
+### 4.2. Configuration des Variables d'Environnement
+
+Créez deux fichiers `.env` pour le développement :
+
+1.  **Pour le Backend (`backend/.env`) :**
+    ```env
+    NODE_ENV=development
+    PORT=3001
+    FRONTEND_URL=http://localhost:5173
+    CORS_ALLOWED_ORIGINS=http://localhost:5173,https://checkout.stripe.com
+
+    # Clés Stripe (Mode TEST)
+    STRIPE_SECRET_KEY=sk_test_...
+    STRIPE_PUBLISHABLE_KEY=pk_test_...
+    STRIPE_WEBHOOK_SECRET=whsec_...
+
+    ADMIN_API_KEY=votre_cle_api_securisee
+    LOG_LEVEL=debug
+    SESSION_STORAGE=file
+    ```
+
+2.  **Pour le Frontend (`.env`) :**
+    ```env
+    VITE_API_BASE_URL=http://localhost:3001
+    VITE_STRIPE_PUBLISHABLE_KEY=pk_test_...
+    VITE_STRIPE_PAYMENT_LINK=https://buy.stripe.com/test_...
+    ```
+
+### 4.3. Base de Données de Développement (SQLite)
+
+La base de données de développement est un simple fichier SQLite qui sera créé automatiquement.
+
+1.  **Exécutez les migrations** pour créer les tables :
+    ```bash
+    cd backend
+    npm run knex:migrate:latest
+    ```
+
+2.  **(Optionnel) Remplissez la base de données** avec des données de test :
+    ```bash
+    npm run knex:seed:run
+    ```
+
+### 4.4. Lancement de l'Application
+
+Ouvrez deux terminaux distincts.
+
+1.  **Lancez le serveur Backend :**
+    ```bash
+    cd backend
+    npm run dev
+    ```
+    Le serveur sera accessible sur `http://localhost:3001`.
+
+2.  **Lancez l'application Frontend :**
+    ```bash
+    # Depuis la racine du projet
+    npm run dev
+    ```
+    L'application sera accessible sur `http://localhost:5173`.
+
+## 5. Déploiement en Production sur O2Switch
+
+Ce guide explique comment déployer l'application sur un hébergement O2Switch via un accès SSH et cPanel.
+
+### Étape 1 : Préparation de l'Environnement O2Switch
+
+1.  **Base de Données PostgreSQL** :
+    *   Connectez-vous à votre cPanel.
+    *   Allez dans `Bases de données > PostgreSQL Databases`.
+    *   Créez une nouvelle base de données (ex: `user_proddb`).
+    *   Créez un nouvel utilisateur et assignez-lui un mot de passe sécurisé.
+    *   Ajoutez l'utilisateur à la base de données avec **tous les privilèges**.
+    *   Notez le nom de la base, le nom d'utilisateur et le mot de passe.
+
+2.  **Configuration de Node.js** :
+    *   Dans cPanel, allez à `Logiciel > Setup Node.js App`.
+    *   Créez une nouvelle application :
+        *   **Node.js version** : Choisissez la version LTS la plus récente (ex: 18.x.x).
+        *   **Application mode** : `Production`.
+        *   **Application root** : `~/projets/marketplace-scraper` (ou le chemin de votre choix).
+        *   **Application URL** : Choisissez le domaine/sous-domaine pour votre **backend** (ex: `api.votredomaine.com`).
+        *   **Application startup file** : Laissez vide pour le moment, nous le mettrons à jour plus tard.
+    *   Cliquez sur **Create**.
+
+### Étape 2 : Déploiement du Code Source
+
+1.  **Connectez-vous en SSH** à votre compte O2Switch.
+
+2.  **Clonez votre projet** dans le dossier que vous avez défini comme *Application root* :
+    ```bash
+    # Assurez-vous d'être dans le bon répertoire
+    cd ~/projets
+    git clone <URL_DE_VOTRE_DEPOT_GIT> marketplace-scraper
+    cd marketplace-scraper
+    ```
+
+3.  **Installez les dépendances** pour le backend et le frontend :
+    ```bash
+    # Frontend
+    npm install
+
+    # Backend
+    cd backend
+    npm install
+    cd ..
+    ```
+
+### Étape 3 : Configuration de la Production
+
+1.  **Créez le fichier d'environnement du Backend** :
+    *   Utilisez un éditeur de texte comme `nano` pour créer le fichier de configuration du backend :
+        ```bash
+        nano backend/.env.production
+        ```
+    *   Ajoutez le contenu suivant, en remplaçant les valeurs par les vôtres :
+        ```env
+        NODE_ENV=production
+        PORT= # Ce champ sera rempli par O2Switch
+        FRONTEND_URL=https://votredomaine.com
+        CORS_ALLOWED_ORIGINS=https://votredomaine.com,https://checkout.stripe.com
+
+        # Base de données PostgreSQL (infos de l'Étape 1)
+        DATABASE_URL="postgres://USER:PASSWORD@localhost:5432/DATABASE"
+
+        # Clés Stripe LIVE
+        STRIPE_SECRET_KEY=sk_live_...
+        STRIPE_PUBLISHABLE_KEY=pk_live_...
+        STRIPE_WEBHOOK_SECRET=whsec_...
+
+        ADMIN_API_KEY=une_cle_api_tres_longue_et_securisee
+        LOG_LEVEL=info
+        SESSION_STORAGE=file
+        ```
+    *   Sauvegardez (`Ctrl+O`) et quittez (`Ctrl+X`).
+
+2.  **Créez le fichier d'environnement du Frontend** :
+    ```bash
+    nano .env.production
+    ```
+    *   Contenu :
+        ```env
+        VITE_API_BASE_URL=https://api.votredomaine.com
+        VITE_STRIPE_PUBLISHABLE_KEY=pk_live_...
+        VITE_STRIPE_PAYMENT_LINK=https://buy.stripe.com/live_...
+        ```
+
+### Étape 4 : Build des Applications
+
+1.  **Compilez le Backend (TypeScript -> JavaScript) :**
+    ```bash
+    cd backend
+    npm run build
+    cd ..
+    ```
+    Cela crée un dossier `backend/dist`.
+
+2.  **Compilez le Frontend (React -> Fichiers statiques) :**
+    ```bash
+    npm run build
+    ```
+    Cela crée un dossier `dist` à la racine.
+
+### Étape 5 : Déploiement Final
+
+1.  **Déployez le Frontend** :
+    *   Le contenu du dossier `dist` (à la racine) doit être copié dans le dossier racine de votre site principal (généralement `~/public_html` ou un sous-dossier si vous utilisez un sous-domaine).
+    *   Vous pouvez le faire via le `Gestionnaire de fichiers` de cPanel ou en ligne de commande.
+
+2.  **Configurez et Lancez le Backend** :
+    *   Retournez à `Setup Node.js App` dans cPanel.
+    *   Modifiez votre application :
+        *   **Application startup file** : `backend/dist/server.js`
+    *   Cliquez sur **Save**.
+    *   Dans la même interface, vous pouvez **Stop** et **Start** l'application pour appliquer les changements.
+
+3.  **Exécutez les migrations de la base de données de production** :
+    *   Dans votre terminal SSH, exécutez :
+        ```bash
+        cd ~/projets/marketplace-scraper/backend
+        npm run knex:migrate:latest -- --env production
+        ```
+
+Votre application est maintenant déployée ! Le frontend est servi comme un site statique et le backend tourne comme une application Node.js.
 
 *Document généré le 2025-07-10 à 13:15:20*
 

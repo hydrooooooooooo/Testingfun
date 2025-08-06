@@ -2,3 +2,4 @@
 export * from './errorHandler';
 export * from './securityMiddleware';
 export * from './authMiddleware';
+export * from './cors';

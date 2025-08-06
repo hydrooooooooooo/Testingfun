@@ -57,7 +57,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = (newToken: string) => {
-    setToken(newToken);
+    localStorage.setItem('token', newToken);
+    try {
+      const decodedToken = jwtDecode<DecodedToken>(newToken);
+      setUser({ id: decodedToken.id, email: decodedToken.email, role: decodedToken.role });
+      setToken(newToken);
+    } catch (error) {
+      console.error('Failed to decode token on login:', error);
+      // En cas d'erreur de décodage, on déconnecte l'utilisateur pour éviter un état incohérent
+      logout();
+    }
   };
 
   const logout = () => {
