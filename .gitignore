@@ -25,5 +25,7 @@ dist-ssr
 # env files
 backend/.env
 backend/.env.*
+backend/mvola-sdk/.env
+backend/mvola-sdk/.env.*
 .env
 .env.*
