@@ -11,6 +11,7 @@ import { exportService } from '../services/exportService';
 export const downloadSessionData = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const { sessionId } = req.params;
   const format = (req.query.format as string) || 'excel';
+  const packIdQuery = (req.query.pack_id as string) || (req.query.packId as string) || undefined;
   const downloadTokenHeader = req.headers['x-session-token'] as string;
   const downloadTokenQuery = req.query.token as string;
   const downloadToken = downloadTokenHeader || downloadTokenQuery; // Accepte le token de l'en-tête ou du query param
@@ -35,8 +36,16 @@ export const downloadSessionData = async (req: AuthenticatedRequest, res: Respon
       return res.status(402).json({ message: 'Payment is required for this session.' });
     }
 
-    if (!session.datasetId || !session.packId) {
-      return res.status(404).json({ message: 'Dataset or pack information is missing.' });
+    // Déterminer le packId à utiliser
+    const packIdToUse = session.packId || packIdQuery || 'pack-decouverte';
+
+    // Si la session n'a pas de packId mais qu'un pack_id est fourni dans la requête, persister pour les prochaines fois
+    if (!session.packId && packIdQuery) {
+      try {
+        await sessionService.updateSession(sessionId, { packId: packIdQuery });
+      } catch (e) {
+        // non bloquant
+      }
     }
 
     let fileBuffer: Buffer;
@@ -44,11 +53,20 @@ export const downloadSessionData = async (req: AuthenticatedRequest, res: Respon
     let contentType: string;
 
     if (format === 'excel' || format === 'xlsx') {
-      fileBuffer = await exportService.generateEnhancedExcel(session.datasetId, session.packId);
+      if (session.datasetId) {
+        fileBuffer = await exportService.generateEnhancedExcel(session.datasetId, packIdToUse);
+      } else {
+        // Fallback démo si datasetId manquant
+        fileBuffer = await exportService.generateDemoExcel(packIdToUse);
+      }
       fileName = `EasyScrapy_${sessionId}.xlsx`;
       contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
     } else if (format === 'csv') {
-      fileBuffer = await exportService.generateCSV(session.datasetId, session.packId);
+      if (session.datasetId) {
+        fileBuffer = await exportService.generateCSV(session.datasetId, packIdToUse);
+      } else {
+        fileBuffer = await exportService.generateDemoCSV(packIdToUse);
+      }
       fileName = `EasyScrapy_${sessionId}.csv`;
       contentType = 'text/csv';
     } else {

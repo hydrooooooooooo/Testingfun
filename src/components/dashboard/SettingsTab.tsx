@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import {
   Card,
@@ -14,11 +14,53 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 
 const SettingsTab: React.FC = () => {
-  const { logout } = useAuth();
+  const { user, token, login, logout } = useAuth();
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [passwordLoading, setPasswordLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name || '');
+      setPhoneNumber(user.phone_number || '');
+    }
+  }, [user]);
+
+  const handleProfileUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setProfileLoading(true);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name, phone_number: phoneNumber }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Une erreur est survenue.');
+      }
+
+      // Le backend renvoie un nouveau token avec les informations mises à jour
+      login(data.token);
+      toast.success('Profil mis à jour avec succès !');
+
+    } catch (err: any) {
+      toast.error(err.message || 'Échec de la mise à jour du profil.');
+    } finally {
+      setProfileLoading(false);
+    }
+  };
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +74,7 @@ const SettingsTab: React.FC = () => {
       return;
     }
 
-    setLoading(true);
+    setPasswordLoading(true);
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/change-password`, {
@@ -63,12 +105,34 @@ const SettingsTab: React.FC = () => {
     } catch (err: any) {
       toast.error(err.message || 'Échec de la mise à jour du mot de passe.');
     } finally {
-      setLoading(false);
+      setPasswordLoading(false);
     }
   };
 
   return (
-    <div className="space-y-6 pt-6">
+    <div className="grid gap-6 pt-6 md:grid-cols-2">
+      <Card>
+        <CardHeader>
+          <CardTitle>Profil</CardTitle>
+          <CardDescription>Mettez à jour les informations de votre profil.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleProfileUpdate} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Nom</Label>
+              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="phone">Numéro de téléphone</Label>
+              <Input id="phone" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="Ex: 0340012345" />
+            </div>
+            <Button type="submit" disabled={profileLoading}>
+              {profileLoading ? 'Mise à jour...' : 'Mettre à jour le profil'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
       <form onSubmit={handlePasswordChange}>
         <Card>
           <CardHeader>
@@ -111,8 +175,8 @@ const SettingsTab: React.FC = () => {
             </div>
           </CardContent>
           <CardFooter>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Chargement...' : 'Changer le mot de passe'}
+            <Button type="submit" disabled={passwordLoading}>
+              {passwordLoading ? 'Chargement...' : 'Changer le mot de passe'}
             </Button>
           </CardFooter>
         </Card>

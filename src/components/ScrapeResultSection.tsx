@@ -1,14 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ScrapePreview from "@/components/ScrapePreview";
-import ExcelDownloadButton from "@/components/ExcelDownloadButton";
-import ScrapeSupportInfo from "@/components/ScrapeSupportInfo";
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
-import { Pack } from "@/lib/plans";
-import { toast } from "@/hooks/use-toast";
-import { useApi } from "@/hooks/useApi";
-import axios from "axios";
-
 import { ScrapeStats, PreviewItem } from "@/hooks/useApi";
 import { FileSpreadsheet, FileText, RotateCw, Unlock } from 'lucide-react';
 
@@ -17,19 +9,9 @@ interface ScrapeResultSectionProps {
   isPaid: boolean;
   stats: ScrapeStats | null;
   propPreviewItems: PreviewItem[];
-  onPayment: () => Promise<void>;
+  onPayment: () => void;
   exportData: (format: 'excel' | 'csv') => void;
   resetScrape: () => void;
-};
-
-type ListingItem = {
-  title: string;
-  price: string;
-  desc: string;
-  image: string;
-  location: string;
-  url?: string;
-  postedAt?: string;
 };
 
 export default function ScrapeResultSection({
@@ -46,29 +28,22 @@ export default function ScrapeResultSection({
     return null;
   }
 
-    const validPreviewItems = Array.isArray(propPreviewItems) ? propPreviewItems : [];
+  const validPreviewItems = Array.isArray(propPreviewItems) ? propPreviewItems : [];
 
   return (
     <>
-            <div className="w-full flex flex-col items-center animate-fade-in">
-        {/* Afficher la prévisualisation si disponible */}
-        {validPreviewItems.length > 0 ? (
-          <div className="w-full">
-            {/* Afficher les éléments de prévisualisation s'ils sont disponibles */}
-            <div className="w-full mt-4 bg-card rounded-xl p-6 border border-border shadow-sm">
-              <h3 className="text-xl font-bold mb-4 tracking-tight">Aperçu des résultats</h3>
-              <ScrapePreview 
-                items={validPreviewItems} 
-              />
-            </div>
+      <div className="w-full flex flex-col items-center animate-fade-in">
+        {validPreviewItems.length > 0 && (
+          <div className="w-full mt-4 bg-card rounded-xl p-6 border border-border shadow-sm">
+            <h3 className="text-xl font-bold mb-4 tracking-tight">Aperçu des résultats</h3>
+            <ScrapePreview items={validPreviewItems} />
           </div>
-        ) : null}
+        )}
       </div>
-      {/* SECTION DE PAIEMENT OU DE TÉLÉCHARGEMENT UNIFIÉE */}
+
       {scrapeDone && (
         <div className="w-full max-w-4xl p-6 mt-4 bg-card rounded-xl border border-border shadow-sm">
           {isPaid ? (
-            // Section de téléchargement si payé
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="text-center md:text-left">
                 <h3 className="text-xl font-bold tracking-tight">Téléchargez vos résultats</h3>
@@ -92,7 +67,6 @@ export default function ScrapeResultSection({
               </div>
             </div>
           ) : (
-            // Section de paiement si non payé
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="text-center md:text-left">
                 <h3 className="text-xl font-bold tracking-tight">Débloquez les résultats complets</h3>

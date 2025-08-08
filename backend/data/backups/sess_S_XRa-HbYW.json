@@ -1,0 +1,46 @@
+{
+  "sessionId": "sess_S_XRa-HbYW",
+  "datasetId": "8cUV6fwa8mc1Ue21a",
+  "timestamp": "2025-08-06T18:34:43.621Z",
+  "totalItems": 2,
+  "previewItems": [
+    {
+      "title": "Hangar metalique ",
+      "price": "$5 000 000",
+      "desc": "Hangar metalique avec tôle tpg ",
+      "image": "https://scontent.feze9-1.fna.fbcdn.net/v/t45.5328-4/481734137_1155211785730451_5753571668435628549_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=Q-AGW7AchIYQ7kNvwH7B4X1&_nc_oc=Adl0vhQ42CsrfjwDT_0kLu7VNOlYEgGBil0SjsFwHs7Hy0SZIGhsKEO_ONnUot-hazw&_nc_zt=23&_nc_ht=scontent.feze9-1.fna&_nc_gid=jIqQSwlefbVqSVexYRfF2Q&oh=00_AfWBJRXHJka7Jp0JISv7TkOto0O3zJ4iZUCKMzixoxhHwQ&oe=689981CB",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/529166470195700",
+      "postedAt": ""
+    },
+    {
+      "title": "Hangar metalique 8*8 mètres",
+      "price": "$4 000 000",
+      "desc": "Hangar metalique\nTube rectangle 30*60",
+      "image": "https://scontent.feze9-1.fna.fbcdn.net/v/t45.5328-4/482724646_1159499625628245_3598206857376564836_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=106&ccb=1-7&_nc_sid=247b10&_nc_ohc=G5bOXqQOTKIQ7kNvwE71Ei3&_nc_oc=AdlFAdFdS3pZgb7BUSp3Rs8IViRFilY8vF6ASn8JMfTbjdpAo0lBN9h8OTSkKSonTaQ&_nc_zt=23&_nc_ht=scontent.feze9-1.fna&_nc_gid=W-4NL_1js7h1xO-2pVRsqQ&oh=00_AfX52ld6ztSDmeAmWvLNB4IOWCsARecMwbgwel6JQec1gg&oe=6899871A",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/935588385404817",
+      "postedAt": ""
+    }
+  ],
+  "allItems": [
+    {
+      "title": "Hangar metalique ",
+      "price": "$5 000 000",
+      "desc": "Hangar metalique avec tôle tpg ",
+      "image": "https://scontent.feze9-1.fna.fbcdn.net/v/t45.5328-4/481734137_1155211785730451_5753571668435628549_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=Q-AGW7AchIYQ7kNvwH7B4X1&_nc_oc=Adl0vhQ42CsrfjwDT_0kLu7VNOlYEgGBil0SjsFwHs7Hy0SZIGhsKEO_ONnUot-hazw&_nc_zt=23&_nc_ht=scontent.feze9-1.fna&_nc_gid=jIqQSwlefbVqSVexYRfF2Q&oh=00_AfWBJRXHJka7Jp0JISv7TkOto0O3zJ4iZUCKMzixoxhHwQ&oe=689981CB",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/529166470195700",
+      "postedAt": ""
+    },
+    {
+      "title": "Hangar metalique 8*8 mètres",
+      "price": "$4 000 000",
+      "desc": "Hangar metalique\nTube rectangle 30*60",
+      "image": "https://scontent.feze9-1.fna.fbcdn.net/v/t45.5328-4/482724646_1159499625628245_3598206857376564836_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=106&ccb=1-7&_nc_sid=247b10&_nc_ohc=G5bOXqQOTKIQ7kNvwE71Ei3&_nc_oc=AdlFAdFdS3pZgb7BUSp3Rs8IViRFilY8vF6ASn8JMfTbjdpAo0lBN9h8OTSkKSonTaQ&_nc_zt=23&_nc_ht=scontent.feze9-1.fna&_nc_gid=W-4NL_1js7h1xO-2pVRsqQ&oh=00_AfX52ld6ztSDmeAmWvLNB4IOWCsARecMwbgwel6JQec1gg&oe=6899871A",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/935588385404817",
+      "postedAt": ""
+    }
+  ]
+}

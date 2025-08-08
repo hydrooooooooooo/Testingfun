@@ -5,7 +5,9 @@ import { jwtDecode } from 'jwt-decode';
 interface DecodedToken {
   id: number;
   email: string;
+  name?: string;
   role: string;
+  phone_number?: string;
   iat: number;
   exp: number;
 }
@@ -14,7 +16,9 @@ interface DecodedToken {
 interface User {
   id: number;
   email: string;
+  name?: string;
   role: string;
+  phone_number?: string;
 }
 
 // Interface pour la valeur du contexte
@@ -40,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
           const decodedToken = jwtDecode<DecodedToken>(storedToken);
           if (decodedToken.exp * 1000 > Date.now()) {
-            setUser({ id: decodedToken.id, email: decodedToken.email, role: decodedToken.role });
+            setUser({ id: decodedToken.id, email: decodedToken.email, role: decodedToken.role, phone_number: decodedToken.phone_number });
             setToken(storedToken);
           } else {
             localStorage.removeItem('token');
@@ -60,7 +64,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('token', newToken);
     try {
       const decodedToken = jwtDecode<DecodedToken>(newToken);
-      setUser({ id: decodedToken.id, email: decodedToken.email, role: decodedToken.role });
+      setUser({ id: decodedToken.id, email: decodedToken.email, role: decodedToken.role, phone_number: decodedToken.phone_number });
       setToken(newToken);
     } catch (error) {
       console.error('Failed to decode token on login:', error);

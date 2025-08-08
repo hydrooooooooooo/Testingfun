@@ -1,15 +1,15 @@
-
 import ScrapePreview from "@/components/ScrapePreview";
 import ScrapeProgress from "@/components/ScrapeProgress";
 import ExcelDownloadButton from "@/components/ExcelDownloadButton";
 import ScrapeSupportInfo from "@/components/ScrapeSupportInfo";
+import PaymentModal from "@/components/PaymentModal";
 import ScrapeForm from "@/components/ScrapeForm";
 import SelectedPackInfos from "@/components/SelectedPackInfos";
 import ScrapeResultSection from "@/components/ScrapeResultSection";
 import React, { useEffect } from "react";
 import { useScrapeContext } from "@/contexts/ScrapeContext";
 import { useSearchParams } from "react-router-dom";
-import { PLANS, Pack } from "@/lib/plans";
+import { Pack } from "@/lib/plans";
 import { 
   Clock, 
   Database, 
@@ -51,41 +51,52 @@ export default function Index() {
   const {
     loading,
     scrapeDone,
+    isPaid,
     stats,
     previewItems,
     progress,
+    resetScrape,
     status,
     startScrape,
-    resetScrape,
     handlePayment,
     exportData,
     sessionId,
-    isPaid,
+    isPaymentModalOpen,
+    setPaymentModalOpen,
+    paymentInfo,
+    onStripePay,
+    onMvolaPay,
+    packs,
+    selectedPackId,
+    setSelectedPackId,
   } = useScrapeContext();
 
   const [url, setUrl] = React.useState("");
-  const [selectedPackId, setSelectedPackId] = React.useState(PLANS[0].id);
 
-  const selectedPack = React.useMemo(() => 
-    PLANS.find(p => p.id === selectedPackId) || PLANS[0],
-    [selectedPackId]
-  );
 
-  // Gérer le pré-remplissage depuis la page pricing
+
+  // Scroll to form if coming from pricing page
   useEffect(() => {
-    const packParam = searchParams.get('pack');
-    if (packParam) {
-      setSelectedPackId(packParam);
+    if (searchParams.get('packId')) {
       setTimeout(() => {
         document.getElementById('scraping-form')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 500);
+      }, 300);
     }
   }, [searchParams]);
 
+  const selectedPack = React.useMemo(() => 
+    packs.find(p => p.id === selectedPackId) || null,
+    [selectedPackId, packs]
+  );
+
   const handleScrape = React.useCallback((e: React.FormEvent, options: any) => {
     e.preventDefault();
-    startScrape(url, options);
-  }, [url, startScrape]);
+    if (!selectedPackId) {
+      console.error("No pack selected");
+      return;
+    }
+    startScrape(url, { ...options, packId: selectedPackId });
+  }, [url, startScrape, selectedPackId]);
 
   return (
 
@@ -112,17 +123,24 @@ export default function Index() {
 
           {/* Scraping Form - Garde le même ID pour le scroll */}
           <div id="scraping-form" className="max-w-4xl mx-auto">
-            <ScrapeForm
-              url={url}
-              setUrl={setUrl}
-              loading={loading}
-              selectedPackId={selectedPackId}
-              setSelectedPackId={setSelectedPackId}
-              selectedPack={selectedPack}
-              onScrape={handleScrape}
-            />
+                        {packs.length > 0 && selectedPack ? (
+              <ScrapeForm
+                url={url}
+                setUrl={setUrl}
+                loading={loading}
+                packs={packs}
+                selectedPackId={selectedPackId}
+                setSelectedPackId={setSelectedPackId}
+                selectedPack={selectedPack}
+                onScrape={handleScrape}
+              />
+            ) : (
+              <div className="text-center p-8 bg-gray-100 rounded-lg">
+                <p>Chargement des packs...</p>
+              </div>
+            )}
             
-            <SelectedPackInfos selectedPack={selectedPack} />
+                        {selectedPack && <SelectedPackInfos selectedPack={selectedPack} />}
             
             {loading && (
               <ScrapeProgress 
@@ -139,10 +157,20 @@ export default function Index() {
           isPaid={isPaid}
           stats={stats}
           propPreviewItems={previewItems}
-          onPayment={() => handlePayment(selectedPackId)}
+          onPayment={() => selectedPackId && handlePayment(selectedPackId)}
           exportData={exportData}
           resetScrape={resetScrape}
         />
+
+        {paymentInfo && (
+          <PaymentModal
+            isOpen={isPaymentModalOpen}
+            onClose={() => setPaymentModalOpen(false)}
+            onStripePay={onStripePay}
+            onMvolaPay={onMvolaPay}
+            planName={paymentInfo.pack.name}
+          />
+        )}
 
         {/* Comment ça fonctionne + Value Proposition Cards - Fusionnés */}
         <section className="w-full py-16 bg-gray-50">

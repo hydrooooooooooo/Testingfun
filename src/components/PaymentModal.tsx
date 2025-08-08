@@ -16,11 +16,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onStripePa
     setIsLoading(true);
     try {
       await onMvolaPay();
-      // Gérer le succès ici (par exemple, afficher une notification)
-      alert('Paiement MVola initié avec succès !');
     } catch (error) {
-      // Gérer l'erreur ici (par exemple, afficher une notification d'erreur)
-      alert('Erreur lors du paiement MVola.');
       console.error('Mvola payment error:', error);
     } finally {
       setIsLoading(false);

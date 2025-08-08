@@ -29,12 +29,15 @@ const PaymentsTab: React.FC<PaymentsTabProps> = ({ payments }) => {
   const getStatusVariant = (status: string): 'default' | 'destructive' | 'secondary' => {
     switch (status.toLowerCase()) {
       case 'succeeded':
+      case 'completed':
         return 'default';
       case 'failed':
       case 'refused':
       case 'error':
-        return 'destructive';
       case 'canceled':
+      case 'cancelled':
+        return 'destructive';
+      case 'pending':
         return 'secondary';
       default:
         return 'secondary';
@@ -44,20 +47,34 @@ const PaymentsTab: React.FC<PaymentsTabProps> = ({ payments }) => {
   const getStatusText = (status: string): string => {
     switch (status.toLowerCase()) {
       case 'succeeded':
+      case 'completed':
         return 'Réussi';
       case 'failed':
       case 'refused':
       case 'error':
         return 'Échoué';
+      case 'pending':
+        return 'En attente';
       case 'canceled':
+      case 'cancelled':
         return 'Annulé';
       default:
         return status.charAt(0).toUpperCase() + status.slice(1);
     }
   };
+
+  const getStatusClass = (status: string): string => {
+    const s = status.toLowerCase();
+    if (s === 'succeeded' || s === 'completed') return 'bg-green-100 text-green-800 border-green-200';
+    if (s === 'pending') return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    if (['failed', 'refused', 'error', 'canceled', 'cancelled'].includes(s)) return 'bg-red-100 text-red-800 border-red-200';
+    return 'bg-gray-100 text-gray-800 border-gray-200';
+  };
   if (!payments) {
     return <div>Chargement des paiements...</div>;
   }
+
+  const formatAmountFR = (n: number) => new Intl.NumberFormat('fr-FR').format(n);
 
   return (
     <div className="space-y-6 pt-6">
@@ -91,9 +108,11 @@ const PaymentsTab: React.FC<PaymentsTabProps> = ({ payments }) => {
                     <TableCell className="font-medium">
                       {purchase.description}
                     </TableCell>
-                    <TableCell>{purchase.amount.toFixed(2)} {purchase.currency.toUpperCase()}</TableCell>
                     <TableCell>
-                      <Badge variant={getStatusVariant(purchase.status)}>
+                      {formatAmountFR(purchase.amount)} {purchase.currency?.toUpperCase?.() || 'MGA'}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className={getStatusClass(purchase.status)}>
                         {getStatusText(purchase.status)}
                       </Badge>
                     </TableCell>

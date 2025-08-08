@@ -1,8 +1,24 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { Pack } from '@/lib/plans';
 import axios from 'axios';
 
 // API base URL - should be set in environment variables
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 // Types pour les options de scraping APIFY
 interface ApifyScrapeOptions {
@@ -56,6 +72,7 @@ export interface ScrapeResult {
 /**
  * Custom hook for API interactions with APIFY support
  */
+
 export function useApi() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -96,7 +113,7 @@ export function useApi() {
 
       console.log('Démarrage du scraping APIFY avec options:', apifyOptions);
 
-      const response = await axios.post(`${API_BASE_URL}/scrape`, {
+      const response = await api.post(`/scrape`, {
         url,
         sessionId,
         apifyOptions,
@@ -136,7 +153,7 @@ export function useApi() {
     
     try {
       console.log(`API: Fetching results for session ${sessionId}`);
-      const response = await axios.get(`${API_BASE_URL}/scrape/result`, { params: { sessionId } });
+      const response = await api.get(`/scrape/result`, { params: { sessionId } });
       
       const session = response.data;
 
@@ -163,9 +180,20 @@ export function useApi() {
   /**
    * Get APIFY run status directly
    */
+    const createMvolaPayment = async (sessionId: string, packId: string) => {
+    try {
+      const response = await api.post(`/mvola/initiate-payment`, { sessionId, packId });
+      return response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors de la création du paiement Mvola';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  };
+
   const getApifyRunStatus = async (runId: string) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/apify/run/${runId}/status`);
+      const response = await api.get(`/apify/run/${runId}/status`);
       return response.data;
     } catch (err: any) {
       console.error('Erreur lors de la récupération du statut APIFY:', err);
@@ -178,7 +206,7 @@ export function useApi() {
    */
   const cancelApifyRun = async (runId: string) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/apify/run/${runId}/abort`);
+      const response = await api.post(`/apify/run/${runId}/abort`);
       return response.data;
     } catch (err: any) {
       console.error("Erreur lors de l'annulation du run APIFY:", err);
@@ -187,22 +215,45 @@ export function useApi() {
   };
 
   /**
-   * Create a payment session - CORRIGÉ
+   * Create a payment session
    */
-  const createPayment = async (packId: string, sessionId: string) => {
+  const createPayment = async (sessionId: string, packId: string) => {
     setLoading(true);
     setError(null);
+
+    // --- Débogage Amélioré ---
+    console.log('%c[Payment] Tentative de création de paiement...', 'color: blue; font-weight: bold;');
+    console.log(`[Payment] Session ID: ${sessionId}`);
+    console.log(`[Payment] Pack ID: ${packId}`);
     
+    const token = localStorage.getItem('token');
+    if (token) {
+      console.log('[Payment] Token trouvé dans localStorage:', token.substring(0, 30) + '...');
+    } else {
+      console.error('[Payment] ERREUR: Token non trouvé dans localStorage. L\'appel va échouer.');
+    }
+    // --- Fin Débogage ---
+
     try {
-      const response = await axios.post(`${API_BASE_URL}/payment/create-payment`, {
+      const response = await api.post(`/payment/create-payment`, {
+        sessionId,
         packId,
-        sessionId
       });
-      
-      return response.data.url;
+      console.log('%c[Payment] Succès de la création du paiement !', 'color: green; font-weight: bold;', response.data);
+      return response.data;
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Une erreur est survenue lors de la création du paiement');
-      throw err;
+      // --- Débogage d'Erreur Amélioré ---
+      console.error('%c[Payment] ERREUR lors de la création du paiement.', 'color: red; font-weight: bold;');
+      console.error('[Payment] Erreur brute:', err);
+      if (err.response) {
+        console.error('[Payment] Réponse du serveur (erreur):', err.response);
+        console.error(`[Payment] Statut: ${err.response.status}, Données:`, err.response.data);
+      }
+      // --- Fin Débogage d'Erreur ---
+      
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors de la création du paiement';
+      setError(errorMessage);
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -259,19 +310,36 @@ export function useApi() {
   /**
    * Get export URL
    */
-  const getExportUrl = (sessionId: string, format: 'excel' | 'csv' = 'excel') => {
-    return `${API_BASE_URL}/export?sessionId=${sessionId}&format=${format}`;
+  const getExportUrl = (sessionId: string, format: 'excel' | 'csv') => {
+    const token = localStorage.getItem('token');
+    return `${API_BASE_URL}/export/${format}?sessionId=${sessionId}&token=${token}`;
   };
+
+  const getPacks = useCallback(async (): Promise<Pack[]> => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.get('/packs');
+      return response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors de la récupération des packs';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   return { 
     loading, 
     error, 
     startScraping, 
     getScrapeResults, 
-    getApifyRunStatus, 
-    cancelApifyRun, 
-    createPayment, 
-    verifyPayment, 
+    getApifyRunStatus,
+    createMvolaPayment,
+    cancelApifyRun,
+    createPayment,
+    getPacks,
     getExportUrl 
   };
 }

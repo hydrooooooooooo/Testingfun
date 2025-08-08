@@ -197,7 +197,7 @@ export class AuthService {
     }
 
     return jwt.sign(
-      { userId: user.id, email: user.email, role: user.role },
+      { userId: user.id, name: user.name, email: user.email, role: user.role, phone_number: user.phone_number },
       config.api.jwtSecret,
       { expiresIn: '7d' }
     );

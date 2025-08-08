@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { PLANS, Pack } from "@/lib/plans";
+import { Pack } from "@/lib/plans";
 import { Loader2, Settings, Info } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
@@ -13,9 +13,10 @@ type ScrapeFormProps = {
   url: string;
   setUrl: (val: string) => void;
   loading: boolean;
-  selectedPackId: string;
+  packs: Pack[];
+  selectedPackId: string | null;
   setSelectedPackId: (id: string) => void;
-  selectedPack: Pack;
+  selectedPack: Pack | null;
   onScrape: (e: React.FormEvent, options?: { 
     singleItem?: boolean;
     deepScrape?: boolean;
@@ -28,6 +29,7 @@ export default function ScrapeForm({
   url,
   setUrl,
   loading,
+  packs,
   selectedPackId,
   setSelectedPackId,
   selectedPack,
@@ -36,13 +38,15 @@ export default function ScrapeForm({
   const [singleItemMode, setSingleItemMode] = React.useState(false);
   const [deepScrape, setDeepScrape] = React.useState(false);
   const [getProfileUrls, setGetProfileUrls] = React.useState(false);
-  const [maxItems, setMaxItems] = React.useState([selectedPack.nbDownloads]);
+  const [maxItems, setMaxItems] = React.useState([1]);
   const [showAdvanced, setShowAdvanced] = React.useState(false);
   
   // Mettre à jour maxItems quand le pack change
   React.useEffect(() => {
-    setMaxItems([selectedPack.nbDownloads]);
-  }, [selectedPack.nbDownloads]);
+    if (selectedPack) {
+      setMaxItems([selectedPack.nbDownloads]);
+    }
+  }, [selectedPack]);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,11 +89,12 @@ export default function ScrapeForm({
           {/* Pack Selection */}
           <select
             className="border border-blue-200 rounded-lg px-3 py-2 text-base bg-muted focus:ring-2 focus:ring-blue-400 font-sans min-w-[180px] font-semibold"
-            value={selectedPackId}
+            value={selectedPackId || ''}
             onChange={e => setSelectedPackId(e.target.value)}
             aria-label="Pack sélectionné"
+            disabled={!selectedPack}
           >
-            {PLANS.map(plan => (
+            {packs.map(plan => (
               <option
                 value={plan.id}
                 key={plan.id}
@@ -150,13 +155,13 @@ export default function ScrapeForm({
                 <Slider
                   value={maxItems}
                   onValueChange={setMaxItems}
-                  max={selectedPack.nbDownloads}
+                  max={selectedPack?.nbDownloads || 1}
                   min={1}
                   step={1}
                   className="w-full"
                 />
                 <p className="text-xs text-gray-600">
-                  Limite basée sur votre pack ({selectedPack.nbDownloads} max)
+                  Limite basée sur votre pack ({selectedPack?.nbDownloads || 'N/A'} max)
                 </p>
               </div>
 

@@ -13,7 +13,7 @@ export class ScrapeController {
    * Start a new scraping job
    */
   async startScrape(req: Request, res: Response, next: NextFunction) {
-    const { url } = req.body;
+    const { url, packId } = req.body;
     let { sessionId, resultsLimit, deepScrape, getProfileUrls } = req.body;
     let session: Session | null = null;
 
@@ -49,6 +49,7 @@ export class ScrapeController {
         status: SessionStatus.PENDING,
         isPaid: false,
         user_id: userId, // Attach user if available
+        packId: packId, // Attach packId
       });
 
       // Start APIFY scraping job with options

@@ -73,7 +73,7 @@ export default function DownloadPage() {
     try {
       const token = localStorage.getItem('authToken');
       const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/sessions/${sessionId}/download`, {
-        params: { format, token: downloadToken },
+        params: { format, token: downloadToken, pack_id: pack.id },
         headers: { 'Authorization': `Bearer ${token}` },
         responseType: 'blob',
       });
