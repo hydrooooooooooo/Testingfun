@@ -3,6 +3,7 @@ export interface User {
   email: string;
   password_hash?: string;
   name?: string;
+  phone_number?: string;
   role: 'user' | 'admin';
   email_verified_at: Date | null;
   created_at: Date;

@@ -24,7 +24,8 @@ export class AdminController {
         user: session.user_id || 'N/A',
         packId: session.packId || 'N/A',
         totalItems: session.totalItems || 0,
-        hasData: session.hasData
+        hasData: session.hasData,
+        paymentMethod: (session as any).payment_method || null,
       }));
       
       res.status(200).json(formattedSessions);
@@ -74,6 +75,15 @@ export class AdminController {
           packStats[session.packId] = (packStats[session.packId] || 0) + 1;
         }
       });
+
+      // Group by payment method
+      const methodStats: Record<string, number> = {};
+      sessions.forEach((session) => {
+        const method = (session as any).payment_method;
+        if (session.isPaid && method) {
+          methodStats[method] = (methodStats[method] || 0) + 1;
+        }
+      });
       
       res.status(200).json({
         status: 'success',
@@ -82,7 +92,8 @@ export class AdminController {
           paidSessions,
           completedSessions,
           failedSessions,
-          packStats
+          packStats,
+          methodStats
         }
       });
     } catch (error) {

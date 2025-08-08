@@ -1,14 +1,23 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useToast } from '@/components/ui/use-toast';
+import { useSearchParams } from 'react-router-dom';
 import { useApi, ScrapeResult, ScrapeStats, PreviewItem } from './useApi';
-import { PLANS } from '@/lib/plans';
+import { Pack } from '@/lib/plans';
 import { useDashboard } from '@/context/DashboardContext';
+import { useAuth } from '@/context/AuthContext';
 
 const POLLING_INTERVAL = 3000; // 3 secondes
 
+interface PaymentInfo {
+  pack: Pack;
+  stripeUrl: string;
+  mvolaUrl?: string;
+}
+
 export function useScrape(initialSessionId?: string) {
-  const { getScrapeResults, startScraping: apiStartScraping, createPayment, getExportUrl } = useApi();
+  const { getScrapeResults, startScraping: apiStartScraping, createPayment, createMvolaPayment, getExportUrl, getPacks } = useApi();
   const { fetchDashboardData } = useDashboard();
+  const { user } = useAuth();
   
   const { toast } = useToast();
 
@@ -22,6 +31,11 @@ export function useScrape(initialSessionId?: string) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [isPolling, setIsPolling] = useState<boolean>(false);
+  const [packs, setPacks] = useState<Pack[]>([]);
+  const [selectedPackId, setSelectedPackId] = useState<string | null>(null);
+  const [isPaymentModalOpen, setPaymentModalOpen] = useState<boolean>(false);
+  const [paymentInfo, setPaymentInfo] = useState<{ pack: Pack; stripeUrl: string; mvolaUrl: string; } | null>(null);
+  const [searchParams] = useSearchParams();
 
   const resetScrape = useCallback(() => {
     setSessionId(null);
@@ -36,6 +50,27 @@ export function useScrape(initialSessionId?: string) {
     setIsPolling(false);
     console.log('Scrape state reset.');
   }, []);
+
+  useEffect(() => {
+    const initializePacks = async () => {
+      try {
+        const fetchedPacks = await getPacks();
+        const formattedPacks = fetchedPacks.map(p => ({ ...p, id: p.id.toString() }));
+        setPacks(formattedPacks);
+
+        const packIdFromUrl = searchParams.get('packId');
+        if (packIdFromUrl && formattedPacks.some(p => p.id === packIdFromUrl)) {
+          setSelectedPackId(packIdFromUrl);
+        } else {
+          setSelectedPackId(formattedPacks[0]?.id || null);
+        }
+      } catch (error) {
+        console.error("Failed to initialize packs in useScrape:", error);
+      }
+    };
+
+    initializePacks();
+  }, [getPacks, searchParams]);
 
   const checkScrapeStatus = useCallback(async () => {
     if (!sessionId || isPolling) return;
@@ -103,13 +138,14 @@ export function useScrape(initialSessionId?: string) {
   }, [sessionId, scrapeDone, checkScrapeStatus]);
 
   type ScrapeOptions = {
+    packId: string;
     singleItem?: boolean;
     deepScrape?: boolean;
     getProfileUrls?: boolean;
     maxItems?: number;
   };
 
-  const startScrape = async (url: string, options: ScrapeOptions = {}) => {
+  const startScrape = async (url: string, options: ScrapeOptions) => {
     resetScrape();
     setLoading(true);
     setStatus('starting');
@@ -139,37 +175,79 @@ export function useScrape(initialSessionId?: string) {
   };
 
   const handlePayment = async (packId: string) => {
-    if (!sessionId) {
-      toast({ title: 'Erreur', description: 'Aucune session de scraping active.', variant: 'destructive' });
+    if (!user) {
+      toast({
+        title: 'Authentification requise',
+        description: 'Vous devez être connecté pour débloquer les résultats.',
+        variant: 'destructive',
+      });
       return;
     }
 
-    const selectedPlan = PLANS.find(p => p.id === packId);
-
-    if (!selectedPlan || !selectedPlan.stripeBuyLink) {
-      toast({ title: 'Erreur de configuration', description: 'Lien de paiement introuvable pour ce pack.', variant: 'destructive' });
+    const selectedPack = packs.find(p => p.id === packId);
+    if (!selectedPack) {
+      toast({ title: 'Erreur', description: 'Pack non trouvé.', variant: 'destructive' });
       return;
     }
 
+    // Ouvre la modale SANS créer le paiement tout de suite
+    setPaymentInfo({ 
+        pack: selectedPack,
+        // Les URL seront générées plus tard
+        stripeUrl: '', 
+        mvolaUrl: '' 
+    });
+    setPaymentModalOpen(true);
+  };
+
+  const onStripePay = async () => {
+    if (!sessionId || !paymentInfo) return;
     setLoading(true);
     try {
-      // Ajoute le sessionId comme client_reference_id pour le suivi dans Stripe
-      const checkoutUrl = `${selectedPlan.stripeBuyLink}?client_reference_id=${sessionId}`;
-      
-      console.log(`Redirecting to Stripe checkout: ${checkoutUrl}`);
-      window.location.href = checkoutUrl;
-
+      const paymentData = await createPayment(sessionId, paymentInfo.pack.id);
+      if (paymentData.stripeUrl) {
+        window.location.href = paymentData.stripeUrl;
+      }
     } catch (err: any) {
-      console.error('Payment redirection failed:', err);
+      console.error('Stripe payment creation failed:', err);
       toast({
-        title: 'Erreur de paiement',
-        description: err.message || 'Impossible de vous rediriger vers la page de paiement.',
+        title: 'Erreur de paiement Stripe',
+        description: err.response?.data?.error || err.message,
         variant: 'destructive',
       });
     } finally {
       setLoading(false);
     }
   };
+
+    const onMvolaPay = async () => {
+    if (!sessionId || !paymentInfo) return;
+    setLoading(true);
+    try {
+      const paymentData = await createMvolaPayment(sessionId, paymentInfo.pack.id);
+      // Deux cas possibles:
+      // 1) API retourne une URL tierce pour valider le paiement -> on ouvre dans un nouvel onglet
+      if (paymentData.transactionUrl) {
+        window.open(paymentData.transactionUrl, '_blank');
+      }
+      // 2) API attend la complétion et renvoie directement une downloadUrl -> on redirige pour auto-download
+      if (paymentData.downloadUrl) {
+        console.log('[MVola] Redirection vers la page de téléchargement:', paymentData.downloadUrl);
+        window.location.href = paymentData.downloadUrl;
+        return;
+      }
+      toast({ title: 'Succès', description: 'Paiement Mvola initié.' });
+      } catch (err: any) {
+        console.error('Mvola payment creation failed:', err);
+        toast({
+          title: 'Erreur de paiement Mvola',
+          description: err.message || 'Impossible d\'initier le paiement Mvola.',
+          variant: 'destructive',
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
 
   const exportData = (format: 'excel' | 'csv') => {
     if (!sessionId || !scrapeDone) {
@@ -200,5 +278,13 @@ export function useScrape(initialSessionId?: string) {
     resetScrape,
     handlePayment,
     exportData,
+    isPaymentModalOpen,
+    setPaymentModalOpen,
+    paymentInfo,
+    onStripePay,
+    onMvolaPay,
+    packs,
+    selectedPackId,
+    setSelectedPackId
   };
 }

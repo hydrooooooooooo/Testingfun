@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { UserData } from '@/types';
 import { useAuth } from './AuthContext';
+import api from '../services/api';
 
 interface DashboardContextType {
   userData: UserData | null;
@@ -27,18 +28,8 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
     try {
       const cacheBuster = `_=${new Date().getTime()}`;
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/dashboard?${cacheBuster}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Erreur lors de la récupération des données.');
-      }
-
-      const data: UserData = await response.json();
+      const response = await api.get<UserData>('/user/dashboard');
+      const data = response.data;
       setUserData(data);
       setError(null);
     } catch (err) {

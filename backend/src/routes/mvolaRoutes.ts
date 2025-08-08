@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { initiateMvolaPayment } from '../controllers/mvolaController';
+import { protect } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -19,6 +20,6 @@ const router = Router();
  *       500:
  *         description: Internal server error or authentication failure.
  */
-router.post('/initiate-payment', initiateMvolaPayment);
+router.post('/initiate-payment', protect, initiateMvolaPayment);
 
 export default router;

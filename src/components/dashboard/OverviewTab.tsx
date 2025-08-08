@@ -14,14 +14,15 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ userData }) => {
     return <div>Chargement des données...</div>;
   }
 
-  const { stats, payments, downloads } = userData;
+  const { stats, payments } = userData;
+  // Pour éviter les soucis de typage avec les sessions (downloads), on affiche ici
+  // l'activité récente basée sur les paiements uniquement.
+  const recentActivity = payments
+    .map((p) => ({ ...p, type: 'payment' as const, date: p.created_at }))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5);
 
-  const combinedActivity: Activity[] = [
-    ...payments.map(p => ({ ...p, type: 'payment' as const, date: p.created_at })),
-    ...downloads.map(d => ({ ...d, type: 'download' as const, date: d.downloaded_at }))
-  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-  const recentActivity = combinedActivity.slice(0, 5);
+  const formatAmountFR = (n: number) => new Intl.NumberFormat('fr-FR').format(n);
 
   return (
     <div className="space-y-6 pt-6">
@@ -68,19 +69,16 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ userData }) => {
               recentActivity.map((activity, index) => (
                 <li key={index} className="flex items-center space-x-4">
                   <div className="p-2 bg-muted rounded-full">
-                    {activity.type === 'payment' ? <CreditCard className="h-5 w-5" /> : <Download className="h-5 w-5" />}
+                    <CreditCard className="h-5 w-5" />
                   </div>
                   <div className="flex-1">
                     {activity.type === 'payment' && (
                       <>
-                        <p className="text-sm font-medium">Paiement de {activity.amount}€</p>
+                        <p className="text-sm font-medium">
+                          Paiement de {formatAmountFR(activity.amount)}{' '}
+                          {(activity as any).currency ? (activity as any).currency.toUpperCase() : 'MGA'}
+                        </p>
                         <p className="text-xs text-muted-foreground">ID de transaction: {activity.stripe_payment_id}</p>
-                      </>
-                    )}
-                    {activity.type === 'download' && (
-                      <>
-                        <p className="text-sm font-medium">Fichier : {activity.scraped_url}</p>
-                        <p className="text-xs text-muted-foreground">Fichier téléchargé</p>
                       </>
                     )}
                   </div>

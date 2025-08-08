@@ -18,6 +18,7 @@ import NotFound from "./pages/NotFound";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from './pages/DashboardPage';
+import ProfilePage from './pages/ProfilePage';
 
 // Layouts
 import PublicLayout from './layouts/PublicLayout';
@@ -34,8 +35,8 @@ function App() {
       <TooltipProvider>
         <AuthProvider>
           <DashboardProvider>
-            <ScrapeProvider>
             <BrowserRouter>
+              <ScrapeProvider>
               <Toaster />
               <Sonner />
               <Routes>
@@ -54,14 +55,17 @@ function App() {
                   <Route path="/dashboard" element={<DashboardLayout />}>
                     <Route index element={<DashboardPage />} />
                   </Route>
+                  <Route path="/profile" element={<DashboardLayout />}>
+                    <Route index element={<ProfilePage />} />
+                  </Route>
                 </Route>
                 <Route path="/download" element={<DownloadPage />} />
 
                 {/* Catch-all route */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              </ScrapeProvider>
             </BrowserRouter>
-          </ScrapeProvider>
         </DashboardProvider>
       </AuthProvider>
       </TooltipProvider>

@@ -209,6 +209,7 @@ export class PaymentController {
           .update({
             status: SessionStatus.FINISHED,
             isPaid: true,
+            payment_method: 'stripe',
             payment_intent_id: paymentIntent.id,
             downloadUrl: downloadUrl,
             downloadToken: downloadToken,
@@ -218,7 +219,6 @@ export class PaymentController {
 
         // 2. Insérer dans la table des paiements
         await trx('payments').insert({
-          id: `pay_${nanoid()}`,
           user_id: session.user_id,
           session_id: sessionId,
           stripe_payment_intent_id: paymentIntent.id,
@@ -231,9 +231,9 @@ export class PaymentController {
 
         // 3. Insérer dans la table des téléchargements
         await trx('downloads').insert({
-          id: `dl_${nanoid()}`,
           user_id: session.user_id,
           session_id: sessionId,
+          format: 'excel',
           download_token: downloadToken,
           expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 jours
         });

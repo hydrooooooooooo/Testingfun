@@ -11,6 +11,7 @@
     "test": "jest",
     "db:migrate": "knex migrate:latest --knexfile src/config/knexfile.ts",
     "db:rollback": "knex migrate:rollback --knexfile src/config/knexfile.ts",
+    "db:seed": "knex seed:run --knexfile src/config/knexfile.ts",
     "dev:prod": "cross-env NODE_ENV=production npm run db:migrate && cross-env NODE_ENV=production ts-node-dev --respawn --transpile-only src/index.ts"
   },
   "dependencies": {
