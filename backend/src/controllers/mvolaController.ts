@@ -131,6 +131,7 @@ export const initiateMvolaPayment = async (req: AuthenticatedRequest, res: Respo
                     status: SessionStatus.FINISHED,
                     isPaid: true,
                     packId: packId,
+                    user_id: userId,
                     payment_method: 'mvola',
                     payment_intent_id: `mvola_${dbTransactionId}`,
                     downloadUrl: downloadUrl,
