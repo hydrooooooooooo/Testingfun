@@ -22,6 +22,7 @@ export interface UserRegistration {
   email: string;
   password: string;
   name?: string;
+  phone_number: string;
 }
 
 export interface UserLogin {

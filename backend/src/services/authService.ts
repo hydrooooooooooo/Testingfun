@@ -8,7 +8,7 @@ import { config } from '../config/config';
 export class AuthService {
   
     async register(userData: UserRegistration): Promise<{ user: User; token: string }> {
-    const { email, password, name } = userData;
+    const { email, password, name, phone_number } = userData;
 
     // 1. Vérifier si l'email est unique
     const existingUser = await db<User>('users').where({ email }).first();
@@ -30,6 +30,7 @@ export class AuthService {
         email,
         password_hash: hashedPassword,
         name,
+        phone_number,
         verification_token: verificationToken,
         verification_token_expires_at: verificationTokenExpiresAt,
         email_verified_at: null, // Important
