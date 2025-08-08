@@ -67,7 +67,10 @@ const DashboardPage: React.FC = () => {
           <PaymentsTab payments={userData?.payments || []} />
         </TabsContent>
         <TabsContent value="files">
-          <FilesTab sessions={userData.downloads} />
+          <FilesTab sessions={(userData.downloads && userData.downloads.length > 0)
+            ? userData.downloads
+            : (userData.sessions || []).filter(s => s.isPaid && s.status === 'completed')}
+          />
         </TabsContent>
         <TabsContent value="settings">
           <SettingsTab />

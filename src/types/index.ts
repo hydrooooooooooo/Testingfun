@@ -56,4 +56,5 @@ export interface UserData {
   };
   payments: Purchase[];
   downloads: Session[]; // Changed from Download[] to Session[] to reflect API changes
+  sessions: Session[]; // Added to align with backend getDashboardData response
 }

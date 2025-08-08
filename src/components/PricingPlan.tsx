@@ -5,6 +5,8 @@ import { CheckCircle, Lock, Loader2 } from "lucide-react";
 export type PricingPlanDisplay = {
   name: string;
   price: string;
+  oldPrice?: string;
+  savingsPercent?: number;
   desc: string;
   features: string[];
   cta: string;
@@ -25,7 +27,7 @@ export default function PricingPlan({
 }) {
   return (
     <div
-      className={`relative bg-white border border-border rounded-xl shadow-md flex flex-col gap-4 px-7 py-6 w-full max-w-xs mx-auto
+      className={`relative bg-white border border-border rounded-xl shadow-md flex flex-col gap-4 px-7 py-6 w-full max-w-xs mx-auto transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg
       ${plan.popular ? "ring-2 ring-primary scale-105 z-10" : ""}
       `}
     >
@@ -34,8 +36,12 @@ export default function PricingPlan({
           Populaire
         </span>
       )}
-      <h3 className="text-xl font-bold text-primary mb-2">{plan.name}</h3>
-      <div className="text-3xl font-extrabold mb-1">{plan.price}</div>
+      <h3 className="text-xl font-bold text-primary mb-1 text-center">{plan.name}</h3>
+      <div className="w-full flex justify-center">
+        <div className="text-3xl font-extrabold mb-1 bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent whitespace-nowrap text-center">
+          {plan.price}
+        </div>
+      </div>
       <div className="mb-2 text-muted-foreground">{plan.desc}</div>
       <ul className="space-y-1 text-sm mb-3">
         {plan.features.map(f => (

@@ -35,17 +35,28 @@ export default function PricingPage() {
       setLoading(true);
       try {
         const response = await api.get('/packs');
-        const plans: PricingPlanDisplay[] = response.data.map((plan: any) => ({
-          name: plan.name,
-          price: `${plan.price.toLocaleString('fr-FR')} MGA`,
-          desc: `${plan.nb_downloads.toLocaleString()} extractions`,
-          features: formatPlanFeatures(plan),
-          cta: plan.popular ? "Choix optimal" : "Choisir ce pack",
-          popular: plan.popular || false,
-          packId: plan.id,
-          nbDownloads: plan.nb_downloads,
-          disabled: false,
-        }));
+        const plans: PricingPlanDisplay[] = response.data.map((plan: any) => {
+          // Afficher le prix réel de la base (en Ariary)
+          const originalPrice = Number(plan.price) || 0;
+          const priceDisplay = `${originalPrice.toLocaleString('fr-FR')} MGA`;
+          const desc = `${Number(plan.nb_downloads).toLocaleString('fr-FR')} extractions`;
+          const descriptionBullets = (plan.description || '')
+            .split('|')
+            .map((s: string) => s.trim())
+            .filter((s: string) => s.length > 0);
+          const features = [desc, ...descriptionBullets];
+          return {
+            name: plan.name,
+            price: priceDisplay,
+            desc,
+            features: features.length > 0 ? features : formatPlanFeatures(plan),
+            cta: plan.popular ? 'Choix optimal' : 'Choisir ce pack',
+            popular: !!plan.popular,
+            packId: plan.id,
+            nbDownloads: plan.nb_downloads,
+            disabled: false,
+          } as PricingPlanDisplay;
+        });
         setPricingPlans(plans);
       } catch (error) {
         console.error("Failed to fetch packs:", error);

@@ -56,8 +56,10 @@ const FilesTab: React.FC<FilesTabProps> = ({ sessions }) => {
     toast({ title: "Préparation du fichier", description: `Le téléchargement de votre fichier ${format.toUpperCase()} va bientôt commencer...` });
 
     try {
+      const authToken = localStorage.getItem('authToken');
       const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/sessions/${session.id}/download`, {
-        params: { format, token: session.downloadToken },
+        params: { format, token: session.downloadToken, pack_id: session.packId },
+        headers: authToken ? { 'Authorization': `Bearer ${authToken}` } : undefined,
         responseType: 'blob',
       });
 
