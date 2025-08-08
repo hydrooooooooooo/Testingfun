@@ -6,7 +6,7 @@ import { sessionService, Session, SessionStatus } from '../services/sessionServi
 
 import { ApiError } from '../middlewares/errorHandler';
 import { logger } from '../utils/logger';
-import { PLANS } from '../config/plans';
+// Packs are now read from DB 'packs' table instead of in-code PLANS
 import db from '../database';
 import { Knex } from 'knex';
 import { config } from '../config/config';
@@ -79,7 +79,8 @@ export class PaymentController {
         throw new ApiError(401, 'User not authenticated. Cannot create payment.');
       }
 
-      const pack = PLANS.find(p => p.id === packId);
+      // Récupérer le pack depuis la base
+      const pack = await db('packs').where({ id: packId }).first();
       if (!pack) {
         throw new ApiError(404, `Pack with ID ${packId} not found`);
       }
@@ -96,7 +97,7 @@ export class PaymentController {
 
       logger.info(`[Payment] Session ${sessionId} successfully updated with userId: ${userId} and packId: ${packId}`);
 
-      if (!pack.stripePriceId) {
+      if (!pack.stripe_price_id) {
         logger.error(`[Payment] Stripe Price ID manquant pour le pack: ${pack.id}`);
         throw new ApiError(500, "Configuration de paiement incomplète pour ce pack.");
       }
@@ -110,7 +111,7 @@ export class PaymentController {
       logger.info(`[Payment] Creating Stripe session with metadata: ${JSON.stringify(metadata)}`);
 
       const checkoutSession = await stripeService.createCheckoutSession(
-        pack.stripePriceId,
+        pack.stripe_price_id,
         updatedSession.id,
         metadata
       );
@@ -193,7 +194,7 @@ export class PaymentController {
           return; 
         }
 
-        const pack = PLANS.find(p => p.id === session.packId);
+        const pack = await trx('packs').where({ id: session.packId }).first();
         if (!pack) {
           logger.error(`[DB] ❌ Pack ${session.packId} non trouvé pour la session ${sessionId}.`);
           return;
@@ -217,15 +218,18 @@ export class PaymentController {
           });
         logger.info(`[DB] ✅ Session ${sessionId} marquée comme terminée et payée.`);
 
-        // 2. Insérer dans la table des paiements
+        // 2. Insérer dans la table des paiements (aligné avec le schéma existant)
+        // Stocker directement le montant MGA renvoyé par Stripe (aucune conversion)
+        const amountMGA = (checkoutSession.amount_total ?? paymentIntent.amount ?? 0);
+
         await trx('payments').insert({
           user_id: session.user_id,
-          session_id: sessionId,
-          stripe_payment_intent_id: paymentIntent.id,
-          amount: paymentIntent.amount / 100,
-          currency: paymentIntent.currency,
+          stripePaymentIntentId: paymentIntent.id,
+          stripeCheckoutId: checkoutSession.id,
+          amount: amountMGA,
+          currency: 'MGA',
           status: 'succeeded',
-          pack_id: session.packId,
+          packId: session.packId,
         });
         logger.info(`[DB] ✅ Paiement enregistré pour la session ${sessionId}.`);
 

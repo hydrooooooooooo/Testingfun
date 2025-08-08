@@ -205,8 +205,11 @@ export function useScrape(initialSessionId?: string) {
     setLoading(true);
     try {
       const paymentData = await createPayment(sessionId, paymentInfo.pack.id);
-      if (paymentData.stripeUrl) {
-        window.location.href = paymentData.stripeUrl;
+      const redirectUrl = paymentData?.url || paymentData?.stripeUrl;
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+      } else {
+        throw new Error('URL de redirection Stripe introuvable');
       }
     } catch (err: any) {
       console.error('Stripe payment creation failed:', err);

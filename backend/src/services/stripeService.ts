@@ -27,7 +27,8 @@ export class StripeService {
           },
         ],
         mode: 'payment',
-        success_url: `${config.server.frontendUrl}/download?session_id={CHECKOUT_SESSION_ID}`,
+        // Important: rediriger avec l'ID de session interne (clientReferenceId)
+        success_url: `${config.server.frontendUrl}/download?session_id=${clientReferenceId}`,
         cancel_url: `${config.server.frontendUrl}/pricing`,
         client_reference_id: clientReferenceId,
         metadata: metadata,

@@ -10,7 +10,7 @@ import { logger } from '../utils/logger';
 import { config } from '../config/config';
 import { protect } from '../middlewares/authMiddleware';
 import db from '../database';
-import { PLANS } from '../config/plans';
+// import { PLANS } from '../config/plans'; // No longer used; packs come from DB
 
 const router = Router();
 
@@ -21,6 +21,7 @@ const router = Router();
  */
 router.post(
   '/create-payment',
+  protect, // Require auth so req.user.id is set in controller
   [
     body('packId').isString().withMessage('Pack ID is required'),
     body('sessionId').isString().withMessage('Session ID is required'),
