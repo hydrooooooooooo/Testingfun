@@ -7,9 +7,26 @@ const authService = new AuthService();
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const userData: UserRegistration = req.body;
-    // TODO: Ajouter une validation plus robuste des entrées (ex: avec Joi ou Zod)
-    if (!userData.email || !userData.password) {
-        res.status(400).json({ message: 'Email and password are required.' });
+    // Validation basique (peut être remplacée par Joi/Zod)
+    if (!userData.email || !userData.password || !userData.phone_number) {
+        res.status(400).json({ message: 'Email, password and phone_number are required.' });
+        return;
+    }
+    const phone = String(userData.phone_number).trim();
+    const phoneRegex = /^\+?\d{7,15}$/;
+    if (!phoneRegex.test(phone)) {
+        res.status(400).json({ message: 'Invalid phone_number format. Use international format, e.g. +261340000000' });
+        return;
+    }
+
+    // Vérifier la confirmation du mot de passe si fournie
+    const confirmPassword = (req.body as any).confirm_password;
+    if (typeof confirmPassword !== 'string' || confirmPassword.length === 0) {
+        res.status(400).json({ message: 'confirm_password is required.' });
+        return;
+    }
+    if (userData.password !== confirmPassword) {
+        res.status(400).json({ message: 'Passwords do not match.' });
         return;
     }
 

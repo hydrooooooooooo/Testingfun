@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -20,17 +21,31 @@ import {
   FormMessage 
 } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
+import { Eye, EyeOff } from 'lucide-react';
 
 // Schéma de validation pour le formulaire d'inscription
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Le nom doit contenir au moins 2 caractères.' }),
   email: z.string().email({ message: 'Veuillez saisir une adresse e-mail valide.' }),
   password: z.string().min(8, { message: 'Le mot de passe doit contenir au moins 8 caractères.' }),
+  phone_number: z
+    .string({ required_error: 'Le numéro de téléphone est requis.' })
+    .trim()
+    .min(7, { message: 'Numéro de téléphone invalide.' })
+    .refine((val) => /^\+?\d{7,15}$/.test(val), {
+      message: 'Numéro de téléphone invalide.',
+    }),
+  confirm_password: z.string({ required_error: 'La confirmation du mot de passe est requise.' })
+}).refine((data) => data.password === data.confirm_password, {
+  message: 'Les mots de passe ne correspondent pas.',
+  path: ['confirm_password'],
 });
 
 export default function RegisterPage() {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,6 +53,8 @@ export default function RegisterPage() {
       name: '',
       email: '',
       password: '',
+      phone_number: '',
+      confirm_password: '',
     },
   });
 
@@ -48,7 +65,13 @@ export default function RegisterPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          name: values.name,
+          email: values.email,
+          password: values.password,
+          phone_number: values.phone_number,
+          confirm_password: values.confirm_password,
+        }),
       });
 
       const data = await response.json();
@@ -99,6 +122,20 @@ export default function RegisterPage() {
                   </FormItem>
                 )}
               />
+              
+              <FormField
+                control={form.control}
+                name="phone_number"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Numéro de téléphone</FormLabel>
+                    <FormControl>
+                      <Input type="tel" placeholder="ex: +261340000000" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"
@@ -119,7 +156,40 @@ export default function RegisterPage() {
                   <FormItem>
                     <FormLabel>Mot de passe</FormLabel>
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <div className="relative">
+                        <Input type={showPassword ? 'text' : 'password'} {...field} />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((v) => !v)}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                        >
+                          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirm_password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirmer le mot de passe</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input type={showConfirm ? 'text' : 'password'} {...field} />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirm((v) => !v)}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          aria-label={showConfirm ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                        >
+                          {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
