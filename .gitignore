@@ -28,4 +28,4 @@ backend/.env.*
 backend/mvola-sdk/.env
 backend/mvola-sdk/.env.*
 .env
-.env.*
+.env.production
