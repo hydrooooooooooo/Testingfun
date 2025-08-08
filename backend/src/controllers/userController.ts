@@ -47,8 +47,8 @@ export const getPaymentHistory = async (req: AuthenticatedRequest, res: Response
       );
 
     const purchases = [...stripeRows.map((p: any) => {
-        const amountEur = Number(p.amount);
-        const amountMGA = isFinite(amountEur) ? Math.round(amountEur * EUR_TO_MGA) : 0;
+        // Montant déjà stocké en MGA côté Stripe (conversion faite au webhook)
+        const amountMGA = Number(p.amount) || 0;
         return {
           id: p.id,
           user_id: p.user_id,
@@ -145,8 +145,8 @@ export const getDashboardData = async (req: AuthenticatedRequest, res: Response)
       );
 
     const purchases: any[] = [...stripeRows.map((p: any) => {
-        const amountEur = Number(p.amount);
-        const amountMGA = isFinite(amountEur) ? Math.round(amountEur * EUR_TO_MGA) : 0;
+        // Montant déjà stocké en MGA côté Stripe (conversion faite au webhook)
+        const amountMGA = Number(p.amount) || 0;
         return {
           id: p.id,
           user_id: p.user_id,

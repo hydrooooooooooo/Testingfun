@@ -1,0 +1,496 @@
+{
+  "sessionId": "sess_8a0GsiKXof",
+  "datasetId": "0QKs2CsCpdYZ667gh",
+  "timestamp": "2025-08-08T12:44:10.753Z",
+  "totalItems": 51,
+  "previewItems": [
+    {
+      "title": "Maison à louer",
+      "price": "$700 000",
+      "desc": "À louer \n👉 Appartement à Ankorondrano près Gymnase Ankoay \n💚 Living \n💚douche et WC (intérieure) \n,💚 une chambre \n💡 électricité, ok\n💦 Eau en cours \n🚐 Accès voiture et moto\n🏍️ Bord de route \nLoyer 700.000 ar\nCaution 1 mois de loyer \n📞 [hidden information]",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/527627337_1310388920600692_3153345770604655884_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=LM_vX55w5ygQ7kNvwGKvFa0&_nc_oc=AdkD957ggQwygjUn5UdJzefF2hsMjDoAAjSfSu_Y6dnWLhSJCiwleehI10I5hMz1Y0s&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=aG5eIIGxW83dP2oPwTD9Gw&oh=00_AfXCnDxOe5hhSvLg_Ae9n4U_Ef6FzMx-pfZtduutd8rcbQ&oe=689BBF3D",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/2591120901239839",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "N/A",
+      "desc": "Appartement T3 \nA louer \nIvandry\nDans une résidence très sécurisé \nContact [hidden information]",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/521824400_587542427571206_8051114370557011610_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=fUO7JbGyb8YQ7kNvwFbbRsA&_nc_oc=AdnaJHZJaR9T4J3mFygtAo6LgZ2dL2myJEQlRQxT7eeFk5aac-Uo9L60EJv5d8QzmTU&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=6uTP62p9A69lXAISXwIYrQ&oh=00_AfVNBPLNcy3nAwLIte8r3iv2J3iEqDbIsw7AnwJ8JhJcag&oe=689BBB80",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/24098052149824025",
+      "postedAt": ""
+    },
+    {
+      "title": "MAISON",
+      "price": "N/A",
+      "desc": "Maison surface 113m², 2ème plan, à 100m route principale, accessible voiture.\nTerrain 2 are 39\n2 étages:\n2ème étage : terasse, appartement de 2 Chambres+ 1 Living + Cuisine + 1 Salle d'eau + Toilette.\n1er étage : 1 appartement de 4 Chambres+ 1 Living + Cuisine + 1 Salle d'eau + Toilette.\nRez_De_Chaussée:\nGarage +salle de depot + cuisine  + Salle d'eau + Toilette.\nEau et electricité jirama\nPrix: 600 millions Ar\nEtudie toutes propositions\nDetails mp",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/519626431_9891488164312277_2204910455910798868_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=PX1mY7MvSNoQ7kNvwF-APiO&_nc_oc=AdnjBAeOuNGaaV_ZW18GHrhIu_UdFXrOFwxLmdVG_MWU2zYdGtJo0X6DAWRwfj0YM5U&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=FAUfaBVwoEwx2MM-q434HA&oh=00_AfU0hScaPrBnZacb3wpQ6WrsyLHJQi6k62uWNjbTpQrsWg&oe=689BCAED",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/2304887363351217",
+      "postedAt": ""
+    }
+  ],
+  "allItems": [
+    {
+      "title": "Maison à louer",
+      "price": "$700 000",
+      "desc": "À louer \n👉 Appartement à Ankorondrano près Gymnase Ankoay \n💚 Living \n💚douche et WC (intérieure) \n,💚 une chambre \n💡 électricité, ok\n💦 Eau en cours \n🚐 Accès voiture et moto\n🏍️ Bord de route \nLoyer 700.000 ar\nCaution 1 mois de loyer \n📞 [hidden information]",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/527627337_1310388920600692_3153345770604655884_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=LM_vX55w5ygQ7kNvwGKvFa0&_nc_oc=AdkD957ggQwygjUn5UdJzefF2hsMjDoAAjSfSu_Y6dnWLhSJCiwleehI10I5hMz1Y0s&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=aG5eIIGxW83dP2oPwTD9Gw&oh=00_AfXCnDxOe5hhSvLg_Ae9n4U_Ef6FzMx-pfZtduutd8rcbQ&oe=689BBF3D",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/2591120901239839",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "N/A",
+      "desc": "Appartement T3 \nA louer \nIvandry\nDans une résidence très sécurisé \nContact [hidden information]",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/521824400_587542427571206_8051114370557011610_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=fUO7JbGyb8YQ7kNvwFbbRsA&_nc_oc=AdnaJHZJaR9T4J3mFygtAo6LgZ2dL2myJEQlRQxT7eeFk5aac-Uo9L60EJv5d8QzmTU&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=6uTP62p9A69lXAISXwIYrQ&oh=00_AfVNBPLNcy3nAwLIte8r3iv2J3iEqDbIsw7AnwJ8JhJcag&oe=689BBB80",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/24098052149824025",
+      "postedAt": ""
+    },
+    {
+      "title": "MAISON",
+      "price": "N/A",
+      "desc": "Maison surface 113m², 2ème plan, à 100m route principale, accessible voiture.\nTerrain 2 are 39\n2 étages:\n2ème étage : terasse, appartement de 2 Chambres+ 1 Living + Cuisine + 1 Salle d'eau + Toilette.\n1er étage : 1 appartement de 4 Chambres+ 1 Living + Cuisine + 1 Salle d'eau + Toilette.\nRez_De_Chaussée:\nGarage +salle de depot + cuisine  + Salle d'eau + Toilette.\nEau et electricité jirama\nPrix: 600 millions Ar\nEtudie toutes propositions\nDetails mp",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/519626431_9891488164312277_2204910455910798868_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=PX1mY7MvSNoQ7kNvwF-APiO&_nc_oc=AdnjBAeOuNGaaV_ZW18GHrhIu_UdFXrOFwxLmdVG_MWU2zYdGtJo0X6DAWRwfj0YM5U&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=FAUfaBVwoEwx2MM-q434HA&oh=00_AfU0hScaPrBnZacb3wpQ6WrsyLHJQi6k62uWNjbTpQrsWg&oe=689BCAED",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/2304887363351217",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "$5",
+      "desc": "Une belle maison à vendre à Ambatobe Andranoritra, 5minutes du lycée français.comprenant:\n👉 1living, 3chambres, cuisine fermée et semi-equipée, wc et douche à l'intérieur.\n👉 Parking pour trois voitures.\n👉Sur un terrain de 157m2 titré et borné ,bien clôturé et sécurisé.\n👉Eau et électricité ok.\n👉Pour plus d'informations et de détails, veuillez m'appeler directement le [hidden information].",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/520938279_1088362486562887_1003734829128648855_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=ecZyql0W1msQ7kNvwFTDzGm&_nc_oc=AdlsvryTUpijH_PRVmmmOopd1_-CI07bG_UwbAfceNjN4Wu2upRRuFCApICTWBDNGI0&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=YK5fNlMtYvgtLwpv02NlUQ&oh=00_AfWleKquyvmgk_0drZPgR-yvGrQX_kO94tbNhhFhxLUMfA&oe=689BBF8B",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1503590100805381",
+      "postedAt": ""
+    },
+    {
+      "title": "maison",
+      "price": "$600",
+      "desc": "Maison  à vendre (propriétaire Direct)\n ~Lieu:Ambohimanarina/ANTANANARIVO \n ~Maison Moderne\n ~2 etages: un grand living, 5 chambres, un cuisine,  2 WC et Douche à l'intérieure,terrasse\n ~TITRE BORNÉ (UNE SEULE SIGNATAIRE)\n ~Prix: 600 millions FMG\n ~TRES BELLE VUE \n ~ACCES MOTO\n ~ eau d jirama OK,électricité en cours d branchement\n NB:MAISON TRÈS  EN SÉCURITÉ\n~ MP OU 034 01 531 32",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/482802507_1147960640123935_319752880324947563_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=YxMG2-nqyUUQ7kNvwGmSuM1&_nc_oc=AdkanUiPLwsSXMfakQCCfvx1txThK5PWmzPG-IV6_jTXhAo1PJBdd1UwoHzfBnccTAU&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=FpNLvqKDyxcbri25x0XwzQ&oh=00_AfUVkimZOgs2RAdPkxfWCHcLG8rdh4cLVTJ7MdG4vCEO-g&oe=689BB75D",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1343317423524387",
+      "postedAt": ""
+    },
+    {
+      "title": "Une maison à vendre",
+      "price": "$220",
+      "desc": "Un living 2Chambres ,douche et WC à l'intérieur ",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/523508417_1982651469243315_8556863886123509446_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=IENnKX3BNoYQ7kNvwHClqZK&_nc_oc=Adnq4FyO28punyOXAkRyt2glgrlbiQ_PomhF9pEr3vDFn7wc7l6iBChkK7N9W7l46GQ&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=qvyqNQFc6HbyIemlfqGJgQ&oh=00_AfVt8Ej4g8qmS5ISdw-JlqGnEXk12VmpT2mQgkLBHYnceQ&oe=689BC557",
+      "location": "Antananarivo-Nord",
+      "url": "https://www.facebook.com/marketplace/item/764579249283829",
+      "postedAt": ""
+    },
+    {
+      "title": "Une maison à vendre AMBATOBE",
+      "price": "$80",
+      "desc": "Une maison à vendre AMBATOBE ,près d'école française \n☑️☑️80millions d'Ar \n☑️☑️Titre borne \n☑️☑️ Accessible voiture ",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/524932314_2211703209271859_6248002523653597944_n.jpg?stp=c33.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=5bvyaeP4yRgQ7kNvwGuq6ye&_nc_oc=AdmhKhVRoOJBQUlAYTixRUoxBKcoDRtqj3Xi4cVDrEO6TdzHK6bdnhYUyoWpVh9jhcM&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=qtyF9s_jPMGqOekEp0XJNQ&oh=00_AfW2iqGJkZGDhwIpnR8WZaXQ-4ar-XEX370Bu_pUDMU1tQ&oe=689BD852",
+      "location": "Antananarivo-Nord",
+      "url": "https://www.facebook.com/marketplace/item/1797102327826154",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "$5",
+      "desc": "Trano amidy\nSabotsy namehana\n400m2\n2 étages\nPlus de 10 chambre confort\n4 toilettes intérieur et 1 extérieur.\nCours avec garage, bassin...\nClôturé avec barbelés.\nChalet\nAccessible voiture \n\nPropriétaire direct\n0345214558",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/513532749_1115861710376321_1098013959532453466_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=v8O-enuh_VkQ7kNvwFHgn81&_nc_oc=AdmcGDkcBsq6i-OWMufvWDlXgl-GiSRQzYb2yJrNzx5slhNBKlmeryAT8a_yPZdrfow&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=BWDHVzIZcn2CZngqsvmm0w&oh=00_AfUsSahz-iXlxUzd8XX8Xmm3LfJwTuitatQhZWa0dwgQ0w&oe=689BCB51",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/2167196300448719",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison a vendre",
+      "price": "$200",
+      "desc": "A vendre\nMaison étage \nAnosivavaka Ambohimanarina \nAccès voiture \nBord de route \n1 Living \n4 chambre \nDouble cuisine \nSurface terrain 130 M 2 \nPrix intéressant \nContact [hidden information]:\nDisponible WhatsApp ",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/521352117_642770738149532_1626093461407789276_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=JeoLd3WJsycQ7kNvwH8azF1&_nc_oc=AdmVsVPBqTh9x7Q9ggIf7cK6JJOp3SDegHBsX-AJwoDm6Hm09DzvOVaRh0fp2osa-QQ&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=GLSDpKkA1kFvuBYQxPBjpQ&oh=00_AfVprJDGR-84tqcydJ0UqLT-fccaLocIV1CyOz79Upe0xg&oe=689BC923",
+      "location": "Antananarivo-Sud",
+      "url": "https://www.facebook.com/marketplace/item/1379975499776922",
+      "postedAt": ""
+    },
+    {
+      "title": "Villa a vendre",
+      "price": "Prix à négocier",
+      "desc": "Vend villa à étage\nSurface 350m2\n3 chambres, grand living, cuisine,...\nRez de chaussé : grande salle multifonctions, Clôturé, parking 4 voitures\nLieu morarano manakambahiny\nTitré Borné avec permis de construire",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t39.30808-6/528488658_24664360466483123_5172067288875034649_n.jpg?stp=c0.114.987.987a_dst-jpg_s133x133_tt6&_nc_cat=104&ccb=1-7&_nc_sid=454cf4&_nc_ohc=U5IRoKJkgMMQ7kNvwGAi6k4&_nc_oc=AdmBbHQGq089pABxJLCu8fhZZcxqGD2SUvXGdMGtR5QlTiGihtD4ZxxR-l9pk4o5vGs&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=ulIPcM--iiJdoKeGICB4Qg&oh=00_AfWpabHMsFK-On9Z5MmzfhPce7wbi1iD3d6HcWF5Hje-yw&oe=689BAA27",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1289737592560207",
+      "postedAt": ""
+    },
+    {
+      "title": "a vendre",
+      "price": "$5",
+      "desc": "A vendre une tres belle villa avec piscine situé dans une residence trés securisé BY PASS AMBOHIMANGAKELY,\nRDC: \nUN grand living avec cuisine ouverte\nUne chambre avec douche wc en attente\nToilette visiteur\nA l'étage:\nSuite parentale avec douche wc en attente\n2 Grandes chambres chacun à sa propre douche wc,\nA l'exterieur:\nune maison pour salle de sport\nGrand jardin, piscine\nParking pour voiture,\nTerrain environ 800m2\nPrix très interréssant\n\nContact: [hidden information] Disponible sur whatsApp",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/504181912_1459210905078620_3637648230642219541_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=bqL8zEaUSjsQ7kNvwEW_0R4&_nc_oc=AdlCmSkYoCYx4kSqhi5_OTNYRIBqzqRXmYBD7Gm2j_dltb7bppW5IQC-99X_OqrCUWg&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=MS3SegsmdqKWaR_kUxsfhQ&oh=00_AfWW36Mqb_tvzLb0DpU8tFPng5HhgkcXUg3Mn7Wm3qULTA&oe=689BB56E",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/3912078252439598",
+      "postedAt": ""
+    },
+    {
+      "title": "VILLA à Vendre.",
+      "price": "Prix à négocier",
+      "desc": "Villa à vendre .By_pass Ankazobe.\n2etages .  Accès voiture. Camion mm.\nSuperficie de 1000m2.\nParking pour 20 voitures.\n2ème plan.....de route principale By -pass. Cloturé .\nContact direct.Proprietaire \n0382341313   0320774749 whatsapp.",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-6/528415117_23922149050800165_312075120176833246_n.jpg?stp=c0.436.1080.1080a_dst-jpg_s133x133_tt6&_nc_cat=105&ccb=1-7&_nc_sid=454cf4&_nc_ohc=Uo0uY__IsbgQ7kNvwFjFij_&_nc_oc=AdlF36psLvHC35aNEfTK_93Qlxwg-fZ0xcWYZqBP0G9lnoAmFS1wrpbW75tVgSwofN4&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=N7dxwzbaBJw0bs2AgTSkBg&oh=00_AfUnfMtJgWABxGiyYTLiGDg60Q5jDnyAghIqL2YwCBMsSw&oe=689BC2DF",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/599903026311982",
+      "postedAt": ""
+    },
+    {
+      "title": "Canapé",
+      "price": "400 000 MGA",
+      "desc": "Description non disponible",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/527510840_4115290758758471_3281626253466821337_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=qmd_PgGeurYQ7kNvwHs4ZZV&_nc_oc=AdlolwZVzbkkUC1hS6mEJuln7CcDT0W0Z8tlh1XpW_4nROhz36NYDCLWi7EVyoZsoIA&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=zuYTqjv5A1dvBIvcdb4ckw&oh=00_AfXKaanu8awqLJDaD0On_Vo95Imm2RoHHsHaJq5mAzv5nQ&oe=689BAA1A",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/761021136424314",
+      "postedAt": ""
+    },
+    {
+      "title": "a vendre",
+      "price": "$5",
+      "desc": "A vendre une tres belle villa avec piscine situé dans une residence trés securisé BY PASS AMBOHIMANGAKELY,\nRDC: \nUN grand living avec cuisine ouverte\nUne chambre avec douche wc en attente\nToilette visiteur\nA l'étage:\nSuite parentale avec douche wc en attente\n2 Grandes chambres chacun à sa propre douche wc,\nA l'exterieur:\nune maison pour salle de sport\nGrand jardin, piscine\nParking pour voiture,\nTerrain 750m2\nPrix très interréssant\n\nContact: [hidden information] Disponible sur whatsApp",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/503129414_689278177149778_2914229125227869425_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=SREiTknxETUQ7kNvwFvVQpo&_nc_oc=AdnLqM1kQrpton_MSt5HIYvayF-ZE22U0-ucgCyjJVHVelVol0AxP2TMfXMEDVLiChY&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=iixk9-cUG35GlW-o4_3xuQ&oh=00_AfV_V1RFmrNQ5r3PMhn8-ytvObSmAx7lsvA0Jp4XVXhT8w&oe=689BA9D4",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1664975407553373",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "$200",
+      "desc": "💐Opportunité à saisir! \n  \n📢Maison à vendre Anosiala Ambohidratrimo\n\n👉2living 6 chambres, 3 salles d eau, cuisine équipée, 2 grandes Salles (Stockage, possible Usine)\n \nSurface du terrain: 6000m2(papier en règle ,titré,borné)\nClôturé et Sécurisé \nAccès Voiture \nQuartier résidentiel \n\n🫴Prix: MP \n \nEau & électricité(jirama)\n\n☎️ WhatsApp +261 34 17 798 58",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/520877322_1898408764287317_6401407896500833871_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=71n4BHm_xvYQ7kNvwH2mq9j&_nc_oc=AdmuANO1HrfA1yYu1EYvwLkiAJPLFLnNGeXDdrk2cODpKVWAHkrQwuJFcillcmu_2BA&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=thdeeWw0gNAk2i0aAmeT7w&oh=00_AfWEz230vo8OjNvHTgXP1mWLkO4g54956NndisHNvsuxFw&oe=689BDE23",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1134164871867905",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison centre ville",
+      "price": "N/A",
+      "desc": "Maison a vendre centre ville \nTSIMBAZAZA \n1 MILLIARD FMG FIXE ( PRIX DEJA RECTIFIÉ) \nMP\n\n",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/480002354_1298702254677232_3376161588966960569_n.jpg?stp=c0.21.133.133a_dst-jpg_p133x133_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=pW10AeIe6eIQ7kNvwHVLdtR&_nc_oc=Adm1a8eMoj1VZsCEBjBDz0TEI_p4czAy-oNq8ouQOxGNSXYNtR8VZaF0dQJv_fAN6qQ&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=DmSi4NKPKE5TVlxdhzWdNg&oh=00_AfVtniqWvFtjBqHwmFP-gn0Rlr4cUFuti1UHG-iwntezUg&oe=689BD615",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1366851834756732",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison à louer",
+      "price": "700 000 MGA",
+      "desc": "A louer 1 er étage 67 ha Nord est ☺️\nLoyer 700 000 Ar \nCaution 700 000 Ar \nVisite 10 000 Ar \nPropriétaire direct 😊\nAkaiky arabe 😊 \nTsisy mamaly mp fa Tonga de miantso  azafady [hidden information]",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-6/524867483_772868421854200_1167067049619615013_n.jpg?stp=c0.83.756.756a_dst-jpg_s133x133_tt6&_nc_cat=109&ccb=1-7&_nc_sid=454cf4&_nc_ohc=ZHsmXK_FsiAQ7kNvwGTnba4&_nc_oc=AdlV-GeRquxA88IzSMOJ4Ykoq4ordny2uliv9kib6CuMoQr4-flJDX727yUVic_L-0E&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=V1-7eil8t8YrMpEGHOOSow&oh=00_AfWjc8tofjvSSeWX2peAczKhtS_EJ_sRYSYaQ8-PsJnQ8w&oe=689BAF0B",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1865841264273982",
+      "postedAt": ""
+    },
+    {
+      "title": "Une maison neuve",
+      "price": "$250",
+      "desc": "Un living 2 chambres , douche et WC à l'intérieur ",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/524481470_1230626662095227_3547811305995565790_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=-9St6OqhwsYQ7kNvwGFhLzv&_nc_oc=AdkxN8wECkdCzqGc5pzFvokKoRlnmUZ5_yatdRfmM4TC_MY4LlAFEajLWP29l3GmiO4&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=VrdrqhnJRHl-UcWtxIIQvA&oh=00_AfVDK2bs74ZL40MCuQuyWtvUFzX9CnSDt9PuevQWa8Qe4w&oe=689BC7E8",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/777972424571807",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "$300",
+      "desc": "Cité 67ha, Antananarivo",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/480146609_986682900074671_8646142180659759633_n.jpg?stp=c0.51.133.133a_dst-jpg_p133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=NK_LH2am0dQQ7kNvwGpSRrh&_nc_oc=Adm8FCV-IJdk57zTnAdELAK8l7zMilVTjODedj18fd8UaLwO4RRtFWguJk5GRQ07nE0&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=d5p8gKAPfg5Aj9iEceqhCA&oh=00_AfXRAHCO5SmMU34EEJbb53IhXocZQx_fFM5bZdgkWZARVA&oe=689BD293",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/9983787061649157",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison ",
+      "price": "$32",
+      "desc": "Ambohikely AMBATOBE \nTrano Kely amidy \nDétails MP ou WhatsApp :[hidden information]",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/517247597_1264679182054345_2485612689983787915_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=BnXcPI0ZpGkQ7kNvwESYnJq&_nc_oc=Adn5oDU9ezLs6jViIw0c6TXKosCDXjRuxVCsRu5IgkV2nhcw1jFeDrN9EP_DKRhdS-Y&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=VyFXdCmOBrT8_NGiQ03LxA&oh=00_AfWGXrq0XHIF2C_vorIsy4Xg848XtQvud4uJ0bBa60S0pA&oe=689BAD25",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1253557642951786",
+      "postedAt": ""
+    },
+    {
+      "title": "Un maison",
+      "price": "$1 000",
+      "desc": "Mivarotta trano à ankeriky, lokoina fotsiny de manao finition sy déco. [hidden information]\nPapier acte de vente.toliara",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/528798672_750040897627383_6442422277502996092_n.jpg?stp=c81.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=nQ44lBfD0OkQ7kNvwEFxk19&_nc_oc=AdlhJj0KumtqORcuL6QRE0MFvEI9p6Rz_5PFw4vpQc-z1lmIputC0cx7UI7r9fV_JTc&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=9USXzgisUDb109Z_rdou9A&oh=00_AfVqWojH4LHy74TMnTYxacdV7mKp4ay6XM5tCKL-R8UhPA&oe=689BD746",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/636431542822782",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison a vendre",
+      "price": "Prix à négocier",
+      "desc": "Maison a vendre sise a alakamisy fenoarivo 1living 2 chambre, lakozy douche sy wc ao anatiny,refitany 1are08 ,refiny trano 8 sur 8 clôturer , quartier résidentiel taratasy aradalana tsara vidiny 40million d'ariary,tsy lavitra  arabe azo odina alina tsara \nTompony mivantana \nT\nContact :[hidden information]",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-6/506507934_1849056665644180_4834163786589469263_n.jpg?stp=c0.83.750.750a_dst-jpg_s133x133_tt6&_nc_cat=101&ccb=1-7&_nc_sid=454cf4&_nc_ohc=U29pMvdQOP8Q7kNvwHvd8nu&_nc_oc=AdmmFN2JxV4CiPl5O44mNTrJvSgHujpIPKlZpntaEsBWW4AL_HRCN-sLJjo-4ZVd6NI&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=n_YL1qmw9hPdoR8VGYKrUA&oh=00_AfVj3G2VdzlpuUOgEVnpStTHf-wKNVRoJTQRFw1cY-piJg&oe=689BBBDC",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/912943760905725",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison à vendre – Itaosy",
+      "price": "Prix à négocier",
+      "desc": "📌 Terrain titré et borné – Propriété au nom d’une seule personne\n📐 Surface : 3 ares 40\n🛏️ Maison composée de :\n\t•\t1 salon\n\t•\t3 chambres\n\t•\t1 cuisine\n\t•\tToilettes intérieures\n\n⚡ Électricité OK\n💧 Puits avec eau propre, moteur déjà installé\n🪣 Possibilité d’utiliser un seau (sitomina) aussi\n🛵 Accès moto uniquement (pas accessible en voiture)\n\n\n📍 Itaosy\n\n📞 Intéressé(e) ? Contactez-moi en message privé !\n",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/500816313_675014088734600_8047124059962184533_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=ts08UsD8YbMQ7kNvwGpW2fe&_nc_oc=AdlfNnoC8pjZZnQI1zPD0Xy5P2-koaJsUXanUJXTh2YBwoHGEhsQXWMhDqoeUQdwVpU&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=BuJx-qchGQVcz-G3dvUO0Q&oh=00_AfXhbu1lo0RGDGl0EDDPYAhROHUxZK2SCtxtwmEFhQkZ2Q&oe=689BDDB1",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1034652451653091",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "$2",
+      "desc": "👉À VENDRE — MAISON DUR EN PLEINE VILLE D’ANKADIFOTSY👈\n\nIdéalement située en plein cœur d’Ankadifotsy, cette maison à étage offre un fort potentiel pour diverses activités : bureaux, résidence familiale, école privée, dépôt ou centre commercial. Titrée et bornée, elle s’étend sur une surface totale de 288 m².🏢\n\nDescription :\n\nRez-de-chaussée :\n\n👉Grand dépôt de stockage de 100 m²\n👉1 chambre\n👉Cuisine\n👉Toilettes\n\n1er étage :\n\n👉1 spacieux salon\n👉3 chambres\n👉Cuisine\n👉Salle de bain\n👉Toilette\n\n2ème étage :\n\n👉3 chambres\n👉 Petite terrasse \n👉Cuisine\n👉Douche et toilettes\n\nAtouts :\n\nEmplacement stratégique en ville✔️\n\nStructure solide en dur✔️\n\nConvient pour toute activité commerciale, administrative ou résidentielle✔️\n\nTitré et borné👌\n\nPrix : [hidden information] Ariary (négociable) 💸\n\nNe ratez pas cette opportunité en centre-ville✨\n\nPour plus d'informations veuillez nous contacter au [hidden information]☎️",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/526678979_1706656850015900_7971542117867068587_n.jpg?stp=c0.33.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=dBM7AMUGqh8Q7kNvwFF402U&_nc_oc=AdnZTvjIzWrdRr3Q2ZKvN17fFpQL_weUqb6fsPOD3L89E_CuucC087XwR_2ZYuVGNBY&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=P25QySHBShFCZb14iRVTFQ&oh=00_AfV1Sha3CagteehSfu5UlluCaNSELiUh1WGZdLAyqeFDYg&oe=689BA79C",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1284044163306305",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "$250",
+      "desc": "Maison à vendre :\n✓ Toerana: versezmbola \n✓ Refiny tany : 10 ares \n✓ Refiny trano : 12 mètres sur 10\n✓ Mifefy tambo ara dalana tsara\n✓ Amoron lalan tany lehibe tongan fiara & Camion \n✓Taratasy ara dalana misoratra @ olona roa mivady ( titré & borné)\n• Mombamomba ny trano:\n✓ misy rihana 2 : dalle daholo fa tsy misy gorodona (terrasse be ny farany ambony, izany hoe dalle hatram tafo)\n✓ 11 ny efitrano fatorina \n✓ 2 ny efitrano fandraisam bahiny \n✓ 2 ny efitrano fidiovana & WC\n✓ 3 ny Terrasse \n✓ Efa misy Jiro jirama \n✓ Rano lava drano \n✓ Trano mbola vao vita ( ny 1er & 2em étage) \n✓ Efa vita carreaux daholo \n✓ Mandoko sisa dia Vita tompoko \nVidiny mirary dia mirary\nContact : 0349636931\n                  0343046223\n✓ Tompony Mivantana \n✓",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/515314003_716929897614543_6039153228571164697_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=0nMOLT7Pxp8Q7kNvwHQEapv&_nc_oc=Adm5yWhB2DA-FSXerRA7KKLmQrAc7fKAVwi4wYzoT54-FfK5P6tlm37OtT43nY75yyo&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=l6LG25TXnv22BlZ4_pM3jg&oh=00_AfVfa9m-SJzAAPEgByU_3LvOMQRlTVrPPiggmgBqcliPDA&oe=689BB4A2",
+      "location": "Antsirabe",
+      "url": "https://www.facebook.com/marketplace/item/1938210246980832",
+      "postedAt": ""
+    },
+    {
+      "title": "VILLA À VENDRE ANDRAISORO",
+      "price": "N/A",
+      "desc": "Villa R+2 situé à Andraisoro \n🔹DÉTAIL\n• Living 4 chambres\n 2 salles de bain, grenier et Veranda\n• Une grande jardin\n• Deux  garages intérieur + extérieur\n chapitonné: pour 3 voitures \n• Eau de puit avec\nchâteau d'eau à moteur\n• Accès voiture\n• Superficie 500m2\n• Surface batie 250m2\n• Papier en règle\n\nContact [hidden information] \nWhatsapp [hidden information]",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/528144556_1845752036293124_7915226962362009660_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=2tQiCXB5ngEQ7kNvwGBLzZq&_nc_oc=AdmoDXWEPtji-Xt0YXsHbEKutcjZGO28L8ZLZ4i4xcxHFBdNqPYT1kwSXz_DNbGHre8&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=uUoRR4vdrgpQG9Xf6rOZuA&oh=00_AfUwdcaWJ3SBOxcL8n20zykQ7-pX3UZi7L0ZO9izBFVN3g&oe=689BAA60",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1443831236953057",
+      "postedAt": ""
+    },
+    {
+      "title": "Villa basse T4 sise MANDROSOA IVATO À VENDRE",
+      "price": "1 200 MGA",
+      "desc": "😍 Magnifique villa basse  moderne T4  à vendre sise MANDROSOA IVATO \n👉 Surface totale du terrain : 990m2\n👉 Surface bâtie 120m2\n\n💥 Description de la villa :\n👇 A l'intérieur :\n\n✅ 1 living avec cheminée\n✅ 1 cuisine fermée\n✅ 1 chambre parentale attenante\n✅ 2 chambres spacieuses \n✅ 1 débarras \n✅ 1 wc & douche avec baignoire \n✅ Garage \n\n👇A l'extérieur : \n✅  dépendance gardien\n✅ Grande cour en pavé autobloquant \n✅ Magnifique Jardin tropical \n\nAccessible voiture/camion\n👍 A 100m du grand lac\n👌 Quartier très calme et très résidentiel \n\n🤑 Prix 1,2 milliard ariary\n\n❌❌ Curieux et intérmédiares s'abstenir ❌❌\n\n🤑 Droit de 1ere visite : 20000 Ariary \n\n👉 Visite sur rendez vous \n👉 Pour plus d'informations/ éventuelle visite \n ☎️ [hidden information]\n📱 WhatsApp : [hidden information]\n\nIG : @fitahianaimmomadagascar",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-6/518256383_1980192499418283_4251922580677346388_n.jpg?stp=c0.79.720.720a_dst-jpg_s133x133_tt6&_nc_cat=105&ccb=1-7&_nc_sid=454cf4&_nc_ohc=ROPAPmLYO7UQ7kNvwEbNore&_nc_oc=Adm-9ASD8G8kKsRbpIgvIqjdQLUDQ4VcGhFIpRo625MMT4_ci_i1tzlGxky_APf9-N0&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=q-1frYi6Vsp4GY8iOxD9Hg&oh=00_AfWFJm3nwz0e-SEsZAAnbnKslPHUlVaaBOrXLtiYR7i1Og&oe=689BC9F3",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1317833226426256",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison avec piscine",
+      "price": "N/A",
+      "desc": "Vends maison avec piscine et jacuzzi . Résidence calme , bon voisinage, sécurisée 24/24 .\nVilla de 3 chambres dont une suite parentale, douche italienne, living , 1 chambre supplémentaire pour usage bureau ou atelier ou salle de sport, cuisine ouverte équipée d'une plaque à gaz, hotte aspirante décorative, four encastré, micro-onde, verrandas.\nGrande cours avec une capacité de 8 voitures. Débarras à étage. Dépendance gardien avec douche et toilette.\nLocal pour piscine.\n\nContact : [hidden information] ou message privee directement.\n",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/481454073_644900914739095_6186638039324099499_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=GI0X-oY-NiYQ7kNvwEP9zMG&_nc_oc=Adk-Yy-z4JNeyrRRXxvnqjPsHuJ_gvXAOEOWM5m5RHHzixZUoHP2hgXVyh37bEyfRGM&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=Ii79SEQrZOeDiG80rOwgkA&oh=00_AfUvaU2GD-coFAEYCvLyJbhIak3u9xUz39m1jpJVNui14Q&oe=689BC33F",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1668286717225541",
+      "postedAt": ""
+    },
+    {
+      "title": "Trano amidy",
+      "price": "N/A",
+      "desc": "🌺 Maison basse AMIDY MAIKA\n👉 80MILLIONS ariary miadvarotra kely\n🌺ITAOSY sinibeandrano. Miala kelin'ny terminus 143\n🌺Tany 300m2 no misy azy, mbola malalaka be.\n🌺Accès voiture. Misy jiro sy rano vovo. EFA MIFEFY TAMBOHO.\n🌺Taratasy TITRÉ BORNÉ\n[hidden information]\nVisite 10-000ar mijery taratasy avy hatrany sady miaona am tompony",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/485913538_1377261439974567_6899063741417396459_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=m2tU65imVPEQ7kNvwGMxm4U&_nc_oc=Admpf3hJljPJOWnsYUbEFVNYgm_NSz9bq9MVUmXwnhCclGwl7YdATLrbODLaMzZd0sM&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=k-t-yp_-s9wg6zB5Qls0DA&oh=00_AfWa-RJaTVuRpe3o9CNxGWfjLjEiGs4MlJlBe2_4JT5BXA&oe=689BA8C0",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1235109688175524",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "N/A",
+      "desc": "CAUSE DEPART !!! \nPROPRIETAIRE DIRECT VEND\nMAGNIFIQUE MAISON \nAMBOHIJANAKA IAVOLOHA\nTany 240m2\n1living +cuisine ouverte placarde et equipe\nDouche Avec chauffe eau gaz et wc interne\n4chambres dont chambre parental Avec dressing\nGrand terasse\nExterieur =Maison gardien. Douche et wc. Depot\nParking pour 3 voitures\nElectricite jirama (pas de délestage(axe iavoloha), eau\n950 millions fmg f/ [hidden information] ariary\nMp svp \nCurieux s' abstenir",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/482449356_1424724528935894_5401259737627024256_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=FKItgHMWzykQ7kNvwGpdMsl&_nc_oc=Adn87UuncOwmz1sitgRAomwml-pUIoKMtqIYMCvI1ZW85stq3OKuHxAfLuSQd9I0wMA&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=mrWH8S8ob8ylEUuF9d0smg&oh=00_AfWXuMkqLTYQZcnbqnPoygIB4SiA1Tgv5Fe78l3agSj2Fg&oe=689BC94A",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1353520368886943",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "N/A",
+      "desc": "👋 salama eee\nHo anao izay mitady trano ahofa na trano amidy dia aza misalasala miditra MP aminay🙏 ireto ny santionany👉",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/481168837_24013960138193624_7101272574357618615_n.jpg?stp=c0.30.133.133a_dst-jpg_p133x133_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=4ZIqsP3MoVcQ7kNvwG9Hew-&_nc_oc=Adn88k73205zg3lmFbc8LUk_2iaW7DpMylP8eF9a4vMLk6IebaPar8eYmSYVVbSwuWg&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=nkhg3RUiYOKiFIhaAfjiIw&oh=00_AfWG_0JLFdtnEV3PoYx3KRvx6gRWvv2QCJlVRoxY6scGPA&oe=689BB4A0",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1176471327150540",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison à vendre",
+      "price": "Prix à négocier",
+      "desc": "Maison à étages à vendre uniquement\nAmbohimangakely tsarahasina \n1living ,4 chambres, cisine , wc& douche , clôture , accessible voiture , bord de route pavée ,eau de puie , électricité. \nPapier complet cadastral, 1 seul signataire\nSurface total 120m²\nPrix: 95M ariary fixe \nCtc [hidden information]\nClient direct no ilaina merci !!",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/528809913_725465363604778_4367707628878580184_n.jpg?stp=c0.66.133.133a_dst-jpg_p133x133_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=I2DMSOjvCwoQ7kNvwHmmGfY&_nc_oc=Adn7_CC2hzA6YLMcGcYtEBdQIqkTI96CbVLRBkhlTcDUHC53CPY0oR1kAfXZu6EtGR0&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=GB7NRORN3s5fDqz1TB_znA&oh=00_AfWdXonnkTg_YuI7nNNi019RXYaYRLDWFbysMDMrChCPUQ&oe=689BA9A1",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1587107706007627",
+      "postedAt": ""
+    },
+    {
+      "title": "Villa a vendre ou échange",
+      "price": "Prix à négocier",
+      "desc": "Villa a étage a vendre ou échange contre voiture\nTitré Borné avec permis de construire\nSurface 550m2 (parking 10 voitures) \nMorcelable 350m2 (parking 4 voitures)\nLieu morarano manakambahiny",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-6/525923213_24626972996888537_369520160937267372_n.jpg?stp=c121.0.719.719a_dst-jpg_s133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=454cf4&_nc_ohc=i0tJHDd2fCEQ7kNvwGKbUPx&_nc_oc=Adk8mjmG0-0ZeEh8ZA064cLWLG9TYwz1-iGH4XIkmpqblnmOIFEyZQ0DvQvQu7_1T8U&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=C9wpEJzl2kI2OkrnTrK1fQ&oh=00_AfUQzTDEhogMjAlW1Ntg159vTiidA7wp08qTJkB00JewAw&oe=689BDC7B",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/2041006643305549",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison R+ 2 - 67ha sur la B.D.R",
+      "price": "N/A",
+      "desc": "‼️Maison R+ 2 - à VENDRE ‼️ \n     🏰  67ha Antananarivo (cité bien sécurisé)\n👌Emplacement stratégique , 1er Plan B.D.R  \n👌 Un seul signataire (Titré/borné)\n\n 🔥-Superficie 125 m² /surface habitable 75 m², terrain (parking) 50 m² cloturé\n⏭Rez de chaussée :\nune grande salle, cuisine, douche , toilettes, Bassin lave à linge\n⏭1ère étage : 2 chambres, cuisine, douche, toilettes\n⏭2ème étage : 2 chambres,  douche, toilettes, Terasse🪴\n👌Eau et électricité JI.RA.MA\n\n☑️ Une belle opportunité à Visiter   ‼️Toutlemonde\n plus de détails contactez directement :\n                    sur MP / ☎️ [hidden information]\n",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/527861676_730663716522707_6215784261908160356_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=DSm7lOtTfxMQ7kNvwEhQXad&_nc_oc=AdnTfSwhutuVCm9_tL5QmdR5Z-R6VJImllAbnsIBzj2LqH5x0jNITPDQW2YJZPjoqo0&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=9mWNZ9_kViuLS6E_lt6MSw&oh=00_AfXXvEZk5Ip5zFvVgAJLt6GFbsKWdn4cjuDDbfKET4i0xg&oe=689BC634",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1022304419789750",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison traditionnelle entièrement rénovée R+1 T6 TSIMBAZAZA BDR PPLE GOUDRONNÉE A VENDRE",
+      "price": "1 300 MGA",
+      "desc": "😍❣️ OFFRE UNIQUE À NE PAS RATER 💔 #opportunitédaffaires \n#Antananarivo \n🏩 Propriété à vendre sise à   \n👉#TSIMBAZAZA #Centreville\n👍 Bord de route principale goudronnée \n👏👏Maison ancienne entièrement rénovée\n✴️Au rez de chaussée :\n✅ 1 living \n✅ Salle de soin\n✅ Cuisine\n💥 À l'étage :\n✅ 2 chambres \n✅ 2 pièces / combles / débarras \n✅ Véranda\n💥 À l'extérieur :\n✅ Garage pour 1 voiture\n✅ Parking pour 3 ou 4 voitures environ \n✅ Grande cour goudronnée \n✅ Dépendance gardien\n✅ Jardin , arbres fruitiers etc...\n\n😍Vue très magnifique 😍😍\n\n👉 Surface propriété 426m2\n👉 Surface bâtie 190m2\n👉 Surface habitable 570m2\n👌 Papier en règle \n\n🤑 opportunités d'affaires très rares ( habitation, ambassade ,banques, maison  d'hôtes etc...\n\n🎀 Prix : 1,3 milliards Ariary\n\n❌❗ ❗Curieux et intermédiaires s'abstenir ❌❗❗\n\n👉 Visite sur rendez vous\n☎️ [hidden information] pour plus d'informations/ éventuelle visite\n📱 WhatsApp : [hidden information]\n 👉 Droit de 1ere visite : 20000 ariary",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-6/525241015_1990005985103601_4508221193726607737_n.jpg?stp=dst-jpg_s133x133_tt6&_nc_cat=101&ccb=1-7&_nc_sid=454cf4&_nc_ohc=OYxiJO9XDNUQ7kNvwH_YQO2&_nc_oc=Adn0Z9z7XURAd4gvWNkFYIHb6vvwre01fDnYMTyWTRCohqeiYagk3DVT4BPxJNuiqh4&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=dE5tjzxZNHKGMNGJDoBV_w&oh=00_AfXSVpnjpyrow_MBWIRjLjJSKWkclU1tsie_LNLi5qZUSA&oe=689BC0BD",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/786021413777985",
+      "postedAt": ""
+    },
+    {
+      "title": "Trano amidy Maika Mahalavolona",
+      "price": "Prix à négocier",
+      "desc": "Maison Titré \n2 chambres 1living\nDouche sy wc anatiny",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/527296339_1266992258412574_4918108506808263048_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=IH3fbBqdHN0Q7kNvwH-AfKk&_nc_oc=AdkWLNJj45bvgSabRoJh9aGvT4GONY1e08Y8uy37QE4XV6RhklQUOUEpBWGR9nCpIa4&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=x84rmIUExTFTN0T--oIviw&oh=00_AfX58iCsOyQ64DcWMiozwIiNqQMJQQC3GYz-sgpn9Ob-jQ&oe=689BB77F",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1847093052890258",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "$10",
+      "desc": "À VENDRE : Maison à 3 étages avec terrasse et garage 🚪\n\nVous cherchez un bien spacieux et fonctionnel ? Découvrez cette maison unique qui allie confort et potentiel d’investissement !\n\nLocalisation : Andravoahangy ambony\n\nNombre d’étages : 3\n\nÉquipements :\n\n•Terrasse spacieuse offrant une vue imprenable 🌇\n\n•Garage pour plusieurs véhicules 🚗\n\n•Espaces bien agencés et lumineux🏙️\n\nIdéal pour : Grande famille, bureaux, ou projet locatif\n\nDescription :\n\nCe bien rare est parfait pour ceux qui cherchent à combiner espace et praticité. Situé en plein ville , il offre des possibilités multiples : résidence principale, immeuble de rapport ou bureaux professionnels.\n\nContactez-nous dès maintenant pour plus de détails ou pour programmer une visite :\n\n📩 MP directement \n\n               Ou\n\n ☎️[hidden information] / [hidden information] \n\n🛑Propriétaire direct🛑\n\nUne opportunité à ne pas manquer !",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/482463096_619269457484312_1865936371280012740_n.jpg?stp=c29.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=106&ccb=1-7&_nc_sid=247b10&_nc_ohc=mrc8BMhfnDMQ7kNvwFdfCr9&_nc_oc=AdnvujtPi-vI9U2D1ORA0Xk_pmDOF0L8p8QN8r4IsiMYxgTuK19cSMd2QnyqqDlFa9Q&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=p2eOJ4dPCGyvxhyB1rHhvQ&oh=00_AfV6h7x1Ql7BHR2G5JHdu9dS04u1_-Mg1JWdMwKL_gq9Aw&oe=689BB56A",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1348765826307666",
+      "postedAt": ""
+    },
+    {
+      "title": "MAISON TRADITIONNELLE À VENDRE ANTANIMENA BEHORIRIKA",
+      "price": "N/A",
+      "desc": "Amidy maika be, Antanimena_Behoririka : Trano traditionnelle, sur terrain de 208 m2, Titré borné, misy Jiro sy Rano jirama, Efa nampidinina ambany be ny vidiny : 180 millions ariary miady varotra, Tél [hidden information] ",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t45.5328-4/438310176_812837634240182_5623864299411438833_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=6_A7-cSXA8sQ7kNvwFb0eJR&_nc_oc=Adlb501Yr8u0gcwmd-7yaRrWlBDf6mQZVv5ClqGF3M74x-jcepdFNZ8AyW05dOQi9mE&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&_nc_gid=FX3ht_bAwNcDYI2Gju7L7Q&oh=00_AfUGhzCfJ5Ba-2-yJsmh4OMSpsslUL9JUv3g7ejOKbtqbg&oe=689BB19C",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1449138086510232",
+      "postedAt": ""
+    },
+    {
+      "title": "Une grande maison",
+      "price": "$6",
+      "desc": "Propriétaire direct met en vente \nA vendre très urgent une grande maison de deux étages sise à Antsahabe a côté de Score et de l'alliance française sur un terrain de 728m2 accessible voiture \nTitre et borné \nGarage fermé \nUne vue superbe \nPrix 6 milliards Fmg légèrement négociable \nTsy mandray mpanera \nMpividy mivantana no tadiavina azafady tompoko \nMp izay liana\nMankasitraka groupe ",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/491472792_1787433771822580_6117007335221499290_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=nu62TjFP2B4Q7kNvwE9SGBU&_nc_oc=AdlrS1xh-2sd1heahbNiIckamkT7gpBdeAIsbVUorLY4g7bSIIhAg_D9LHO7Mml7fuY&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=sMrnyKn0javl6TUufUZEeg&oh=00_AfWaFnpIlvm56pd0XzivuqD4QqfHc6t2S_JTW8jaKmgnwA&oe=689BBD78",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/680474324345557",
+      "postedAt": ""
+    },
+    {
+      "title": "maison",
+      "price": "N/A",
+      "desc": "A VENDRE 🏡 \npapier ok ✅ \nnotre maison de vacances 🏝️\n •citer VALPINSON TAMATAVE 🥰\n\n📞Contacter directement le [hidden information] ☎️ pour le prix et détails 🤩",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/473217385_3852220235094914_648232331281721624_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=106&ccb=1-7&_nc_sid=247b10&_nc_ohc=xUoEMB6nvBUQ7kNvwGSpSoE&_nc_oc=Adn9nBJGt3OgWK5lc8yVC5umcxjOZCD49gH6VqBFkd9s29Tig7Jq6m6FYlSCngoHDdU&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=R9TWB5L3chdxlLDri5iCxQ&oh=00_AfW4PAFYKxYIBjuphGxx1y0_b9COL5F7D7UxD50f4SmigQ&oe=689BB34A",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1676355409687886",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison indépendante",
+      "price": "$1",
+      "desc": "A LOUER\n#AMBODITSIRY \nMaison indépendante F4\nLiving - 03 chambres - salle d'eau et toilette - terrasse - réserve d'eau - \nParking pour une voiture \n🄻🄾🅈🄴🅁: 1.000.000 ar \n\nPour plus d'informations veuillez nous contacter au: +261 34 51 269 15 (Disponible sur WhatsApp)",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/528592349_1308571257280745_1964082254329078238_n.jpg?stp=c0.51.133.133a_dst-jpg_p133x133_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=Yy3Wl3gk4PgQ7kNvwE7EfpS&_nc_oc=Admpa7hPM0976oDGn7C832PHvQZBITjGb3P3INAkeO8_eXf5HgZo7wVN94nbPvLD3T4&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=Tyg1YsDBWAMpV_g-Gqj07g&oh=00_AfXEMuqp0Gii8l8Y70K5wi_pRDKfOv_xHBTVhvyvSPGfUQ&oe=689BA7CD",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1293877175607650",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison à louer",
+      "price": "N/A",
+      "desc": "Maison indépendante clôturée à louer 🏡 \n\n➡️ Idéale pour ceux qui cherchent la tranquillité (vue panoramique)\n➡️ Situé à Manakambahiny Anosiala \n➡️ Eau et électricité sur place : Jirama + groupe électrogène + panneau solaire (0 délestage)\n➡️ A 100m de la RN4 \n➡️ 1 living, 2 chambres, 1 cuisine, 1 salle d'eau + toilette intérieure et extérieure, bassin, garage + parking pour 2 voitures de plus\n➡️ Un grand jardin\n➡️ Un chalet\n➡️ Superficie totale : 1000m²\n➡️ Loyer 500.000ar (loyer incluant le service d'entretien du jardin) \n\n📞 [hidden information] ou par mp",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/477757883_1076235124188582_6316008084333613695_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=ZrhX7ERCPeIQ7kNvwHnT8NX&_nc_oc=Adl3ZEtYIC-itC5pQJSfdmnZOmCgjqnQCk7xiBPCxwBP4LtN2hr58M3EcV1kVyOQl40&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=boD0LMwKKi0r7LGfSMMPhQ&oh=00_AfVTANxxyfFC_3UDhUog0tLcxIxg53AnVJvF_3mv7xxOpw&oe=689BB7E1",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1141184657269681",
+      "postedAt": ""
+    },
+    {
+      "title": "VENDRE",
+      "price": "N/A",
+      "desc": "😍A VENDRE 😍\npapier ok ✅ \nnotre maison de vacances 🏝️\n •citer VALPINSON TAMATAVE \n Contact : [hidden information] 📞",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/491760373_1052368003491779_1747089914367240433_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=nhuvzrwsNuwQ7kNvwF-Rsgn&_nc_oc=AdkiXq9vz9jMmqJ2yjmA2b46dAMoC21y48SuysMG8vnMtjY9Dyo5uX3fOWB9I2tG3cI&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=23zu4RAct2Zpe0jivUO5Nw&oh=00_AfX7FFsfDM6ysRJxW-PWC33EHGJTZKT3pPe9MUqm_Rq9Rg&oe=689BD241",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1903877213725425",
+      "postedAt": ""
+    },
+    {
+      "title": "UNE GRANDE MAISON A LOUER",
+      "price": "Prix à négocier",
+      "desc": "CENTRE VILLE: Une grande villa à louer  située à 05  minutes à pieds de l'avenue de l'indépendance comprenant 01 grand séjour, 06  chambres dont les 03 avec une salle de bain attenante chacune, une cuisine, une salle de bain, une grande terrasse avec une vue sur Tana, garage pour 04 voitures, une dépendance gardien, jardin\nloyer: 2500Euro negociable\n[hidden information]",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-6/522968844_1243342497807681_5995189582434091335_n.jpg?stp=c0.22.893.893a_dst-jpg_s133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=454cf4&_nc_ohc=_YiJI2aHK_AQ7kNvwE-EShC&_nc_oc=Adnq5_sMdWANpUPImG06mpG9RB6HHzlNh1T_Rtn4Kk2HlDWiA5ipYHJbAVX-UowWR_A&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=zZ5pw7hxwHZomC9cHuCM-Q&oh=00_AfXYX_D9wdrH-2O_m-PfKLTBl0h5PTvGYVSQzguN38geUQ&oe=689BBB2C",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1250744103254751",
+      "postedAt": ""
+    },
+    {
+      "title": "2 maison ",
+      "price": "$300",
+      "desc": "Trano amidy 2 eto Andoharanofotsy..T B\nPrix mora \nContact [hidden information]",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/502152401_1450978246065800_5642360989185929945_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=9MppB298UpkQ7kNvwEN6FZP&_nc_oc=Adkqyzisi7ZHSq13IMr-uKsDuz6U4xPiMld4ecmSzQT71mhJO6Wem0EJfI8EkUFtI9s&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=HEvofyN9vT_VbbSNK17-kw&oh=00_AfWdmt1cWY-oIrDBEqJJF2rSpecw7E_W0ulov4O2rGwEUQ&oe=689BCFFA",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1419864892533421",
+      "postedAt": ""
+    },
+    {
+      "title": "APPARTEMENT A VENDRE",
+      "price": "Prix à négocier",
+      "desc": "CITE PLANTON: Bel appartement T3 à vendre dans un immeuble sécurisé, 01 grand séjour dotant d'une baie vitrée, 02 chambres dont l'une avec une salle de bain attenante, une cuisine équipée, une salle d'eau, une terrasse, un débarras, parking.\nPrix: 350 millions Ar\n[hidden information]",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-6/528781625_1252085916933339_7178100602848971963_n.jpg?stp=c120.0.720.720a_dst-jpg_s133x133_tt6&_nc_cat=105&ccb=1-7&_nc_sid=454cf4&_nc_ohc=vQzcE1mdYJUQ7kNvwGtsv7i&_nc_oc=AdkkvuhMvjsUyT4D2DDVqkWzO94c48YXQ682tKFZFP6WdyZmMn2RXI6D4oTIOoLOujs&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=uNQOn7CIi6IbTjA5YDGPvg&oh=00_AfV2jRjEFk3Z94EnK_Rl_02G7k9RMtJjUjsLFC9pC-uOAg&oe=689BC40F",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/2150794132081073",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison louer",
+      "price": "$400 000",
+      "desc": "Bonjour \nTrano ahofa 2 chambre ambony ambany \nDouche +WC intérieur \nMisy pompe\nCuisine intérieur \nMisy pompe intérieur \nLoyer : 2 Millions+ caution \nPanera moitier \nDroit de visite : 5000 Ar ",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/528697673_2324006274736232_5232182824758714560_n.jpg?stp=c0.21.133.133a_dst-jpg_p133x133_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=0WBc6He2rOsQ7kNvwGIkxPV&_nc_oc=Adk6fPUePoVxNfHgfx3zOrG3NndyaXqnahbxutdpDIMlciLVsMIAxhfxo1ruCz-Gmx4&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=bmguriFfINzPkaqamZg6ig&oh=00_AfVfjLKALauo04kTIKgTe7zxOhLsqYwJMeDTVwFVUVShKQ&oe=689BA798",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1819497278604983",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "N/A",
+      "desc": "Trano amidy Ambohimanarina \n1ere plan 2etages prix morabe \nNum: [hidden information]",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/513742445_1258403849013943_6921697526035545949_n.jpg?stp=c0.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=HiBfGZriOjoQ7kNvwGjZRwo&_nc_oc=AdntZHo6-dyui3hiUpZsR0-TM4E88Xa-ydTkqWaRsHyTBGge2jlkMt7eGg73jLu-wbw&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=90BoEcjA275N63ZjmShQSw&oh=00_AfU28T8Rxpob55MOfDPo3bs-JGJLWMCiRpGYlNIMuGanaw&oe=689BCAD2",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1241737244297463",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "N/A",
+      "desc": "Maison meublée \nA louer \n1liv +2chambres \nTanjombato \nContact:[hidden information]",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t45.5328-4/525492415_1302558971392876_448109604622833659_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=3YQyF_znGI0Q7kNvwHttUW-&_nc_oc=AdlaTAbcZjHH_X1SBvD5C5YiFrBj0GRFNf96Quytu6kvAmGhK44PQGIrGfi7dqEjdpM&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&_nc_gid=LHmNTi6B4m8azreP2FmC_Q&oh=00_AfWCk5d1rIugIZFMPuGO5vOO31pQuPpJZih09dSarvh6NA&oe=689BD429",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1067797585419484",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison à vendre ",
+      "price": "$500",
+      "desc": "🚨A Vendre  une Villa à etage sise à ANKADIKELY \n(Bord de  route) \n\n⛔️⛔️Prix tres intéressant⛔⛔\n\naccessible voiture\nQuartier résidentiel \nTerrain 400M2\nSurface habitable 100m2\nEau et elec JIRAMA\nCloturé \n4chmbr, 1 living \ncuisine, 2 toilettes \ntitré et borné\n📞 [hidden information] \nWhatsApp +261341217451🇲🇬",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/488425278_24585677964354693_4950573657959937734_n.jpg?stp=c6.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=Jtvf3Xjx0csQ7kNvwEqcMij&_nc_oc=Adlrhpb63XaWledwEWP_gQuxiNsG8jcVGxbRAY2VFlE15KN9dpMlMdXjgrqxvzQ3P3s&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=5bR94Yhsy6DzJDzy1qmWSA&oh=00_AfUvemTGx5wPwIk2BhCykQpwZJzM2lIMgmXpN7vaYpb7YQ&oe=689BDD58",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/9332410870173548",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison",
+      "price": "$200 000",
+      "desc": "👉À VENDRE — MAISON DUR EN PLEINE VILLE D’ANKADIFOTSY👈\n\nIdéalement située en plein cœur d’Ankadifotsy, cette maison à étage offre un fort potentiel pour diverses activités : bureaux, résidence familiale, école privée, dépôt ou centre commercial. Titrée et bornée, elle s’étend sur une surface totale de 288 m².🏢\n\nDescription :\n\nRez-de-chaussée :\n\n👉Grand dépôt de stockage de 100 m²\n👉1 chambre\n👉Cuisine\n👉Toilettes\n\n1er étage :\n\n👉1 spacieux salon\n👉3 chambres\n👉Cuisine\n👉Salle de bain\n👉Toilette\n\n2ème étage :\n\n👉3 chambres\n👉 Petite terrasse \n👉Cuisine\n👉Douche et toilettes\n\nAtouts :\n\nEmplacement stratégique en ville✔️\n\nStructure solide en dur✔️\n\nConvient pour toute activité commerciale, administrative ou résidentielle✔️\n\nTitré et borné👌\n\nPrix : [hidden information] Ariary (négociable) 💸\n\nNe ratez pas cette opportunité en centre-ville✨\n\nPour plus d'informations veuillez nous contacter au [hidden information]☎️",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t45.5328-4/526678979_1706656850015900_7971542117867068587_n.jpg?stp=c0.33.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=dBM7AMUGqh8Q7kNvwFF402U&_nc_oc=AdnZTvjIzWrdRr3Q2ZKvN17fFpQL_weUqb6fsPOD3L89E_CuucC087XwR_2ZYuVGNBY&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=8vaH3QmfsTJHb4iBThtWNQ&oh=00_AfWMVUiFQQXkeIGRj_M6gwXF5fppybrt8Ew8q7tYYwPhnQ&oe=689BA79C",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/832473112631074",
+      "postedAt": ""
+    }
+  ]
+}

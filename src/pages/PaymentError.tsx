@@ -123,7 +123,7 @@ export default function PaymentErrorPage() {
     setIsRetrying(true);
     
     try {
-      const paymentUrl = await createPayment(packId, sessionId);
+      const paymentUrl = await createPayment(sessionId, packId);
       
       if (paymentUrl) {
         // Rediriger vers Stripe Checkout
