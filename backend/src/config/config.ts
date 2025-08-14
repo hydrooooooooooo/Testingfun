@@ -2,7 +2,9 @@ import dotenv from 'dotenv';
 import { logger } from '../utils/logger';
 
 // Load environment variables from .env file
-dotenv.config();
+const nodeEnv = process.env.NODE_ENV || 'development';
+const envPath = nodeEnv === 'production' ? '.env.production' : '.env';
+dotenv.config({ path: envPath });
 
 /**
  * Application configuration
@@ -26,6 +28,19 @@ export const config = {
     stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
     adminApiKey: process.env.ADMIN_API_KEY,
     jwtSecret: process.env.JWT_SECRET,
+  },
+  
+  // Mail configuration (SMTP)
+  mail: {
+    host: process.env.SMTP_HOST || 'localhost',
+    port: Number(process.env.SMTP_PORT || 25),
+    secure: String(process.env.SMTP_SECURE || '').toLowerCase() === 'true' || Number(process.env.SMTP_PORT) === 465,
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+    fromEmail: process.env.SMTP_FROM || process.env.SMTP_USER,
+    fromName: process.env.SMTP_FROM_NAME || 'EasyScrapy',
+    replyTo: process.env.SMTP_REPLY_TO,
+    tlsRejectUnauthorized: String(process.env.SMTP_TLS_REJECT_UNAUTHORIZED || '').toLowerCase() !== 'false',
   },
   
   // Session storage configuration

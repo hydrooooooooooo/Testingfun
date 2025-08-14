@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import { User, UserRegistration, UserLogin } from '../models/User';
 import db from '../database';
 import { config } from '../config/config';
+import { mailer, renderVerificationEmail, renderPasswordResetEmail } from './mailerService';
 
 export class AuthService {
   
@@ -84,20 +85,14 @@ export class AuthService {
   }
 
   async sendVerificationEmail(user: User, token: string): Promise<void> {
-    const verificationUrl = `${config.server.frontendUrl}/verify-email?token=${token}`;
-
-    // TODO: Implémenter un vrai service d'envoi d'email (ex: Nodemailer, SendGrid)
-    // Pour l'instant, on log le lien dans la console pour le développement
-    console.log(`==== EMAIL DE VÉRIFICATION ====`)
-    console.log(`Cher ${user.name || 'utilisateur'},
-`);
-    console.log(`Cliquez sur ce lien pour vérifier votre email: ${verificationUrl}
-`);
-    console.log(`Ce lien expire dans 1 heure.`);
-    console.log(`===============================`);
-
-    // Simule une opération asynchrone
-    return Promise.resolve();
+    const verificationUrl = `${config.server.backendUrl}/auth/verify-email/${token}`;
+    const email = renderVerificationEmail({ verifyUrl: verificationUrl, name: user.name || undefined });
+    await mailer.sendEmail({
+      to: user.email,
+      subject: email.subject,
+      text: email.text,
+      html: email.html,
+    });
   }
 
   async verifyEmail(token: string): Promise<boolean> {
@@ -153,9 +148,13 @@ export class AuthService {
 
       // 4. Envoyer l'email de réinitialisation (simulation)
       const resetUrl = `${config.server.frontendUrl}/reset-password?token=${resetToken}`;
-      console.log(`==== EMAIL DE RÉINITIALISATION DE MOT DE PASSE ====`)
-      console.log(`Cliquez sur ce lien pour réinitialiser votre mot de passe: ${resetUrl}`);
-      console.log(`==================================================`);
+      const email = renderPasswordResetEmail({ resetUrl, name: user.name || undefined });
+      await mailer.sendEmail({
+        to: user.email,
+        subject: email.subject,
+        text: email.text,
+        html: email.html,
+      });
     }
 
     // Toujours retourner true pour ne pas permettre l'énumération d'utilisateurs

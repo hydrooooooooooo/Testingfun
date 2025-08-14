@@ -41,7 +41,7 @@ export const getPaymentHistory = async (req: AuthenticatedRequest, res: Response
         db.raw("'MGA' as currency"),
         'status',
         db.raw('client_transaction_id as stripe_payment_id'),
-        db.raw("COALESCE(created_at, datetime('now')) as created_at"),
+        db.raw("COALESCE(created_at, NOW()) as created_at"),
         db.raw("'Paiement MVola' as description"),
         db.raw('0 as credits_purchased')
       );
@@ -139,7 +139,7 @@ export const getDashboardData = async (req: AuthenticatedRequest, res: Response)
         'currency',
         'status',
         db.raw('client_transaction_id as stripe_payment_id'),
-        db.raw("COALESCE(created_at, datetime('now')) as created_at"),
+        db.raw("COALESCE(created_at, NOW()) as created_at"),
         db.raw("'Paiement MVola' as description"),
         db.raw('0 as credits_purchased')
       );
