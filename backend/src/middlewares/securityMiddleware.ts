@@ -17,6 +17,21 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
     next();
     return;
   }
+
+  // Page HTML de réinitialisation du mot de passe: autoriser style/JS inline pour le rendu UI
+  if (req.path.startsWith('/api/auth/reset-password/')) {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    // CSP spécifique: autoriser styles et scripts inline UNIQUEMENT pour cette page
+    res.setHeader(
+      'Content-Security-Policy',
+      "default-src 'self'; img-src 'self' data: https: http:; connect-src 'self' https: http:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'"
+    );
+    next();
+    return;
+  }
   
   // Set security headers for other routes
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -24,7 +39,7 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
   
-  // CSP plus permissif pour permettre les requêtes externes et les images
+  // CSP par défaut (plus permissif pour images/requêtes externes)
   res.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' data: https:; connect-src 'self' https:");
   
   next();

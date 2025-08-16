@@ -115,9 +115,16 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Connexion en cours...' : 'Se connecter'}
-              </Button>
+              <div className="space-y-2">
+                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? 'Connexion en cours...' : 'Se connecter'}
+                </Button>
+                <div className="text-center">
+                  <Link to="/forgot-password" className="text-sm underline">
+                    Mot de passe oublié ?
+                  </Link>
+                </div>
+              </div>
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">

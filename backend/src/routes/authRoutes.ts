@@ -134,5 +134,23 @@ router.post('/request-password-reset', authController.requestPasswordReset);
  */
 router.post('/reset-password', authController.resetPassword);
 
+/**
+ * @swagger
+ * /auth/reset-password/{token}:
+ *   get:
+ *     summary: Serve backend password reset page (HTML)
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: HTML page with password reset form
+ */
+router.get('/reset-password/:token', authController.resetPasswordPage);
+
 
 export default router;
