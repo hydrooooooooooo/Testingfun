@@ -76,13 +76,6 @@ export const config = {
   },
 };
 
-// DEBUG TEMPORAIRE - À SUPPRIMER APRÈS TEST
-console.log('=== CONFIG DEBUG ===');
-console.log('FRONTEND_URL from env:', process.env.FRONTEND_URL);
-console.log('frontendUrl in config:', config.server.frontendUrl);
-console.log('CORS origins:', config.cors.allowedOrigins);
-console.log('===================');
-
 // Validate required configuration
 const validateConfig = () => {
   const requiredVars = [

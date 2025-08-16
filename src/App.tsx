@@ -16,6 +16,7 @@ import DownloadPage from "./pages/DownloadPage";
 import Models from "./pages/Models";
 import NotFound from "./pages/NotFound";
 import LoginPage from "./pages/LoginPage";
+import RequestPasswordResetPage from "./pages/RequestPasswordResetPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
@@ -48,6 +49,7 @@ function App() {
                   <Route path="/models" element={<Models />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/forgot-password" element={<RequestPasswordResetPage />} />
                 </Route>
 
                 {/* Protected Routes */}

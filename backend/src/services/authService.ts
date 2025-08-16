@@ -85,7 +85,7 @@ export class AuthService {
   }
 
   async sendVerificationEmail(user: User, token: string): Promise<void> {
-    const verificationUrl = `${config.server.backendUrl}/auth/verify-email/${token}`;
+    const verificationUrl = `${config.server.backendUrl}/api/auth/verify-email/${token}`;
     const email = renderVerificationEmail({ verifyUrl: verificationUrl, name: user.name || undefined });
     await mailer.sendEmail({
       to: user.email,
@@ -132,13 +132,17 @@ export class AuthService {
     const user = await db<User>('users').where({ email }).first();
 
     // Pour des raisons de sécurité, on ne révèle pas si l'email existe ou non.
-    // On simule un succès même si l'utilisateur n'est pas trouvé ou non vérifié.
-    if (user && user.email_verified_at) {
-      // 2. Générer un token de réinitialisation
+    // On renvoie toujours 200, mais on agit différemment côté serveur.
+    if (!user) {
+      // Utilisateur inexistant -> ne rien envoyer
+      return true;
+    }
+
+    // 2. Si l'email est vérifié -> envoyer l'email de reset
+    if (user.email_verified_at) {
       const resetToken = crypto.randomBytes(32).toString('hex');
       const resetTokenExpiresAt = new Date(Date.now() + 3600000); // 1 heure
 
-      // 3. Stocker le token et sa date d'expiration
       await db('users')
         .where({ id: user.id })
         .update({
@@ -146,18 +150,33 @@ export class AuthService {
           reset_token_expires_at: resetTokenExpiresAt,
         });
 
-      // 4. Envoyer l'email de réinitialisation (simulation)
-      const resetUrl = `${config.server.frontendUrl}/reset-password?token=${resetToken}`;
-      const email = renderPasswordResetEmail({ resetUrl, name: user.name || undefined });
+      const resetUrl = `${config.server.backendUrl}/api/auth/reset-password/${resetToken}`;
+      const resetEmail = renderPasswordResetEmail({ resetUrl, name: user.name || undefined });
       await mailer.sendEmail({
         to: user.email,
-        subject: email.subject,
-        text: email.text,
-        html: email.html,
+        subject: resetEmail.subject,
+        text: resetEmail.text,
+        html: resetEmail.html,
       });
+      return true;
     }
 
-    // Toujours retourner true pour ne pas permettre l'énumération d'utilisateurs
+    // 3. Si l'email n'est pas vérifié -> renvoyer un email de vérification
+    let verificationToken = user.verification_token as unknown as string | null;
+    const tokenExpired = !user.verification_token_expires_at || new Date() > new Date(user.verification_token_expires_at);
+    if (!verificationToken || tokenExpired) {
+      verificationToken = crypto.randomBytes(32).toString('hex');
+      const verificationTokenExpiresAt = new Date(Date.now() + 3600000); // 1 heure
+      await db('users')
+        .where({ id: user.id })
+        .update({
+          verification_token: verificationToken,
+          verification_token_expires_at: verificationTokenExpiresAt,
+        });
+    }
+
+    const verifyUrl = `${config.server.backendUrl}/api/auth/verify-email/${verificationToken}`;
+    await this.sendVerificationEmail(user, verificationToken!);
     return true;
   }
 
