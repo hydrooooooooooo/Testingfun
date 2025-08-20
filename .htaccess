@@ -1,0 +1,9 @@
+RewriteEngine On
+RewriteBase /
+
+# Exclure les appels API
+RewriteCond %{REQUEST_URI} !^/api/.*$
+RewriteCond %{REQUEST_URI} !\.(js|css|png|jpg|svg|gif|ico|json|html|map)$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]

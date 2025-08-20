@@ -1,0 +1,28 @@
+{
+  "sessionId": "sess_1Vk8btMr-o",
+  "datasetId": "shCD8MHYoZq2hf4gH",
+  "timestamp": "2025-06-20T09:02:24.868Z",
+  "totalItems": 1,
+  "previewItems": [
+    {
+      "title": "No Title",
+      "price": "N/A",
+      "desc": "Description non disponible",
+      "image": "",
+      "location": "Unknown",
+      "url": "",
+      "postedAt": ""
+    }
+  ],
+  "allItems": [
+    {
+      "title": "No Title",
+      "price": "N/A",
+      "desc": "Description non disponible",
+      "image": "",
+      "location": "Unknown",
+      "url": "",
+      "postedAt": ""
+    }
+  ]
+}

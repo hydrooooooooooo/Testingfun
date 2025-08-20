@@ -1,0 +1,496 @@
+{
+  "sessionId": "sess_YqiqtjNi8y",
+  "datasetId": "vcxUwdH86B4Z2mruX",
+  "timestamp": "2025-08-09T18:42:44.613Z",
+  "totalItems": 51,
+  "previewItems": [
+    {
+      "title": "Voiture",
+      "price": "$11 600 000",
+      "desc": "Polo3 phase 1 ,moteur 1.4L essence eco,  interieur d origine, 5 portes,  papier a jour, tompony num [hidden information]",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/522698039_2290041144795721_61140423405282420_n.jpg?stp=c51.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=M6pPB3bbKzcQ7kNvwEkWxs3&_nc_oc=AdnPLnUo6EQwhfg2fypaphawOUyNn_CCIz41kATVjs2HZPTpkcF5JIxupQeTcK1VlHs&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=-Lql7fm0dIh2a06Q0ktiAg&oh=00_AfXJABkvpwCEjvXgdm3ZPTpdjBCD64PSytETC7BSioMP4Q&oe=689D7A6D",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1077910667814852",
+      "postedAt": ""
+    },
+    {
+      "title": "Hyundai Santa Fe",
+      "price": "$5 800 000",
+      "desc": "🔰 Voiture à vendre: HUNDYAI SANTAFE:\n〽 Disponible fin juin début juillet jusqu’au 2 ou 3 juillet.\n❇ 12000€ negotiable à la baisse💹 en fonction de la visite technique.\n✅ 7 places\n✅ automatique\n✅ Les sièges arrières sont pliables pour plus de place pour les valises si besoin\n✅ Mise en circulation 2007\n✅ Arrivée à Madagascar courant 2024 depuis la Corée.\n✅ Diesel\n✅ Écran tactile (tablette avec applications, musique, YouTube, GPS etc),\n✅ Bluetooth\n✅ Caméra de recul\n✅ Air conditionné\n❇ En très bon état, voiture solide et fiable!",
+      "image": "https://scontent-dfw5-3.xx.fbcdn.net/v/t45.5328-4/485714510_666816869408241_5154102452177030109_n.jpg?stp=c0.51.133.133a_dst-jpg_p133x133_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=gUNF4mK-pUcQ7kNvwFhDyR2&_nc_oc=AdnEPLzDNTNOlyQKJk__ffHgZ-nP-OfJokBXosdGcmb80iFKe-isBMaw97-eH_IoWjk&_nc_zt=23&_nc_ht=scontent-dfw5-3.xx&_nc_gid=N7pUD0jlnNswAI-OMWj6Bg&oh=00_AfVuMOF5K0kJySg1fDNuJeQ9Abes7noG-irM9_OM5Mqoyw&oe=689D72FA",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1834592947317495",
+      "postedAt": ""
+    },
+    {
+      "title": "Voiture ",
+      "price": "$9 000 000",
+      "desc": "Vend Scénic I essence \n2 vitre électrique \n4 jantes Allu \n",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/520274437_1945414292964555_6169968090501504221_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=tLIMCQ4i6-0Q7kNvwF-_xPK&_nc_oc=Adn98MUskY56poFKxpAW58H9-SSaUDgWV_8FoA5l6byIDpoatd7MaG7D5Pe4HpVW2JQ&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=MBqwtah6ZIZdPrqk2p7_mQ&oh=00_AfU52uTJWtzpvQsysTRWyumsmnlqOclZ3Xr5CCiH5jhLbA&oe=689D7208",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1412630723138517",
+      "postedAt": ""
+    }
+  ],
+  "allItems": [
+    {
+      "title": "Voiture",
+      "price": "$11 600 000",
+      "desc": "Polo3 phase 1 ,moteur 1.4L essence eco,  interieur d origine, 5 portes,  papier a jour, tompony num [hidden information]",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/522698039_2290041144795721_61140423405282420_n.jpg?stp=c51.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=M6pPB3bbKzcQ7kNvwEkWxs3&_nc_oc=AdnPLnUo6EQwhfg2fypaphawOUyNn_CCIz41kATVjs2HZPTpkcF5JIxupQeTcK1VlHs&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=-Lql7fm0dIh2a06Q0ktiAg&oh=00_AfXJABkvpwCEjvXgdm3ZPTpdjBCD64PSytETC7BSioMP4Q&oe=689D7A6D",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1077910667814852",
+      "postedAt": ""
+    },
+    {
+      "title": "Hyundai Santa Fe",
+      "price": "$5 800 000",
+      "desc": "🔰 Voiture à vendre: HUNDYAI SANTAFE:\n〽 Disponible fin juin début juillet jusqu’au 2 ou 3 juillet.\n❇ 12000€ negotiable à la baisse💹 en fonction de la visite technique.\n✅ 7 places\n✅ automatique\n✅ Les sièges arrières sont pliables pour plus de place pour les valises si besoin\n✅ Mise en circulation 2007\n✅ Arrivée à Madagascar courant 2024 depuis la Corée.\n✅ Diesel\n✅ Écran tactile (tablette avec applications, musique, YouTube, GPS etc),\n✅ Bluetooth\n✅ Caméra de recul\n✅ Air conditionné\n❇ En très bon état, voiture solide et fiable!",
+      "image": "https://scontent-dfw5-3.xx.fbcdn.net/v/t45.5328-4/485714510_666816869408241_5154102452177030109_n.jpg?stp=c0.51.133.133a_dst-jpg_p133x133_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=gUNF4mK-pUcQ7kNvwFhDyR2&_nc_oc=AdnEPLzDNTNOlyQKJk__ffHgZ-nP-OfJokBXosdGcmb80iFKe-isBMaw97-eH_IoWjk&_nc_zt=23&_nc_ht=scontent-dfw5-3.xx&_nc_gid=N7pUD0jlnNswAI-OMWj6Bg&oh=00_AfVuMOF5K0kJySg1fDNuJeQ9Abes7noG-irM9_OM5Mqoyw&oe=689D72FA",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1834592947317495",
+      "postedAt": ""
+    },
+    {
+      "title": "Voiture ",
+      "price": "$9 000 000",
+      "desc": "Vend Scénic I essence \n2 vitre électrique \n4 jantes Allu \n",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/520274437_1945414292964555_6169968090501504221_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=tLIMCQ4i6-0Q7kNvwF-_xPK&_nc_oc=Adn98MUskY56poFKxpAW58H9-SSaUDgWV_8FoA5l6byIDpoatd7MaG7D5Pe4HpVW2JQ&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=MBqwtah6ZIZdPrqk2p7_mQ&oh=00_AfU52uTJWtzpvQsysTRWyumsmnlqOclZ3Xr5CCiH5jhLbA&oe=689D7208",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1412630723138517",
+      "postedAt": ""
+    },
+    {
+      "title": "Moteur voiture",
+      "price": "$6 000 000",
+      "desc": "‼️Arrivage manitra be 🙂 ‼️\n    Bonne occasion daholo : \n🔴Nissan : qd32, zd30 , lame ressort, hydrovague, varavarana , volant sns..\n🔴Mitsubishi: 4d56 ,boite de vitesse sns\n🔴Isuzu: 4hk1, 4jb1 , lame ressort, boitier direction sns..\n🔴Kia bongo camionnettes ( moteur tsotra )\n🔴Hyundai: crdi 2.0 , 4d56\n🔴JMC \n🔴Mercedes : cdi 4 / 5 cylindres \n🔴Toyota : d4d, avanza vvti sns …\n\nPont, train avant,boitier direction, barre de torson,Varavarana ,demarreur, transmission sns ..\n\nMbola maro no tsy voalaza fa tongava mijery\n\nPage: Lain’s motors\nPoint de vente: Anjanahary, Anosy avaratra, Fianarantsoa\n\n📞[hidden information] / [hidden information]",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/479739144_2446391962366177_300574384102222467_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=CL_4Ht14SaoQ7kNvwFyP350&_nc_oc=AdnOk76hI_MNTi_r95PzZImM0B5BXcBNWiXMWTrr4Cu4vjNZRqnvZNBTmEg7VfEHFj8&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=dn6NsnaACkcjPfPwL7EJ4w&oh=00_AfUXHHIIAtix_Ny5C7SqZnL6IIWrEerRgd-w6XJLyjSq-Q&oe=689D4DEB",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/595921896579592",
+      "postedAt": ""
+    },
+    {
+      "title": "Voiture 205",
+      "price": "$4 100 000",
+      "desc": "Fiara  205 peugeot\nmoteur 4 cylindre essence\n5 portes\nVitesse manuel\nJante Karenjy par 15\nPrix : négociable devant la voiture 🚘\nContact : +261 32 07 490 49 ou mp",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/481747850_2102543713511475_3217850089315276205_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=HCvBvlHkHOgQ7kNvwFDscvb&_nc_oc=Admiv0s5w8qZGbIpaGQRgn9D-wfqavSER2jNz4RTe04HCUyKj95B60eVsJo-hHryYtw&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=_-uaROV2ylui3Ula3jHYyQ&oh=00_AfXininGayNc9_RR5CbUA3cSM-AbCvNYRihV1OIqo8zAkQ&oe=689D5776",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/591945573839763",
+      "postedAt": ""
+    },
+    {
+      "title": "Voiture d'occasion",
+      "price": "15 000 000 MGA",
+      "desc": "Miarahaba Tompoko,\n\nFiara amidy maika, Renault Essence,\nconsommation: 9 au 100\n\nPrix 15 Millions d' ariary à Débattre\n\nContact: Mr Avotra Randriamboavonjy     /  Tél: [hidden information]",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/482577615_2087211938390048_2119333964421144374_n.jpg?stp=c0.16.133.133a_dst-jpg_p133x133_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=edkAY8AkJD4Q7kNvwFfQ6Y_&_nc_oc=AdnYZsM40LExKKhdCsqTwd8oitpG30ure9tdXjmFDivcDro8aG3JFcl5XODCLZ2635g&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=QRjqrb2FkoJ1KS4Cf_iN5A&oh=00_AfXdkRth_ge0valHx62frt7g8ISV3GB_P6sn6IqiuIM_mA&oe=689D5471",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1358110911988030",
+      "postedAt": ""
+    },
+    {
+      "title": "Voiture ",
+      "price": "$11 000 000",
+      "desc": "PEUGEOT 306 PHASE II DIESEL \nMOTEUR SRDT \n2 VITRES ÉLECTRIQUES \n5 PORTES \nVERROUILLAGE CENTRALISÉ \n4 JANTES ALU \nCONTACT : [hidden information]",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/518259870_1792304041717319_7577814665432152339_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=106&ccb=1-7&_nc_sid=247b10&_nc_ohc=-hxycqnaCtEQ7kNvwGf_NLR&_nc_oc=AdnOMh194M7m6cnx-p6o0R_2tWNgUlY4OB5YNRJDsC3hMamwnidjGmLE5Q-w2TQsGHE&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=CQEE5i13JDy4g8FR7rNHKQ&oh=00_AfXZ2d8VYFv1Kv16efLtphI1XAw3yTrGxVqLMwz7c8aixQ&oe=689D56C0",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1082515609915388",
+      "postedAt": ""
+    },
+    {
+      "title": "Peugeot 206",
+      "price": "$13 000 000",
+      "desc": "Moteur DW8\nDirection Assisté \nPapier à jour \nAuto radio \nDevoir peinture manatsara, capitonnage AV gauche misy rovitra, silent bloc bras AV misolo\nPrix à débattre devant la voiture \nPropriétaire direct [hidden information]",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/528362025_1673811999968694_8931369634645836061_n.jpg?stp=c0.81.133.133a_dst-jpg_p133x133_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=zb5UKPxqYF4Q7kNvwETjGSS&_nc_oc=AdmpbVPm9eIa5kAmo4tGN9B2wjd-7hHkXLZW7WML9ubDzbL_IWOx5cMhb5cZtXwCeuc&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=Rpb7ZjB1C3H_ax8r-5PjIQ&oh=00_AfUkSK48E3Rlt7zhMhng7i1Hadkun3lN3OMSCAMtumbqow&oe=689D7DEF",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/724747480337028",
+      "postedAt": ""
+    },
+    {
+      "title": "Santafe the style Mlx",
+      "price": "$4 250 000",
+      "desc": "💥Hyundai Santa Fe 2010 – The Style MLX  à vendre/ amidy \n📍 Véhicule spacieux, robuste et prêt pour toutes les routes de Madagascar !\n🔹 Marque : Hyundai\n🔹 Modèle : Santa Fe \"The Style\" MLX\n🔹 Année : 2010\n🔹 État : Très bon état / Révisé récemment \n🔹 Papiers : En règle\n☎️Contact direct Whatsapp : [hidden information] ou mp🗨️ \n#santafemlx #Moinscher #vente #Madagascar #hyundaisantafe",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/527843686_1131222832156081_1809902005725270177_n.jpg?stp=c12.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=2o5AdYViikIQ7kNvwEPgOQO&_nc_oc=Admb4y9WjpyKNaQkJjUBZiekh5TKSH3R1Ux4dbEOPDBEfyt7ZDL-FY2Adx5e_gMV67k&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=wInF49x5PJmTD5Ym2J2pmg&oh=00_AfU68wfFy8jd_AU28oz6fkKkoFOH0VFa93eh7Y-79UcRww&oe=689D7E07",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/737200425589486",
+      "postedAt": ""
+    },
+    {
+      "title": "2008 Citroën C4 ",
+      "price": "$17 000 000",
+      "desc": "🇫🇷 Citroën C4 🇫🇷\nA vendre \n📌 Année 2008\n📌 Moteur HDI 1.6l 110cv \n📌 BVM\n📌 Immatriculation étrangère\n📌 4 FAD, 2VE, 4 jantes alu d'origine VTS\n📌 Limitateur de vitesse, économiseur de batterie, commande au volant fonctionnelle \n📌 Retroviseur électrique\n📌 Voiture très économique et puissante\n☎️ Contact : +26138 89 124 30\n💰 Prix : 17.000.000ar à débattre",
+      "image": "https://scontent-dfw5-3.xx.fbcdn.net/v/t45.5328-4/516101996_1042224151407441_3205855829551304847_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=g7nopfIrrG8Q7kNvwGI1n4K&_nc_oc=AdkltHa5gGjPInYrinbpukoGFoccm1lDwDCXSc_tLebMtXjlyEnH88RzHs3RsfCS7v4&_nc_zt=23&_nc_ht=scontent-dfw5-3.xx&_nc_gid=5-ktAwpzKpzhuBiSfz48tQ&oh=00_AfXM3ee4Qfakm-GV27VpIUk6CCohWMVQkx3_lZRNMduqgQ&oe=689D659C",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1442639326738255",
+      "postedAt": ""
+    },
+    {
+      "title": "Trano",
+      "price": "$15 000 000",
+      "desc": "Trano amidy \nEfitra 4 ambony ambany\nAccès voiture \nMisy tokotany Mbola malalaka tsara\nFanjakamandroso\nMp na miantsoa [hidden information]",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/524813992_1794931944795633_9005990075973607688_n.jpg?stp=c0.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=111&ccb=1-7&_nc_sid=247b10&_nc_ohc=8Y2_CxAtcVMQ7kNvwFZ6e42&_nc_oc=AdmGuADkjbA-1q5EBwEKqvJM7y7gZs6fjfDn5jmjMt272wY3GCxnQdOz2C3qH5YDDSU&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=QI049vywcf-WF_p5Cv7yMw&oh=00_AfUshTM1QGROCtcYvl1R-F7ZpoTY_777gAsUlDjbCTE_NA&oe=689D67A4",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1815895495689641",
+      "postedAt": ""
+    },
+    {
+      "title": "Trottinette électrique",
+      "price": "2 074 000 MGA",
+      "desc": "Trottinette électrique\nContact : [hidden information] (whatsapp)\n\n",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/490536259_1174548260641312_2124557494278586081_n.jpg?stp=c0.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=106&ccb=1-7&_nc_sid=247b10&_nc_ohc=_obOJcP6-v8Q7kNvwH3GOvB&_nc_oc=Adnjhc-uQ5huTj_PnhqfV2SSVqXMCucFFJbo4qKXPbKv4_fXlx6HivthYABqnLOyVck&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=aoM43aMmCuXQHKTPIUiAtQ&oh=00_AfUOkNnlEwcM-bA4Deca7cBCU2SqRsrZf3RymjVRqk7p9A&oe=689D6DBA",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1659804505413945",
+      "postedAt": ""
+    },
+    {
+      "title": "L200 triton 2018",
+      "price": "$6 800 000",
+      "desc": "Proprio direct vend\nVéhicule en très bon état\n\nMitsubishi pickUp Sportero L200 année 2018\nMoteur  Turbo 2.5 Diesel D-ID\n4x4 fonctionnel 2H, 4H, 4L \n4vitres électiques\nKilométrage : 70****km\nJante alu 16 pouces / 4 pneus neufs\nFreinage ABS\nAutoradio d'origine USB, cd, aux\nVitres : 4 vitres électriques\nDouble airbag\nVoiture climatisée\nVerrouillage  centralisée commande à distance\nCouvre caisse\n\nPrix : 68millions d'ar à debattre\nContact : [hidden information] ou [hidden information]",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/506657601_576268115220225_4188563039891223361_n.jpg?stp=c51.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=YEeei01kov4Q7kNvwGxUCQO&_nc_oc=AdlIlS3U25-kbD0ThzhraKmRksEURzgcIQa_i6QO2cNA88nXyAAQnf8M3Moji1vGp80&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=Au6pKOqo9VuS9sT4hjaMPA&oh=00_AfW4rc9SERzHc-7r9xFBZxXPPV0vyo21b6HjEjPeVKqYBg&oe=689D5575",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/687072414170034",
+      "postedAt": ""
+    },
+    {
+      "title": "Voiture ",
+      "price": "$9 000 000",
+      "desc": "Vend Scénic I essence \n2 vitre électrique \n4 jantes Allu \n",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/520274437_1945414292964555_6169968090501504221_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=tLIMCQ4i6-0Q7kNvwF-_xPK&_nc_oc=Adn98MUskY56poFKxpAW58H9-SSaUDgWV_8FoA5l6byIDpoatd7MaG7D5Pe4HpVW2JQ&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=F2AWELuKq6InxsrmW0Ka2A&oh=00_AfWMSfYyrRPU0Jcdolg9MHavAFbVhVYsCqwu1u1TI9_RGA&oe=689D7208",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1412630723138517",
+      "postedAt": ""
+    },
+    {
+      "title": "O",
+      "price": "$5 404 640",
+      "desc": "Occasion rare à saisir tsyy manakalo \n✅Golf 4 GTI \n✅5 portes\n✅Moteur 1.8 i Turbo 20Valves 150cv\n✅Voiture en très bonne état\n✅Moteur puissant\n✅Jantes Alu\n✅Intérieur Recaro d’origine\nPrix: 19millions d’ariary à débattre devant la voiture\n☎️ [hidden information]",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/487299938_9388023384641644_4475161544651392453_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=4crJ-lrf2d0Q7kNvwGoM5yd&_nc_oc=Adngb2lhS0FabLB-Ofin2ICx3Ci6t2Lk_0e3c0iuLVrwZe__9oZ6jFUAcI0-n2oEBuc&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=Uz_n2th3bEg9GMN0dp68SA&oh=00_AfUMdIJaxzC8Xwliqgjj9CeV8Aa678WWs8kddM_W3-pIoQ&oe=689D64FC",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1772242560017601",
+      "postedAt": ""
+    },
+    {
+      "title": "Loue une Villa a étage ",
+      "price": "$2 800 000",
+      "desc": "\n🔶 À LOUER – VILLA F5 À AMBOHITSOA 🔶\n\n🏡 Spacieuse villa F5 à Ambohitsoa, déjà pré-fibrée. Parfait pour usage résidentiel ou bureau.\n\n✨ Caractéristiques :\n\nGrand living avec cheminée\n\n4 chambres + mezzanine\n\nCuisine + salle à manger\n\n2 salles de bains, 2 toilettes\n\nDébarras\n\n\n🌿 Extérieurs :\n\nGrand jardin\n\nDépendance pour gardien\n\nAbri voiture\n\nCuve d’eau avec surpresseur\n\n\n💰 Loyer : 2.800.000 Ariary\n\n📞 Contact :\n\n038 143 5117\n\n033 32 876 17",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/528441757_2179296439253681_7357638703478341747_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=V05FZwTNq9YQ7kNvwHQbJfR&_nc_oc=AdnhTKAl00PPy6d2gQsPMRNjEcXiy74ZP9Wsh8EoeR7_Lc_NBRkOe0cNbgADp_uKLRU&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=SX1pNgVc6CW1AaLJBQWt0A&oh=00_AfXQc_DnKI3gB8QWK0xCnV0VUdrdFqmXuWaS67bMkJgM-w&oe=689D7011",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1844004653130145",
+      "postedAt": ""
+    },
+    {
+      "title": "Scooteur g5",
+      "price": "$7 500 000",
+      "desc": "G5 125cc, moteur milamina tsara\nCarénage mikatona tsara\nVelona démarreur\nCarb, 0 bruit\nDevoir :tableau, valve soupape ihany\n2 ème main, izay maka azy\nPapier aradalana\nPrix natao 7,5\nLieu : Alarobia amboniloha\nTel : [hidden information] ",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/528640758_999876998783510_7865808164613895215_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=HsI1SNkZi8MQ7kNvwH0oe3x&_nc_oc=AdnGae6RLKBVo0aIq468g25ZF0xIJ-f1Li1JDSQTIBx_vAi3JExYeP_dDP0fL7g16bQ&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=voQ-tD7BdmhIWeykoZjnKw&oh=00_AfWVB5F-xmFeO59LJ5KcfhXatTAC9K7meHgfTvq_u9vZug&oe=689D53C2",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1502521767370201",
+      "postedAt": ""
+    },
+    {
+      "title": "2008 Citroën C4 ",
+      "price": "$17 000 000",
+      "desc": "🇫🇷 Citroën C4 🇫🇷\nA vendre \n📌 Année 2008\n📌 Moteur HDI 1.6l 110cv \n📌 BVM\n📌 Immatriculation étrangère\n📌 4 FAD, 2VE, 4 jantes alu d'origine VTS\n📌 Limitateur de vitesse, économiseur de batterie, commande au volant fonctionnelle \n📌 Retroviseur électrique\n📌 Voiture très économique et puissante\n☎️ Contact : +26138 89 124 30\n💰 Prix : 17.000.000ar à débattre",
+      "image": "https://scontent-dfw5-3.xx.fbcdn.net/v/t45.5328-4/516101996_1042224151407441_3205855829551304847_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=g7nopfIrrG8Q7kNvwGI1n4K&_nc_oc=AdkltHa5gGjPInYrinbpukoGFoccm1lDwDCXSc_tLebMtXjlyEnH88RzHs3RsfCS7v4&_nc_zt=23&_nc_ht=scontent-dfw5-3.xx&_nc_gid=jv4x8q8TkIGQzFUg_noZMQ&oh=00_AfWtbJHpsswXHuAhbkWu4kI47yeyRecKpi0SgJWvnfg29A&oe=689D659C",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1442639326738255",
+      "postedAt": ""
+    },
+    {
+      "title": "Voiture 205",
+      "price": "$4 100 000",
+      "desc": "Fiara  205 peugeot\nmoteur 4 cylindre essence\n5 portes\nVitesse manuel\nJante Karenjy par 15\nPrix : négociable devant la voiture 🚘\nContact : +261 32 07 490 49 ou mp",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/481747850_2102543713511475_3217850089315276205_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=HCvBvlHkHOgQ7kNvwFDscvb&_nc_oc=Admiv0s5w8qZGbIpaGQRgn9D-wfqavSER2jNz4RTe04HCUyKj95B60eVsJo-hHryYtw&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=G3c1OSsYF6OGS-X5A819xQ&oh=00_AfUBRp-X6SGZCgaUVMEtJihV2lfGT9y_3WednlxGajD-9A&oe=689D5776",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/591945573839763",
+      "postedAt": ""
+    },
+    {
+      "title": "505",
+      "price": "$7 000 000",
+      "desc": "Tena tsara moteur, vao avy nanao Tana Antsirabe an!!!\nTompony mivantana\nTsy manao reprise an!!!\nContact [hidden information]",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/528638474_1420756159141471_8314566613613833092_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=zbK28RDwjDQQ7kNvwGKkSQw&_nc_oc=AdmcCimnYw_DWMugO-1nm6MQjME-Mn7xZ7RxrgZFod2iTs1NXj87tPYzpxvHGgcMexY&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=Ar4AvBo8xyE3bltC9nHnGw&oh=00_AfX4_WhG2qtcGg44ohAS3OAdnLFznGZSaCcf1OAgMXacFw&oe=689D6CFD",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1102917007890158",
+      "postedAt": ""
+    },
+    {
+      "title": "2004 Renault clio",
+      "price": "$11 000 000",
+      "desc": "À VENDRE 🚗\n📌 Renault Clio 2004 📌\n\nÉtat: Normal 😊\nPlaces: 5 (2 à l'avant, 3 à l'arrière) 🪑\nTransmission: Manuelle ⚙️\nClimatisation: À réparer ❄️🔧\nVerrouillage à distance: Oui (ouverture/fermeture) 🔑\nLecteur CD: Fonctionne 🎶\nPropriétaire: Original 👤\nPrix: 11 000 000 AR 💰\n\nContacte: +261340786144",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/479694872_2717469935115461_8939045843134417239_n.jpg?stp=c24.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=106&ccb=1-7&_nc_sid=247b10&_nc_ohc=8gfU3CW5sv0Q7kNvwFgMqyr&_nc_oc=AdnFWwkZBRHESCis2Y52ycFJQrGrHWFQSKrksdQJyYnr9ua5ESOajhq0eQOGLeT77LA&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=ffWlcm3KExI7u6UHe3k6OQ&oh=00_AfWpd1uHjgw6wHCMMXf6lUlKVvsElo6mtiw26eTNH_r26w&oe=689D6A18",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1150838996703852",
+      "postedAt": ""
+    },
+    {
+      "title": "Renault megane Z diesel",
+      "price": "$17 000 000",
+      "desc": "85 fmg miady kely. Mp ou [hidden information]. Papier complet tsara. Moteur 1,9L turbo, economique.int et ext d'origine, tableau mandeha tsara daholo, pompe électronique, 6 vitesses avant. 4 Jantes allu",
+      "image": "https://scontent-dfw5-3.xx.fbcdn.net/v/t45.5328-4/484562531_960881109448306_3357085856593244378_n.jpg?stp=c21.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=zecArN094owQ7kNvwEWv7nH&_nc_oc=Adl8dCs4AgMtaNXeBLpL_vx3mlE8CLVnaPJCWFeCOkIjaS6YBjDyQvCn4vePxGFmFP0&_nc_zt=23&_nc_ht=scontent-dfw5-3.xx&_nc_gid=oAP_tYZmVcjrSkRxN7v9sg&oh=00_AfVG1wrq6rPXkkfYzAa198Ep-vNIlSb_92tVKRPrLrEv_A&oe=689D807C",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1830094667530968",
+      "postedAt": ""
+    },
+    {
+      "title": "205 GR",
+      "price": "$8 200 000",
+      "desc": "A VENDRE | AMIDY MAIKA\n🔹 PEUGEOT 205 \n🔹Moteur Essence 1.9 \n🔹Capot mibotsina d'origine \n🔹0 devoir \nContact : [hidden information]\nPrix : 41M FMG négociable ",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/484618355_1343883286803074_1725903090033590915_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=kNcxVYDmcVQQ7kNvwEmPwyE&_nc_oc=Adk5yhhVInJSmlIlgckV2x7o3kygKLzvHD2r-0rkWDU_p1TSd54ts70ynrTUKlB3Qk4&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=4BEbS91ijsL8atSXiYqwkQ&oh=00_AfUb4CN1Ra96qgSYnTn2Iez4J_IItKcxJropXfBGuzfFFg&oe=689D5570",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/672439775457810",
+      "postedAt": ""
+    },
+    {
+      "title": "Urgent",
+      "price": "$11 700 000",
+      "desc": "Peugeot 206.Essence.Toutes options.interieur origine.4 vitre électrique.toit ouvrant électrique.Boite automatique.Prix maika vola.Fiara Tonga d afaka mlavalava.[hidden information]",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/476373363_656388160293980_711534354741802080_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=XQ70Fg7ClpMQ7kNvwHG7Lun&_nc_oc=Adm5aeNwMHmGiBqYsKoOBz1gFZyeNxDVP9K7Z5IasOpxefI4IDEv7FKev9ZQWpMkxjA&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=fzCHQb3iV3wba41_L6R-Mw&oh=00_AfXrMWJEDPFNz5gBaYKiRgv1IZutuwKItdc-Db9RaP-9LA&oe=689D7355",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/514708421655718",
+      "postedAt": ""
+    },
+    {
+      "title": "Suzuki samurai",
+      "price": "9 500 000 MGA",
+      "desc": "A vendre\n\n💢 Suzuki samurai\n💢 Moteur essence\n💢 4x4 fonctionnel \n💢 Moteur milamina ✅\n\n❌ Devoir: Peinture, intérieur, démarreur\n \nPrix: 9 500 000ar ferme\nContact ☎️: [hidden information]\nLieu: ‘’ gastro ivato ‘’",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/516217704_712144604947435_4428517916945306453_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=XypejWEBE5AQ7kNvwHp8CV3&_nc_oc=AdkyiBZSOxd8CTaqtdt4zuzjuRgY2ME_UbNHW_OdoqzFASSJcX9DH2NgUZYRdxG98sQ&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=WsUn68K6U3-npJpgaOg79A&oh=00_AfVIMNLv-tfm4TBG2h-dBEXXMVs2AqxDeAAxKxDjBk4a4A&oe=689D5A79",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/2455483054820131",
+      "postedAt": ""
+    },
+    {
+      "title": "Fiara Daewoo,Tico,3cylindres, essence,5portes,Matanjaka ,mety ho an mpanao Taxi,int s'y ext tsara ,",
+      "price": "8 000 000 MGA",
+      "desc": "8000000ar a Débattre,moteur essence, 3cylindres,voiture économique,bon états en Générale.",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t39.30808-6/498289337_4016251331926574_5217127675876731329_n.jpg?stp=c11.0.199.199a_dst-jpg_s133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=454cf4&_nc_ohc=rbo6GlF4_44Q7kNvwFlMctz&_nc_oc=Adm1lXRKbRw_8i8ZyxcVgtl9FA7eWMGxbn_x4R6BkvjoYskM_HsXk7H97qwTQ5ftvA0&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=und0zUFhlP-BRHsWd7DS0Q&oh=00_AfUjDanCIAfSyrw_D0Z0HsFhHmJq1j7Yze5-RYbl1WI7vg&oe=689D7FFB",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/581259764296502",
+      "postedAt": ""
+    },
+    {
+      "title": "A vendre",
+      "price": "$3 700 000",
+      "desc": "A vendre \n🇨🇵 Peugeot 208 1.6 e-HDi 92 ch 🇨🇵 \nAnnée 2014, 180 000 km au compteur \n\nBVM5, ABS, Air conditionné manuel, Écran tactile multifonction (radio 4x25W avec fonction bluetooth, prise Jack/USB et commande au volant), lève vitre électrique AV séquentiel côté conducteur, prise 12V AV, rehausse active du siège conducteur, rétroviseur extérieur électrique, verrouillage automatique des portes en roulant, verrouillage centralisé des portes, jantes alu 17\", ESP, Airbags frontaux et latéraux, détection de sous gonflage, ligne d'échappement complète en Inox en 63 mm, etc...\n\nVoiture très bien entretenue et agréable à conduire \nPrix: 37 000 000 Ar négociable \nContact: [hidden information] ou mp",
+      "image": "https://scontent-dfw5-3.xx.fbcdn.net/v/t45.5328-4/487878902_1491678448472888_318502349196964934_n.jpg?stp=c18.0.132.132a_dst-jpg_p168x128_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=Dox7P_y51eEQ7kNvwF4IVgb&_nc_oc=AdkJhX-fNi4E71005UWJde9okz1UEOb7XOEiHNsW8Rq1lU9kCyLUJYw5I4-kbutJNBY&_nc_zt=23&_nc_ht=scontent-dfw5-3.xx&_nc_gid=0puGoEValnayuA42F-5rUQ&oh=00_AfVaVS11zZFN4JibsjcrdyCm0Gxm3zSwHk4AMcT4vXCROg&oe=689D846D",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1720421068852603",
+      "postedAt": ""
+    },
+    {
+      "title": "Auto",
+      "price": "$8 400 000",
+      "desc": "Visible Majunga androany iany🔛Miakatra Tanà Rapitso 🔛205 tsara Kely☄️Moteur Mbola maina be🔛Tableau mande daolo🔛Jante alu sports BBS🔛Moteur TU Économique 💵💶Prix intéressant 📲[hidden information]",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/480047717_918604447019579_6023157344376584876_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=4wQ3y1iF-EAQ7kNvwFG3CnR&_nc_oc=AdmYuX2KasPJUujIi0dY8na3S9EuXepEtchSC_7qOwbamyHcZoYTvJVUzV59Sd4uxZY&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=4HoWC5gVdoqjLicJ7w4tbw&oh=00_AfX1hyeReI7R46tOm5ZDp3assmTQ3YqjdgCvVVP0Y0YvRg&oe=689D5155",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1158268701880524",
+      "postedAt": ""
+    },
+    {
+      "title": "LOFT À LOUER",
+      "price": "6 000 000 MGA",
+      "desc": "☑️APPART UNIQUE\n\nLumineux LOFT cosy en plein coeur d'#IVANDRY surface environ 140m²  dont la moitié terrasse ,  au 7 ème étage avec ascenseur. Très bel vue sur Tana .\n\nA 5 minutes en voiture du centre d'affaires #ANKORONDRANO et 10 minutes du centre ville.\n\nC'est un 2 pièces ouverte. Il se compose d' une entrée sur séjour et cuisine ouverte équipée( plaques à induction, micro-ondes, frigidaire et lave linge), salle à manger avec coin salon, salon avec canapé et téléviseur, , salle de bains et wc séparés, un espace couchage .\n\nÉquipée d'un generateur de secours et cuve d'eau avec surpresseur.\n\nLoyer : Nous Consulter \n\nInfo +261341178974 [whattsap]",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t39.30808-6/529942184_2967392926801590_724641708499879530_n.jpg?stp=c0.84.768.768a_dst-jpg_s133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=454cf4&_nc_ohc=eRJDhWCMu78Q7kNvwEgarL1&_nc_oc=AdnBpXnL5I_MXzb-YTUKdo8zjnbVnpdZYPnybFC7YKvm_GaCmGLIlYBXiFZBGCOcXn8&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=40Dc80hSZqss-vnFhx7F3A&oh=00_AfUrY-YzC5MmpCi0iD-BryCKO65xrLXWWKBPEVWZvKk7-Q&oe=689D4EF0",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1098453975041826",
+      "postedAt": ""
+    },
+    {
+      "title": "Scooter G5 125cc",
+      "price": "$7 500 000",
+      "desc": "G5 125cc, moteur milamina tsara\nCarénage mikatona tsara\nVelona démarreur\nCarb, 0 bruit\nDevoir :tableau, valve soupape ihany\n2 ème main, izay maka azy\nPapier aradalana\nPrix natao 7,5\nLieu : Alarobia amboniloha\nTel : [hidden information] ",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/528823608_743099091774024_5575666126937753010_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_ohc=diqRxGx3zTgQ7kNvwHED4Oj&_nc_oc=Adnz4UwcPyxvlOYvuao_00RDm6ShcFdddXnr-GUfjvsNSJRMZWYWZAFMlYxDyQT0YTo&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=cvy3PDUU1dEinf9TOaQhag&oh=00_AfU4AE051VveoAeCJdyUQe79FG3TahcdeaE7mkMwz2gIBA&oe=689D616E",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1065878999059546",
+      "postedAt": ""
+    },
+    {
+      "title": "Peugeot 206",
+      "price": "$13 000 000",
+      "desc": "Moteur DW8\nDirection Assisté \nPapier à jour \nAuto radio \nDevoir peinture manatsara, capitonnage AV gauche misy rovitra, silent bloc bras AV misolo\nPrix à débattre devant la voiture \nPropriétaire direct [hidden information]",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/528362025_1673811999968694_8931369634645836061_n.jpg?stp=c0.81.133.133a_dst-jpg_p133x133_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=zb5UKPxqYF4Q7kNvwETjGSS&_nc_oc=AdmpbVPm9eIa5kAmo4tGN9B2wjd-7hHkXLZW7WML9ubDzbL_IWOx5cMhb5cZtXwCeuc&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=uvwu2rhG6S1607TcHbJKnA&oh=00_AfXi7uVTiRYQ0RxOAQQER157xn8xlKyi3WGwSefUe1VKgQ&oe=689D7DEF",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/724747480337028",
+      "postedAt": ""
+    },
+    {
+      "title": "Appartement T2 meublé à louer",
+      "price": "6 000 000 MGA",
+      "desc": "☑️APPART UNIQUE\n\nLumineux LOFT cosy en plein coeur d'#IVANDRY surface environ 140m²  dont la moitié terrasse ,  au 7 ème étage avec ascenseur. Très bel vue sur Tana .\n\nA 5 minutes en voiture du centre d'affaires #ANKORONDRANO et 10 minutes du centre ville.\n\nC'est un 2 pièces ouverte. Il se compose d' une entrée sur séjour et cuisine ouverte équipée( plaques à induction, micro-ondes, frigidaire et lave linge), salle à manger avec coin salon, salon avec canapé et téléviseur, , salle de bains et wc séparés, un espace couchage .\n\nÉquipée d'un generateur de secours et cuve d'eau avec surpresseur.\n\nLoyer : Nous Consulter \n\nInfo +261341178974 [whattsap]",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t39.30808-6/529821964_2967394863468063_3443454925814877179_n.jpg?stp=c0.84.768.768a_dst-jpg_s133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=454cf4&_nc_ohc=FXiy0wv5l0QQ7kNvwGgLVD5&_nc_oc=AdmZRK4fww3lJO5hKFOAbyMChJoH0qlNULR5dGzJciDgayoG2j50DfQeIlBdAfVKXLA&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=X3Q1n_1QukGqCJAwHj_eOg&oh=00_AfUfFgajkNigLirW0lXYPDmnFhcjKYhBaVrTV27hJyWoKQ&oe=689D5BAF",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/1333051225063408",
+      "postedAt": ""
+    },
+    {
+      "title": "1994 PEUGEOT 306",
+      "price": "$4 000 000",
+      "desc": "A VENDRE PEUGEOT 306 TSY MISY MOTEUR sy BOITE avec papier .PRIX :20.000.000Fmg FIXE.TEL : [hidden information]",
+      "image": "https://scontent-dfw5-3.xx.fbcdn.net/v/t45.5328-4/479740116_1147674146812032_6377511507652138809_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=108&ccb=1-7&_nc_sid=247b10&_nc_ohc=A1ppwyYERbUQ7kNvwFAttCn&_nc_oc=AdnbIZM_pKfiKeJfz93HbAZIaJbyA0-N6RwKOep4fVKzqMo8NHTL-vcqXMpyeUywTFQ&_nc_zt=23&_nc_ht=scontent-dfw5-3.xx&_nc_gid=DV8KVlt8qnpApTtnCzCYfw&oh=00_AfUFgzh2FAlh_Jc-afBHFMq9u-BJT8U6MPc63lsIiHD0pw&oe=689D79D9",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/959102506191723",
+      "postedAt": ""
+    },
+    {
+      "title": "Suzuki Jimny année 2022",
+      "price": "9 990 000 MGA",
+      "desc": "‼️ 🚨À VENDRE – SUZUKI JIMNY 3 PORTES 🚨‼️\n🚙Occasion rare – Parfait état ✅– Très faible kilométrage !\nCaractéristiques principales :\nAnnée : 2022 – Seulement 13 685 km \nCouleur extérieure : Beige 🟡\nCouleur intérieur : Noir ⚫\nBoîte manuelle – Moteur essence 1.5L\nTransmission 4x4 avec réducteur\nPuissance : 102 ch 💨\n3 portes – 4 places\nLongueur : 3,48 m – Idéal pour se faufiler partout💆🏻\n Équipements : clim, Bluetooth, airbags, ABS, jantes alliage.\nEntretien à jour – Aucun frais à prévoir👌🏻\n\n📍Visible à Androhibe - Antananarivo sur RDV.🇲🇬\nPrix : 99 900 000 Ar (négociable) 💸💸\n📞Contact direct : 038 73 020 61- 034 89 036 32",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/496320146_1254015293069656_6557094025925257293_n.jpg?stp=c0.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=101&ccb=1-7&_nc_sid=247b10&_nc_ohc=MfDQGIJ4E0QQ7kNvwFjWExg&_nc_oc=Adnfgjhs_RhGhipJNXGqGVHTNFKGmiV_xHOqPFjD4j-M7oDIaILEu_V6hfw2RwJnnD4&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=-awfxaZiXWzsknxtIFqlLA&oh=00_AfXP4s_DKjzGlEP7PXYAglOdA9RquEeFMewi6hBpwWSwIQ&oe=689D568D",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1013070723860569",
+      "postedAt": ""
+    },
+    {
+      "title": "Loue une villa à étage ",
+      "price": "$3 000 000",
+      "desc": "🏡 Belle Villa à étage de type F5 en location à ANDROHIBE ( Usage mixteô\n\nSise dans un quartier calme à 10 min en voiture du Coliseum.\n\n👉 Au rez de chaussée::\n- Un grand living avec cheminée\n- Une cuisine placardée\n- Une toilette visiteur\n\n👉 À l'étage:: \n- Quatres (4) chambres placardées\n- Une salle d'eau ( baignoire et douche) avec eau chaude\n- Une toilette\n- Une terasse \n- Un balcon\n\n👉 À l'éxterieur::\n- Un grand jardin\n- Grand parking\n- Deux dépendances gardien et la bonne\n- Dépôts\n- Buanderie\n- Bassin\n- Grand Jardin potager\n\n👉 Équipements::\n- Cuve d'eau\n- Groupe éléctrogene\n- Onduleur\n- Chauffe eau\n\n👉 Loyer: 3.000.000 Ariary \n👉 Caution: 1 mois\n👉 Droit de visite: 10.000 Ariary\n👉 Honoraires d'agence: équivalent au 75% de loyer\n👉 Contact: [hidden information] /! [hidden information] ",
+      "image": "https://scontent-dfw5-3.xx.fbcdn.net/v/t45.5328-4/489370671_1169354304859949_2658872335904985389_n.jpg?stp=c51.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=PNU1-GLasTQQ7kNvwGijbti&_nc_oc=AdmFXiUvGGNmF85SfMJK9VLWdnkXt-sZJcxzKlxa4VwnucfETSUrtqZxrcVQCtTayWo&_nc_zt=23&_nc_ht=scontent-dfw5-3.xx&_nc_gid=N7ljJdTPx64rFrSFoeB2IA&oh=00_AfUq0pZplxmgxHOYtdRwnNlCOquVdZdKdKBCjMHzmoWJFw&oe=689D56CC",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/666677636012560",
+      "postedAt": ""
+    },
+    {
+      "title": "Renault SENIC RX4",
+      "price": "$14 000 000",
+      "desc": "À vendre Renault SENIC RX4 tel:[hidden information].",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/487287474_1175423320708208_1721849215294221628_n.jpg?stp=c0.66.133.133a_dst-jpg_p133x133_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=EokaXz4rC_AQ7kNvwEn9CVE&_nc_oc=Admf9BAQPoDm2QJ-ERkKCc5QAXRkK0ibku9rAlUQimIn5yzBrntGBGp-aMdW6PlqTXQ&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=0bS_dLHRMMLXEzOZyujmOw&oh=00_AfWYrGqPAR74mLZE-0SiC_Bxk_CQ-LCsblV2Q3pfNhyUqw&oe=689D7863",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/9953827491328056",
+      "postedAt": ""
+    },
+    {
+      "title": "🔴🟠🟡 🏢🏣🏨 MAISON de type F6 A LOUER - FIADANANA   🏠🏡🏘 🟢🔵🟣",
+      "price": "2 500 000 MGA",
+      "desc": "├┬┴┬┴ ὰ ℓσυєя ┬┴┬┴┤\n🚨🚦 Ⓞⓕⓕⓡⓔ ⓔⓧⓒⓔⓟⓣⓘⓞⓝⓝⓔⓛⓛⓔ 🚦🚨\n𝑪𝒐𝒏𝒕𝒂𝒄𝒕𝒆𝒛-𝒏𝒐𝒖𝒔 𝒑𝒐𝒖𝒓 𝒑𝒍𝒖𝒔 𝒅'𝒊𝒏𝒇𝒐𝒓𝒎𝒂𝒕𝒊𝒐𝒏𝒔 👩‍🦰 𝕄𝕒𝕕𝕒𝕞𝕖 𝕋𝕚𝕒𝕟𝕒 : 𝟘𝟛𝟜𝟙𝟟𝟟𝟚𝟚𝟡𝟠 / 𝟘𝟛𝟟𝟜𝟘𝟙𝟟𝟛𝟝𝟞\n\n💰💸 💶 Ⓛⓞⓨⓔⓡ: 2.500.000 Ariary\n\n🔴🟠🟡 🏢🏣🏨 MAISON de type F6 A LOUER - FIADANANA   🏠🏡🏘 🟢🔵🟣\n♠️♥️REF:VAL506 ♣️♦️\n🕵️‍♀️👣 EMPLACEMENT👀: FIADANANA\n🎞🎬BREVE DESCRIPTION🎬🎞 :\n\nMAISON A LOUER FIADANANA \nA proximité du camp militaire Fiadanana, une nouvelle maison dispose d'une  garage pour une petite voiture:\n🔸 RDC :  living room, une chambre,  cuisine fermée, une chambre, une salle d'eau, toilette.\n🔹 1er étage : chambre parentale + 2 chambres + 2 douches + 2toiletttes \n🔸 A l'extérieur: bassin\n\n 🚩🇲🇬 🏚️ ▀▄▀▄ 𝑰𝑴𝑴𝑶 𝒅𝒆 𝒍'𝑶𝒖𝒆𝒔𝒕 ▄▀▄▀ - 𝕬𝖌𝖊𝖓𝖈𝖊 𝕴𝖒𝖒𝖔𝖇𝖎𝖑𝖎𝖊̀𝖗𝖊 🏚️🚩🇲🇬\n📬 Adresse: Lot 24 TB - Villa sainte famille Jeanne - Bel'air TALATAMATY 📨\n ✔️Droit de visite 10 000 ariary\n ✔️Honoraire d’agence : 75% du loyer mensuel, dès la réservation\n\n𝕄𝕒𝕕𝕒𝕞𝕖 𝕋𝕚𝕒𝕟𝕒 ☎:️0⃣3⃣4⃣️1⃣7⃣7⃣2⃣2⃣9⃣️8⃣ 📞 - / 𝟘𝟛𝟟𝟜𝟘𝟙𝟟𝟛𝟝𝟞 / 🚥 watsapp : ⓿➌➍➊➐➐➋➋➒➑ 🚥",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/496079357_1199937571511647_612477373289290479_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=aWZyC_jgvyMQ7kNvwFYCqOx&_nc_oc=Adm2ER8bLciKelciKQL3VjKveqastGccNzBMzOa5UVGElnzWZXHyuNHeyQVYtBE4Asg&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=DIRx5g04Pqv5mC7h4ATIqA&oh=00_AfXCQcaHsEzqxgvfWIE656gE2DGBGq_ibZRNbQB51v6_Dg&oe=689D509A",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1383124626066796",
+      "postedAt": ""
+    },
+    {
+      "title": "Scooter bonne occasion",
+      "price": "2 000 000 MGA",
+      "desc": "🔥🔥🔥PROMOTION🔥🔥🔥\nEfa ela no niandrasana azy ity oh\nDestockage be ny scooter rehetra \nBonne occasion \nArrivage début Mars 😍\nJeudi 27 et vendredi 28 ihany io ⌛️⌛️\nAza tara ary \n🤳🏾🤳🏾[hidden information] na mp",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t39.30808-6/495006979_1942758026468441_4414391787569143416_n.jpg?stp=c0.88.752.752a_dst-jpg_s133x133_tt6&_nc_cat=102&ccb=1-7&_nc_sid=454cf4&_nc_ohc=zOkOZiggUz0Q7kNvwHJOlwD&_nc_oc=Adntpjh7z7y2A94kQsrMqC3qpv16xcHCRxLfq7Op1XaO-xwUIPys52QTVZQ1_CE-idU&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=q6iMPjqNyEgVrwKaPuFdVA&oh=00_AfXd5isK1MWgRr5WS80CPGsMJMtIWPdgt_DOVuOWxRyzgA&oe=689D800D",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/621920934172748",
+      "postedAt": ""
+    },
+    {
+      "title": "VW GOLF TYPE 3 TBE",
+      "price": "$8 000 000",
+      "desc": "A vendre VW golf 3 TBE VC CD JA/15 moteur essence carb élec origine économique matanjaka boîte manuelle train milamina tsara, afaka Tonga d mandeha n'aiza n'aiza",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/484955421_1363097321543135_4143352845785860726_n.jpg?stp=c84.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=105&ccb=1-7&_nc_sid=247b10&_nc_ohc=6CJFePeksbQQ7kNvwEEaukQ&_nc_oc=AdnfYRAfmeurY8sn4qNOU2Z7IdGm-bhIbR83Ht4l9W8rC-qVx_FN504dtI3AtFPY8-k&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=yBcm1DOmnHKyzXNXOmIFGg&oh=00_AfX6Gq3_f8GFejq8l94SeTpk0RcfT5dgmiOw_eVndSb1yQ&oe=689D6360",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/2370492616668733",
+      "postedAt": ""
+    },
+    {
+      "title": "Hyundai Santa fe 2",
+      "price": "$3 600 000",
+      "desc": "Hyundai Santa fe 2\nAnnée 2009\nBoite Automatique \nDiesel\nMoteur impeccable \n[hidden information]",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/487069230_1326051758633275_6280086601533022296_n.jpg?stp=c0.23.133.133a_dst-jpg_p133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=Ur7Nin47JdkQ7kNvwFNa_jS&_nc_oc=AdlG4O6ydipdRGZNJl-p5Xjn5IulVirT3jWmRxQp4qJgjXBHLNwWwu__zsp3sQcORZ8&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=FHcKRLIbZjRI3jaAyW7Odg&oh=00_AfVf2whBrClnU9YqmsPnppmBgTZaRXuEujV7TT5uQm01Yg&oe=689D717F",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1453690688948030",
+      "postedAt": ""
+    },
+    {
+      "title": "Gp carbe Bonne eto",
+      "price": "$2 000 000",
+      "desc": "Tsisy kitiana ,mandeha ny rehefa \nMoteur mbola tsy nikitikita,\nSortie 2025\n034 73 192 16",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/484799340_551687157940101_6088521643346792069_n.jpg?stp=c0.81.133.133a_dst-jpg_p133x133_tt6&_nc_cat=102&ccb=1-7&_nc_sid=247b10&_nc_ohc=vcboP5vPOFUQ7kNvwFrt0Mx&_nc_oc=Adk_c8jgxC8KkGgJ6QSD7VakhfDs3PBtVwKY6zKqLQmB1D3y08b7pKoAW8hLfhWcNbU&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=5ahLzxHbJ9RHPi9xp-u6Rw&oh=00_AfWjY5eRor17TwN0tRk8nNnF2ibR0CP949bAZPVZ2RTpDQ&oe=689D54D7",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/578709101878342",
+      "postedAt": ""
+    },
+    {
+      "title": "Grand starex CVX",
+      "price": "$2 500 000",
+      "desc": "🇲🇬à VENDRE   🇰🇷\n     🇰🇷GRAND STAREX CVX PHASE II 🇰🇷\n 🇰🇷 TRES BONNE OCCASION DE COREA🇰🇷\n                  💯FULL KIT CHROME💯\n✳️Numeros etranger\n✳️Année;2️⃣0️⃣0️⃣9️⃣\n✳️92 .......Km\n✳️Moteur:CRDI  2.5. VGT\n✳️Boite de vitesse manuelle 5 rapports\n✳️12 places d'origine sans defaut\n✳️5 Jantes alu d'origine\n✳️Double coulissante avec petit fenetre\n✳️Climatisation Integrale:Climatronic\n✳️Détecteur de recul\n✳️Commande au volant\n✳️Chaise rotatif 180° \n✳️Moteur& Train impeccable\n🛑Voiture en excellente etat🛑\n✳️ 5 pneus comme neuf(MICHELIN)\n✳️ Interieur et exterieur d'origine\n✳️Livre avec accessoires complet: 🔧Clé de roue🛠️,cric⚙️pneu de secours\n💰PRIX EST TOUJOURS ABORDABLE💰\n🏷️🏷️🏷️🏷️🏷️🏷️🏷️🏷️🏷️🏷️🏷️🏷️🏷️🏷️\n📞 Whatsap:+26132 45 171 88\n   ☎️☎️   : [hidden information]",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t45.5328-4/491771321_657986940400726_5229906540880035876_n.jpg?stp=c0.19.133.133a_dst-jpg_p133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=247b10&_nc_ohc=7Wz1oVdpOZEQ7kNvwGV5lex&_nc_oc=AdntbuVg8PPMMOiNnXOenOeaZTS6Dcpb06vooH7xWmbaC7h7weJpscwctQ9bxZkn6Qo&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=jwfndhGa7OK8ct2A5soMog&oh=00_AfV1x3ZG09xOi1pjPjV7xvnsnQlr21BICTrlyztAtK3fLQ&oe=689D669D",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/691357096588570",
+      "postedAt": ""
+    },
+    {
+      "title": "2015 C4 HDi 1.6 Sport",
+      "price": "$16 000 000",
+      "desc": "🎉🔥🔥C4🔥💥\n💢💯💯HDi 1.6 \n👉⛽diesel \n♟️BVM\n📱📱📞[hidden information]\n💵💵💵16.000.000ar",
+      "image": "https://scontent-dfw5-3.xx.fbcdn.net/v/t45.5328-4/518206823_2565267683816546_8923393011111365216_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=3qcbrJ06bKEQ7kNvwE6EubJ&_nc_oc=AdmntHKlqzfQ7ba0qzND8Z_dywXgeu_H0OdcAdAlPGmmM45FqRdC4BpGprmtMcrVF8Q&_nc_zt=23&_nc_ht=scontent-dfw5-3.xx&_nc_gid=52NWPtBYpYD-uWvduF2Fiw&oh=00_AfV2C_B97nnpTxoIbcE2ZMxNXLITTNwSBzrnR65EBvXd7g&oe=689D708E",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1923817681723111",
+      "postedAt": ""
+    },
+    {
+      "title": "Voiture Renault",
+      "price": "$15 000 000",
+      "desc": "Miarahaba Tompoko,\n\nFiara amidy maika, Renault Essence,\nconsommation: 9 au 100\n\nPrix 15 Millions d' ariary à Débattre\n\nContact: Mr Avotra Randriamboavonjy     /  Tél: [hidden information]",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/482577615_2087211938390048_2119333964421144374_n.jpg?stp=c0.16.133.133a_dst-jpg_p133x133_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=edkAY8AkJD4Q7kNvwFfQ6Y_&_nc_oc=AdnYZsM40LExKKhdCsqTwd8oitpG30ure9tdXjmFDivcDro8aG3JFcl5XODCLZ2635g&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=5ZeAN2ZmG27ng8RZ0-4DAw&oh=00_AfVeHLil4zNm-lh0Ctt4G7C2v-CrH4ydtJvJJ7rs0OeWlQ&oe=689D5471",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1212371570451276",
+      "postedAt": ""
+    },
+    {
+      "title": "opel combo",
+      "price": "$9 000 000",
+      "desc": "Amidy na atakalo\nOPEL COMBO fourgon vitré, immatriculé TV, diesel tsotra mitsitsy be, jante tôle, seza tsy misy rovitra, tableau tsy misy vaky, moteur milamina tsara, carrosserie tsy mbola nandalo afo, papier aradalana sy à jour, tonga dia afaka milavalava, devoir frein a main, dia manatsara, tsy misy batterie\nvidiny 9 000 000Ar\ncontact [hidden information] na MP\n",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/516513752_2483944385306060_3778267291943004267_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=100&ccb=1-7&_nc_sid=247b10&_nc_ohc=WwlzDkr0IvgQ7kNvwG9hQYk&_nc_oc=AdljVbPNDDp_JRFlGC84OV5N4OBFlLJTWDzahYYyEfZg2NjhvfEPuqlrUzgeaAL50Kg&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=7mFLMMORSqvdQSM7OPpxag&oh=00_AfX7ktmobX1STr34fjftjv5wJPEtM0MTeWCvMLi3bzZkew&oe=689D6E22",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/713064211327885",
+      "postedAt": ""
+    },
+    {
+      "title": "Renault",
+      "price": "$21 000 000",
+      "desc": "Renault express nouveau \nBonne occasion de France, intérieur et extérieur origine, année 2000 , 188xxx km réel, Air bag au volant, verrouillage centralisé avec télécommande a distance, moteur diesel 1.9 D55. Tsy misy devoir. \n[hidden information]",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/504332808_1000476938836277_249439179182152317_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=104&ccb=1-7&_nc_sid=247b10&_nc_ohc=M6TK6LGBG6IQ7kNvwE9DOe3&_nc_oc=Adn-xR7AFABp4uaasMHcEqVSXtfsxAHDgTqzhwZYtixYE0ZSz309NEm_ZV0QGRXKb74&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=MNtNgnUq6KfYUIeU2k_ydg&oh=00_AfWyuR685TBuEPWwju-dzzXDO-3c26daT4BvRUPs3F1_UA&oe=689D5159",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1780983102528231",
+      "postedAt": ""
+    },
+    {
+      "title": "Motos Electriques",
+      "price": "3 000 000 MGA",
+      "desc": "Motos Electriques ecologiquement responsable (zero emission de CO2)\nMotos Electriques financierement economique\nMotos Electriques visuellement attirante.",
+      "image": "https://scontent-dfw5-1.xx.fbcdn.net/v/t39.30808-6/525200522_1243491460850270_4526175008212925095_n.jpg?stp=c180.0.721.721a_dst-jpg_s133x133_tt6&_nc_cat=103&ccb=1-7&_nc_sid=454cf4&_nc_ohc=wcw7qD1GDTEQ7kNvwFRnKqk&_nc_oc=Adl3cSoQ0tFJauR9cOfzS0uplydjO1dJcxCy86t_U8XgMQcxNkO1FOQvQp9VlTaCReM&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=jEDTctkSH9QVCpbGzZ_sWQ&oh=00_AfVE0IDtAqsuwU7tnbpvzFh1X3Nk4wlXvyIrrBziquNlHw&oe=689D51F4",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1805884513695717",
+      "postedAt": ""
+    },
+    {
+      "title": "Vente 4L",
+      "price": "$4 500 000",
+      "desc": "4L \nBon état intérieur extérieur \nMoteur kely mangina be\nPneu 4 maranitra be \nEquipement mande tsara daholo\nFiara mandeha tsara , fa Afaka mbola manatsara izay mety aminao\nPrix 4,5 millions ariary \nTompony direct\n\nMp na miantso [hidden information]\nVisible mahatony ivandry na alarobia",
+      "image": "https://scontent-dfw5-3.xx.fbcdn.net/v/t45.5328-4/490785179_1122937746543302_8558319862176828554_n.jpg?stp=c22.0.133.133a_dst-jpg_p133x133_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=UPmZdORDnGgQ7kNvwG5HojR&_nc_oc=AdlN-nsvXKJvyquhBAIC5JFyXjGH-grRSFB9ZbF_fP8NvFp8KkK8kF2brSLUFJ0JhSY&_nc_zt=23&_nc_ht=scontent-dfw5-3.xx&_nc_gid=LlS6BLITiVT2mAcSTsDPHA&oh=00_AfWzZjsZnZgkDWj9_Zt0eQ3FBioYEkbG1dOjsk0Ul3uFTw&oe=689D5CAD",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1867146704086619",
+      "postedAt": ""
+    },
+    {
+      "title": "Espace 3 ",
+      "price": "$15 000 000",
+      "desc": "Renault espace 3\nTurbo 2 .2 dt intercoleur 👈\nFiara milamina tsara \nMp na ☎️ [hidden information] WhatsApp ",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t45.5328-4/484651414_552952160545455_1085301337880972567_n.jpg?stp=c0.51.133.133a_dst-jpg_p133x133_tt6&_nc_cat=107&ccb=1-7&_nc_sid=247b10&_nc_ohc=W4BBBCpv0LwQ7kNvwG2Wnih&_nc_oc=AdmJ5PTGabSsFaCiuk0TMj6K_Hupg1CeuyekuY3SOJ5cpsXsaByobzBbvYJ2QqJU85w&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=mMumf-inYJvte937QassPA&oh=00_AfW4yzvynxhVUsSpwlqJcWYSY1iqXJNbi2t26OFJ6FuFQQ&oe=689D54D3",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/1114364973829848",
+      "postedAt": ""
+    },
+    {
+      "title": "🏙️A VENDRE OU A LOUER 🏙️",
+      "price": "3 000 000 MGA",
+      "desc": "☎️[hidden information] / [hidden information]\n📞 WhatsApp : [hidden information]\n\n💸💸💸#VILLA_A_VENDRE_OU_A_LOUER 💸💸💸\n----------------#AMBOHIBAO_ANTEHIROKA ---------------\n\n💰 Prix de vente : [hidden information] Ariary négociable \n💰 Prix location : 3.000.000 Ariary \n\n🏡Toit Immobilier Madagascar vous propose \n\n🏙️UNE VILLA A DEUX ETAGES À VENDRE OU A LOUER 🏙️.\n👉 Réf : VV 6001\n\n🏙️Une Villa de 100 m2, bâtie sur un terrain titré et borné de 350m2, villa équipée d'eau et d'électricité, accessible en voiture, comportant :\n\n➡️Au RDC : \n- 01 living\n- Cuisine ouverte\n- Douche toilette combinées, \n- Garage pour une voiture\n\n➡️Au 1ère étage : \n- 01 chambre parentale\n- 01 autre chambre\n\n➡️Au 2ème étage : \n- 02 chambres\n- Douche et toilette combinées\n\n➡️Au 3ème étage : \n- Grande terrasse\n\n➡️A l'extérieur : \n- Jardin\n- Puit \n- Parking pour 02 voitures \n\n👉 Visite : 10.000 Ariary \n👉 Honoraires d'agence : 75% si location \n\n🏡 Agence Toit Immobilier Madagascar \n📧 [hidden information]",
+      "image": "https://scontent-dfw5-3.xx.fbcdn.net/v/t45.5328-4/525126933_695897756817841_3199435790364294900_n.jpg?stp=c0.22.133.133a_dst-jpg_p133x133_tt6&_nc_cat=109&ccb=1-7&_nc_sid=247b10&_nc_ohc=9S9IR6uyNVsQ7kNvwHuU-nG&_nc_oc=AdntWSBCoIor9PEUa-SsPXtrVVyfkrkl7B0hOpJcIpdqq9SKWTfsw6uIah5bfzyab4M&_nc_zt=23&_nc_ht=scontent-dfw5-3.xx&_nc_gid=ayzn87ueFoTrRyJ5AGbKIw&oh=00_AfVX7KpejRt9V90JOOlok-7iGK5Ok27T3qlmH1p5EfeyLQ&oe=689D5660",
+      "location": "Unknown",
+      "url": "https://www.facebook.com/marketplace/item/31001209762797521",
+      "postedAt": ""
+    },
+    {
+      "title": "Maison F4 pour usage mixte a louer ANKORONDRANO",
+      "price": "2 600 000 MGA",
+      "desc": "EN EXCLUSIVITÉ \n\n#À_LOUER pour usage mixte, habitation, bureau \nANKORONDRANO En face Station Total\n\nMAISON F4 au second plan , accessible voiture, quartier d'affaires \n1salon (30m²) , cuisine, Sde , 3 chambres (12m² , 10m² , 8m²) , parking pour une voiture , \n\nLoyer 2600 000Ariary\n\nContact [hidden information]",
+      "image": "https://scontent-dfw5-2.xx.fbcdn.net/v/t39.30808-6/487514129_2837507023123515_5508821293130512581_n.jpg?stp=c0.84.768.768a_dst-jpg_s133x133_tt6&_nc_cat=102&ccb=1-7&_nc_sid=454cf4&_nc_ohc=AOm9cCVqQmkQ7kNvwE3X4JH&_nc_oc=AdkD9PFuU4iI-avmXaHRDnNUS39gz875Dyx2gJnpn_rTbQksnweIg5s-0SRhANwG1TM&_nc_zt=23&_nc_ht=scontent-dfw5-2.xx&_nc_gid=493OorF5bcl_gTGjoD_cQg&oh=00_AfWXwJgttA5F0iM4lR_leW8Sadl6170TUxj5_oS0gHPBHQ&oe=689D8423",
+      "location": "Antananarivo",
+      "url": "https://www.facebook.com/marketplace/item/659996769920514",
+      "postedAt": ""
+    }
+  ]
+}
