@@ -67,3 +67,16 @@ logger.info(`Logger initialized at ${new Date().toISOString()}`, {
   environment: process.env.NODE_ENV || 'development',
   nodeVersion: process.version
 });
+
+// Audit logging: dedicated logger
+const auditLogger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [new winston.transports.File({ filename: 'logs/audit.log' })],
+});
+
+export const audit = (event: string, meta: Record<string, unknown> = {}) => {
+  const payload = { ts: new Date().toISOString(), event, ...meta };
+  auditLogger.info(payload);
+  logger.info(`[AUDIT] ${event}`, meta);
+};

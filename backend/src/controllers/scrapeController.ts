@@ -7,6 +7,7 @@ import { logger } from '../utils/logger';
 import { config } from '../config/config';
 import fs from 'fs';
 import path from 'path';
+import db from '../database';
 
 export class ScrapeController {
   /**
@@ -50,7 +51,24 @@ export class ScrapeController {
         isPaid: false,
         user_id: userId, // Attach user if available
         packId: packId, // Attach packId
+        url: url,
       });
+
+      // Log search event
+      try {
+        const domain = (() => {
+          try { return new URL(url).hostname; } catch { return null; }
+        })();
+        await db('search_events').insert({
+          user_id: userId || null,
+          session_id: sessionId,
+          url,
+          domain,
+          status: 'PENDING',
+        });
+      } catch (e) {
+        logger.warn('Failed to log search event', e);
+      }
 
       // Start APIFY scraping job with options
       const { datasetId, actorRunId } = await apifyService.startScraping(url, sessionId, validLimit, scrapingOptions);
@@ -81,6 +99,60 @@ export class ScrapeController {
 
       // Log the error and pass it to the error handler
       logger.error(`Error starting scrape: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      next(error);
+    }
+  }
+
+  /**
+   * Start a one-time free TRIAL scraping (max 10 items)
+   */
+  async startTrialScrape(req: Request, res: Response, next: NextFunction) {
+    const { url } = req.body;
+    let session: Session | null = null;
+    try {
+      const authUser = (req as any).user;
+      const userId = authUser?.id;
+      if (!userId) throw new ApiError(401, 'Authentication required for trial scraping.');
+
+      if (!url || !this.isValidMarketplaceUrl(url)) {
+        throw new ApiError(400, 'URL invalide. Veuillez fournir une URL Facebook ou LinkedIn Marketplace valide.');
+      }
+
+      const user = await db('users').select('id', 'trial_used').where({ id: userId }).first();
+      if (!user) throw new ApiError(404, 'Utilisateur non trouvé.');
+      if (user.trial_used) throw new ApiError(403, 'Votre essai gratuit a déjà été utilisé.');
+
+      const TRIAL_LIMIT = 10;
+      const sessionId = `sess_${nanoid(10)}`;
+
+      session = await sessionService.createSession({
+        id: sessionId,
+        status: SessionStatus.PENDING,
+        isPaid: false,
+        is_trial: true,
+        user_id: userId,
+        packId: 'TRIAL',
+        url,
+      });
+
+      try {
+        const domain = (() => { try { return new URL(url).hostname; } catch { return null; } })();
+        await db('search_events').insert({ user_id: userId, session_id: sessionId, url, domain, status: 'PENDING' });
+      } catch (e) {
+        logger.warn('Failed to log trial search event', e);
+      }
+
+      await db('users').where({ id: userId, trial_used: false }).update({ trial_used: true, updated_at: new Date() });
+
+      const scrapingOptions = { deepScrape: false, getProfileUrls: false };
+      const { datasetId, actorRunId } = await apifyService.startScraping(url, sessionId, TRIAL_LIMIT, scrapingOptions);
+
+      await sessionService.updateSession(sessionId, { datasetId, actorRunId, status: SessionStatus.RUNNING });
+
+      res.status(200).json({ status: 'success', data: { sessionId, datasetId, actorRunId, isTrial: true } });
+    } catch (error) {
+      if (session) { try { await sessionService.updateSession(session.id, { status: SessionStatus.FAILED }); } catch {} }
+      logger.error(`Error starting trial scrape: ${error instanceof Error ? error.message : 'Unknown error'}`);
       next(error);
     }
   }
@@ -139,6 +211,15 @@ export class ScrapeController {
             hasData: normalizedItems.length > 0,
           });
 
+          // Update search_events with FINISHED status and duration
+          try {
+            const ev = await db('search_events').select('created_at').where({ session_id: sessionId }).orderBy('created_at', 'asc').first();
+            const durationMs = ev?.created_at ? (Date.now() - new Date(ev.created_at).getTime()) : null;
+            await db('search_events').where({ session_id: sessionId }).update({ status: 'FINISHED', duration_ms: durationMs });
+          } catch (e) {
+            logger.warn('Failed to update search_event on success', e);
+          }
+
           if (!updatedSession) {
             throw new ApiError(500, 'Failed to update session after scraping.');
           }
@@ -150,16 +231,57 @@ export class ScrapeController {
         } else if (failedStatuses.includes(runStatus.status.toUpperCase())) {
           logger.error(`Scraping for session ${sessionId} failed with status: ${runStatus.status}`);
           const updatedSession = await sessionService.updateSession(sessionId, { status: SessionStatus.FAILED });
+          // Update search_events with FAILED status and duration
+          try {
+            const ev = await db('search_events').select('created_at').where({ session_id: sessionId }).orderBy('created_at', 'asc').first();
+            const durationMs = ev?.created_at ? (Date.now() - new Date(ev.created_at).getTime()) : null;
+            await db('search_events').where({ session_id: sessionId }).update({ status: 'FAILED', duration_ms: durationMs, error_code: runStatus.status || 'FAILED' });
+          } catch (e) {
+            logger.warn('Failed to update search_event on failure', e);
+          }
           session = updatedSession!;
           throw new ApiError(500, `Scraping failed with status: ${runStatus.status}`);
 
         } else {
-          // Le scraping est toujours en cours (ex: RUNNING, READY)
-          logger.info(`Scraping for session ${sessionId} is still in progress with status: ${runStatus.status}`);
+          // Le scraping est toujours en cours (ex: RUNNING, READY) -> appliquer un timeout global
+          const maxMs = Number(process.env.MAX_SCRAPE_RUNTIME_MS || 15 * 60 * 1000); // 15 min par défaut
+          const runtimeMs = runStatus.runtimeMs ?? 0;
+          logger.info(`Scraping in progress for session ${sessionId}`, {
+            apifyStatus: runStatus.status,
+            progress: runStatus.progress,
+            startedAt: runStatus.startedAt,
+            finishedAt: runStatus.finishedAt,
+            runtimeMs,
+            maxMs,
+          });
+
+          if (runtimeMs > 0 && runtimeMs > maxMs) {
+            logger.warn(`Scraping timeout reached for session ${sessionId} after ${runtimeMs} ms. Marking as FAILED.`);
+            const updatedSession = await sessionService.updateSession(sessionId, { status: SessionStatus.FAILED });
+            // Update search_events with FAILED and duration
+            try {
+              const ev = await db('search_events').select('created_at').where({ session_id: sessionId }).orderBy('created_at', 'asc').first();
+              const durationMs = ev?.created_at ? (Date.now() - new Date(ev.created_at).getTime()) : null;
+              await db('search_events').where({ session_id: sessionId }).update({ status: 'FAILED', duration_ms: durationMs, error_code: 'TIMEOUT' });
+            } catch (e) {
+              logger.warn('Failed to update search_event on timeout', e);
+            }
+            session = updatedSession!;
+            return res.status(504).json({
+              message: 'Scraping timed out.',
+              status: SessionStatus.FAILED,
+              progress: runStatus.progress,
+              runtimeMs,
+              maxMs,
+            });
+          }
+
           return res.status(202).json({
             message: 'Scraping in progress.',
             status: session.status,
             progress: runStatus.progress,
+            startedAt: runStatus.startedAt,
+            runtimeMs,
           });
         }
       }
@@ -214,6 +336,15 @@ export class ScrapeController {
           hasData: totalItemsCount > 0,
         });
 
+        // Update search_events with FINISHED and duration
+        try {
+          const ev = await db('search_events').select('created_at').where({ session_id: sessionId }).orderBy('created_at', 'asc').first();
+          const durationMs = ev?.created_at ? (Date.now() - new Date(ev.created_at).getTime()) : null;
+          await db('search_events').where({ session_id: sessionId }).update({ status: 'FINISHED', duration_ms: durationMs });
+        } catch (e) {
+          logger.warn('Failed to update search_event on webhook success', e);
+        }
+
         logger.info(`Session ${sessionId} successfully updated with ${totalItemsCount} items.`);
 
       } else if (isFailed) {
@@ -221,6 +352,13 @@ export class ScrapeController {
         await sessionService.updateSession(sessionId, {
           status: SessionStatus.FAILED,
         });
+        try {
+          const ev = await db('search_events').select('created_at').where({ session_id: sessionId }).orderBy('created_at', 'asc').first();
+          const durationMs = ev?.created_at ? (Date.now() - new Date(ev.created_at).getTime()) : null;
+          await db('search_events').where({ session_id: sessionId }).update({ status: 'FAILED', duration_ms: durationMs, error_code: runStatus });
+        } catch (e) {
+          logger.warn('Failed to update search_event on webhook failure', e);
+        }
       } else {
         logger.info(`Received non-final webhook status '${runStatus}' for session ${sessionId}. Ignoring.`);
       }
@@ -270,6 +408,7 @@ export class ScrapeController {
           price: item.price,
           desc: item.desc,
           image: item.image,
+          images: Array.isArray(item.images) ? item.images.slice(0, 3) : [],
           location: item.location,
           url: item.url,
           postedAt: item.postedAt
@@ -279,6 +418,7 @@ export class ScrapeController {
           price: item.price,
           desc: item.desc,
           image: item.image,
+          images: Array.isArray(item.images) ? item.images.slice(0, 3) : [],
           location: item.location,
           url: item.url,
           postedAt: item.postedAt
@@ -319,15 +459,41 @@ export class ScrapeController {
             price = item.price;
         }
 
-        // Gérer la structure d'image imbriquée
-        const image = item.primary_listing_photo?.listing_image?.uri || item.image || item.imageUrl || null;
+        // Gérer les images (jusqu'à 3) et l'image principale
+        let images: string[] = [];
+        if (Array.isArray(item.images)) {
+          images = item.images.filter((u: any) => typeof u === 'string').slice(0, 3);
+        } else {
+          const tmp: string[] = [];
+          const push = (u?: any) => { if (typeof u === 'string') tmp.push(u); };
+          push(item.primary_listing_photo?.listing_image?.uri);
+          if (Array.isArray(item.listing_photos)) {
+            for (const p of item.listing_photos) push(p?.image?.uri);
+          }
+          push(item.image);
+          push(item.imageUrl);
+          // dédupliquer et limiter à 3
+          const seen = new Set<string>();
+          for (const u of tmp) {
+            if (typeof u !== 'string') continue;
+            const fixed = u.startsWith('//') ? 'https:' + u : u;
+            if (!fixed.startsWith('http')) continue;
+            if (!seen.has(fixed)) {
+              seen.add(fixed);
+              images.push(fixed);
+            }
+            if (images.length >= 3) break;
+          }
+        }
+        const image = item.image || (images.length > 0 ? images[0] : null);
 
         return {
             title: title,
             price: price,
             desc: item.desc || item.description || '',
             image: image,
-            location: item.location?.reverse_geocode?.city || item.location || 'Lieu non disponible',
+            images: images,
+            location: item.location?.reverse_geocode_detailed?.city || item.location?.reverse_geocode?.city || item.location || 'Lieu non disponible',
             url: item.url || item.listing_url || '#',
             postedAt: item.postedAt || item.creation_time || null,
             // Inclure d'autres champs si nécessaire

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import api from '@/services/api';
 import {
   Card,
   CardContent,
@@ -36,23 +37,10 @@ const SettingsTab: React.FC = () => {
     e.preventDefault();
     setProfileLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/profile`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ name, phone_number: phoneNumber }),
-      });
+      const { data } = await api.put('/user/profile', { name, phone_number: phoneNumber });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Une erreur est survenue.');
-      }
-
-      // Le backend renvoie un nouveau token avec les informations mises à jour
-      login(data.token);
+      // Si le backend renvoie encore un token, on le garde pour compatibilité UI
+      if (data?.token) login(data.token);
       toast.success('Profil mis à jour avec succès !');
 
     } catch (err: any) {
@@ -76,21 +64,7 @@ const SettingsTab: React.FC = () => {
 
     setPasswordLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/change-password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ currentPassword, newPassword }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Une erreur est survenue.');
-      }
+      const { data } = await api.post('/user/change-password', { currentPassword, newPassword });
 
       toast.success('Mot de passe mis à jour avec succès ! Vous allez être déconnecté.');
       

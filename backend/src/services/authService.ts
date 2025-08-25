@@ -37,7 +37,8 @@ export class AuthService {
         email_verified_at: null, // Important
         role: 'user', // Rôle par défaut
         credits: 0, // Crédits par défaut
-        subscription_status: 'free' // Statut par défaut
+        subscription_status: 'free', // Statut par défaut
+        last_verification_email_sent_at: new Date(),
       })
       .returning('*');
 
@@ -72,10 +73,15 @@ export class AuthService {
       throw new Error('Invalid credentials.'); // Message générique pour la sécurité
     }
 
+    // 3. Vérifier que l'email a été vérifié
+    if (!user.email_verified_at) {
+      throw new Error('Email not verified');
+    }
+
     // Optionnel : Mettre à jour la date de dernière connexion
     // await db('users').where({ id: user.id }).update({ last_login: new Date() });
 
-    // 3. Générer et retourner le token JWT
+    // 4. Générer et retourner le token JWT
     const token = this.generateJWT(user);
 
     // Exclure le hash du mot de passe de la réponse
@@ -162,6 +168,14 @@ export class AuthService {
     }
 
     // 3. Si l'email n'est pas vérifié -> renvoyer un email de vérification
+    //    Appliquer un cooldown de 2 minutes entre les renvois
+    const now = Date.now();
+    const lastSent = user.last_verification_email_sent_at ? new Date(user.last_verification_email_sent_at).getTime() : 0;
+    const COOLDOWN_MS = 2 * 60 * 1000; // 2 minutes
+    if (lastSent && now - lastSent < COOLDOWN_MS) {
+      // Cooldown actif: ne rien envoyer, mais répondre comme si c'était OK
+      return true;
+    }
     let verificationToken = user.verification_token as unknown as string | null;
     const tokenExpired = !user.verification_token_expires_at || new Date() > new Date(user.verification_token_expires_at);
     if (!verificationToken || tokenExpired) {
@@ -177,6 +191,8 @@ export class AuthService {
 
     const verifyUrl = `${config.server.backendUrl}/api/auth/verify-email/${verificationToken}`;
     await this.sendVerificationEmail(user, verificationToken!);
+    // Mettre à jour l'horodatage du dernier envoi
+    await db('users').where({ id: user.id }).update({ last_verification_email_sent_at: new Date() });
     return true;
   }
 
@@ -222,3 +238,4 @@ export class AuthService {
     );
   }
 }
+

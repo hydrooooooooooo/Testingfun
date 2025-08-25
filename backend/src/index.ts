@@ -3,6 +3,8 @@ import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { errorHandler, securityHeaders, corsForStripeWebhook, requestLogger, corsMiddleware } from './middlewares';
+import { cookieParser } from './middlewares/cookies';
+import { csrfProtect } from './middlewares/csrf';
 import { routes } from './routes';
 import { logger } from './utils';
 import { config } from './config/config';
@@ -15,8 +17,9 @@ const port = config.server.port;
 
 // Security middleware
 app.use(helmet({
-  contentSecurityPolicy: false, // Désactiver CSP pour le développement
-  crossOriginEmbedderPolicy: false // Désactiver COEP pour le développement
+  // En dev, on assouplit; en prod, Helmet met les en-têtes par défaut (CSP minimale côté custom middleware)
+  contentSecurityPolicy: config.server.isDev ? false : undefined,
+  crossOriginEmbedderPolicy: config.server.isDev ? false : undefined,
 }));
 app.use(securityHeaders);
 app.use(corsForStripeWebhook);
@@ -28,23 +31,36 @@ app.use(morgan('dev'));
 app.use(corsMiddleware);
 app.use(requestLogger);
 
+// Rate limiting pour endpoints sensibles
+import { apiLimiter } from './middlewares/rateLimiter';
+app.use('/api/auth', apiLimiter);
+app.use('/api/payment', apiLimiter);
+app.use('/api/export', apiLimiter);
+
 // Special handling for Stripe webhook routes (support both paths for compatibilité)
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));
 app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
 
+// Cookies for all other routes
+app.use(cookieParser);
 // Body parsing middleware for all other routes
 app.use(express.json());
+// CSRF protection for state-changing requests
+app.use(csrfProtect);
 
 // Main routes
 app.use('/api', routes);
 
-// Health check endpoint
+// Health check endpoint (limité en production)
 app.get('/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'ok', 
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
-  });
+  if (config.server.isDev) {
+    return res.status(200).json({ 
+      status: 'ok', 
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'development'
+    });
+  }
+  return res.status(200).json({ status: 'ok' });
 });
 
 // Error handling middleware
@@ -67,21 +83,21 @@ const server = app.listen(port, () => {
   logger.info(`Health check available at http://localhost:${port}/health`);
   
   // Afficher toutes les routes enregistrées de manière récursive
-  logger.info('Registered routes:');
-  function printRoutes(stack: any[], parentPath: string) {
-    stack.forEach((layer) => {
-      if (layer.route) {
-        const methods = Object.keys(layer.route.methods).join(', ').toUpperCase();
-        logger.info(`  ${methods} ${parentPath}${layer.route.path}`);
-      } else if (layer.name === 'router' && layer.handle.stack) {
-        // C'est un routeur, on explore ses routes
-        // On essaie de reconstruire le chemin du sous-routeur
-        const newParentPath = parentPath + (layer.regexp.source.replace(/\//g, '/').replace('(?:\?.*)?$', '').replace('^', '').slice(0, -1) || '');
-        printRoutes(layer.handle.stack, newParentPath);
-      }
-    });
+  if (config.server.isDev) {
+    logger.info('Registered routes:');
+    function printRoutes(stack: any[], parentPath: string) {
+      stack.forEach((layer) => {
+        if (layer.route) {
+          const methods = Object.keys(layer.route.methods).join(', ').toUpperCase();
+          logger.info(`  ${methods} ${parentPath}${layer.route.path}`);
+        } else if (layer.name === 'router' && layer.handle.stack) {
+          const newParentPath = parentPath + (layer.regexp.source.replace(/\//g, '/').replace('(?:\\?.*)?$', '').replace('^', '').slice(0, -1) || '');
+          printRoutes(layer.handle.stack, newParentPath);
+        }
+      });
+    }
+    printRoutes(app._router.stack, '');
   }
-  printRoutes(app._router.stack, '');
 });
 
 // Gestion de l'arrêt du serveur

@@ -32,7 +32,8 @@ export const downloadSessionData = async (req: AuthenticatedRequest, res: Respon
       return res.status(404).json({ message: 'Session not found or access denied.' });
     }
 
-    if (!session.isPaid) {
+    const isTrial = !!(session as any).is_trial;
+    if (!session.isPaid && !isTrial) {
       return res.status(402).json({ message: 'Payment is required for this session.' });
     }
 
@@ -76,6 +77,16 @@ export const downloadSessionData = async (req: AuthenticatedRequest, res: Respon
     res.setHeader('Content-Type', contentType);
     res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
     res.send(fileBuffer);
+
+    // If this was a trial download, consume the trial so it can't be reused
+    if (isTrial) {
+      try {
+        await sessionService.updateSession(sessionId, { is_trial: false });
+        logger.info(`Trial consumed for session ${sessionId}, flag is_trial set to false`);
+      } catch (e) {
+        logger.warn(`Failed to disable is_trial for session ${sessionId}`);
+      }
+    }
 
     logger.info(`Successfully sent file ${fileName} for session ${sessionId}`);
 

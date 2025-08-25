@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import api from '@/services/api';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -13,30 +13,14 @@ interface Payment {
 }
 
 export default function PaymentHistory() {
-  const { token } = useAuth();
   const [payments, setPayments] = useState<Payment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPayments = async () => {
-      if (!token) {
-        setIsLoading(false);
-        return;
-      }
-
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/payments`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Erreur lors de la récupération des paiements.');
-        }
-
-        const data = await response.json();
+        const { data } = await api.get('/user/payments');
         setPayments(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Une erreur inconnue est survenue.');
@@ -46,7 +30,7 @@ export default function PaymentHistory() {
     };
 
     fetchPayments();
-  }, [token]);
+  }, []);
 
   if (isLoading) {
     return <div>Chargement de l'historique des paiements...</div>;

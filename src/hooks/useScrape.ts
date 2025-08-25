@@ -55,7 +55,14 @@ export function useScrape(initialSessionId?: string) {
     const initializePacks = async () => {
       try {
         const fetchedPacks = await getPacks();
-        const formattedPacks = fetchedPacks.map(p => ({ ...p, id: p.id.toString() }));
+        // Normaliser les champs snake_case du backend vers camelCase attendus côté front
+        const formattedPacks = fetchedPacks.map((p: any) => ({
+          ...p,
+          id: p.id?.toString?.() ?? p.id,
+          nbDownloads: p.nbDownloads ?? p.nb_downloads,
+          priceLabel: p.priceLabel ?? p.price_label,
+          stripePriceId: p.stripePriceId ?? p.stripe_price_id,
+        }));
         setPacks(formattedPacks);
 
         const packIdFromUrl = searchParams.get('packId');

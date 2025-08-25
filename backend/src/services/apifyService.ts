@@ -56,9 +56,27 @@ export class ApifyService {
       item.desc = 'Description non disponible';
     }
     
-    // Valider l'URL de l'image
+    // Nettoyer et limiter les images (max 3) et synchroniser le champ image principal
+    const asArray = (arr: any) => Array.isArray(arr) ? arr : [];
+    const rawImages: string[] = asArray(item.images);
+    let cleanedImages = rawImages
+      .filter((u) => typeof u === 'string' && u.length > 0)
+      .map((u) => {
+        if (u.startsWith('//')) return 'https:' + u;
+        if (u.startsWith('/')) return '';
+        return u;
+      })
+      .filter((u) => u.startsWith('http'));
+    // Dédupliquer
+    cleanedImages = Array.from(new Set(cleanedImages)).slice(0, 3);
+    item.images = cleanedImages;
+    // Valider l'URL de l'image principale
     if (item.image && !item.image.startsWith('http')) {
       item.image = '';
+    }
+    // Si pas d'image principale, prendre la première de la liste
+    if ((!item.image || item.image === '') && cleanedImages.length > 0) {
+      item.image = cleanedImages[0];
     }
     
     return item;
@@ -111,12 +129,44 @@ export class ApifyService {
       logger.info(`Configuration du scraper avec limite de ${resultsLimit} résultats`);
       logger.info('Configuration du scraper', { input });
 
-      // Lancer l'acteur en mode asynchrone
-      const runResult = await apifyClient.actor(actorId).start(input, {
+      // Préparer webhook pour fin de run (succès/échec)
+      // 1) Privilégier APIFY_WEBHOOK_URL si défini (doit être https public)
+      // 2) Sinon, utiliser BACKEND_URL uniquement s'il est en https
+      const explicitWebhookBase = process.env.APIFY_WEBHOOK_URL || '';
+      const backendUrl = config.server.backendUrl || '';
+      const isHttps = (u: string) => typeof u === 'string' && /^https:\/\//i.test(u);
+      const chosenBase = isHttps(explicitWebhookBase)
+        ? explicitWebhookBase
+        : (isHttps(backendUrl) ? backendUrl : '');
+      const hasWebhook = chosenBase.length > 0;
+      const webhookUrl = hasWebhook ? `${chosenBase.replace(/\/$/, '')}/api/scrape/webhook` : '';
+      const payloadTemplate = `{"sessionId":"${sessionId}","resource":{{resource}},"eventData":{{eventData}}}`;
+
+      const startOptions: any = {
         memory: 2048,
         build: 'latest',
-        waitForFinish: 10, // Attendre seulement 10 secondes pour le démarrage
-      });
+        waitForFinish: 30, // Attendre un peu plus pour capter les runs rapides
+      };
+      if (hasWebhook) {
+        startOptions.webhooks = [
+          {
+            eventTypes: [
+              'ACTOR.RUN.SUCCEEDED',
+              'ACTOR.RUN.FAILED',
+              'ACTOR.RUN.TIMED_OUT',
+              'ACTOR.RUN.ABORTED',
+            ],
+            requestUrl: webhookUrl,
+            payloadTemplate,
+            idempotencyKey: `sess_${sessionId}`,
+          } as any,
+        ];
+      } else {
+        logger.warn('Skipping Apify webhook registration (no https endpoint). Set APIFY_WEBHOOK_URL=https://... or BACKEND_URL=https://...', { backendUrl, explicitWebhookBase });
+      }
+
+      // Lancer l'acteur en mode asynchrone
+      const runResult = await apifyClient.actor(actorId).start(input, startOptions);
       
       // Convert to the expected structure
       const run = {
@@ -128,7 +178,8 @@ export class ApifyService {
       logger.info(`APIFY job started successfully:`, { 
         runId: run.id, 
         datasetId: run.defaultDatasetId,
-        status: run.status 
+        status: run.status, 
+        webhookUrl: hasWebhook ? webhookUrl : null
       });
 
       // Enregistrer l'URL dans la session
@@ -149,15 +200,25 @@ export class ApifyService {
   /**
    * Get the status of a scraping job
    */
-  async getRunStatus(actorRunId: string): Promise<{ status: string; progress: number }> {
+  async getRunStatus(actorRunId: string): Promise<{ status: string; progress: number; startedAt?: string; finishedAt?: string; runtimeMs?: number }> {
     try {
       const run = await apifyClient.run(actorRunId).get();
       
       let progress = 0;
       let status = 'UNKNOWN';
+      let startedAt: string | undefined;
+      let finishedAt: string | undefined;
+      let runtimeMs: number | undefined;
       
       if (run && run.status) {
         status = run.status;
+        if (run.startedAt) startedAt = run.startedAt as unknown as string;
+        if (run.finishedAt) finishedAt = run.finishedAt as unknown as string;
+        if (run.startedAt) {
+          const start = new Date(run.startedAt).getTime();
+          const end = run.finishedAt ? new Date(run.finishedAt as unknown as string).getTime() : Date.now();
+          runtimeMs = Math.max(0, end - start);
+        }
         
         if (status === 'SUCCEEDED') {
           progress = 100;
@@ -171,7 +232,10 @@ export class ApifyService {
       
       return {
         status,
-        progress
+        progress,
+        startedAt,
+        finishedAt,
+        runtimeMs,
       };
     } catch (error) {
       logger.error(`Error getting run status for ${actorRunId}:`, error);
@@ -324,40 +388,43 @@ export class ApifyService {
       description = typeof item.description === 'string' ? item.description : '';
     }
     
-    // 4. Extraction de l'image principale - Version corrigée
+    // 4. Extraction d'images (jusqu'à 3) et de l'image principale
     let imageUrl = '';
+    const images: string[] = [];
+    // Image principale
     if (item.primary_listing_photo?.listing_image?.uri) {
-      imageUrl = item.primary_listing_photo.listing_image.uri;
+      images.push(item.primary_listing_photo.listing_image.uri);
     } else if (item.primary_listing_photo?.image?.uri) {
-      imageUrl = item.primary_listing_photo.image.uri;
-    } else if (item.listing_photos && item.listing_photos.length > 0 && item.listing_photos[0].image?.uri) {
-      imageUrl = item.listing_photos[0].image.uri;
-    } else if (item.imageUrl && typeof item.imageUrl === 'string') {
-      imageUrl = item.imageUrl;
-    } else if (item.image) {
-      if (typeof item.image === 'string') {
-        imageUrl = item.image;
-      } else if (typeof item.image === 'object' && item.image !== null && 'uri' in item.image) {
-        imageUrl = (item.image as { uri: string }).uri;
+      images.push(item.primary_listing_photo.image.uri);
+    }
+    // Autres photos
+    if (Array.isArray(item.listing_photos)) {
+      for (const p of item.listing_photos) {
+        const uri = p?.image?.uri;
+        if (typeof uri === 'string') images.push(uri);
       }
     }
-    
-    // S'assurer que l'URL de l'image est complète
-    if (imageUrl && !imageUrl.startsWith('http')) {
-      if (imageUrl.startsWith('//')) {
-        imageUrl = 'https:' + imageUrl;
-      } else if (imageUrl.startsWith('/')) {
-        const listingUrl = item.listingUrl || item.url || item.link || item.href;
-        if (listingUrl && typeof listingUrl === 'string') {
-          try {
-            const urlObj = new URL(listingUrl);
-            imageUrl = `${urlObj.protocol}//${urlObj.hostname}${imageUrl}`;
-          } catch (e) {
-            // En cas d'erreur, laisser l'URL telle quelle
-          }
-        }
+    // Champs alternatifs simples
+    if (typeof item.imageUrl === 'string') images.push(item.imageUrl);
+    if (item.image) {
+      if (typeof item.image === 'string') images.push(item.image);
+      else if (typeof item.image === 'object' && item.image !== null && 'uri' in item.image) {
+        images.push((item.image as { uri: string }).uri);
       }
     }
+    // Déduplication simple tout en préservant l'ordre, et nettoyage basique
+    const seen = new Set<string>();
+    const fixedImages: string[] = [];
+    for (let u of images) {
+      if (typeof u !== 'string' || u.length === 0) continue;
+      if (u.startsWith('//')) u = 'https:' + u;
+      if (!seen.has(u)) {
+        seen.add(u);
+        fixedImages.push(u);
+      }
+      if (fixedImages.length >= 3) break;
+    }
+    imageUrl = fixedImages[0] || '';
     
     // 5. Extraction de la localisation - Version corrigée
     let locationStr = 'Unknown';
@@ -410,6 +477,7 @@ export class ApifyService {
       price: price,
       desc: description || 'No Description',
       image: imageUrl,
+      images: fixedImages,
       location: locationStr,
       url: url,
       postedAt: postedAt

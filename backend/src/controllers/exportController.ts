@@ -3,10 +3,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { sessionService, Session, SessionStatus } from '../services/sessionService';
 import { exportService } from '../services/exportService';
 import { ApiError } from '../middlewares/errorHandler';
-import { logger } from '../utils/logger';
+import { logger, audit } from '../utils/logger';
+import { alertService } from '../services/alertService';
 import fs from 'fs';
 import path from 'path';
 import { config } from '../config/config';
+import jwt from 'jsonwebtoken';
+import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 
 export class ExportController {
   /**
@@ -21,7 +24,7 @@ export class ExportController {
       // Accepter les deux formats de paramètres (sessionId et session_id) pour plus de compatibilité
       const sessionIdParam = req.query.sessionId || req.query.session_id;
       const format = req.query.format as string || 'excel';
-      const downloadToken = req.query.token as string || null;
+      const downloadToken = (req.query.token as string) || null;
       const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
       const userAgent = req.headers['user-agent'] || 'unknown';
       
@@ -69,9 +72,27 @@ export class ExportController {
         }
       }
       
-      // Vérifier si la session est payée, temporaire, ou si un token de téléchargement valide est fourni
-      const hasValidToken = downloadToken && session.downloadToken === downloadToken;
-      const isPaid = session.isPaid || isTemporarySession || hasValidToken;
+      // Vérifier le token JWT signé s'il est fourni
+      let hasValidToken = false;
+      let tokenUserId: number | null = null;
+      if (downloadToken) {
+        try {
+          const payload = jwt.verify(downloadToken, config.api.jwtSecret as string) as { sessionId: string; userId?: number };
+          hasValidToken = payload.sessionId === sessionId;
+          tokenUserId = payload.userId ?? null;
+        } catch (e) {
+          logger.warn(`[${requestId}] Token JWT invalide pour session ${sessionId}`);
+          hasValidToken = false;
+        }
+      }
+
+      // Vérifier ownership si authentifié
+      const reqUserId = (req as AuthenticatedRequest).user?.id;
+      const isOwner = !!reqUserId && !!session?.user_id && Number(session.user_id) === Number(reqUserId);
+
+      // Conditions d'autorisation
+      const isTrial = !!(session as any).is_trial;
+      const isPaid = !!session.isPaid || isTemporarySession || hasValidToken || isTrial;
       
       // Log pour le débogage des tokens
       if (downloadToken) {
@@ -82,7 +103,18 @@ export class ExportController {
       
       if (!isPaid) {
         logger.warn(`[${requestId}] Tentative d'exportation sans paiement pour la session ${sessionId}`);
+        audit('export.denied_unpaid', { sessionId, ip: clientIp, ua: userAgent, userId: reqUserId });
         throw new ApiError(403, 'Payment required to export data');
+      }
+
+      // Si pas de token valide, exiger ownership pour empêcher accès par simple ID
+      if (!hasValidToken && !isTemporarySession) {
+        if (!isOwner) {
+          logger.warn(`[${requestId}] Tentative d'exportation non propriétaire pour session ${sessionId}`);
+          audit('export.denied_not_owner', { sessionId, ip: clientIp, ua: userAgent, userId: reqUserId });
+          await alertService.notify('export.denied_not_owner', { sessionId, ip: clientIp, ua: userAgent, userId: reqUserId });
+          throw new ApiError(403, 'Not authorized to export this session');
+        }
       }
 
       // Vérifier également que le scraping est terminé
@@ -96,9 +128,11 @@ export class ExportController {
       // pour éviter les téléchargements multiples avec le même token (optionnel)
       if (hasValidToken) {
         logger.info(`[${requestId}] Téléchargement autorisé via token pour la session ${sessionId}`);
-        // On pourrait réinitialiser le token après utilisation si on veut limiter à un seul téléchargement
-        await sessionService.updateSession(sessionId, { downloadToken: undefined });
-        logger.info(`[${requestId}] Token de téléchargement effacé pour la session ${sessionId}`);
+        // Si ancien schéma, on efface le token stocké simple si présent
+        if (session.downloadToken) {
+          await sessionService.updateSession(sessionId, { downloadToken: undefined });
+          logger.info(`[${requestId}] Ancien token de téléchargement effacé pour la session ${sessionId}`);
+        }
       }
       
       // Vérifier si la session a un datasetId (sauf pour les sessions temporaires)
@@ -157,6 +191,16 @@ export class ExportController {
 
       // Configurer les en-têtes CORS et envoyer le fichier
       this.sendFileWithHeaders(res, buffer, filename, contentType, requestId);
+      audit('export.success', { sessionId, userId: reqUserId ?? tokenUserId, format, size: buffer.length });
+      // Si c'est un export de trial, désactiver le flag pour empêcher d'autres téléchargements gratuits
+      if (isTrial) {
+        try {
+          await sessionService.updateSession(sessionId, { is_trial: false });
+          logger.info(`[${requestId}] Trial consommé: désactivation du flag is_trial pour la session ${sessionId}`);
+        } catch (e) {
+          logger.warn(`[${requestId}] Échec de la désactivation du flag is_trial pour la session ${sessionId}`);
+        }
+      }
     } catch (error) {
       // Log détaillé de l'erreur pour faciliter le débogage
       logger.error(`[${requestId}] Erreur lors de la requête d'exportation: ${error instanceof Error ? error.message : String(error)}`);
@@ -284,6 +328,15 @@ export class ExportController {
       }
       
       logger.info(`Récupération du fichier de backup pour la session ${sessionId}`);
+
+      // Ownership check requis (route protégée par protect)
+      const session = await sessionService.getSession(sessionId);
+      const reqUserId = (req as AuthenticatedRequest).user?.id;
+      if (!session || !reqUserId || Number(session.user_id) !== Number(reqUserId)) {
+        audit('backup.denied_not_owner', { sessionId, userId: reqUserId });
+        await alertService.notify('backup.denied_not_owner', { sessionId, userId: reqUserId });
+        throw new ApiError(403, 'Not authorized to access this backup');
+      }
       
       // Construire le chemin du fichier de backup
       const backupDir = path.join(__dirname, '../../data/backups');
@@ -309,6 +362,37 @@ export class ExportController {
     }
   }
 
+  // === Helpers: filename sanitation and encoding ===
+  private sanitizeFilename(name: string): string {
+    if (!name || typeof name !== 'string') return 'download.xlsx';
+    // Trim and remove leading/trailing dots or spaces
+    let out = name.trim().replace(/^[\.\s]+|[\.\s]+$/g, '');
+    // Replace forbidden/suspicious characters
+    out = out.replace(/[\\/:*?"<>|\n\r\t]/g, '-');
+    // Collapse multiple spaces, dashes, underscores
+    out = out.replace(/\s+/g, ' ').replace(/[\-_]{2,}/g, '_');
+    // Ensure an extension exists (keep original if present)
+    if (!/\.[A-Za-z0-9]+$/.test(out)) {
+      out = out + '.xlsx';
+    }
+    return out;
+  }
+
+  private toAsciiFallback(name: string): string {
+    const match = name.match(/^(.*?)(\.[A-Za-z0-9]+)$/);
+    const base = match ? match[1] : name;
+    const ext = match ? match[2] : '';
+    let ascii = base.normalize('NFKD').replace(/[^\x20-\x7E]/g, '_');
+    ascii = ascii.replace(/\s+/g, '_').replace(/[^A-Za-z0-9._-]/g, '_');
+    if (!ascii) ascii = 'download';
+    return `${ascii}${ext}`;
+  }
+
+  private encodeRFC5987(name: string): string {
+    return encodeURIComponent(name)
+      .replace(/[!'()*]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase());
+  }
+
   /**
    * Configure les en-têtes CORS et envoie le fichier
    */
@@ -327,7 +411,12 @@ export class ExportController {
     
     // Définir les en-têtes pour le téléchargement du fichier
     res.setHeader('Content-Type', contentType);
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    // Sanitize filename and provide RFC5987-compliant header for maximum compatibility
+    const safeFilename = this.sanitizeFilename(filename);
+    const asciiFallback = this.toAsciiFallback(safeFilename);
+    const encodedFilename = this.encodeRFC5987(safeFilename);
+    // Include both filename (ASCII fallback, unquoted per RFC6266 recommendations) and filename* (UTF-8)
+    res.setHeader('Content-Disposition', `attachment; filename=${asciiFallback}; filename*=UTF-8''${encodedFilename}`);
     res.setHeader('Content-Length', buffer.length);
     
     // En-têtes de cache pour éviter les problèmes avec les navigateurs

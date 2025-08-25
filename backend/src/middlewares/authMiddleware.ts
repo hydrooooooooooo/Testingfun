@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
+import { audit } from '../utils/logger';
 
 // Étendre le type Request de Express pour inclure notre propriété `user`
 export interface AuthenticatedRequest extends Request {
@@ -12,30 +13,34 @@ export interface AuthenticatedRequest extends Request {
 }
 
 export const protect = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  let token;
+  let token: string | undefined;
 
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    try {
-      // Récupérer le token de l'en-tête (Bearer TOKEN)
-      token = req.headers.authorization.split(' ')[1];
+  // 1) Try cookie first
+  token = (req as any).cookies?.['access_token'];
 
-      // Vérifier le token
-      const decoded = jwt.verify(token, config.api.jwtSecret as string) as { userId: number; email: string; role: string };
+  // 2) Fallback to Authorization header
+  if (!token && req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
 
-      // Attacher le payload de l'utilisateur à la requête en mappant correctement les champs
-      req.user = { 
-        id: decoded.userId, // Mapper userId vers id
-        email: decoded.email, 
-        role: decoded.role 
-      };
-
-      next();
-    } catch (error) {
-      console.error('Token verification failed:', error);
-      return res.status(401).json({ message: 'Not authorized, token failed' });
-    }
-  } else {
+  if (!token) {
+    audit('auth.missing_token', { path: req.path, ip: req.ip });
     return res.status(401).json({ message: 'Not authorized, no token' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, config.api.jwtSecret as string) as { userId: number; email: string; role: string };
+    req.user = {
+      id: decoded.userId,
+      email: decoded.email,
+      role: decoded.role,
+    };
+
+    next();
+  } catch (error) {
+    console.error('Token verification failed:', error);
+    audit('auth.token_invalid', { path: req.path, ip: req.ip });
+    return res.status(401).json({ message: 'Not authorized, token failed' });
   }
 };
 
@@ -43,6 +48,7 @@ export const protect = (req: AuthenticatedRequest, res: Response, next: NextFunc
 export const restrictTo = (...roles: string[]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     if (!req.user || !roles.includes(req.user.role)) {
+      audit('auth.forbidden_role', { path: req.path, ip: req.ip, rolesRequired: roles, user: req.user?.id });
       return res.status(403).json({ message: 'You do not have permission to perform this action' });
     }
     next();

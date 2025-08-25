@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,6 +22,7 @@ import {
 } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/context/AuthContext';
+import api from '@/services/api';
 
 // Schéma de validation pour le formulaire de connexion
 const formSchema = z.object({
@@ -32,6 +34,8 @@ export default function LoginPage() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [unverified, setUnverified] = useState(false);
+  const [lastEmail, setLastEmail] = useState<string>('');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,19 +47,9 @@ export default function LoginPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Une erreur est survenue lors de la connexion.');
-      }
+      setUnverified(false);
+      setLastEmail(values.email);
+      const { data } = await api.post('/auth/login', values);
 
       // La logique de stockage est maintenant gérée par le contexte
       login(data.token); 
@@ -67,8 +61,11 @@ export default function LoginPage() {
 
       navigate('/dashboard');
 
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Une erreur inconnue est survenue.';
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        setUnverified(true);
+      }
+      const errorMessage = error?.response?.data?.message || (error instanceof Error ? error.message : 'Une erreur inconnue est survenue.');
       toast({
         variant: 'destructive',
         title: 'Erreur de connexion',
@@ -119,6 +116,11 @@ export default function LoginPage() {
                 <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting ? 'Connexion en cours...' : 'Se connecter'}
                 </Button>
+                {unverified && (
+                  <div className="text-center text-sm text-amber-600 dark:text-amber-400">
+                    Votre e-mail n’est pas vérifié. Veuillez consulter votre boîte de réception pour valider votre compte.
+                  </div>
+                )}
                 <div className="text-center">
                   <Link to="/forgot-password" className="text-sm underline">
                     Mot de passe oublié ?
@@ -138,3 +140,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

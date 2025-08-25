@@ -6,14 +6,12 @@ import { config } from '../config/config';
  * Middleware to add security headers
  */
 export const securityHeaders = (req: Request, res: Response, next: NextFunction) => {
-  // Pour les routes d'export et preview, on n'applique pas les en-têtes de sécurité restrictifs
-  if (req.path.startsWith('/api/export') || req.path.startsWith('/api/preview')) {
-    // Uniquement l'en-tête de base pour éviter le reniflage de type MIME
+  // Pour export/preview: en dev on assouplit; en prod on garde des headers sûrs
+  const isExportOrPreview = req.path.startsWith('/api/export') || req.path.startsWith('/api/preview');
+  if (isExportOrPreview && config.server.isDev) {
+    // Dev: limiter au minimum
     res.setHeader('X-Content-Type-Options', 'nosniff');
-    
-    // Log pour débogage
-    logger.info(`Désactivation des en-têtes de sécurité restrictifs pour ${req.path}`);
-    
+    logger.info(`Désactivation partielle des en-têtes de sécurité (dev) pour ${req.path}`);
     next();
     return;
   }
@@ -39,8 +37,13 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
   
-  // CSP par défaut (plus permissif pour images/requêtes externes)
-  res.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' data: https:; connect-src 'self' https:");
+  // CSP par défaut (plus stricte en production)
+  if (config.server.isDev) {
+    res.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' data: https:; connect-src 'self' https:");
+  } else {
+    // Pas de inline script/style en prod
+    res.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'");
+  }
   
   next();
 };
@@ -58,8 +61,17 @@ export const corsForStripeWebhook = (req: Request, res: Response, next: NextFunc
   
   // Configuration CORS spéciale pour les routes d'export et preview
   if (req.path.startsWith('/api/export') || req.path.startsWith('/api/preview') || req.path.startsWith('/api/verify-payment')) {
-    // Pour les exports, previews et vérification de paiement, on autorise toutes les origines et en-têtes
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    const allowedOrigins = config.cors.allowedOrigins;
+    const origin = req.headers.origin as string | undefined;
+    if (config.server.isDev) {
+      res.setHeader('Access-Control-Allow-Origin', origin || '*');
+    } else {
+      if (origin && allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+      } else if (allowedOrigins[0]) {
+        res.setHeader('Access-Control-Allow-Origin', allowedOrigins[0]);
+      }
+    }
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, HEAD');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key, Cache-Control, Pragma, Expires, Origin, X-Requested-With, Accept');
     res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition, Content-Type, Content-Length');
@@ -94,7 +106,9 @@ export const corsForStripeWebhook = (req: Request, res: Response, next: NextFunc
   
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  if (!config.server.isDev) {
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
   
   // Handle preflight requests
   if (req.method === 'OPTIONS') {

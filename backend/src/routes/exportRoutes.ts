@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { exportController } from '../controllers/exportController';
 import { query, param } from 'express-validator';
 import { validate } from '../middlewares/validationMiddleware';
+import { protect } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -19,6 +20,7 @@ router.get(
     query('format').optional().isIn(['excel', 'csv']).withMessage('Format must be excel or csv'),
   ],
   validate,
+  protect,
   exportController.exportData.bind(exportController)
 );
 
@@ -33,6 +35,7 @@ router.get(
     param('sessionId').isString().withMessage('Session ID is required'),
   ],
   validate,
+  protect,
   exportController.getBackupData.bind(exportController)
 );
 

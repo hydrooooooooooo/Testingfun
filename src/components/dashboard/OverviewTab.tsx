@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart2, Download, CreditCard, Activity as ActivityIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { UserData, Activity } from '@/types';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useApi } from '@/hooks/useApi';
+import { useDashboard } from '@/context/DashboardContext';
 
 interface OverviewTabProps {
   userData: UserData | null;
@@ -15,6 +19,69 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ userData }) => {
   }
 
   const { stats, payments } = userData;
+  const { startTrialScrape, getScrapeResults, getExportUrl } = useApi();
+  const { fetchDashboardData } = useDashboard();
+  const [trialUrl, setTrialUrl] = useState('');
+  const [trialLoading, setTrialLoading] = useState(false);
+  const [trialMsg, setTrialMsg] = useState<string | null>(null);
+  const [trialSessionId, setTrialSessionId] = useState<string | null>(null);
+  const pollingRef = useRef<number | null>(null);
+
+  const onStartTrial = async () => {
+    setTrialMsg(null);
+    if (!trialUrl || trialUrl.length < 8) {
+      setTrialMsg('Veuillez entrer une URL valide.');
+      return;
+    }
+    setTrialLoading(true);
+    try {
+      const res = await startTrialScrape(trialUrl);
+      setTrialSessionId(res.sessionId);
+      setTrialMsg(`Essai lancé ! ID de session: ${res.sessionId}`);
+    } catch (e: any) {
+      setTrialMsg(e.message || "Impossible de lancer l'essai gratuit");
+    } finally {
+      setTrialLoading(false);
+    }
+  };
+
+  // Poll trial session and auto-download excel when completed
+  useEffect(() => {
+    if (!trialSessionId) return;
+    if (pollingRef.current) window.clearInterval(pollingRef.current);
+    pollingRef.current = window.setInterval(async () => {
+      try {
+        const res = await getScrapeResults(trialSessionId);
+        if (res?.status && ['finished', 'COMPLETED', 'SUCCEEDED'].includes(String(res.status).toUpperCase())) {
+          // Stop polling
+          if (pollingRef.current) {
+            window.clearInterval(pollingRef.current);
+            pollingRef.current = null;
+          }
+          // Refresh dashboard so Files tab shows the trial file
+          fetchDashboardData();
+          setTrialMsg('Essai terminé. Préparation du téléchargement...');
+          // Auto-download Excel
+          const url = getExportUrl(trialSessionId, 'excel');
+          const link = document.createElement('a');
+          link.href = url;
+          link.target = '_blank';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      } catch (err) {
+        console.error('Erreur de polling trial:', err);
+      }
+    }, 3000);
+
+    return () => {
+      if (pollingRef.current) {
+        window.clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
+    };
+  }, [trialSessionId, getScrapeResults, getExportUrl, fetchDashboardData]);
   // Pour éviter les soucis de typage avec les sessions (downloads), on affiche ici
   // l'activité récente basée sur les paiements uniquement.
   const recentActivity = payments
@@ -26,6 +93,29 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ userData }) => {
 
   return (
     <div className="space-y-6 pt-6">
+      {userData.user && userData.user.trial_used !== true && (
+        <Card className="border-primary/30">
+          <CardHeader>
+            <CardTitle>Essai gratuit – Scrape 10 annonces</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-3 md:flex-row md:items-center">
+              <Input
+                placeholder="Collez l'URL du marketplace (ex: https://www.facebook.com/marketplace/...)"
+                value={trialUrl}
+                onChange={(e) => setTrialUrl(e.target.value)}
+                className="md:flex-1"
+              />
+              <Button onClick={onStartTrial} disabled={trialLoading}>
+                {trialLoading ? 'Démarrage…' : 'Lancer l\'essai'}
+              </Button>
+            </div>
+            {trialMsg && (
+              <p className="text-sm mt-2 text-muted-foreground">{trialMsg}</p>
+            )}
+          </CardContent>
+        </Card>
+      )}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">

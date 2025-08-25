@@ -62,6 +62,15 @@ export const config = {
     level: process.env.LOG_LEVEL || 'info',
     format: process.env.LOG_FORMAT || 'json',
   },
+
+  // Alerting configuration (Slack and/or Email)
+  alerting: {
+    enabled: String(process.env.ALERTS_ENABLED || '').toLowerCase() === 'true',
+    slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
+    emailTo: process.env.ALERT_EMAIL_TO,
+    // Comma-separated list of events to alert on; defaults include critical ones
+    events: (process.env.ALERT_EVENTS || 'stripe.webhook_verification_failed,security.rate_limited,export.denied_not_owner').split(',').map(s => s.trim()).filter(Boolean),
+  },
   
   // CORS configuration
   cors: {

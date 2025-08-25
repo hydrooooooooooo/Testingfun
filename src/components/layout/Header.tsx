@@ -55,9 +55,14 @@ const Header = () => {
             <Button onClick={logout}>Déconnexion</Button>
           </>
         ) : (
-          <Link to="/login">
-            <Button>Se connecter</Button>
-          </Link>
+          <>
+            <Link to="/login">
+              <Button variant="outline">Se connecter</Button>
+            </Link>
+            <Link to="/register">
+              <Button>S'inscrire</Button>
+            </Link>
+          </>
         )}
       </div>
 
@@ -86,9 +91,14 @@ const Header = () => {
                   <Button onClick={() => { logout(); closeMenu(); }}>Déconnexion</Button>
                 </div>
               ) : (
-                <Link to="/login" onClick={closeMenu}>
-                  <Button className="w-full">Se connecter</Button>
-                </Link>
+                <div className="flex flex-col gap-4">
+                  <Link to="/login" onClick={closeMenu}>
+                    <Button variant="outline" className="w-full">Se connecter</Button>
+                  </Link>
+                  <Link to="/register" onClick={closeMenu}>
+                    <Button className="w-full">S'inscrire</Button>
+                  </Link>
+                </div>
               )}
             </nav>
           </SheetContent>

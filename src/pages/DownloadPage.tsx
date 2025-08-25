@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { PLANS } from "@/lib/plans";
 import { toast } from "@/hooks/use-toast";
 import { FileDown, Loader2, CheckCircle, ArrowLeft, Download, Mail, RotateCcw, Home } from "lucide-react";
-import axios from "axios";
+import api from "@/services/api";
 
 export default function DownloadPage() {
   const location = useLocation();
@@ -32,15 +32,8 @@ export default function DownloadPage() {
     setIsVerifying(true);
     setError('');
     try {
-      const token = localStorage.getItem('authToken');
-      if (!token) {
-        setError("Utilisateur non authentifié. Veuillez vous reconnecter.");
-        setIsVerifying(false);
-        return;
-      }
-      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/payment/verify-payment`, {
+      const response = await api.get(`/payment/verify-payment`, {
         params: { sessionId },
-        headers: { 'Authorization': `Bearer ${token}` },
       });
       if (response.data.isPaid) {
         setPaymentVerified(true);
@@ -71,10 +64,8 @@ export default function DownloadPage() {
     }
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('authToken');
-      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/sessions/${sessionId}/download`, {
+      const response = await api.get(`/sessions/${sessionId}/download`, {
         params: { format, token: downloadToken, pack_id: pack.id },
-        headers: { 'Authorization': `Bearer ${token}` },
         responseType: 'blob',
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
