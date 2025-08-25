@@ -19,7 +19,9 @@ export interface Session {
   actorRunId?: string;
   datasetId?: string;
   isPaid: boolean;
+  is_trial?: boolean;
   packId?: string;
+  url?: string;
   downloadUrl?: string;
   downloadToken?: string;
   totalItems?: number;

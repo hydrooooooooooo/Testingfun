@@ -67,9 +67,22 @@ const DashboardPage: React.FC = () => {
           <PaymentsTab payments={userData?.payments || []} />
         </TabsContent>
         <TabsContent value="files">
-          <FilesTab sessions={(userData.downloads && userData.downloads.length > 0)
-            ? userData.downloads
-            : (userData.sessions || []).filter(s => s.isPaid && s.status === 'completed')}
+          <FilesTab
+            sessions={(() => {
+              const sessions = userData.sessions || [];
+              const paidCompleted = sessions.filter(s => s.isPaid && s.status === 'completed');
+              const trialCompleted = sessions.filter(s => s.is_trial && s.status === 'completed');
+              const merged = [...paidCompleted];
+              for (const t of trialCompleted) {
+                if (!merged.find(p => p.id === t.id)) merged.push(t);
+              }
+              const downloads = (userData.downloads || []).filter(d => d.status === 'completed');
+              // Merge downloads too to be safe
+              for (const d of downloads) {
+                if (!merged.find(p => p.id === d.id)) merged.push(d);
+              }
+              return merged;
+            })()}
           />
         </TabsContent>
         <TabsContent value="settings">

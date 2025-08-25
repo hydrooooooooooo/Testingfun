@@ -159,13 +159,6 @@ Cordialement,
                   <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
                     <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="font-medium text-gray-900">ID Dataset</p>
-                      <p className="text-sm text-gray-600">Format: ds_xxxxxx (visible dans les résultats)</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <div>
                       <p className="font-medium text-gray-900">URL concernée</p>
                       <p className="text-sm text-gray-600">L'adresse que vous tentez de scraper</p>
                     </div>
@@ -297,11 +290,11 @@ Cordialement,
             <div className="space-y-4">
               <details className="bg-white rounded-xl p-4 cursor-pointer shadow-sm border border-gray-100">
                 <summary className="font-semibold text-gray-900 flex items-center justify-between">
-                  Où trouver mon ID scraping et Dataset ?
+                  Où trouver mon ID scraping ?
                   <ArrowRight className="w-4 h-4 text-gray-400" />
                 </summary>
                 <p className="text-gray-600 mt-3 text-sm leading-relaxed">
-                  Ces identifiants s'affichent automatiquement pendant et après l'extraction sur la page d'accueil. 
+                  Ces identifiants s'affichent automatiquement pendant et après l'extraction sur la page d'accueil et sur votre compte
                   Notez-les pour faciliter le support en cas de problème.
                 </p>
               </details>
@@ -325,17 +318,6 @@ Cordialement,
                 <p className="text-gray-600 mt-3 text-sm leading-relaxed">
                   Utilisez des filtres précis sur la plateforme source, évitez les URLs trop génériques 
                   et contactez-nous pour des conseils personnalisés selon votre secteur d'activité.
-                </p>
-              </details>
-              
-              <details className="bg-white rounded-xl p-4 cursor-pointer shadow-sm border border-gray-100">
-                <summary className="font-semibold text-gray-900 flex items-center justify-between">
-                  Mes crédits ont-ils une date d'expiration ?
-                  <ArrowRight className="w-4 h-4 text-gray-400" />
-                </summary>
-                <p className="text-gray-600 mt-3 text-sm leading-relaxed">
-                  Non, vos crédits d'extraction n'expirent jamais. Vous pouvez les utiliser à votre rythme, 
-                  quand vous en avez besoin.
                 </p>
               </details>
             </div>

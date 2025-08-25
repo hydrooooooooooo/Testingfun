@@ -152,5 +152,11 @@ router.post('/reset-password', authController.resetPassword);
  */
 router.get('/reset-password/:token', authController.resetPasswordPage);
 
+// CSRF token endpoint (frontend fetches token and sends it back in X-CSRF-Token header)
+router.get('/csrf-token', authController.csrfToken);
+
+// Logout clears auth and csrf cookies
+router.post('/logout', authController.logout);
+
 
 export default router;

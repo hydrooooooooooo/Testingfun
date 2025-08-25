@@ -105,7 +105,7 @@ export const getDashboardData = async (req: AuthenticatedRequest, res: Response)
       return res.status(401).json({ message: 'Utilisateur non authentifié.' });
     }
 
-    const user = await db('users').where({ id: userId }).select('id', 'name', 'email', 'created_at').first();
+    const user = await db('users').where({ id: userId }).select('id', 'name', 'email', 'created_at', 'trial_used').first();
     if (!user) {
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     }
@@ -120,6 +120,7 @@ export const getDashboardData = async (req: AuthenticatedRequest, res: Response)
         'created_at',
         'totalItems',
         'isPaid',
+        'is_trial',
         'downloadToken',
         'url'
       )

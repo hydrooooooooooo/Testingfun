@@ -1,24 +1,9 @@
 import { useState, useCallback } from 'react';
 import { Pack } from '@/lib/plans';
-import axios from 'axios';
+import api from '@/services/api';
 
-// API base URL - should be set in environment variables
+// API base URL (for building absolute URLs when needed)
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
-
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
 
 // Types pour les options de scraping APIFY
 interface ApifyScrapeOptions {
@@ -226,12 +211,7 @@ export function useApi() {
     console.log(`[Payment] Session ID: ${sessionId}`);
     console.log(`[Payment] Pack ID: ${packId}`);
     
-    const token = localStorage.getItem('token');
-    if (token) {
-      console.log('[Payment] Token trouvé dans localStorage:', token.substring(0, 30) + '...');
-    } else {
-      console.error('[Payment] ERREUR: Token non trouvé dans localStorage. L\'appel va échouer.');
-    }
+    // Auth is handled via httpOnly cookies; token in localStorage is no longer required
     // --- Fin Débogage ---
 
     try {
@@ -267,9 +247,9 @@ export function useApi() {
       console.log(`Vérification du paiement pour la session ${sessionId}`);
       
       try {
-        const response = await axios.get(`${API_BASE_URL}/payment/verify-payment`, {
+        const response = await api.get(`/payment/verify-payment`, {
           params: { sessionId },
-          timeout: 10000
+          timeout: 10000,
         });
         
         console.log('Réponse de vérification (route spécifique):', response.data);
@@ -285,9 +265,9 @@ export function useApi() {
       } catch (error) {
         console.warn('Erreur avec la route spécifique, essai avec la route générique:', error);
         
-        const fallbackResponse = await axios.get(`${API_BASE_URL}/verify-payment`, {
+        const fallbackResponse = await api.get(`/verify-payment`, {
           params: { sessionId },
-          timeout: 10000
+          timeout: 10000,
         });
         
         console.log('Réponse de vérification (route fallback):', fallbackResponse.data);
@@ -311,8 +291,12 @@ export function useApi() {
    * Get export URL
    */
   const getExportUrl = (sessionId: string, format: 'excel' | 'csv') => {
-    const token = localStorage.getItem('token');
-    return `${API_BASE_URL}/export/${format}?sessionId=${sessionId}&token=${token}`;
+    const fmt = format || 'excel';
+    // Backend route: GET /api/export?sessionId=...&format=excel
+    const url = new URL(`${API_BASE_URL}/export`);
+    url.searchParams.set('sessionId', sessionId);
+    url.searchParams.set('format', fmt);
+    return url.toString();
   };
 
   const getPacks = useCallback(async (): Promise<Pack[]> => {
@@ -330,6 +314,91 @@ export function useApi() {
     }
   }, []);
 
+  const searchAdminUsers = useCallback(async (q: string, limit = 20): Promise<Array<{ id: number; email: string }>> => {
+    try {
+      const response = await api.get('/admin/users', { params: { q, limit } });
+      return response.data?.data || response.data || [];
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors de la recherche utilisateurs';
+      setError(errorMessage);
+      return [];
+    }
+  }, []);
+
+  const getAdminReport = useCallback(async () => {
+    try {
+      const response = await api.get('/admin/report');
+      return response.data?.data || response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors du chargement du reporting admin';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, []);
+
+  const getAdminSearches = useCallback(async (
+    page = 1,
+    limit = 50,
+    params?: { from?: string; to?: string; userId?: number }
+  ) => {
+    try {
+      const response = await api.get('/admin/searches', { params: { page, limit, ...(params || {}) } });
+      return response.data?.data || response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors du chargement des recherches';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, []);
+
+  const getAdminAdvancedMetrics = useCallback(async () => {
+    try {
+      const response = await api.get('/admin/metrics-advanced');
+      return response.data?.data || response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors du chargement des métriques avancées';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, []);
+
+  const exportAdminSearchesCsv = useCallback(async (params?: { from?: string; to?: string; userId?: number }) => {
+    try {
+      const response = await api.get('/admin/searches/export', { params: params || {}, responseType: 'blob' });
+      const blob = new Blob([response.data], { type: 'text/csv;charset=utf-8;' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'searches.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors de l\'export CSV';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, []);
+
+  // Start a one-time free trial scrape (max 10 items)
+  const startTrialScrape = async (
+    url: string
+  ): Promise<{ sessionId: string; datasetId?: string; actorRunId?: string; isTrial: boolean }> => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.post(`/trial/scrape`, { url }, { timeout: 30000 });
+      return response.data?.data || response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || "Erreur lors du lancement de l'essai gratuit";
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return { 
     loading, 
     error, 
@@ -340,6 +409,12 @@ export function useApi() {
     cancelApifyRun,
     createPayment,
     getPacks,
-    getExportUrl 
+    getExportUrl,
+    getAdminReport,
+    getAdminSearches,
+    getAdminAdvancedMetrics,
+    exportAdminSearchesCsv,
+    searchAdminUsers,
+    startTrialScrape
   };
 }

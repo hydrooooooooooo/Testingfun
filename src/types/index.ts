@@ -39,6 +39,8 @@ export interface Session {
   downloadToken?: string;
   payment_intent_id?: string | null;
   url?: string;
+  // Trial flag for free trial sessions
+  is_trial?: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -48,6 +50,8 @@ export interface UserData {
     id: number;
     name: string;
     email: string;
+    // Indicates if the user has already consumed the one-time free trial
+    trial_used?: boolean;
     created_at: string;
   };
   stats: {

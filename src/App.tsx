@@ -18,15 +18,21 @@ import NotFound from "./pages/NotFound";
 import LoginPage from "./pages/LoginPage";
 import RequestPasswordResetPage from "./pages/RequestPasswordResetPage";
 import RegisterPage from "./pages/RegisterPage";
+import ResendVerificationPage from "./pages/ResendVerificationPage";
 import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
+import AdminDashboard from './pages/AdminDashboard';
+import VerifyEmailSuccess from './pages/VerifyEmailSuccess';
+import VerifyEmailError from './pages/VerifyEmailError';
 
 // Layouts
 import PublicLayout from './layouts/PublicLayout';
 import DashboardLayout from './layouts/DashboardLayout';
+import AdminLayout from './layouts/AdminLayout';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
 
 const queryClient = new QueryClient();
 
@@ -49,7 +55,10 @@ function App() {
                   <Route path="/models" element={<Models />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/resend-verification" element={<ResendVerificationPage />} />
                   <Route path="/forgot-password" element={<RequestPasswordResetPage />} />
+                  <Route path="/verify-email/success" element={<VerifyEmailSuccess />} />
+                  <Route path="/verify-email/error" element={<VerifyEmailError />} />
                 </Route>
 
                 {/* Protected Routes */}
@@ -59,6 +68,11 @@ function App() {
                   </Route>
                   <Route path="/profile" element={<DashboardLayout />}>
                     <Route index element={<ProfilePage />} />
+                  </Route>
+                  <Route element={<AdminRoute />}>
+                    <Route path="/admin" element={<AdminLayout />}>
+                      <Route index element={<AdminDashboard />} />
+                    </Route>
                   </Route>
                 </Route>
                 <Route path="/download" element={<DownloadPage />} />

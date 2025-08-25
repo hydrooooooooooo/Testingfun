@@ -1,5 +1,7 @@
 import rateLimit from 'express-rate-limit';
 import { logger } from '../utils';
+import { audit } from '../utils/logger';
+import { alertService } from '../services/alertService';
 
 /**
  * Configure le middleware de limitation de débit pour protéger contre les attaques par force brute.
@@ -15,6 +17,8 @@ export const apiLimiter = rateLimit({
       method: req.method,
       url: req.originalUrl,
     });
+    audit('security.rate_limited', { ip: req.ip, method: req.method, url: req.originalUrl });
+    void alertService.notify('security.rate_limited', { ip: req.ip, method: req.method, url: req.originalUrl });
     res.status(options.statusCode).send(options.message);
   },
 });

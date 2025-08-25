@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import api from '@/services/api';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from './ui/button';
@@ -13,40 +13,24 @@ interface Download {
 }
 
 export default function DownloadHistory() {
-  const { token } = useAuth();
   const [downloads, setDownloads] = useState<Download[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchDownloads = async () => {
-      if (!token) {
-        setIsLoading(false);
-        return;
-      }
-
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/downloads`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-                    throw new Error("Erreur lors de la récupération de l'historique des téléchargements.");
-        }
-
-        const data = await response.json();
+        const { data } = await api.get('/user/downloads');
         setDownloads(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Une erreur inconnue est survenue.');
+        setError(err instanceof Error ? err.message : "Une erreur inconnue est survenue.");
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchDownloads();
-  }, [token]);
+  }, []);
 
   if (isLoading) {
     return <div>Chargement de l'historique des téléchargements...</div>;

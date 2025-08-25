@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '@/services/api';
 import { toast } from '@/hooks/use-toast';
 import {
   Card,
@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Session } from '@/types'; // Importer le type Session
+import { useApi } from '@/hooks/useApi';
 
 // Mettre à jour les props pour accepter un tableau de sessions
 interface FilesTabProps {
@@ -45,21 +46,34 @@ const formatBytes = (bytes: number, decimals = 2) => {
 
 const FilesTab: React.FC<FilesTabProps> = ({ sessions }) => {
   const [loadingSessionId, setLoadingSessionId] = useState<string | null>(null);
+  const { getExportUrl } = useApi();
 
   const handleDownload = async (session: Session, format: 'excel' | 'csv') => {
     if (!session.id || !session.downloadToken) {
-      toast({ title: "Erreur", description: "Informations de session invalides.", variant: "destructive" });
-      return;
+      // Pour les sessions TRIAL, on passe par l'endpoint export sans token de session
+      if (session.is_trial) {
+        const url = getExportUrl(session.id, format);
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast({ title: "Téléchargement", description: `Le fichier ${format.toUpperCase()} va être téléchargé.` });
+        return;
+      } else {
+        toast({ title: "Erreur", description: "Informations de session invalides.", variant: "destructive" });
+        return;
+      }
     }
 
     setLoadingSessionId(session.id);
     toast({ title: "Préparation du fichier", description: `Le téléchargement de votre fichier ${format.toUpperCase()} va bientôt commencer...` });
 
     try {
-      const authToken = localStorage.getItem('authToken');
-      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/sessions/${session.id}/download`, {
+      // Cas standard: endpoint /sessions/:id/download avec token
+      const response = await api.get(`/sessions/${session.id}/download`, {
         params: { format, token: session.downloadToken, pack_id: session.packId },
-        headers: authToken ? { 'Authorization': `Bearer ${authToken}` } : undefined,
         responseType: 'blob',
       });
 
@@ -108,11 +122,19 @@ const FilesTab: React.FC<FilesTabProps> = ({ sessions }) => {
               {sessions.length > 0 ? (
                 sessions.map((session) => (
                   <TableRow key={session.id}>
-                    <TableCell className="font-mono text-xs">{session.id}</TableCell>
+                    <TableCell className="font-mono text-xs">
+                      {session.id}
+                      {session.is_trial && (
+                        <Badge variant="secondary" className="ml-2">TRIAL</Badge>
+                      )}
+                    </TableCell>
                     <TableCell>
                       <a href={session.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline truncate block max-w-xs">
                         {session.url}
                       </a>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {session.is_trial ? 'Session: TRIAL' : (session.packId ? `Pack: ${session.packId}` : 'Pack: -')}
+                      </div>
                     </TableCell>
                     <TableCell>
                       {format(new Date(session.created_at), 'd MMM yyyy, HH:mm', { locale: fr })}

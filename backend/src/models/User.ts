@@ -16,6 +16,7 @@ export interface User {
   reset_token_expires_at?: Date;
   profile_image?: string;
   subscription_status: 'free' | 'premium' | 'enterprise';
+  last_verification_email_sent_at?: Date | null;
 }
 
 export interface UserRegistration {

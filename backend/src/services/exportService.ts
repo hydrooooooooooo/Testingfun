@@ -211,7 +211,7 @@ export class ExportService {
             const imageBuffer = await this.downloadImage(item.imageUrl);
             if (imageBuffer) {
               const imageId = workbook.addImage({
-                buffer: imageBuffer,
+                buffer: imageBuffer as any,
                 extension: 'jpeg'
               });
 
@@ -317,7 +317,8 @@ export class ExportService {
       ];
 
       logger.info('Fichier Excel enrichi généré avec succès');
-      return await workbook.xlsx.writeBuffer() as Buffer;
+      const arrayBuf = await workbook.xlsx.writeBuffer();
+      return Buffer.from(arrayBuf as ArrayBuffer);
 
     } catch (error) {
       logger.error('Erreur lors de la génération du fichier Excel enrichi:', error);
@@ -459,7 +460,8 @@ export class ExportService {
       });
 
       logger.info(`Généré un fichier Excel de démonstration avec ${demoItems.length} éléments`);
-      return await workbook.xlsx.writeBuffer() as Buffer;
+      const arrayBuf = await workbook.xlsx.writeBuffer();
+      return Buffer.from(arrayBuf as ArrayBuffer);
     } catch (error) {
       logger.error('Erreur lors de la génération du fichier Excel de démonstration:', error);
       throw new Error(`Échec de la génération du fichier Excel de démonstration: ${error}`);

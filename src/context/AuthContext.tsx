@@ -3,7 +3,8 @@ import { jwtDecode } from 'jwt-decode';
 
 // Interface pour le payload du token JWT
 interface DecodedToken {
-  id: number;
+  userId?: number; // backend signs as userId
+  id?: number;     // fallback for legacy tokens
   email: string;
   name?: string;
   role: string;
@@ -44,7 +45,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
           const decodedToken = jwtDecode<DecodedToken>(storedToken);
           if (decodedToken.exp * 1000 > Date.now()) {
-            setUser({ id: decodedToken.id, email: decodedToken.email, role: decodedToken.role, phone_number: decodedToken.phone_number });
+            const uid = decodedToken.userId ?? decodedToken.id!;
+            setUser({ id: uid, email: decodedToken.email, role: decodedToken.role, phone_number: decodedToken.phone_number });
             setToken(storedToken);
           } else {
             localStorage.removeItem('token');
@@ -64,7 +66,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('token', newToken);
     try {
       const decodedToken = jwtDecode<DecodedToken>(newToken);
-      setUser({ id: decodedToken.id, email: decodedToken.email, role: decodedToken.role, phone_number: decodedToken.phone_number });
+      const uid = decodedToken.userId ?? decodedToken.id!;
+      setUser({ id: uid, email: decodedToken.email, role: decodedToken.role, phone_number: decodedToken.phone_number });
       setToken(newToken);
     } catch (error) {
       console.error('Failed to decode token on login:', error);

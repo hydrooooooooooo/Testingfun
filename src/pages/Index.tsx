@@ -34,7 +34,12 @@ import {
   ShoppingBag,
   MapPin,
   BarChart2,
-  LineChart
+  LineChart,
+  Copy,
+  Link,
+  Star,
+  Timer,
+  DollarSign
 } from "lucide-react";
 
 // Ajout Google Fonts (Inter)
@@ -42,7 +47,7 @@ if (typeof document !== "undefined" && !document.getElementById("google-inter"))
   const link = document.createElement("link");
   link.id = "google-inter";
   link.rel = "stylesheet";
-  link.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap";
+  link.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap";
   document.head.appendChild(link);
 }
 
@@ -73,8 +78,6 @@ export default function Index() {
 
   const [url, setUrl] = React.useState("");
 
-
-
   // Scroll to form if coming from pricing page
   useEffect(() => {
     if (searchParams.get('packId')) {
@@ -99,31 +102,102 @@ export default function Index() {
   }, [url, startScrape, selectedPackId]);
 
   return (
+    <div className="flex flex-col items-center min-h-screen w-full bg-gradient-to-b from-blue-50 to-white">
+      
+      {/* Hero Section Ultra Simplifié */}
+      <section className="w-full max-w-7xl mx-auto px-4 py-10">
+        <div className="text-center mb-10">
+          {/* Badge d'introduction */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 rounded-full text-xs sm:text-sm font-semibold mb-6 border border-blue-200">
+            <Zap className="w-4 h-4" />
+            Extraction automatique Facebook Marketplace
+          </div>
+          
+          {/* Titre principal simplifié et percutant */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight leading-snug">
+            Transformez une recherche
+            <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              en fichier Excel
+            </span>
+          </h1>
+          
+          {/* Sous-titre ultra clair */}
+          <p className="text-base md:text-lg text-gray-700 mb-6 max-w-3xl md:max-w-4xl mx-auto leading-normal font-medium">
+            Copiez l'URL de votre recherche Facebook Marketplace,
+            <span className="block text-blue-600 font-semibold md:font-bold">obtenez TOUTES les données en Excel en 3 minutes ⚡</span>
+          </p>
 
-      <div className="flex flex-col items-center min-h-screen w-full bg-gradient-to-b from-slate-50 to-white">
-        
-        {/* Hero Section */}
-        <section className="w-full max-w-6xl mx-auto px-4 py-16">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium mb-6">
-              <Zap className="w-4 h-4" />
-              Extraction automatisée de données marketplace
+          {/* Bénéfices immédiats */}
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-8">
+            <div className="group flex items-center gap-3 bg-white/80 backdrop-blur px-5 md:px-6 py-4 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500/15 to-green-500/10 flex items-center justify-center ring-1 ring-green-200">
+                <Timer className="w-5 h-5 text-green-600" />
+              </div>
+              <div className="text-left">
+                <p className="font-semibold md:font-bold text-gray-900">Fini le copier-coller</p>
+                <p className="text-xs md:text-sm text-gray-600">3 minutes au lieu de 3 heures</p>
+              </div>
             </div>
             
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
-              Transformez vos recherches en
-              <span className="block text-blue-600">données exploitables</span>
-            </h1>
+            <div className="group flex items-center gap-3 bg-white/80 backdrop-blur px-5 md:px-6 py-4 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500/15 to-blue-500/10 flex items-center justify-center ring-1 ring-blue-200">
+                <FileSpreadsheet className="w-5 h-5 text-blue-600" />
+              </div>
+              <div className="text-left">
+                <p className="font-semibold md:font-bold text-gray-900">Excel prêt à utiliser</p>
+                <p className="text-xs md:text-sm text-gray-600">Toutes les données organisées</p>
+              </div>
+            </div>
             
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Extrayez instantanément les données de <strong>Facebook Marketplace</strong> et <strong>LinkedIn</strong> 
-              en fichiers Excel structurés. Gagnez des heures d'analyse manuelle.
-            </p>
+            <div className="group flex items-center gap-3 bg-white/80 backdrop-blur px-5 md:px-6 py-4 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500/15 to-purple-500/10 flex items-center justify-center ring-1 ring-purple-200">
+                <DollarSign className="w-5 h-5 text-purple-600" />
+              </div>
+              <div className="text-left">
+                <p className="font-semibold md:font-bold text-gray-900">Pas d'abonnement</p>
+                <p className="text-xs md:text-sm text-gray-600">Payez uniquement ce que vous utilisez</p>
+              </div>
+            </div>
           </div>
+        </div>
 
-          {/* Scraping Form - Garde le même ID pour le scroll */}
-          <div id="scraping-form" className="max-w-4xl mx-auto">
-                        {packs.length > 0 && selectedPack ? (
+        {/* Instructions ultra simples */}
+        <div className="rounded-2xl p-6 md:p-8 mb-10 bg-white/70 backdrop-blur-sm border border-gray-100 shadow">
+          <h2 className="text-xl md:text-2xl font-semibold text-center mb-6">
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Comment faire ?</span> C'est simple !
+          </h2>
+          
+          <div className="grid md:grid-cols-3 gap-5 md:gap-6 max-w-4xl mx-auto">
+            <div className="text-center md:text-left">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mx-auto md:mx-0 mb-3 ring-1 ring-blue-200 bg-blue-50 text-blue-700 font-bold">
+                <span className="text-base md:text-lg">1</span>
+              </div>
+              <h3 className="text-base md:text-lg font-semibold mb-1">Cherchez sur Facebook</h3>
+              <p className="text-sm md:text-base text-gray-600">Faites votre recherche normale sur Facebook Marketplace</p>
+            </div>
+            
+            <div className="text-center md:text-left">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mx-auto md:mx-0 mb-3 ring-1 ring-purple-200 bg-purple-50 text-purple-700 font-bold">
+                <span className="text-base md:text-lg">2</span>
+              </div>
+              <h3 className="text-base md:text-lg font-semibold mb-1">Copiez l'URL</h3>
+              <p className="text-sm md:text-base text-gray-600">Copiez l'adresse de la page de résultats</p>
+            </div>
+            
+            <div className="text-center md:text-left">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mx-auto md:mx-0 mb-3 ring-1 ring-green-200 bg-green-50 text-green-700 font-bold">
+                <span className="text-base md:text-lg">3</span>
+              </div>
+              <h3 className="text-base md:text-lg font-semibold mb-1">Récupérez Excel</h3>
+              <p className="text-sm md:text-base text-gray-600">Téléchargez votre fichier avec toutes les données</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Formulaire principal */}
+        <div id="scraping-form" className="max-w-4xl mx-auto">
+          {packs.length > 0 && selectedPack ? (
+            <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
               <ScrapeForm
                 url={url}
                 setUrl={setUrl}
@@ -134,379 +208,307 @@ export default function Index() {
                 selectedPack={selectedPack}
                 onScrape={handleScrape}
               />
-            ) : (
-              <div className="text-center p-8 bg-gray-100 rounded-lg">
-                <p>Chargement des packs...</p>
-              </div>
-            )}
-            
-                        {selectedPack && <SelectedPackInfos selectedPack={selectedPack} />}
-            
-            {loading && (
+            </div>
+          ) : (
+            <div className="text-center p-8 bg-gray-100 rounded-3xl">
+              <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+              <p className="text-lg font-semibold text-gray-700">Chargement des options...</p>
+            </div>
+          )}
+          
+          {selectedPack && <SelectedPackInfos selectedPack={selectedPack} />}
+          
+          {loading && (
+            <div className="mt-8">
               <ScrapeProgress 
                 percent={progress} 
                 stepLabel={status}
               />
-            )}
-          </div>
-        </section>
-
-        {/* Results Section */}
-        <ScrapeResultSection
-          scrapeDone={scrapeDone}
-          isPaid={isPaid}
-          stats={stats}
-          propPreviewItems={previewItems}
-          onPayment={() => selectedPackId && handlePayment(selectedPackId)}
-          exportData={exportData}
-          resetScrape={resetScrape}
-        />
-
-        {paymentInfo && (
-          <PaymentModal
-            isOpen={isPaymentModalOpen}
-            onClose={() => setPaymentModalOpen(false)}
-            onStripePay={onStripePay}
-            onMvolaPay={onMvolaPay}
-            planName={paymentInfo.pack.name}
-          />
-        )}
-
-        {/* Comment ça fonctionne + Value Proposition Cards - Fusionnés */}
-        <section className="w-full py-16 bg-gray-50">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Comment ça fonctionne ?
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-12">
-                Un processus simple et efficace en 3 étapes pour transformer vos recherches en données exploitables
-              </p>
             </div>
-            
-            {/* Étapes du processus */}
-            <div className="grid md:grid-cols-3 gap-8 mb-16">
-              <div className="relative">
-                <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 h-full">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
-                    <Search className="w-6 h-6 text-blue-600" />
+          )}
+        </div>
+      </section>
+
+      {/* Results Section */}
+      <ScrapeResultSection
+        scrapeDone={scrapeDone}
+        isPaid={isPaid}
+        stats={stats}
+        propPreviewItems={previewItems}
+        onPayment={() => selectedPackId && handlePayment(selectedPackId)}
+        exportData={exportData}
+        resetScrape={resetScrape}
+      />
+
+      {paymentInfo && (
+        <PaymentModal
+          isOpen={isPaymentModalOpen}
+          onClose={() => setPaymentModalOpen(false)}
+          onStripePay={onStripePay}
+          onMvolaPay={onMvolaPay}
+          planName={paymentInfo.pack.name}
+        />
+      )}
+
+      {/* Section Problème/Solution très claire */}
+      <section className="w-full py-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Problème */}
+            <div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-8">
+                😤 Vous perdez des heures à faire ça ?
+              </h2>
+              
+              <div className="space-y-6">
+                <div className="flex items-start gap-4 p-6 bg-red-50 border border-red-200 rounded-2xl">
+                  <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-white text-sm font-bold">❌</span>
                   </div>
-                  <div className="absolute -top-3 -right-3 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">
-                    1
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                    Configurez votre recherche
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Définissez vos critères sur Facebook Marketplace ou LinkedIn : 
-                    catégorie de produits, fourchette de prix, zone géographique, etc.
-                  </p>
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-sm text-gray-700">
-                      <strong>💡 Astuce :</strong> Plus vos filtres sont précis, 
-                      plus les données extraites seront pertinentes pour votre analyse.
-                    </p>
+                  <div>
+                    <p className="font-semibold text-red-800">Copier-coller chaque annonce une par une</p>
+                    <p className="text-red-600 text-sm mt-1">3 heures pour 100 annonces...</p>
                   </div>
                 </div>
                 
-                <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md border border-gray-200">
-                    <ArrowRight className="w-4 h-4 text-gray-400" />
+                <div className="flex items-start gap-4 p-6 bg-red-50 border border-red-200 rounded-2xl">
+                  <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-white text-sm font-bold">❌</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-red-800">Risquer d'oublier des données importantes</p>
+                    <p className="text-red-600 text-sm mt-1">Prix, contact, localisation manqués</p>
                   </div>
                 </div>
-              </div>
-
-              <div className="relative">
-                <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 h-full">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
-                    <Play className="w-6 h-6 text-green-600" />
+                
+                <div className="flex items-start gap-4 p-6 bg-red-50 border border-red-200 rounded-2xl">
+                  <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-white text-sm font-bold">❌</span>
                   </div>
-                  <div className="absolute -top-3 -right-3 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">
-                    2
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                    Lancez l'extraction
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Notre outil automatisé parcourt et extrait toutes les données 
-                    correspondant à vos critères en quelques minutes.
-                  </p>
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-sm text-gray-700">
-                      <strong>💡 Astuce :</strong> Surveillez la barre de progression 
-                      pour suivre l'avancement de votre extraction en temps réel.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md border border-gray-200">
-                    <ArrowRight className="w-4 h-4 text-gray-400" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="relative">
-                <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 h-full">
-                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
-                    <Download className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <div className="absolute -top-3 -right-3 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">
-                    3
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                    Téléchargez vos données
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Recevez un fichier Excel structuré avec tous vos résultats, 
-                    prêt pour vos analyses et présentations.
-                  </p>
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-sm text-gray-700">
-                      <strong>💡 Astuce :</strong> Données formatées pour vos analyses, 
-                      tableaux de bord et présentations.
-                    </p>
+                  <div>
+                    <p className="font-semibold text-red-800">Données non organisées pour vos analyses</p>
+                    <p className="text-red-600 text-sm mt-1">Impossible de faire des graphiques</p>
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* Value Proposition Cards */}
-            <div className="grid md:grid-cols-4 gap-6">
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                <Clock className="w-8 h-8 text-blue-600 mb-3 mx-auto" />
-                <h3 className="font-semibold text-gray-900 mb-2">Gain de temps</h3>
-                <p className="text-sm text-gray-600">Extraction en quelques clics au lieu d'heures de copier-coller</p>
-              </div>
+            
+            {/* Solution */}
+            <div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-8">
+                ⚡ Notre solution automatique !
+              </h2>
               
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                <Database className="w-8 h-8 text-green-600 mb-3 mx-auto" />
-                <h3 className="font-semibold text-gray-900 mb-2">Données structurées</h3>
-                <p className="text-sm text-gray-600">Export Excel prêt pour vos analyses et tableaux de bord</p>
-              </div>
-              
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                <BarChart3 className="w-8 h-8 text-purple-600 mb-3 mx-auto" />
-                <h3 className="font-semibold text-gray-900 mb-2">Analyse concurrentielle</h3>
-                <p className="text-sm text-gray-600">Surveillez la concurrence et identifiez les opportunités</p>
-              </div>
-              
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                <Shield className="w-8 h-8 text-gray-600 mb-3 mx-auto" />
-                <h3 className="font-semibold text-gray-900 mb-2">Sans compte</h3>
-                <p className="text-sm text-gray-600">Aucune inscription requise, résultats immédiats</p>
+              <div className="space-y-6">
+                <div className="flex items-start gap-4 p-6 bg-green-50 border border-green-200 rounded-2xl">
+                  <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <CheckCircle className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-green-800">Extraction automatique de TOUTES les annonces</p>
+                    <p className="text-green-600 text-sm mt-1">3 minutes pour 1000+ annonces</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4 p-6 bg-green-50 border border-green-200 rounded-2xl">
+                  <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <CheckCircle className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-green-800">Toutes les données capturées automatiquement</p>
+                    <p className="text-green-600 text-sm mt-1">Prix, description, contact, images, localisation</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4 p-6 bg-green-50 border border-green-200 rounded-2xl">
+                  <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <CheckCircle className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-green-800">Excel parfaitement organisé</p>
+                    <p className="text-green-600 text-sm mt-1">Prêt pour tableaux de bord et analyses</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Exemples d'utilisation par domaine */}
-        <section className="w-full py-16 bg-white">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Cas d'usage par secteur
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Découvrez comment différents professionnels utilisent EasyScrapyMG pour optimiser leurs activités
+      {/* Cas d'usage simplifiés */}
+      <section className="w-full py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              Parfait pour tous les professionnels
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Que vous soyez dans l'immobilier, l'automobile, le e-commerce ou les études de marché
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Immobilier */}
+            <div className="group bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 border border-blue-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Home className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Immobilier</h3>
+              <p className="text-gray-700 mb-6">
+                Surveillez les prix du marché et trouvez les meilleures opportunités
+              </p>
+              <div className="bg-white/80 rounded-xl p-4">
+                <p className="text-sm font-semibold text-blue-700">
+                  "500+ annonces analysées en 3 minutes au lieu de 2 jours"
+                </p>
+              </div>
+            </div>
+
+            {/* E-commerce */}
+            <div className="group bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-8 border border-green-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <ShoppingBag className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">E-commerce</h3>
+              <p className="text-gray-700 mb-6">
+                Analysez la concurrence et optimisez vos prix de vente
+              </p>
+              <div className="bg-white/80 rounded-xl p-4">
+                <p className="text-sm font-semibold text-green-700">
+                  "Surveillance concurrentielle automatisée"
+                </p>
+              </div>
+            </div>
+
+            {/* Automobile */}
+            <div className="group bg-gradient-to-br from-purple-50 to-purple-100 rounded-3xl p-8 border border-purple-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Car className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Automobile</h3>
+              <p className="text-gray-700 mb-6">
+                Évaluez la cote des véhicules et trouvez les meilleures affaires
+              </p>
+              <div className="bg-white/80 rounded-xl p-4">
+                <p className="text-sm font-semibold text-purple-700">
+                  "Comparaison de 1000+ véhicules instantanée"
+                </p>
+              </div>
+            </div>
+
+            {/* Études de marché */}
+            <div className="group bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl p-8 border border-orange-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <BarChart3 className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Études</h3>
+              <p className="text-gray-700 mb-6">
+                Réalisez des études de marché complètes avec des données réelles
+              </p>
+              <div className="bg-white/80 rounded-xl p-4">
+                <p className="text-sm font-semibold text-orange-700">
+                  "Rapports clients alimentés par des données réelles"
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Témoignages/Garanties */}
+      <section className="w-full py-20 bg-gradient-to-r from-gray-900 to-gray-800">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold text-white mb-12">
+            Pourquoi nous faire confiance ?
+          </h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white/10 backdrop-blur rounded-3xl p-8 border border-white/20">
+              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Shield className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4">100% Sécurisé</h3>
+              <p className="text-gray-300">
+                Aucune donnée stockée. Chiffrement de bout en bout pour protéger vos recherches.
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Immobilier */}
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border border-blue-200">
-                <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-6">
-                  <Home className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  Immobilier
-                </h3>
-                <p className="text-gray-700 mb-4">
-                  Analysez le marché immobilier, surveillez les prix par quartier et identifiez les bonnes affaires.
-                </p>
-                <div className="bg-white/80 rounded-lg p-4">
-                  <p className="text-sm text-gray-700">
-                    <strong>Exemple :</strong> "Je surveille 500+ annonces de location à Antananarivo pour optimiser mes tarifs"
-                  </p>
-                </div>
+            <div className="bg-white/10 backdrop-blur rounded-3xl p-8 border border-white/20">
+              <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <TrendingUp className="w-8 h-8 text-white" />
               </div>
-
-              {/* E-commerce */}
-              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 border border-green-200">
-                <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center mb-6">
-                  <ShoppingBag className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  E-commerce & Retail
-                </h3>
-                <p className="text-gray-700 mb-4">
-                  Surveillez la concurrence, analysez les tendances prix et découvrez de nouveaux fournisseurs.
-                </p>
-                <div className="bg-white/80 rounded-lg p-4">
-                  <p className="text-sm text-gray-700">
-                    <strong>Exemple :</strong> "J'analyse les prix de 200+ produits électroniques pour rester compétitif"
-                  </p>
-                </div>
-              </div>
-
-              {/* Automobile */}
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-8 border border-purple-200">
-                <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mb-6">
-                  <Car className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  Automobile
-                </h3>
-                <p className="text-gray-700 mb-4">
-                  Évaluez la cote des véhicules, analysez l'offre par région et optimisez vos achats/ventes.
-                </p>
-                <div className="bg-white/80 rounded-lg p-4">
-                  <p className="text-sm text-gray-700">
-                    <strong>Exemple :</strong> "Je compare 300+ véhicules d'occasion pour mes clients concessionnaire"
-                  </p>
-                </div>
-              </div>
-
-              {/* Marketing & Études */}
-              <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-8 border border-orange-200">
-                <div className="w-12 h-12 bg-orange-600 rounded-xl flex items-center justify-center mb-6">
-                  <BarChart2 className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  Marketing & Études
-                </h3>
-                <p className="text-gray-700 mb-4">
-                  Réalisez des études de marché, analysez le comportement consommateur et créez des rapports clients.
-                </p>
-                <div className="bg-white/80 rounded-lg p-4">
-                  <p className="text-sm text-gray-700">
-                    <strong>Exemple :</strong> "J'extrais 1000+ annonces pour mes études sectorielles mensuelles"
-                  </p>
-                </div>
-              </div>
-
-              {/* Services Financiers */}
-              <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-2xl p-8 border border-teal-200">
-                <div className="w-12 h-12 bg-teal-600 rounded-xl flex items-center justify-center mb-6">
-                  <LineChart className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  Services Financiers
-                </h3>
-                <p className="text-gray-700 mb-4">
-                  Évaluez les actifs, analysez les tendances marché et créez des rapports de valorisation.
-                </p>
-                <div className="bg-white/80 rounded-lg p-4">
-                  <p className="text-sm text-gray-700">
-                    <strong>Exemple :</strong> "Je valorise des biens pour mes dossiers de crédit immobilier"
-                  </p>
-                </div>
-              </div>
-
-              {/* Consultants */}
-              <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl p-8 border border-indigo-200">
-                <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mb-6">
-                  <Briefcase className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  Consulting & Stratégie
-                </h3>
-                <p className="text-gray-700 mb-4">
-                  Collectez des données marché pour vos recommandations stratégiques et analyses concurrentielles.
-                </p>
-                <div className="bg-white/80 rounded-lg p-4">
-                  <p className="text-sm text-gray-700">
-                    <strong>Exemple :</strong> "Je fournis des analyses sectorielles basées sur des données réelles"
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Conçu pour les professionnels exigeants */}
-        <section className="w-full py-16 bg-gradient-to-r from-gray-900 to-gray-800">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-white mb-4">
-                Conçu pour les professionnels exigeants
-              </h2>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Des fonctionnalités avancées et une fiabilité à toute épreuve pour vos projets les plus critiques
+              <h3 className="text-xl font-bold text-white mb-4">99.9% Fiable</h3>
+              <p className="text-gray-300">
+                Infrastructure robuste qui traite des milliers de requêtes chaque jour sans interruption.
               </p>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-6">
-                  <Shield className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="font-semibold text-white mb-2">Sécurité & Confidentialité</h3>
-                <p className="text-gray-300">Chiffrement de bout en bout et protection des données selon les standards internationaux</p>
+            <div className="bg-white/10 backdrop-blur rounded-3xl p-8 border border-white/20">
+              <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Users className="w-8 h-8 text-white" />
               </div>
-              
-              <div className="text-center">
-                <div className="w-16 h-16 bg-green-600 rounded-xl flex items-center justify-center mx-auto mb-6">
-                  <TrendingUp className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="font-semibold text-white mb-2">Performance & Fiabilité</h3>
-                <p className="text-gray-300">Infrastructure robuste pour traiter de gros volumes avec une disponibilité de 99.9%</p>
-              </div>
-              
-              <div className="text-center">
-                <div className="w-16 h-16 bg-purple-600 rounded-xl flex items-center justify-center mx-auto mb-6">
-                  <Users className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="font-semibold text-white mb-2">Support Expert</h3>
-                <p className="text-gray-300">Équipe technique dédiée pour vous accompagner dans vos projets les plus complexes</p>
-              </div>
+              <h3 className="text-xl font-bold text-white mb-4">Support Expert</h3>
+              <p className="text-gray-300">
+                Équipe technique malgache disponible pour vous aider à optimiser vos extractions.
+              </p>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* FAQ Section */}
-        <section className="w-full py-16">
-          <div className="max-w-4xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Questions fréquentes
-              </h2>
+      {/* FAQ ultra simplifiée */}
+      <section className="w-full py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Questions fréquentes
+            </h2>
+            <p className="text-xl text-gray-600">Tout ce que vous devez savoir</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                ❓ Quelles données j'obtiens ?
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Tout ! Titres, prix, descriptions, images, localisations, contacts, URLs... 
+                Parfaitement organisé dans un fichier Excel prêt à utiliser.
+              </p>
             </div>
             
-            <div className="space-y-8">
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  Quels types de données puis-je extraire ?
-                </h3>
-                <p className="text-gray-600">
-                  Titres, prix, descriptions, images, localisations, URLs des annonces, informations de contact quand disponibles, 
-                  et métadonnées utiles pour vos analyses de marché.
-                </p>
-              </div>
-              
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  L'extraction respecte-t-elle les conditions d'utilisation ?
-                </h3>
-                <p className="text-gray-600">
-                  Oui, notre outil respecte les limitations et bonnes pratiques d'extraction. 
-                  Nous recommandons un usage responsable et conforme aux CGU des plateformes.
-                </p>
-              </div>
-              
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  Puis-je automatiser des extractions régulières ?
-                </h3>
-                <p className="text-gray-600">
-                  Contactez-nous pour discuter de solutions d'automatisation adaptées à vos besoins professionnels 
-                  et volumes d'extraction.
-                </p>
-              </div>
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                ⚡ C'est vraiment si rapide ?
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Oui ! 3 minutes en moyenne pour extraire des centaines d'annonces, 
+                au lieu des heures que ça vous prendrait manuellement.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                🔒 Mes données sont protégées ?
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Absolument. Nous ne stockons rien. Vos URL et données sont traitées en temps réel 
+                puis supprimées automatiquement.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                💰 Dois-je m'abonner ?
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Non ! Pas d'abonnement. Vous payez uniquement ce que vous utilisez. 
+                Idéal pour tester ou pour une utilisation ponctuelle.
+              </p>
             </div>
           </div>
-        </section>
-      </div>
-
+        </div>
+      </section>
+    </div>
   );
 }

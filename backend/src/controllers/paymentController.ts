@@ -5,11 +5,13 @@ import { stripeService } from '../services/stripeService';
 import { sessionService, Session, SessionStatus } from '../services/sessionService';
 
 import { ApiError } from '../middlewares/errorHandler';
-import { logger } from '../utils/logger';
+import { logger, audit } from '../utils/logger';
+import { alertService } from '../services/alertService';
 // Packs are now read from DB 'packs' table instead of in-code PLANS
 import db from '../database';
 import { Knex } from 'knex';
 import { config } from '../config/config';
+import jwt from 'jsonwebtoken';
 
 export class PaymentController {
   /**
@@ -130,11 +132,15 @@ export class PaymentController {
    */
   async handleWebhook(req: Request, res: Response, next: NextFunction) {
     try {
-      logger.info('🚀 BYPASS TOTAL DE LA VERIFICATION STRIPE ACTIVÉ');
-
-      // Le middleware express.raw() est utilisé, donc req.body est un Buffer.
-      // Nous devons le parser manuellement en JSON car la vérification de signature est désactivée.
-      const event: Stripe.Event = JSON.parse(req.body.toString());
+      // Verify Stripe signature
+      const sig = req.headers['stripe-signature'] as string | undefined;
+      if (!sig) {
+        audit('stripe.webhook_missing_signature');
+        return res.status(400).json({ error: 'Missing Stripe signature' });
+      }
+      const payload = req.body instanceof Buffer ? req.body.toString('utf8') : String(req.body);
+      const event: Stripe.Event = stripeService.constructEvent(payload, sig);
+      audit('stripe.webhook_verified', { eventType: event.type, eventId: event.id });
       
       logger.info(`[STRIPE] --> [SERVER] Received Stripe event: ${event.type} (ID: ${event.id})`);
 
@@ -157,6 +163,8 @@ export class PaymentController {
       res.status(200).json({ received: true });
     } catch (error) {
       logger.error('❌ Error handling webhook:', error);
+      audit('stripe.webhook_verification_failed', { error: (error as Error).message });
+      await alertService.notify('stripe.webhook_verification_failed', { error: (error as Error).message });
       res.status(400).json({ error: (error as Error).message });
     }
   }
@@ -200,9 +208,11 @@ export class PaymentController {
           return;
         }
 
-        const downloadToken = nanoid(40);
-        const downloadUrl = `${config.server.frontendUrl}/download?session_id=${session.id}&token=${downloadToken}`;
+        // Issue a JWT-signed download token bound to session and user
+        const jwtToken = jwt.sign({ sessionId, userId: session.user_id }, config.api.jwtSecret as string, { expiresIn: '2h' });
+        const downloadUrl = `${config.server.frontendUrl}/download?session_id=${session.id}&token=${jwtToken}`;
         logger.info(`🔗 Génération de l'URL de téléchargement: ${downloadUrl}`);
+        audit('export.token_issued', { sessionId, userId: session.user_id });
 
         // 1. Mettre à jour la session
         await trx('scraping_sessions')
@@ -213,7 +223,7 @@ export class PaymentController {
             payment_method: 'stripe',
             payment_intent_id: paymentIntent.id,
             downloadUrl: downloadUrl,
-            downloadToken: downloadToken,
+            downloadToken: jwtToken,
             updated_at: new Date(),
           });
         logger.info(`[DB] ✅ Session ${sessionId} marquée comme terminée et payée.`);
@@ -238,7 +248,7 @@ export class PaymentController {
           user_id: session.user_id,
           session_id: sessionId,
           format: 'excel',
-          download_token: downloadToken,
+          download_token: jwtToken,
           expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 jours
         });
         logger.info(`[DB] ✅ Téléchargement enregistré pour la session ${sessionId}.`);

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { AuthService } from '../services/authService';
 import { UserRegistration, UserLogin } from '../models/User';
 import config from '../config/config';
+import { generateCsrfToken } from '../middlewares/csrf';
 
 const authService = new AuthService();
 
@@ -32,7 +33,25 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     }
 
     const { user, token } = await authService.register(userData);
-    res.status(201).json({ message: 'User registered successfully. Please check your email for verification.', user, token });
+    const isSecure = req.protocol === 'https' || (req.get('x-forwarded-proto') || '').includes('https');
+    // Set httpOnly auth cookie
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: isSecure,
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    // Issue CSRF token cookie
+    const csrf = generateCsrfToken();
+    res.cookie('csrf_token', csrf, {
+      httpOnly: false,
+      sameSite: 'strict',
+      secure: isSecure,
+      path: '/',
+      maxAge: 60 * 60 * 1000,
+    });
+    res.status(201).json({ message: 'User registered successfully. Please check your email for verification.', user, csrfToken: csrf, token });
   } catch (error) {
     const err = error as Error;
     // Gérer les conflits (email déjà existant)
@@ -44,6 +63,38 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+export const csrfToken = async (req: Request, res: Response): Promise<void> => {
+  const isSecure = req.protocol === 'https' || (req.get('x-forwarded-proto') || '').includes('https');
+  const csrf = generateCsrfToken();
+  res.cookie('csrf_token', csrf, {
+    httpOnly: false,
+    sameSite: 'strict',
+    secure: isSecure,
+    path: '/',
+    maxAge: 60 * 60 * 1000,
+  });
+  res.status(200).json({ csrfToken: csrf });
+};
+
+export const logout = async (req: Request, res: Response): Promise<void> => {
+  const isSecure = req.protocol === 'https' || (req.get('x-forwarded-proto') || '').includes('https');
+  res.cookie('access_token', '', {
+    httpOnly: true,
+    sameSite: 'strict',
+    secure: isSecure,
+    path: '/',
+    maxAge: 0,
+  });
+  res.cookie('csrf_token', '', {
+    httpOnly: false,
+    sameSite: 'strict',
+    secure: isSecure,
+    path: '/',
+    maxAge: 0,
+  });
+  res.status(200).json({ message: 'Logged out' });
+};
+
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const credentials: UserLogin = req.body;
@@ -53,12 +104,30 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     const { user, token } = await authService.login(credentials);
-    res.status(200).json({ user, token });
+    const isSecure = req.protocol === 'https' || (req.get('x-forwarded-proto') || '').includes('https');
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: isSecure,
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    const csrf = generateCsrfToken();
+    res.cookie('csrf_token', csrf, {
+      httpOnly: false,
+      sameSite: 'strict',
+      secure: isSecure,
+      path: '/',
+      maxAge: 60 * 60 * 1000,
+    });
+    res.status(200).json({ user, csrfToken: csrf, token });
   } catch (error) {
      const err = error as Error;
     // Gérer les identifiants invalides
     if (err.message.includes('Invalid credentials')) {
         res.status(401).json({ message: err.message });
+    } else if (err.message.includes('Email not verified')) {
+        res.status(403).json({ message: 'Please verify your email address before logging in.' });
     } else {
         res.status(500).json({ message: 'An internal error occurred.', error: err.message });
     }
@@ -69,11 +138,13 @@ export const verifyEmail = async (req: Request, res: Response): Promise<void> =>
   try {
     const { token } = req.params;
     await authService.verifyEmail(token);
-    // Idéalement, rediriger vers une page de succès sur le frontend
-    res.status(200).json({ message: 'Email verified successfully.' });
+    const successUrl = new URL('/verify-email/success', config.server.frontendUrl).toString();
+    res.redirect(successUrl);
   } catch (error) {
     const err = error as Error;
-    res.status(400).json({ message: 'Invalid or expired verification token.', error: err.message });
+    const reason = encodeURIComponent(err.message || 'Invalid or expired verification token.');
+    const errorUrl = `${config.server.frontendUrl}/verify-email/error?reason=${reason}`;
+    res.redirect(errorUrl);
   }
 };
 

@@ -12,6 +12,8 @@ import { paymentRoutes } from './paymentRoutes';
 import { previewRoutes } from './previewRoutes';
 import { scrapeRoutes } from './scrapeRoutes';
 import { sessionRoutes } from './sessionRoutes';
+import adminRoutes from './adminRoutes';
+import trialRoutes from './trialRoutes';
 
 const router = Router();
 
@@ -25,6 +27,8 @@ router.use('/preview', previewRoutes);
 router.use('/scrape', scrapeRoutes);
 router.use('/sessions', sessionRoutes);
 router.use('/user', userRoutes);
+router.use('/admin', adminRoutes);
+router.use('/trial', trialRoutes);
 
 // Health check endpoint
 router.get('/health', (req, res) => {
