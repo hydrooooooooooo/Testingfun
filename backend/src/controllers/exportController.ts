@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { sessionService, Session, SessionStatus } from '../services/sessionService';
 import { exportService } from '../services/exportService';
+import { apifyService } from '../services/apifyService';
 import { ApiError } from '../middlewares/errorHandler';
 import { logger, audit } from '../utils/logger';
 import { alertService } from '../services/alertService';
@@ -192,6 +193,10 @@ export class ExportController {
       // Configurer les en-têtes CORS et envoyer le fichier
       this.sendFileWithHeaders(res, buffer, filename, contentType, requestId, req.headers.origin);
       audit('export.success', { sessionId, userId: reqUserId ?? tokenUserId, format, size: buffer.length });
+      // Schedule Apify dataset cleanup (non-blocking, fire and forget)
+      if (session.datasetId) {
+        apifyService.deleteDataset(session.datasetId).catch(() => {});
+      }
       // Si c'est un export de trial, désactiver le flag pour empêcher d'autres téléchargements gratuits
       if (isTrial) {
         try {

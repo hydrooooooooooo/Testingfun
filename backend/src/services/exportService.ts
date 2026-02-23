@@ -6,6 +6,9 @@ import { PLANS } from '../config/plans';
 
 export class ExportService {
   
+  /** Max concurrent image downloads */
+  private static readonly IMAGE_CONCURRENCY = 5;
+
   /**
    * Télécharger une image depuis une URL et la convertir en buffer
    */
@@ -15,7 +18,6 @@ export class ExportService {
         return null;
       }
 
-      // Timeout de 10 secondes pour éviter les blocages
       const response = await axios.get(imageUrl, {
         responseType: 'arraybuffer',
         timeout: 10000,
@@ -31,6 +33,25 @@ export class ExportService {
       logger.warn(`Impossible de télécharger l'image ${imageUrl}: ${error}`);
     }
     return null;
+  }
+
+  /**
+   * Download images in batches with concurrency limit to prevent OOM
+   */
+  private async downloadImagesBatch(urls: (string | null)[]): Promise<(Buffer | null)[]> {
+    const results: (Buffer | null)[] = new Array(urls.length).fill(null);
+    const concurrency = ExportService.IMAGE_CONCURRENCY;
+
+    for (let i = 0; i < urls.length; i += concurrency) {
+      const batch = urls.slice(i, i + concurrency);
+      const batchResults = await Promise.all(
+        batch.map(url => url ? this.downloadImage(url) : Promise.resolve(null))
+      );
+      for (let j = 0; j < batchResults.length; j++) {
+        results[i + j] = batchResults[j];
+      }
+    }
+    return results;
   }
 
   /**
@@ -169,37 +190,37 @@ export class ExportService {
         { width: 30 }  // URL
       ];
 
+      // Download all images in batches (concurrency-limited) before filling rows
+      const imageUrls = limitedItems.map(item => item.imageUrl || null);
+      logger.info(`Downloading ${imageUrls.filter(Boolean).length} images in batches of ${ExportService.IMAGE_CONCURRENCY}...`);
+      const imageBuffers = await this.downloadImagesBatch(imageUrls);
+
       // Traitement des données avec images
       let currentRow = 6;
-      
+
       for (let i = 0; i < limitedItems.length; i++) {
         const item = limitedItems[i];
         const row = worksheet.getRow(currentRow);
-        
-        // Définir la hauteur de ligne pour les images
+
         row.height = 120;
 
-        // Télécharger et insérer l'image
-        if (item.imageUrl) {
+        // Insert pre-downloaded image
+        const imageBuffer = imageBuffers[i];
+        if (imageBuffer) {
           try {
-            const imageBuffer = await this.downloadImage(item.imageUrl);
-            if (imageBuffer) {
-              const imageId = workbook.addImage({
-                buffer: imageBuffer as any,
-                extension: 'jpeg'
-              });
-
-              worksheet.addImage(imageId, {
-                tl: { col: 0, row: currentRow - 1 },
-                ext: { width: 150, height: 110 }
-              });
-            }
+            const imageId = workbook.addImage({
+              buffer: imageBuffer as any,
+              extension: 'jpeg'
+            });
+            worksheet.addImage(imageId, {
+              tl: { col: 0, row: currentRow - 1 },
+              ext: { width: 150, height: 110 }
+            });
           } catch (error) {
-            logger.warn(`Erreur lors du téléchargement de l'image pour l'item ${i}: ${error}`);
             row.getCell(1).value = 'Image non disponible';
           }
         } else {
-          row.getCell(1).value = 'Pas d\'image';
+          row.getCell(1).value = item.imageUrl ? 'Image non disponible' : 'Pas d\'image';
         }
 
         // Remplir les autres colonnes

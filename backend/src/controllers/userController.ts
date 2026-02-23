@@ -1,21 +1,10 @@
 import { logger } from '../utils/logger';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import db from '../database';
 import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
 import bcrypt from 'bcryptjs';
-
-// Taux de conversion EUR -> MGA pour l'affichage unifié
-const EUR_TO_MGA = Number(process.env.EUR_TO_MGA) || 5000;
-
-// Étendre l'interface Request pour inclure la propriété user complète
-interface AuthenticatedRequest extends Request {
-  user?: {
-    id: number;
-    email: string;
-    role: string;
-  };
-}
+import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 
 /**
  * Récupère l'historique des paiements pour l'utilisateur authentifié.

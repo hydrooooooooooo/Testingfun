@@ -322,6 +322,19 @@ export class ApifyService {
   }
 
   /**
+   * Delete an Apify dataset to free storage after export
+   */
+  async deleteDataset(datasetId: string): Promise<void> {
+    try {
+      await apifyClient.dataset(datasetId).delete();
+      logger.info(`Apify dataset ${datasetId} deleted successfully`);
+    } catch (error) {
+      // Non-critical: log but don't throw
+      logger.warn(`Failed to delete Apify dataset ${datasetId}:`, error);
+    }
+  }
+
+  /**
    * Test Apify connection
    */
   async testApifyConnection(): Promise<boolean> {

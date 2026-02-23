@@ -196,14 +196,20 @@ export class PaymentController {
       const paymentIntent = await stripeService.retrievePaymentIntent(paymentIntentId);
       logger.info(`Successfully retrieved payment intent: ${paymentIntent.id}`);
 
+      // Idempotency check: skip if this payment was already processed
+      const existingPayment = await db('payments').where({ stripePaymentIntentId: paymentIntent.id }).first();
+      if (existingPayment) {
+        logger.info(`[STRIPE] Idempotency: payment ${paymentIntent.id} already processed for session ${sessionId}. Skipping.`);
+        return;
+      }
+
       // Récupérer la session DANS la transaction pour garantir les données les plus fraîches
       await db.transaction(async (trx) => {
         const session = await trx('scraping_sessions').where('id', sessionId).first();
-        
+
         if (!session || !session.user_id || !session.packId) {
           logger.error(`[DB] ❌ Session ${sessionId} ou données critiques (user_id, packId) non trouvées DANS LA TRANSACTION.`);
-          // On ne throw pas pour ne pas faire échouer le webhook, mais on log l'erreur critique.
-          return; 
+          return;
         }
 
         const pack = await trx('packs').where({ id: session.packId }).first();

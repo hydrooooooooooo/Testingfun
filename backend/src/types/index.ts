@@ -1,10 +1,4 @@
-import { Request } from 'express';
-
-export interface AuthenticatedRequest extends Request {
-  user?: {
-    id: number;
-  };
-}
+export { AuthenticatedRequest } from '../middlewares/authMiddleware';
 
 export interface ScrapedItem {
     id: string;
