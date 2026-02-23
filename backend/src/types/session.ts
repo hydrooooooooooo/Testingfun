@@ -6,7 +6,7 @@ export interface Session {
   url: string; // L'URL de la session de scraping
   id: string;
   user_id?: number; // L'ID de l'utilisateur associé
-  status: 'pending' | 'running' | 'finished' | 'failed';
+  status: 'pending' | 'running' | 'completed' | 'failed' | 'payment_failed';
   actorRunId?: string;
   datasetId?: string;
   isPaid: boolean;
@@ -28,4 +28,4 @@ export interface SessionStats {
   finishedAt?: string;
 }
 
-export type SessionStatus = 'pending' | 'running' | 'completed' | 'failed';
+export type SessionStatus = 'pending' | 'running' | 'completed' | 'failed' | 'payment_failed';

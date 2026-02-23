@@ -64,7 +64,7 @@ export class ExportController {
             hasData: true // On considère qu'une session temporaire a des données
           };
           await sessionService.createSession(newSession);
-          return this.handleTemporaryExport(sessionId, format as 'excel' | 'csv', requestId, res, next);
+          return this.handleTemporaryExport(sessionId, format as 'excel' | 'csv', requestId, req, res, next);
         } else {
           // Pour les sessions normales, on renvoie une erreur
           logger.error(`[${requestId}] Session non trouvée: ${sessionId}`);
@@ -154,7 +154,7 @@ export class ExportController {
 
       // Si c'est une session temporaire, utiliser la méthode spécifique
       if (isTemporarySession) {
-        return this.handleTemporaryExport(sessionId, format as 'excel' | 'csv', requestId, res, next);
+        return this.handleTemporaryExport(sessionId, format as 'excel' | 'csv', requestId, req, res, next);
       }
       
       // Pour les sessions normales, continuer avec le processus standard
@@ -181,12 +181,12 @@ export class ExportController {
         } else {
           // Fallback - générer des données de démonstration si aucun datasetId n'est disponible
           logger.warn(`[${requestId}] Aucun datasetId disponible pour la session ${sessionId}, génération de données de démonstration`);
-          return this.handleTemporaryExport(sessionId, format as 'excel' | 'csv', requestId, res, next);
+          return this.handleTemporaryExport(sessionId, format as 'excel' | 'csv', requestId, req, res, next);
         }
       } catch (error) {
         logger.error(`[${requestId}] Erreur lors de la génération du fichier: ${error instanceof Error ? error.message : String(error)}`);
         // En cas d'erreur, essayer de générer des données de démonstration comme fallback
-        return this.handleTemporaryExport(sessionId, format as 'excel' | 'csv', requestId, res, next, true);
+        return this.handleTemporaryExport(sessionId, format as 'excel' | 'csv', requestId, req, res, next, true);
       }
 
       // Configurer les en-têtes CORS et envoyer le fichier
@@ -234,6 +234,7 @@ export class ExportController {
     sessionId: string,
     format: 'excel' | 'csv',
     requestId: string,
+    req: Request,
     res: Response,
     next: NextFunction,
     isFallback: boolean = false

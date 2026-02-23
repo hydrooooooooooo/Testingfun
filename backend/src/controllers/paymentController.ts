@@ -256,6 +256,35 @@ export class PaymentController {
           expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 jours
         });
         logger.info(`[DB] ✅ Téléchargement enregistré pour la session ${sessionId}.`);
+
+        // 4. Ajouter les crédits au compte utilisateur
+        const creditsToAdd = pack.nb_downloads || pack.nbDownloads || 0;
+        if (creditsToAdd > 0) {
+          const currentUser = await trx('users').where({ id: session.user_id }).forUpdate().first();
+          const currentBalance = parseFloat(currentUser?.credits_balance || currentUser?.credits || 0);
+          const newBalance = currentBalance + creditsToAdd;
+
+          await trx('users')
+            .where({ id: session.user_id })
+            .update({
+              credits_balance: newBalance,
+              updated_at: trx.fn.now()
+            });
+
+          await trx('credit_transactions').insert({
+            user_id: session.user_id,
+            amount: creditsToAdd,
+            balance_after: newBalance,
+            transaction_type: 'purchase',
+            reference_id: paymentIntent.id,
+            status: 'completed',
+            description: `Achat ${pack.name} (${creditsToAdd} crédits)`,
+            metadata: JSON.stringify({ packId: pack.id, stripePaymentIntentId: paymentIntent.id }),
+          });
+          logger.info(`[DB] ✅ ${creditsToAdd} crédits ajoutés au compte de l'utilisateur ${session.user_id}. Nouveau solde: ${newBalance}`);
+        } else {
+          logger.warn(`[DB] ⚠️ Pack ${pack.id} a 0 crédits (nb_downloads), aucun crédit ajouté.`);
+        }
       });
 
       logger.info(`[STRIPE] ✅ Traitement complet et réussi pour la session ${sessionId}.`);

@@ -200,7 +200,7 @@ export default function PaymentErrorPage() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Prix</p>
-                  <p className="font-semibold">{pack.price}€</p>
+                  <p className="font-semibold">{pack.priceLabel}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Nombre d'annonces</p>
