@@ -190,7 +190,7 @@ export class ExportController {
       }
 
       // Configurer les en-têtes CORS et envoyer le fichier
-      this.sendFileWithHeaders(res, buffer, filename, contentType, requestId);
+      this.sendFileWithHeaders(res, buffer, filename, contentType, requestId, req.headers.origin);
       audit('export.success', { sessionId, userId: reqUserId ?? tokenUserId, format, size: buffer.length });
       // Si c'est un export de trial, désactiver le flag pour empêcher d'autres téléchargements gratuits
       if (isTrial) {
@@ -210,7 +210,7 @@ export class ExportController {
       }
       
       // Envoyer une réponse d'erreur avec les en-têtes CORS appropriés
-      res.setHeader('Access-Control-Allow-Origin', '*');
+      const reqOrigin = req.headers.origin; res.setHeader('Access-Control-Allow-Origin', reqOrigin && config.cors.allowedOrigins.includes(reqOrigin) ? reqOrigin : config.cors.allowedOrigins[0]);
       res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, HEAD');
       res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma, Expires');
       
@@ -268,7 +268,7 @@ export class ExportController {
       this.saveBackupFile(buffer, filename, requestId);
       
       // Configurer les en-têtes CORS et envoyer le fichier
-      this.sendFileWithHeaders(res, buffer, filename, contentType, requestId);
+      this.sendFileWithHeaders(res, buffer, filename, contentType, requestId, req.headers.origin);
     } catch (error) {
       // Log détaillé de l'erreur pour faciliter le débogage
       logger.error(`[${requestId}] Erreur lors de la génération du fichier de démonstration: ${error instanceof Error ? error.message : String(error)}`);
@@ -278,7 +278,7 @@ export class ExportController {
       }
       
       // Envoyer une réponse d'erreur avec les en-têtes CORS appropriés
-      res.setHeader('Access-Control-Allow-Origin', '*');
+      const reqOrigin = req.headers.origin; res.setHeader('Access-Control-Allow-Origin', reqOrigin && config.cors.allowedOrigins.includes(reqOrigin) ? reqOrigin : config.cors.allowedOrigins[0]);
       res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, HEAD');
       res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma, Expires');
       
@@ -352,8 +352,12 @@ export class ExportController {
       const backupData = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
       
       // Ajouter les en-têtes CORS pour permettre l'accès depuis le frontend
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, cache-control');
+      const backupOrigin = req.headers.origin;
+      if (backupOrigin && config.cors.allowedOrigins.includes(backupOrigin)) {
+        res.header('Access-Control-Allow-Origin', backupOrigin);
+      }
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Cache-Control, X-CSRF-Token');
+      res.header('Access-Control-Allow-Credentials', 'true');
       
       // Renvoyer les données
       res.status(200).json(backupData);
@@ -396,9 +400,9 @@ export class ExportController {
   /**
    * Configure les en-têtes CORS et envoie le fichier
    */
-  private sendFileWithHeaders(res: Response, buffer: Buffer, filename: string, contentType: string, requestId: string): void {
-    // Configurer les en-têtes CORS de manière permissive pour cette réponse
-    res.setHeader('Access-Control-Allow-Origin', '*');
+  private sendFileWithHeaders(res: Response, buffer: Buffer, filename: string, contentType: string, requestId: string, origin?: string): void {
+    // Configurer les en-têtes CORS avec l'origine validée
+    res.setHeader('Access-Control-Allow-Origin', origin && config.cors.allowedOrigins.includes(origin) ? origin : config.cors.allowedOrigins[0]);
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, HEAD');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma, Expires');
     res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition, Content-Type, Content-Length');

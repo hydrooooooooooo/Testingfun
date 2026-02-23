@@ -19,12 +19,16 @@ export class PaymentController {
    */
   async verifyPayment(req: Request, res: Response, next: NextFunction) {
     try {
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma');
+      const origin = req.headers.origin;
+      if (origin && config.cors.allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+      }
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma, X-CSRF-Token');
       res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-      
+      res.header('Access-Control-Allow-Credentials', 'true');
+
       if (req.method === 'OPTIONS') {
-        return res.status(200).end();
+        return res.status(204).end();
       }
       
       const sessionIdParam = req.query.sessionId || req.query.session_id;

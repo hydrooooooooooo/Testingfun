@@ -63,14 +63,10 @@ export const corsForStripeWebhook = (req: Request, res: Response, next: NextFunc
   if (req.path.startsWith('/api/export') || req.path.startsWith('/api/preview') || req.path.startsWith('/api/verify-payment')) {
     const allowedOrigins = config.cors.allowedOrigins;
     const origin = req.headers.origin as string | undefined;
-    if (config.server.isDev) {
-      res.setHeader('Access-Control-Allow-Origin', origin || '*');
-    } else {
-      if (origin && allowedOrigins.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-      } else if (allowedOrigins[0]) {
-        res.setHeader('Access-Control-Allow-Origin', allowedOrigins[0]);
-      }
+    if (origin && allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    } else if (allowedOrigins[0]) {
+      res.setHeader('Access-Control-Allow-Origin', allowedOrigins[0]);
     }
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, HEAD');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key, Cache-Control, Pragma, Expires, Origin, X-Requested-With, Accept');
@@ -95,13 +91,8 @@ export const corsForStripeWebhook = (req: Request, res: Response, next: NextFunc
   
   if (origin && allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
-  } else {
-    // En développement, on est plus permissif
-    if (config.server.isDev) {
-      res.setHeader('Access-Control-Allow-Origin', '*');
-    } else {
-      res.setHeader('Access-Control-Allow-Origin', allowedOrigins[0]);
-    }
+  } else if (allowedOrigins[0]) {
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigins[0]);
   }
   
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');

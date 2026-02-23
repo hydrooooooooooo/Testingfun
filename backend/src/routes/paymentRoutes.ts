@@ -48,12 +48,11 @@ router.post(
  */
 router.get(
   '/verify-payment',
-  // Utiliser cors() directement comme middleware pour cette route spécifique
   cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma', 'Expires'],
-    preflightContinue: false,
+    origin: config.cors.allowedOrigins,
+    credentials: true,
+    methods: ['GET', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma', 'Expires', 'X-CSRF-Token'],
     optionsSuccessStatus: 204
   }),
   [
@@ -71,10 +70,10 @@ router.get(
 router.post(
   '/force-payment',
   cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    preflightContinue: false,
+    origin: config.cors.allowedOrigins,
+    credentials: true,
+    methods: ['POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
     optionsSuccessStatus: 204
   }),
   protect, // Protéger la route
