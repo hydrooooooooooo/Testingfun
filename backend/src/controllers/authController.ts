@@ -181,6 +181,19 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
   }
 };
 
+/**
+ * Return the current authenticated user info (reads from httpOnly cookie).
+ */
+export const me = async (req: Request, res: Response): Promise<void> => {
+  // protect middleware already decoded the token and set req.user
+  const user = (req as any).user;
+  if (!user) {
+    res.status(401).json({ message: 'Not authenticated' });
+    return;
+  }
+  res.status(200).json({ user });
+};
+
 // Serve a minimal HTML page for password reset (backend-only flow)
 export const resetPasswordPage = async (req: Request, res: Response): Promise<void> => {
   const { token } = req.params;

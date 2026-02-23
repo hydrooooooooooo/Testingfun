@@ -30,9 +30,11 @@ const ProfilePage: React.FC = () => {
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await api.put('/user/profile', profileData);
-      if (response.data.token) {
-        login(response.data.token);
+      await api.put('/user/profile', profileData);
+      // Refresh user info from the cookie-authenticated endpoint
+      const meResponse = await api.get('/auth/me');
+      if (meResponse.data?.user) {
+        login(meResponse.data.user);
       }
       toast({ title: 'Succès', description: 'Votre profil a été mis à jour.' });
     } catch (error: any) {

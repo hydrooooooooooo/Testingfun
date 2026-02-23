@@ -12,16 +12,17 @@ import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
-  FormLabel, 
-  FormMessage 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
 } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
 import { Eye, EyeOff } from 'lucide-react';
+import api from '@/services/api';
 
 // Schéma de validation pour le formulaire d'inscription
 const formSchema = z.object({
@@ -60,25 +61,13 @@ export default function RegisterPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: values.name,
-          email: values.email,
-          password: values.password,
-          phone_number: values.phone_number,
-          confirm_password: values.confirm_password,
-        }),
+      await api.post('/auth/register', {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        phone_number: values.phone_number,
+        confirm_password: values.confirm_password,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Une erreur est survenue lors de l'inscription.");
-      }
 
       toast({
         title: 'Inscription réussie',
@@ -87,8 +76,8 @@ export default function RegisterPage() {
 
       navigate('/login');
 
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Une erreur inconnue est survenue.';
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || error.message || 'Une erreur inconnue est survenue.';
       toast({
         variant: 'destructive',
         title: "Erreur d'inscription",

@@ -22,3 +22,24 @@ export const apiLimiter = rateLimit({
     res.status(options.statusCode).send(options.message);
   },
 });
+
+/**
+ * Stricter rate limiter for authentication-sensitive endpoints
+ * (login, password reset, registration).
+ */
+export const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 attempts per 15 minutes
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: 'Trop de tentatives. Veuillez réessayer dans 15 minutes.',
+  handler: (req, res, next, options) => {
+    logger.warn(`Auth rate limit exceeded for IP: ${req.ip}`, {
+      method: req.method,
+      url: req.originalUrl,
+    });
+    audit('security.auth_rate_limited', { ip: req.ip, method: req.method, url: req.originalUrl });
+    void alertService.notify('security.auth_rate_limited', { ip: req.ip, method: req.method, url: req.originalUrl });
+    res.status(options.statusCode).send(options.message);
+  },
+});

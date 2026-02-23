@@ -51,8 +51,8 @@ export default function LoginPage() {
       setLastEmail(values.email);
       const { data } = await api.post('/auth/login', values);
 
-      // La logique de stockage est maintenant gérée par le contexte
-      login(data.token); 
+      // Store user info in context (auth is via httpOnly cookie)
+      login(data.user);
 
       toast({
         title: 'Connexion réussie',

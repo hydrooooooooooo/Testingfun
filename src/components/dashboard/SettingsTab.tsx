@@ -15,7 +15,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 
 const SettingsTab: React.FC = () => {
-  const { user, token, login, logout } = useAuth();
+  const { user, login, logout } = useAuth();
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
@@ -39,8 +39,9 @@ const SettingsTab: React.FC = () => {
     try {
       const { data } = await api.put('/user/profile', { name, phone_number: phoneNumber });
 
-      // Si le backend renvoie encore un token, on le garde pour compatibilité UI
-      if (data?.token) login(data.token);
+      // Refresh user info from the cookie-authenticated endpoint
+      const meResponse = await api.get('/auth/me');
+      if (meResponse.data?.user) login(meResponse.data.user);
       toast.success('Profil mis à jour avec succès !');
 
     } catch (err: any) {

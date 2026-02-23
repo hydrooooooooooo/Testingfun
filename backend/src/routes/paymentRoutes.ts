@@ -55,6 +55,7 @@ router.get(
     allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma', 'Expires', 'X-CSRF-Token'],
     optionsSuccessStatus: 204
   }),
+  protect,
   [
     query('sessionId').isString().withMessage('Session ID is required'),
   ],

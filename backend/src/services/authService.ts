@@ -9,7 +9,8 @@ import { mailer, renderVerificationEmail, renderPasswordResetEmail } from './mai
 export class AuthService {
   
     async register(userData: UserRegistration): Promise<{ user: User; token: string }> {
-    const { email, password, name, phone_number } = userData;
+    const { password, name, phone_number } = userData;
+    const email = userData.email.trim().toLowerCase();
 
     // 1. Vérifier si l'email est unique
     const existingUser = await db<User>('users').where({ email }).first();
@@ -56,7 +57,8 @@ export class AuthService {
   }
 
   async login(credentials: UserLogin): Promise<{ user: User; token: string }> {
-    const { email, password } = credentials;
+    const { password } = credentials;
+    const email = credentials.email.trim().toLowerCase();
 
     // 1. Trouver l'utilisateur par email
     const user = await db<User>('users').where({ email }).first();
@@ -133,7 +135,8 @@ export class AuthService {
     return true;
   }
 
-  async requestPasswordReset(email: string): Promise<boolean> {
+  async requestPasswordReset(rawEmail: string): Promise<boolean> {
+    const email = rawEmail.trim().toLowerCase();
     // 1. Trouver l'utilisateur par email
     const user = await db<User>('users').where({ email }).first();
 
@@ -213,14 +216,14 @@ export class AuthService {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-    // 4. Mettre à jour le mot de passe et invalider le token
+    // 4. Mettre à jour le mot de passe, invalider le token, and force re-login
     await db('users')
       .where({ id: user.id })
       .update({
         password_hash: hashedPassword,
         reset_token: null,
         reset_token_expires_at: null,
-        // On pourrait aussi forcer une nouvelle connexion en invalidant les sessions/tokens JWT existants ici
+        password_changed_at: new Date(),
       });
 
     return true;

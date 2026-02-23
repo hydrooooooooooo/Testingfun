@@ -2,17 +2,18 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
 import { audit } from '../utils/logger';
+import db from '../database';
 
 // Étendre le type Request de Express pour inclure notre propriété `user`
 export interface AuthenticatedRequest extends Request {
-  user?: { 
-    id: number; 
-    email: string; 
-    role: string 
+  user?: {
+    id: number;
+    email: string;
+    role: string
   };
 }
 
-export const protect = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const protect = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   let token: string | undefined;
 
   // 1) Try cookie first
@@ -29,7 +30,18 @@ export const protect = (req: AuthenticatedRequest, res: Response, next: NextFunc
   }
 
   try {
-    const decoded = jwt.verify(token, config.api.jwtSecret as string) as { userId: number; email: string; role: string };
+    const decoded = jwt.verify(token, config.api.jwtSecret as string) as { userId: number; email: string; role: string; iat: number };
+
+    // Check if password was changed after token was issued
+    const user = await db('users').where({ id: decoded.userId }).select('password_changed_at').first();
+    if (user?.password_changed_at) {
+      const changedAtSec = Math.floor(new Date(user.password_changed_at).getTime() / 1000);
+      if (decoded.iat < changedAtSec) {
+        audit('auth.token_invalidated_password_change', { path: req.path, ip: req.ip, userId: decoded.userId });
+        return res.status(401).json({ message: 'Password changed. Please log in again.' });
+      }
+    }
+
     req.user = {
       id: decoded.userId,
       email: decoded.email,

@@ -283,9 +283,22 @@ export const changePassword = async (req: AuthenticatedRequest, res: Response) =
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-    await db('users').where({ id: userId }).update({ password_hash: hashedPassword });
+    await db('users').where({ id: userId }).update({
+      password_hash: hashedPassword,
+      password_changed_at: new Date(),
+    });
 
-    res.status(200).json({ message: 'Mot de passe mis à jour avec succès.' });
+    // Clear auth cookie to force re-login with new credentials
+    const isSecure = req.protocol === 'https' || (req.get('x-forwarded-proto') || '').includes('https');
+    res.cookie('access_token', '', {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: isSecure,
+      path: '/',
+      maxAge: 0,
+    });
+
+    res.status(200).json({ message: 'Mot de passe mis à jour avec succès. Veuillez vous reconnecter.' });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Une erreur inconnue est survenue.';
     logger.error(`Error in changePassword for user ${userId}: ${errorMessage}`);

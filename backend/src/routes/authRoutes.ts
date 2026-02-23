@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import * as authController from '../controllers/authController';
+import { protect } from '../middlewares/authMiddleware';
+import { authLimiter } from '../middlewares/rateLimiter';
 
 const router = Router();
 
@@ -33,7 +35,7 @@ const router = Router();
  *       409:
  *         description: Conflict, email already exists
  */
-router.post('/register', authController.register);
+router.post('/register', authLimiter, authController.register);
 
 /**
  * @swagger
@@ -61,7 +63,7 @@ router.post('/register', authController.register);
  *       401:
  *         description: Unauthorized, invalid credentials
  */
-router.post('/login', authController.login);
+router.post('/login', authLimiter, authController.login);
 
 /**
  * @swagger
@@ -104,7 +106,7 @@ router.get('/verify-email/:token', authController.verifyEmail);
  *       200:
  *         description: If user exists, a reset link is sent
  */
-router.post('/request-password-reset', authController.requestPasswordReset);
+router.post('/request-password-reset', authLimiter, authController.requestPasswordReset);
 
 /**
  * @swagger
@@ -132,7 +134,7 @@ router.post('/request-password-reset', authController.requestPasswordReset);
  *       400:
  *         description: Invalid or expired token
  */
-router.post('/reset-password', authController.resetPassword);
+router.post('/reset-password', authLimiter, authController.resetPassword);
 
 /**
  * @swagger
@@ -151,6 +153,9 @@ router.post('/reset-password', authController.resetPassword);
  *         description: HTML page with password reset form
  */
 router.get('/reset-password/:token', authController.resetPasswordPage);
+
+// Return current user from httpOnly cookie
+router.get('/me', protect, authController.me);
 
 // CSRF token endpoint (frontend fetches token and sends it back in X-CSRF-Token header)
 router.get('/csrf-token', authController.csrfToken);
