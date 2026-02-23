@@ -165,9 +165,24 @@ export class ApifyService {
         logger.warn('Skipping Apify webhook registration (no https endpoint). Set APIFY_WEBHOOK_URL=https://... or BACKEND_URL=https://...', { backendUrl, explicitWebhookBase });
       }
 
-      // Lancer l'acteur en mode asynchrone
-      const runResult = await apifyClient.actor(actorId).start(input, startOptions);
-      
+      // Lancer l'acteur en mode asynchrone avec timeout
+      const APIFY_START_TIMEOUT_MS = 60_000; // 60 seconds
+      let runResult: any;
+      try {
+        runResult = await Promise.race([
+          apifyClient.actor(actorId).start(input, startOptions),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Apify actor start timed out after 60s')), APIFY_START_TIMEOUT_MS)
+          ),
+        ]);
+      } catch (startError: any) {
+        if (startError.message?.includes('timed out')) {
+          logger.error(`Apify start timeout for session ${sessionId}`, { url, actorId });
+          throw new Error('Le lancement du scraping a pris trop de temps. Veuillez réessayer.');
+        }
+        throw startError;
+      }
+
       // Convert to the expected structure
       const run = {
         id: runResult.id,
@@ -285,14 +300,21 @@ export class ApifyService {
    * Get dataset items
    */
   async getDatasetItems(datasetId: string, limit: number | null = null): Promise<any[]> {
+    const DATASET_TIMEOUT_MS = 30_000; // 30 seconds
     try {
       const options: any = {};
       if (limit) {
         options.limit = limit;
       }
-      
-      const { items } = await apifyClient.dataset(datasetId).listItems(options);
-      return items.map((item: ApifyItem) => this.extractItemData(item));
+
+      const result = await Promise.race([
+        apifyClient.dataset(datasetId).listItems(options),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error(`Dataset fetch timed out after ${DATASET_TIMEOUT_MS / 1000}s`)), DATASET_TIMEOUT_MS)
+        ),
+      ]);
+
+      return result.items.map((item: ApifyItem) => this.extractItemData(item));
     } catch (error) {
       logger.error(`Error getting dataset items for ${datasetId}:`, error);
       throw new Error(`Failed to get dataset items: ${(error as Error).message}`);

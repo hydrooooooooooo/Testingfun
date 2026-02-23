@@ -70,46 +70,20 @@ export class ExportService {
   }
 
   /**
-   * Normaliser les données d'un item
+   * Map already-normalized items from apifyService to export format.
+   * apifyService.extractItemData() is the single source of truth for normalization.
    */
   private normalizeItem(item: any): any {
     return {
-      title: item.title || item.marketplace_listing_title || item.custom_title || item.name || 'Sans titre',
-      price: this.normalizePrice(item),
-      description: this.normalizeDescription(item),
-      location: this.normalizeLocation(item),
-      url: item.url || item.listingUrl || item.link || item.href || '',
-      postedAt: item.postedAt || item.date || new Date().toISOString().split('T')[0],
-      imageUrl: this.extractImageUrl(item),
-      // Garder les données brutes pour le tableau récapitulatif
+      title: item.title || 'Sans titre',
+      price: item.price || 'Prix non spécifié',
+      description: item.desc || item.description || 'Description non disponible',
+      location: typeof item.location === 'string' ? item.location : 'Localisation non spécifiée',
+      url: item.url || '',
+      postedAt: item.postedAt || new Date().toISOString().split('T')[0],
+      imageUrl: item.image || (Array.isArray(item.images) ? item.images[0] : null) || this.extractImageUrl(item),
       rawData: item
     };
-  }
-
-  private normalizePrice(item: any): string {
-    if (item.listing_price?.formatted_amount) return item.listing_price.formatted_amount;
-    if (item.listing_price?.amount) return `${item.listing_price.amount} ${item.listing_price.currency || '€'}`;
-    if (item.price) return typeof item.price === 'string' ? item.price : `${item.price} €`;
-    if (item.prix) return typeof item.prix === 'string' ? item.prix : `${item.prix} €`;
-    return 'Prix non spécifié';
-  }
-
-  private normalizeDescription(item: any): string {
-    if (item.redacted_description?.text) return item.redacted_description.text;
-    if (item.description) return item.description;
-    if (item.desc) return item.desc;
-    return 'Description non disponible';
-  }
-
-  private normalizeLocation(item: any): string {
-    if (typeof item.location === 'string') return item.location;
-    if (item.location?.reverse_geocode_detailed) {
-      const loc = item.location.reverse_geocode_detailed;
-      return [loc.city, loc.state, loc.postal_code].filter(Boolean).join(', ');
-    }
-    if (item.location?.reverse_geocode?.city) return item.location.reverse_geocode.city;
-    if (item.lieu) return item.lieu;
-    return 'Localisation non spécifiée';
   }
 
   /**
