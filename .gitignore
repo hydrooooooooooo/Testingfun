@@ -1,4 +1,6 @@
+# ============================================
 # Logs
+# ============================================
 logs
 *.log
 npm-debug.log*
@@ -7,25 +9,70 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# ============================================
+# Dependencies
+# ============================================
 node_modules
+
+# ============================================
+# Build output
+# ============================================
 dist
 dist-ssr
-*.local
+dist-o2switch
 
-# Editor directories and files
+# ============================================
+# Environment variables & Secrets
+# NEVER commit real secrets!
+# ============================================
+.env
+.env.*
+!.env.exemple
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+backend/mvola-sdk/.env
+backend/mvola-sdk/.env.*
+!backend/mvola-sdk/.env.exemple
+DEPLOY-O2SWITCH/**/.env
+DEPLOY-O2SWITCH/**/.env.*
+!DEPLOY-O2SWITCH/**/.env.exemple
+
+# Secret / key files
+*.key
+*.pem
+*.p8
+*.p12
+*.pfx
+secrets.json
+
+# ============================================
+# Database files
+# ============================================
+*.sqlite
+*.db
+**/database-dump.sql
+
+# ============================================
+# Editor & IDE directories
+# ============================================
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-# env files
-backend/.env
-backend/.env.*
-backend/mvola-sdk/.env
-backend/mvola-sdk/.env.*
-.env
-.env.production
+
+# ============================================
+# OS files
+# ============================================
+.DS_Store
+Thumbs.db
+
+# ============================================
+# Misc / local
+# ============================================
+*.local
