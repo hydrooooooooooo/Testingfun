@@ -110,11 +110,20 @@ export const useCredits = () => {
     itemCount: number
   ): Promise<CreditEstimate | null> => {
     try {
-      const response = await api.post('/user/credits/estimate', {
+      const response = await api.post('/estimate/simple', {
         serviceType,
         itemCount,
       });
-      return response.data;
+      const data = response.data;
+      // Map from CostEstimation shape to CreditEstimate shape
+      return {
+        serviceType: data.serviceType,
+        itemCount,
+        estimatedCost: data.totalCost,
+        currentBalance: data.userBalance,
+        hasEnoughCredits: data.hasEnough,
+        shortfall: data.shortfall,
+      };
     } catch (err: any) {
       console.error('Error estimating cost:', err);
       throw new Error(err.response?.data?.message || 'Erreur lors de l\'estimation du coût');

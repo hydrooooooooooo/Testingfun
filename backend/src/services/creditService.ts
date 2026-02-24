@@ -26,12 +26,13 @@ export type TransactionType =
   | 'admin_adjustment' 
   | 'expiration';
 
-export type ServiceType = 
-  | 'facebook_posts' 
-  | 'facebook_pages' 
+export type ServiceType =
+  | 'facebook_posts'
+  | 'facebook_pages'
   | 'facebook_pages_benchmark'  // Agent 2: Analyse Concurrence
   | 'facebook_pages_calendar'   // Agent 3: Calendrier Éditorial (futur)
   | 'facebook_pages_copywriting' // Agent 4: Optimiseur Copywriting (futur)
+  | 'ai_analysis'               // Analyse IA par page
   | 'marketplace';
 
 export type TransactionStatus = 'completed' | 'reserved' | 'refunded';

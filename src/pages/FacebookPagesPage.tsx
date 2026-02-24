@@ -506,7 +506,7 @@ export default function FacebookPagesPage() {
                             onChange={(e) => setExtractComments(e.target.checked)}
                             className="w-3.5 h-3.5 text-navy rounded"
                           />
-                          <span className="text-xs text-navy-700">Inclure les commentaires (+1 crédit)</span>
+                          <span className="text-xs text-navy-700">Inclure les commentaires (+0.1 cr/post)</span>
                         </label>
                       </div>
                     )}
@@ -522,7 +522,7 @@ export default function FacebookPagesPage() {
                     pageCount: extractSinglePost ? 1 : validCount,
                     postsPerPage: extractSinglePost ? 1 : (extractPosts ? postsLimit : 0),
                     includeComments: extractComments,
-                    commentsPerPost: extractComments ? 10 : 0,
+                    commentsPerPost: extractComments ? commentsLimit : 0,
                   }}
                   onEstimateChange={(est) => setCreditEstimate({
                     cost: est.cost,
