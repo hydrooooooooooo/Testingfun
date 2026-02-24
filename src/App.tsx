@@ -6,9 +6,12 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { AuthProvider } from "./context/AuthContext";
 import { ScrapeProvider } from "./contexts/ScrapeContext";
 import { DashboardProvider } from "./context/DashboardContext";
+import { LocaleProvider } from "./i18n/LocaleProvider";
 
 // Pages - Public
 import Index from "./pages/Index";
+import AboutPage from "./pages/AboutPage";
+import UseCasePage from "./pages/UseCasePage";
 import Pricing from "./pages/Pricing";
 import Support from "./pages/Support";
 import ExemplesPage from "./pages/ExemplesPage";
@@ -66,6 +69,7 @@ function App() {
         <AuthProvider>
           <DashboardProvider>
             <BrowserRouter>
+              <LocaleProvider>
               <ScrapeProvider>
               <Toaster />
               <Sonner />
@@ -84,6 +88,18 @@ function App() {
                   <Route path="/forgot-password" element={<RequestPasswordResetPage />} />
                   <Route path="/verify-email/success" element={<VerifyEmailSuccess />} />
                   <Route path="/verify-email/error" element={<VerifyEmailError />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/use-cases/:slug" element={<UseCasePage />} />
+
+                  {/* EN routes */}
+                  <Route path="/en" element={<Index />} />
+                  <Route path="/en/pricing" element={<Pricing />} />
+                  <Route path="/en/support" element={<Support />} />
+                  <Route path="/en/examples" element={<ExemplesPage />} />
+                  <Route path="/en/about" element={<AboutPage />} />
+                  <Route path="/en/use-cases/:slug" element={<UseCasePage />} />
+                  <Route path="/en/login" element={<LoginPage />} />
+                  <Route path="/en/register" element={<RegisterPage />} />
                 </Route>
 
                 {/* Payment flow routes (accessible without full dashboard layout) */}
@@ -126,6 +142,7 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Routes>
               </ScrapeProvider>
+              </LocaleProvider>
             </BrowserRouter>
         </DashboardProvider>
       </AuthProvider>
