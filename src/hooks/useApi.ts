@@ -376,6 +376,21 @@ export function useApi() {
     }
   }, []);
 
+  const getAdminAIUsage = useCallback(async (filters?: { from?: string; to?: string; userId?: number }) => {
+    try {
+      const params: Record<string, string> = {};
+      if (filters?.from) params.from = filters.from;
+      if (filters?.to) params.to = filters.to;
+      if (filters?.userId) params.userId = String(filters.userId);
+      const response = await api.get('/admin/ai-usage', { params });
+      return response.data?.data || response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors du chargement des données IA';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, []);
+
   // Start a one-time free trial scrape (max 10 items)
   const startTrialScrape = async (
     url: string
@@ -485,6 +500,7 @@ export function useApi() {
     getAdminReport,
     getAdminSearches,
     getAdminAdvancedMetrics,
+    getAdminAIUsage,
     exportAdminSearchesCsv,
     searchAdminUsers,
     startTrialScrape,
