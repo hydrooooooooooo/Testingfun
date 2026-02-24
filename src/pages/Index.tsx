@@ -1,514 +1,650 @@
-import ScrapePreview from "@/components/ScrapePreview";
-import ScrapeProgress from "@/components/ScrapeProgress";
-import ExcelDownloadButton from "@/components/ExcelDownloadButton";
-import ScrapeSupportInfo from "@/components/ScrapeSupportInfo";
-import PaymentModal from "@/components/PaymentModal";
-import ScrapeForm from "@/components/ScrapeForm";
-import SelectedPackInfos from "@/components/SelectedPackInfos";
-import ScrapeResultSection from "@/components/ScrapeResultSection";
-import React, { useEffect } from "react";
-import { useScrapeContext } from "@/contexts/ScrapeContext";
-import { useSearchParams } from "react-router-dom";
-import { Pack } from "@/lib/plans";
-import { 
-  Clock, 
-  Database, 
-  BarChart3, 
-  Zap, 
-  FileSpreadsheet, 
-  Shield, 
-  CheckCircle,
-  ArrowRight,
-  Users,
-  Building,
-  TrendingUp,
-  Search,
-  Download,
-  Play,
-  Store,
-  Target,
-  PieChart,
-  Briefcase,
-  Home,
-  Car,
-  ShoppingBag,
-  MapPin,
-  BarChart2,
-  LineChart,
-  Copy,
-  Link,
-  Star,
-  Timer,
-  DollarSign
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import {
+  ShoppingBag, FileText, TrendingUp, Sparkles, Calendar, Bell,
+  Shield, Users, Home, Car, BarChart3, UserPlus, Settings, Download,
+  ArrowRight, Zap
 } from "lucide-react";
 
-// Ajout Google Fonts (Inter)
-if (typeof document !== "undefined" && !document.getElementById("google-inter")) {
-  const link = document.createElement("link");
-  link.id = "google-inter";
-  link.rel = "stylesheet";
-  link.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap";
-  document.head.appendChild(link);
-}
-
 export default function Index() {
-  const [searchParams] = useSearchParams();
-  const {
-    loading,
-    scrapeDone,
-    isPaid,
-    stats,
-    previewItems,
-    progress,
-    resetScrape,
-    status,
-    startScrape,
-    handlePayment,
-    exportData,
-    sessionId,
-    isPaymentModalOpen,
-    setPaymentModalOpen,
-    paymentInfo,
-    onStripePay,
-    onMvolaPay,
-    packs,
-    selectedPackId,
-    setSelectedPackId,
-  } = useScrapeContext();
+  /* ---------- Pricing packs from API ---------- */
+  const [packs, setPacks] = useState<any[]>([]);
+  const [loadingPacks, setLoadingPacks] = useState(true);
 
-  const [url, setUrl] = React.useState("");
-
-  // Scroll to form if coming from pricing page
   useEffect(() => {
-    if (searchParams.get('packId')) {
-      setTimeout(() => {
-        document.getElementById('scraping-form')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 300);
-    }
-  }, [searchParams]);
+    fetch("/api/packs")
+      .then((res) => res.json())
+      .then((data) => {
+        setPacks(data);
+        setLoadingPacks(false);
+      })
+      .catch(() => setLoadingPacks(false));
+  }, []);
 
-  const selectedPack = React.useMemo(() => 
-    packs.find(p => p.id === selectedPackId) || null,
-    [selectedPackId, packs]
-  );
+  /* ---------- Features data ---------- */
+  const features = [
+    {
+      icon: ShoppingBag,
+      title: "Extraction Marketplace",
+      description:
+        "Transformez une recherche Facebook Marketplace en fichier Excel structur\u00e9 en 3 minutes. Titres, prix, descriptions, images, localisations.",
+      tag: "Agents immo \u00b7 E-commerce \u00b7 Revendeurs",
+    },
+    {
+      icon: FileText,
+      title: "Analyse Facebook Pages",
+      description:
+        "Analysez les publications, l\u2019engagement et la strat\u00e9gie de contenu de n\u2019importe quelle Page Facebook.",
+      tag: "Community managers \u00b7 Agences",
+    },
+    {
+      icon: TrendingUp,
+      title: "Benchmark Concurrentiel",
+      description:
+        "Comparez les performances de marques concurrentes : engagement, fr\u00e9quence de publication, types de contenu.",
+      tag: "Directeurs marketing \u00b7 Analystes",
+    },
+    {
+      icon: Sparkles,
+      title: "Analyses IA",
+      description:
+        "L\u2019intelligence artificielle d\u00e9crypte vos donn\u00e9es et g\u00e9n\u00e8re des insights actionnables pour votre strat\u00e9gie.",
+      tag: "Data analysts \u00b7 D\u00e9cideurs",
+    },
+    {
+      icon: Calendar,
+      title: "Automatisations",
+      description:
+        "Programmez des extractions r\u00e9currentes et recevez vos donn\u00e9es automatiquement, sans intervention.",
+      tag: "\u00c9quipes marketing \u00b7 Veilleurs",
+    },
+    {
+      icon: Bell,
+      title: "Surveillance & Mentions",
+      description:
+        "Soyez alert\u00e9 en temps r\u00e9el d\u00e8s que votre marque, vos produits ou vos concurrents sont mentionn\u00e9s.",
+      tag: "E-r\u00e9putation \u00b7 Relations presse",
+    },
+  ];
 
-  const handleScrape = React.useCallback((e: React.FormEvent, options: any) => {
-    e.preventDefault();
-    if (!selectedPackId) {
-      console.error("No pack selected");
-      return;
-    }
-    startScrape(url, { ...options, packId: selectedPackId });
-  }, [url, startScrape, selectedPackId]);
+  /* ---------- Use cases data ---------- */
+  const useCases = [
+    {
+      icon: Home,
+      title: "Immobilier",
+      description:
+        "Suivez les prix, identifiez les opportunit\u00e9s et analysez le march\u00e9 locatif ou de vente en temps r\u00e9el.",
+      audience: "Agents \u00b7 Promoteurs \u00b7 Investisseurs",
+    },
+    {
+      icon: ShoppingBag,
+      title: "E-commerce",
+      description:
+        "Analysez les prix, la disponibilit\u00e9 et les strat\u00e9gies de vos concurrents sur Marketplace.",
+      audience: "Vendeurs \u00b7 Analystes pricing",
+    },
+    {
+      icon: Car,
+      title: "Automobile",
+      description:
+        "\u00c9valuez la cote des v\u00e9hicules, suivez les tendances et trouvez les meilleures affaires.",
+      audience: "Concessionnaires \u00b7 Particuliers",
+    },
+    {
+      icon: BarChart3,
+      title: "\u00c9tudes de march\u00e9",
+      description:
+        "Collectez des donn\u00e9es terrain \u00e0 grande \u00e9chelle pour alimenter vos analyses sectorielles.",
+      audience: "Cabinets conseil \u00b7 Chercheurs",
+    },
+  ];
+
+  /* ---------- FAQ data ---------- */
+  const faqItems = [
+    {
+      question: "Quelles donn\u00e9es puis-je extraire ?",
+      answer:
+        "Titres, prix, descriptions, images, localisations, contacts, URLs\u2026 Toutes les donn\u00e9es sont organis\u00e9es dans un fichier Excel pr\u00eat \u00e0 utiliser.",
+    },
+    {
+      question: "C\u2019est vraiment si rapide ?",
+      answer:
+        "Oui ! 3 minutes en moyenne pour extraire des centaines d\u2019annonces, au lieu des heures de copier-coller manuel.",
+    },
+    {
+      question: "Mes donn\u00e9es sont-elles prot\u00e9g\u00e9es ?",
+      answer:
+        "Absolument. Nous ne stockons aucune donn\u00e9e. Vos URL et donn\u00e9es sont trait\u00e9es en temps r\u00e9el puis supprim\u00e9es automatiquement.",
+    },
+    {
+      question: "Dois-je m\u2019abonner ?",
+      answer:
+        "Non ! Pas d\u2019abonnement. Vous achetez des cr\u00e9dits et les utilisez quand vous voulez. Id\u00e9al pour une utilisation ponctuelle ou r\u00e9guli\u00e8re.",
+    },
+    {
+      question: "Quelles sont les fonctionnalit\u00e9s avanc\u00e9es ?",
+      answer:
+        "Au-del\u00e0 de l\u2019extraction, EasyScrapy propose l\u2019analyse IA de vos donn\u00e9es, le benchmark concurrentiel, les automatisations programm\u00e9es et la surveillance de mentions en temps r\u00e9el.",
+    },
+    {
+      question: "Comment fonctionne le syst\u00e8me de cr\u00e9dits ?",
+      answer:
+        "Vous achetez un pack de cr\u00e9dits. Chaque extraction consomme un nombre de cr\u00e9dits proportionnel au volume de donn\u00e9es. Vos cr\u00e9dits n\u2019expirent jamais.",
+    },
+  ];
+
+  /* ---------- Price formatter ---------- */
+  const formatPrice = (price: number) =>
+    new Intl.NumberFormat("fr-MG").format(price);
 
   return (
-    <div className="flex flex-col items-center min-h-screen w-full bg-gradient-to-b from-blue-50 to-white">
-      
-      {/* Hero Section Ultra Simplifié */}
-      <section className="w-full max-w-7xl mx-auto px-4 py-10">
-        <div className="text-center mb-10">
-          {/* Badge d'introduction */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 rounded-full text-xs sm:text-sm font-semibold mb-6 border border-blue-200">
-            <Zap className="w-4 h-4" />
-            Extraction automatique Facebook Marketplace
-          </div>
-          
-          {/* Titre principal simplifié et percutant */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight leading-snug">
-            Transformez une recherche
-            <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              en fichier Excel
-            </span>
-          </h1>
-          
-          {/* Sous-titre ultra clair */}
-          <p className="text-base md:text-lg text-gray-700 mb-6 max-w-3xl md:max-w-4xl mx-auto leading-normal font-medium">
-            Copiez l'URL de votre recherche Facebook Marketplace,
-            <span className="block text-blue-600 font-semibold md:font-bold">obtenez TOUTES les données en Excel en 3 minutes ⚡</span>
-          </p>
+    <div className="flex flex-col min-h-screen w-full">
+      {/* ================================================================
+          1. HERO SECTION
+      ================================================================= */}
+      <section className="relative w-full bg-navy overflow-hidden">
+        {/* Decorative gold circles */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-gold/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/5 rounded-full blur-3xl" />
 
-          {/* Bénéfices immédiats */}
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-8">
-            <div className="group flex items-center gap-3 bg-white/80 backdrop-blur px-5 md:px-6 py-4 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl hover:-translate-y-0.5 transition-all">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500/15 to-green-500/10 flex items-center justify-center ring-1 ring-green-200">
-                <Timer className="w-5 h-5 text-green-600" />
-              </div>
-              <div className="text-left">
-                <p className="font-semibold md:font-bold text-gray-900">Fini le copier-coller</p>
-                <p className="text-xs md:text-sm text-gray-600">3 minutes au lieu de 3 heures</p>
-              </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24 lg:pt-28 lg:pb-32">
+          <div className="text-center max-w-4xl mx-auto">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 text-gold-800 border border-gold/30 rounded-full text-sm font-semibold mb-8">
+              <Zap className="w-4 h-4" />
+              Plateforme d'Intelligence Sociale
             </div>
-            
-            <div className="group flex items-center gap-3 bg-white/80 backdrop-blur px-5 md:px-6 py-4 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl hover:-translate-y-0.5 transition-all">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500/15 to-blue-500/10 flex items-center justify-center ring-1 ring-blue-200">
-                <FileSpreadsheet className="w-5 h-5 text-blue-600" />
-              </div>
-              <div className="text-left">
-                <p className="font-semibold md:font-bold text-gray-900">Excel prêt à utiliser</p>
-                <p className="text-xs md:text-sm text-gray-600">Toutes les données organisées</p>
-              </div>
-            </div>
-            
-            <div className="group flex items-center gap-3 bg-white/80 backdrop-blur px-5 md:px-6 py-4 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl hover:-translate-y-0.5 transition-all">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500/15 to-purple-500/10 flex items-center justify-center ring-1 ring-purple-200">
-                <DollarSign className="w-5 h-5 text-purple-600" />
-              </div>
-              <div className="text-left">
-                <p className="font-semibold md:font-bold text-gray-900">Pas d'abonnement</p>
-                <p className="text-xs md:text-sm text-gray-600">Payez uniquement ce que vous utilisez</p>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Instructions ultra simples */}
-        <div className="rounded-2xl p-6 md:p-8 mb-10 bg-white/70 backdrop-blur-sm border border-gray-100 shadow">
-          <h2 className="text-xl md:text-2xl font-semibold text-center mb-6">
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Comment faire ?</span> C'est simple !
-          </h2>
-          
-          <div className="grid md:grid-cols-3 gap-5 md:gap-6 max-w-4xl mx-auto">
-            <div className="text-center md:text-left">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mx-auto md:mx-0 mb-3 ring-1 ring-blue-200 bg-blue-50 text-blue-700 font-bold">
-                <span className="text-base md:text-lg">1</span>
-              </div>
-              <h3 className="text-base md:text-lg font-semibold mb-1">Cherchez sur Facebook</h3>
-              <p className="text-sm md:text-base text-gray-600">Faites votre recherche normale sur Facebook Marketplace</p>
-            </div>
-            
-            <div className="text-center md:text-left">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mx-auto md:mx-0 mb-3 ring-1 ring-purple-200 bg-purple-50 text-purple-700 font-bold">
-                <span className="text-base md:text-lg">2</span>
-              </div>
-              <h3 className="text-base md:text-lg font-semibold mb-1">Copiez l'URL</h3>
-              <p className="text-sm md:text-base text-gray-600">Copiez l'adresse de la page de résultats</p>
-            </div>
-            
-            <div className="text-center md:text-left">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mx-auto md:mx-0 mb-3 ring-1 ring-green-200 bg-green-50 text-green-700 font-bold">
-                <span className="text-base md:text-lg">3</span>
-              </div>
-              <h3 className="text-base md:text-lg font-semibold mb-1">Récupérez Excel</h3>
-              <p className="text-sm md:text-base text-gray-600">Téléchargez votre fichier avec toutes les données</p>
-            </div>
-          </div>
-        </div>
+            {/* H1 */}
+            <h1 className="font-display text-white text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+              Extrayez, analysez et surveillez
+              <span className="block text-gold">vos donn\u00e9es sociales</span>
+            </h1>
 
-        {/* Formulaire principal */}
-        <div id="scraping-form" className="max-w-4xl mx-auto">
-          {packs.length > 0 && selectedPack ? (
-            <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
-              <ScrapeForm
-                url={url}
-                setUrl={setUrl}
-                loading={loading}
-                packs={packs}
-                selectedPackId={selectedPackId}
-                setSelectedPackId={setSelectedPackId}
-                selectedPack={selectedPack}
-                onScrape={handleScrape}
-              />
-            </div>
-          ) : (
-            <div className="text-center p-8 bg-gray-100 rounded-3xl">
-              <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
-              <p className="text-lg font-semibold text-gray-700">Chargement des options...</p>
-            </div>
-          )}
-          
-          {selectedPack && <SelectedPackInfos selectedPack={selectedPack} />}
-          
-          {loading && (
-            <div className="mt-8">
-              <ScrapeProgress 
-                percent={progress} 
-                stepLabel={status}
-              />
-            </div>
-          )}
-        </div>
-      </section>
+            {/* Subtitle */}
+            <p className="text-steel-200 text-lg sm:text-xl max-w-3xl mx-auto mb-10 leading-relaxed">
+              La plateforme tout-en-un pour transformer les donn\u00e9es Facebook en
+              avantage concurrentiel. Extraction automatique, analyse IA,
+              benchmark et surveillance en temps r\u00e9el.
+            </p>
 
-      {/* Results Section */}
-      <ScrapeResultSection
-        scrapeDone={scrapeDone}
-        isPaid={isPaid}
-        stats={stats}
-        propPreviewItems={previewItems}
-        onPayment={() => selectedPackId && handlePayment(selectedPackId)}
-        exportData={exportData}
-        resetScrape={resetScrape}
-      />
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+              <Link
+                to="/register"
+                className="inline-flex items-center gap-2 bg-gold text-navy font-bold rounded-xl px-8 py-4 hover:bg-gold-300 transition shadow-lg text-lg"
+              >
+                Commencer gratuitement
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <a
+                href="#features"
+                className="inline-flex items-center gap-2 border border-white/30 text-white rounded-xl px-8 py-4 hover:bg-white/10 transition text-lg"
+              >
+                D\u00e9couvrir les fonctionnalit\u00e9s
+              </a>
+            </div>
 
-      {paymentInfo && (
-        <PaymentModal
-          isOpen={isPaymentModalOpen}
-          onClose={() => setPaymentModalOpen(false)}
-          onStripePay={onStripePay}
-          onMvolaPay={onMvolaPay}
-          planName={paymentInfo.pack.name}
-        />
-      )}
-
-      {/* Section Problème/Solution très claire */}
-      <section className="w-full py-20 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Problème */}
-            <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-8">
-                😤 Vous perdez des heures à faire ça ?
-              </h2>
-              
-              <div className="space-y-6">
-                <div className="flex items-start gap-4 p-6 bg-red-50 border border-red-200 rounded-2xl">
-                  <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-white text-sm font-bold">❌</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-red-800">Copier-coller chaque annonce une par une</p>
-                    <p className="text-red-600 text-sm mt-1">3 heures pour 100 annonces...</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4 p-6 bg-red-50 border border-red-200 rounded-2xl">
-                  <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-white text-sm font-bold">❌</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-red-800">Risquer d'oublier des données importantes</p>
-                    <p className="text-red-600 text-sm mt-1">Prix, contact, localisation manqués</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4 p-6 bg-red-50 border border-red-200 rounded-2xl">
-                  <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-white text-sm font-bold">❌</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-red-800">Données non organisées pour vos analyses</p>
-                    <p className="text-red-600 text-sm mt-1">Impossible de faire des graphiques</p>
-                  </div>
-                </div>
+            {/* Stats row */}
+            <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
+              <div className="text-center">
+                <p className="text-gold font-display text-3xl sm:text-4xl font-bold">
+                  10 000+
+                </p>
+                <p className="text-steel-200 text-sm mt-1">
+                  extractions r\u00e9alis\u00e9es
+                </p>
               </div>
-            </div>
-            
-            {/* Solution */}
-            <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-8">
-                ⚡ Notre solution automatique !
-              </h2>
-              
-              <div className="space-y-6">
-                <div className="flex items-start gap-4 p-6 bg-green-50 border border-green-200 rounded-2xl">
-                  <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <CheckCircle className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-green-800">Extraction automatique de TOUTES les annonces</p>
-                    <p className="text-green-600 text-sm mt-1">3 minutes pour 1000+ annonces</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4 p-6 bg-green-50 border border-green-200 rounded-2xl">
-                  <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <CheckCircle className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-green-800">Toutes les données capturées automatiquement</p>
-                    <p className="text-green-600 text-sm mt-1">Prix, description, contact, images, localisation</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4 p-6 bg-green-50 border border-green-200 rounded-2xl">
-                  <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <CheckCircle className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-green-800">Excel parfaitement organisé</p>
-                    <p className="text-green-600 text-sm mt-1">Prêt pour tableaux de bord et analyses</p>
-                  </div>
-                </div>
+              <div className="text-center">
+                <p className="text-gold font-display text-3xl sm:text-4xl font-bold">
+                  99.9%
+                </p>
+                <p className="text-steel-200 text-sm mt-1">de fiabilit\u00e9</p>
+              </div>
+              <div className="text-center">
+                <p className="text-gold font-display text-3xl sm:text-4xl font-bold">
+                  48h
+                </p>
+                <p className="text-steel-200 text-sm mt-1">support max</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Cas d'usage simplifiés */}
-      <section className="w-full py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
+      {/* ================================================================
+          2. FEATURES SECTION
+      ================================================================= */}
+      <section id="features" className="w-full bg-cream-50 py-20 lg:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Parfait pour tous les professionnels
+            <h2 className="font-display text-navy text-3xl lg:text-4xl font-bold mb-4">
+              Une plateforme, six superpouvoirs
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Que vous soyez dans l'immobilier, l'automobile, le e-commerce ou les études de marché
+            <p className="text-steel text-lg max-w-2xl mx-auto">
+              Tout ce dont vous avez besoin pour exploiter les donn\u00e9es Facebook
+              de mani\u00e8re professionnelle.
             </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Immobilier */}
-            <div className="group bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 border border-blue-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Home className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Immobilier</h3>
-              <p className="text-gray-700 mb-6">
-                Surveillez les prix du marché et trouvez les meilleures opportunités
-              </p>
-              <div className="bg-white/80 rounded-xl p-4">
-                <p className="text-sm font-semibold text-blue-700">
-                  "500+ annonces analysées en 3 minutes au lieu de 2 jours"
-                </p>
-              </div>
-            </div>
 
-            {/* E-commerce */}
-            <div className="group bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-8 border border-green-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <ShoppingBag className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">E-commerce</h3>
-              <p className="text-gray-700 mb-6">
-                Analysez la concurrence et optimisez vos prix de vente
-              </p>
-              <div className="bg-white/80 rounded-xl p-4">
-                <p className="text-sm font-semibold text-green-700">
-                  "Surveillance concurrentielle automatisée"
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feat) => (
+              <div
+                key={feat.title}
+                className="bg-white rounded-2xl shadow border border-cream-300 p-8 hover:-translate-y-1 transition-transform duration-200"
+              >
+                <div className="w-12 h-12 bg-navy/10 rounded-xl flex items-center justify-center mb-5">
+                  <feat.icon className="w-6 h-6 text-navy" />
+                </div>
+                <h3 className="font-display text-navy text-xl font-bold mb-3">
+                  {feat.title}
+                </h3>
+                <p className="text-steel leading-relaxed mb-4">
+                  {feat.description}
                 </p>
+                <span className="inline-block bg-gold/10 text-gold-700 text-xs px-3 py-1 rounded-full">
+                  {feat.tag}
+                </span>
               </div>
-            </div>
-
-            {/* Automobile */}
-            <div className="group bg-gradient-to-br from-purple-50 to-purple-100 rounded-3xl p-8 border border-purple-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Car className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Automobile</h3>
-              <p className="text-gray-700 mb-6">
-                Évaluez la cote des véhicules et trouvez les meilleures affaires
-              </p>
-              <div className="bg-white/80 rounded-xl p-4">
-                <p className="text-sm font-semibold text-purple-700">
-                  "Comparaison de 1000+ véhicules instantanée"
-                </p>
-              </div>
-            </div>
-
-            {/* Études de marché */}
-            <div className="group bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl p-8 border border-orange-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 bg-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <BarChart3 className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Études</h3>
-              <p className="text-gray-700 mb-6">
-                Réalisez des études de marché complètes avec des données réelles
-              </p>
-              <div className="bg-white/80 rounded-xl p-4">
-                <p className="text-sm font-semibold text-orange-700">
-                  "Rapports clients alimentés par des données réelles"
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Témoignages/Garanties */}
-      <section className="w-full py-20 bg-gradient-to-r from-gray-900 to-gray-800">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold text-white mb-12">
-            Pourquoi nous faire confiance ?
-          </h2>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white/10 backdrop-blur rounded-3xl p-8 border border-white/20">
-              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Shield className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">100% Sécurisé</h3>
-              <p className="text-gray-300">
-                Aucune donnée stockée. Chiffrement de bout en bout pour protéger vos recherches.
-              </p>
-            </div>
-            
-            <div className="bg-white/10 backdrop-blur rounded-3xl p-8 border border-white/20">
-              <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <TrendingUp className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">99.9% Fiable</h3>
-              <p className="text-gray-300">
-                Infrastructure robuste qui traite des milliers de requêtes chaque jour sans interruption.
-              </p>
-            </div>
-            
-            <div className="bg-white/10 backdrop-blur rounded-3xl p-8 border border-white/20">
-              <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Users className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">Support Expert</h3>
-              <p className="text-gray-300">
-                Équipe technique malgache disponible pour vous aider à optimiser vos extractions.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ ultra simplifiée */}
-      <section className="w-full py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Questions fréquentes
+      {/* ================================================================
+          3. HOW IT WORKS
+      ================================================================= */}
+      <section className="w-full bg-white py-20 lg:py-28">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-navy text-3xl lg:text-4xl font-bold mb-4">
+              Comment \u00e7a marche ?
             </h2>
-            <p className="text-xl text-gray-600">Tout ce que vous devez savoir</p>
+            <p className="text-steel text-lg">
+              Trois \u00e9tapes simples pour acc\u00e9der \u00e0 vos donn\u00e9es.
+            </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                ❓ Quelles données j'obtiens ?
+
+          <div className="relative grid md:grid-cols-3 gap-12">
+            {/* Connecting line (desktop) */}
+            <div className="hidden md:block absolute top-16 left-[16.5%] right-[16.5%] h-0.5 bg-cream-300" />
+
+            {/* Step 1 */}
+            <div className="text-center relative">
+              <p className="text-gold font-display text-4xl font-bold mb-4">
+                01
+              </p>
+              <div className="w-14 h-14 bg-navy rounded-full flex items-center justify-center mx-auto mb-5 relative z-10">
+                <UserPlus className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="font-display text-navy text-xl font-bold mb-2">
+                Inscrivez-vous
               </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Tout ! Titres, prix, descriptions, images, localisations, contacts, URLs... 
-                Parfaitement organisé dans un fichier Excel prêt à utiliser.
+              <p className="text-steel">
+                Cr\u00e9ez votre compte gratuitement en 30 secondes
               </p>
             </div>
-            
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                ⚡ C'est vraiment si rapide ?
+
+            {/* Step 2 */}
+            <div className="text-center relative">
+              <p className="text-gold font-display text-4xl font-bold mb-4">
+                02
+              </p>
+              <div className="w-14 h-14 bg-navy rounded-full flex items-center justify-center mx-auto mb-5 relative z-10">
+                <Settings className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="font-display text-navy text-xl font-bold mb-2">
+                Configurez
               </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Oui ! 3 minutes en moyenne pour extraire des centaines d'annonces, 
-                au lieu des heures que ça vous prendrait manuellement.
+              <p className="text-steel">
+                Choisissez votre type d'extraction et vos param\u00e8tres
               </p>
             </div>
-            
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                🔒 Mes données sont protégées ?
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Absolument. Nous ne stockons rien. Vos URL et données sont traitées en temps réel 
-                puis supprimées automatiquement.
+
+            {/* Step 3 */}
+            <div className="text-center relative">
+              <p className="text-gold font-display text-4xl font-bold mb-4">
+                03
               </p>
-            </div>
-            
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                💰 Dois-je m'abonner ?
+              <div className="w-14 h-14 bg-navy rounded-full flex items-center justify-center mx-auto mb-5 relative z-10">
+                <Download className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="font-display text-navy text-xl font-bold mb-2">
+                R\u00e9cup\u00e9rez
               </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Non ! Pas d'abonnement. Vous payez uniquement ce que vous utilisez. 
-                Idéal pour tester ou pour une utilisation ponctuelle.
+              <p className="text-steel">
+                T\u00e9l\u00e9chargez vos donn\u00e9es en Excel, pr\u00eates \u00e0 l'emploi
               </p>
             </div>
           </div>
         </div>
       </section>
+
+      {/* ================================================================
+          4. USE CASES
+      ================================================================= */}
+      <section className="w-full bg-navy py-20 lg:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-white text-3xl lg:text-4xl font-bold mb-4">
+              Con\u00e7u pour les professionnels qui comptent sur leurs donn\u00e9es
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {useCases.map((uc) => (
+              <div
+                key={uc.title}
+                className="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-8 border-l-4 border-l-gold"
+              >
+                <uc.icon className="w-8 h-8 text-gold mb-5" />
+                <h3 className="text-white font-bold text-lg mb-3">
+                  {uc.title}
+                </h3>
+                <p className="text-steel-200 leading-relaxed mb-4 text-sm">
+                  {uc.description}
+                </p>
+                <p className="text-gold/80 text-sm">{uc.audience}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================================
+          5. PRICING SECTION
+      ================================================================= */}
+      <section className="w-full bg-cream-50 py-20 lg:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-navy text-3xl lg:text-4xl font-bold mb-4">
+              Des tarifs flexibles pour chaque besoin
+            </h2>
+            <p className="text-steel text-lg mb-6">
+              Pas d'abonnement. Payez uniquement ce que vous utilisez.
+            </p>
+            <span className="inline-block bg-gold/20 text-gold-700 text-sm font-semibold px-4 py-2 rounded-full">
+              \u00c9conomisez jusqu'\u00e0 38% avec les gros volumes
+            </span>
+          </div>
+
+          {loadingPacks ? (
+            <div className="flex justify-center py-12">
+              <div className="w-10 h-10 border-4 border-navy border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : packs.length > 0 ? (
+            <div className="grid gap-8" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))" }}>
+              {packs.map((pack: any, idx: number) => {
+                const isPopular = idx === 1 || pack.popular;
+                return (
+                  <div
+                    key={pack.id || idx}
+                    className={`relative bg-white rounded-2xl shadow p-6 flex flex-col ${
+                      isPopular ? "border-2 border-gold ring-2 ring-gold/20" : "border border-cream-300"
+                    }`}
+                  >
+                    {isPopular && (
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gold text-navy text-xs font-bold px-4 py-1 rounded-full">
+                        Populaire
+                      </span>
+                    )}
+                    <h3 className="font-display text-navy font-bold text-xl mb-2">
+                      {pack.name}
+                    </h3>
+                    <p className="text-navy text-3xl font-bold mb-1">
+                      {formatPrice(pack.price)}{" "}
+                      <span className="text-steel text-base font-normal">
+                        MGA
+                      </span>
+                    </p>
+                    {pack.downloads && (
+                      <p className="text-steel text-sm mb-6">
+                        {pack.downloads} t\u00e9l\u00e9chargements
+                      </p>
+                    )}
+                    <div className="mt-auto">
+                      <Link
+                        to="/register"
+                        className="block w-full text-center bg-navy text-white font-semibold hover:bg-navy-400 rounded-xl py-3 transition"
+                      >
+                        Choisir ce pack
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-center text-steel">
+              Les tarifs seront disponibles prochainement.
+            </p>
+          )}
+        </div>
+      </section>
+
+      {/* ================================================================
+          6. TRUST SECTION
+      ================================================================= */}
+      <section className="w-full bg-white py-20 lg:py-28">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-navy text-3xl lg:text-4xl font-bold">
+              Pourquoi nous faire confiance ?
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Shield,
+                title: "100% S\u00e9curis\u00e9",
+                description:
+                  "Aucune donn\u00e9e stock\u00e9e. Chiffrement de bout en bout pour prot\u00e9ger vos recherches.",
+              },
+              {
+                icon: TrendingUp,
+                title: "99.9% Fiable",
+                description:
+                  "Infrastructure robuste qui traite des milliers de requ\u00eates chaque jour.",
+              },
+              {
+                icon: Users,
+                title: "Support Expert",
+                description:
+                  "\u00c9quipe technique disponible sous 48h pour vous aider.",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="bg-white rounded-2xl p-8 border border-cream-300 text-center"
+              >
+                <div className="w-14 h-14 bg-gold/10 rounded-2xl flex items-center justify-center mx-auto mb-5">
+                  <item.icon className="w-7 h-7 text-gold" />
+                </div>
+                <h3 className="font-display text-navy text-xl font-bold mb-3">
+                  {item.title}
+                </h3>
+                <p className="text-steel leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================================
+          7. FAQ
+      ================================================================= */}
+      <section id="faq" className="w-full bg-cream-50 py-20 lg:py-28">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-navy text-3xl lg:text-4xl font-bold">
+              Questions fr\u00e9quentes
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {faqItems.map((item) => (
+              <div
+                key={item.question}
+                className="bg-white rounded-2xl p-8 border border-cream-300"
+              >
+                <h3 className="font-bold text-navy text-lg mb-3">
+                  {item.question}
+                </h3>
+                <p className="text-steel leading-relaxed">{item.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================================
+          8. FINAL CTA
+      ================================================================= */}
+      <section className="relative w-full bg-navy overflow-hidden py-20 lg:py-28">
+        {/* Decorative gold circles */}
+        <div className="absolute top-10 right-20 w-64 h-64 bg-gold/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 left-20 w-80 h-80 bg-gold/5 rounded-full blur-3xl" />
+
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-display text-white text-3xl lg:text-4xl font-bold mb-6">
+            Pr\u00eat \u00e0 transformer vos donn\u00e9es sociales en avantage concurrentiel ?
+          </h2>
+          <p className="text-steel-200 text-lg mb-10 leading-relaxed">
+            Rejoignez des centaines de professionnels qui utilisent EasyScrapy
+            pour prendre de meilleures d\u00e9cisions, plus vite.
+          </p>
+          <Link
+            to="/register"
+            className="inline-flex items-center gap-2 bg-gold text-navy font-bold rounded-xl px-8 py-4 hover:bg-gold-300 transition shadow-lg text-lg"
+          >
+            Commencer gratuitement
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+          <p className="text-steel-200 text-sm mt-6">
+            Inscription gratuite \u00b7 Aucun engagement \u00b7 Paiement s\u00e9curis\u00e9
+          </p>
+        </div>
+      </section>
+
+      {/* ================================================================
+          9. FOOTER
+      ================================================================= */}
+      <footer className="w-full bg-navy-900 border-t border-navy-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
+            {/* Brand column */}
+            <div>
+              <p className="text-white text-2xl font-bold mb-3">
+                Easy<span className="text-gold">Scrapy</span>
+                <span className="text-gold">.com</span>
+              </p>
+              <p className="text-steel-200 text-sm leading-relaxed">
+                Intelligence sociale pour les professionnels
+              </p>
+            </div>
+
+            {/* Produit */}
+            <div>
+              <h4 className="text-white font-bold mb-4">Produit</h4>
+              <ul className="space-y-3">
+                {[
+                  { label: "Extraction Marketplace", href: "/#features" },
+                  { label: "Facebook Pages", href: "/#features" },
+                  { label: "Benchmark", href: "/#features" },
+                  { label: "Analyses IA", href: "/#features" },
+                  { label: "Automatisations", href: "/#features" },
+                  { label: "Surveillance", href: "/#features" },
+                ].map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="text-steel-200 hover:text-gold transition text-sm"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Ressources */}
+            <div>
+              <h4 className="text-white font-bold mb-4">Ressources</h4>
+              <ul className="space-y-3">
+                <li>
+                  <a
+                    href="#pricing"
+                    className="text-steel-200 hover:text-gold transition text-sm"
+                  >
+                    Tarifs
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#features"
+                    className="text-steel-200 hover:text-gold transition text-sm"
+                  >
+                    Fonctionnalit\u00e9s
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#faq"
+                    className="text-steel-200 hover:text-gold transition text-sm"
+                  >
+                    FAQ
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* L\u00e9gal */}
+            <div>
+              <h4 className="text-white font-bold mb-4">L\u00e9gal</h4>
+              <ul className="space-y-3">
+                <li>
+                  <a
+                    href="#"
+                    className="text-steel-200 hover:text-gold transition text-sm"
+                  >
+                    Conditions d'utilisation
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-steel-200 hover:text-gold transition text-sm"
+                  >
+                    Politique de confidentialit\u00e9
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-steel-200 hover:text-gold transition text-sm"
+                  >
+                    Mentions l\u00e9gales
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="border-t border-navy-700 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-steel-200 text-sm">
+              &copy; 2026 EasyScrapy.com &mdash; Tous droits r\u00e9serv\u00e9s
+            </p>
+            <p className="text-steel-200 text-sm">
+              Fait avec passion depuis Madagascar
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
