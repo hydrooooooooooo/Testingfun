@@ -195,11 +195,13 @@ export interface BenchmarkEstimateParams {
   competitorCount: number;
   postsLimit: number;
   includeAiAnalysis?: boolean;
+  modelId?: string;
 }
 
 export interface AiAnalysisEstimateParams {
   pageCount: number;
   postsPerPage: number;
+  modelId?: string;
 }
 
 class CostEstimationService {
@@ -308,6 +310,17 @@ class CostEstimationService {
       subtotal: COST_MATRIX.benchmark.reportGeneration,
     });
 
+    // Apply AI model cost multiplier to the AI analysis breakdown item
+    if (includeAiAnalysis && params.modelId) {
+      const multiplier = getModelCostMultiplier(params.modelId);
+      const aiItem = breakdown.find(b => b.label === 'Analyse IA comparative');
+      if (aiItem && multiplier !== 1.0) {
+        aiItem.unitCost = COST_MATRIX.benchmark.aiAnalysis * multiplier;
+        aiItem.subtotal = aiItem.unitCost * aiItem.quantity;
+        aiItem.label = `Analyse IA comparative (×${multiplier})`;
+      }
+    }
+
     const totalCost = breakdown.reduce((sum, item) => sum + item.subtotal, 0);
     
     return this.buildEstimation(userId, 'benchmark', totalCost, breakdown);
@@ -339,8 +352,25 @@ class CostEstimationService {
       },
     ];
 
+    // Apply AI model cost multiplier to all breakdown items
+    if (params.modelId) {
+      const multiplier = getModelCostMultiplier(params.modelId);
+      if (multiplier !== 1.0) {
+        breakdown.forEach(item => {
+          item.unitCost = item.unitCost * multiplier;
+          item.subtotal = item.quantity * item.unitCost;
+        });
+        breakdown.push({
+          label: `Multiplicateur modèle IA (×${multiplier})`,
+          quantity: 1,
+          unitCost: 0,
+          subtotal: 0,
+        });
+      }
+    }
+
     const totalCost = breakdown.reduce((sum, item) => sum + item.subtotal, 0);
-    
+
     return this.buildEstimation(userId, 'ai_analysis', totalCost, breakdown);
   }
 
