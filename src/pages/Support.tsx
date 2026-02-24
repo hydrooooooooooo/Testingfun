@@ -1,349 +1,249 @@
-import React from "react";
-
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
-  Mail,
-  HelpCircle,
-  Clock,
-  MessageSquare,
-  AlertCircle,
-  CheckCircle,
-  Users,
-  Shield,
-  Zap,
-  ArrowRight,
-  FileText,
-  Search,
-  Database
-} from "lucide-react";
+  Mail, HelpCircle, Clock, MessageSquare,
+  AlertCircle, CheckCircle, Users, Shield,
+  Zap, ArrowRight, FileText, Search,
+  Database, ChevronDown
+} from 'lucide-react';
+import { useState } from 'react';
 
-export default function SupportPage() {
-  const handleEmailClick = () => {
-    const subject = encodeURIComponent("Support EasyScrapyMG - Demande d'assistance");
-    const body = encodeURIComponent(`
-Bonjour,
+const SUPPORT_EMAIL = 'support@easyscrapy.com';
+
+function handleEmailClick() {
+  const subject = encodeURIComponent("Support EasyScrapy - Demande d'assistance");
+  const body = encodeURIComponent(
+`Bonjour,
 
 Je vous contacte concernant :
 
-📝 Nature du problème : [Décrivez votre problème ici]
+Nature du problème : [Décrivez votre problème ici]
 
-🔗 URL scrappée : [Indiquez l'URL si applicable]
+URL scrappée : [Indiquez l'URL si applicable]
 
-🆔 ID scraping : [Si vous en avez un : scrape_xxxxxx]
-🆔 ID Dataset : [Si vous en avez un : ds_xxxxxx]
+ID de session : [Si vous en avez un : sess_xxxxxx]
 
-📱 Informations supplémentaires :
+Informations supplémentaires :
 - Navigateur utilisé :
 - Étape où le problème survient :
 
 Merci d'avance pour votre aide !
 
 Cordialement,
-[Votre nom]
-    `);
+[Votre nom]`
+  );
+  window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${subject}&body=${body}`;
+}
 
-    window.location.href = `mailto:support@easyscrapymg.com?subject=${subject}&body=${body}`;
-  };
+const supportTypes = [
+  { icon: Search, label: "Problèmes d'extraction", desc: "Erreurs de scraping, URLs non supportées, configuration" },
+  { icon: Database, label: 'Export des données', desc: "Téléchargement, formats de fichiers, données manquantes" },
+  { icon: FileText, label: 'Questions facturation', desc: "Paiements, crédits, remboursements, transactions" },
+  { icon: Users, label: 'Formation & conseils', desc: "Optimisation, bonnes pratiques, conseils d'usage" },
+  { icon: AlertCircle, label: 'Incidents & bugs', desc: "Signalement de bugs, problèmes techniques" },
+  { icon: Zap, label: 'Demandes spéciales', desc: "Extractions personnalisées, volumes importants" },
+];
 
+const infoItems = [
+  { label: 'ID de session', desc: 'Format : sess_xxxxxx (affiché dans vos extractions)' },
+  { label: 'URL concernée', desc: "L'adresse que vous tentez de scraper" },
+  { label: 'Description précise', desc: "Étapes effectuées et message d'erreur si applicable" },
+];
+
+const faqs = [
+  {
+    q: 'Où trouver mon ID de session ?',
+    a: "L'ID de session s'affiche automatiquement pendant et après l'extraction dans votre dashboard, section Extractions. Il commence toujours par sess_.",
+  },
+  {
+    q: "Que faire si mon extraction échoue ?",
+    a: "Contactez-nous avec votre ID de session et l'URL problématique. Nous investiguerons rapidement et rembourserons les crédits si l'erreur vient de notre côté.",
+  },
+  {
+    q: 'Comment optimiser mes extractions ?',
+    a: "Utilisez des filtres précis sur la plateforme source (localisation, catégorie) et évitez les URLs trop génériques. Pour les pages Facebook, limitez le nombre de pages par session pour de meilleurs résultats.",
+  },
+];
+
+function FaqItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
   return (
+    <div className="border border-cream-300 rounded-xl bg-white overflow-hidden">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between px-5 py-4 text-left"
+      >
+        <span className="font-semibold text-navy text-[15px]">{q}</span>
+        <ChevronDown className={`w-4 h-4 text-steel flex-shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <div className="px-5 pb-4">
+          <p className="text-steel text-[14px] leading-relaxed">{a}</p>
+        </div>
+      )}
+    </div>
+  );
+}
 
-      <div className="min-h-screen bg-gradient-to-b from-cream-50 to-white">
+export default function SupportPage() {
+  return (
+    <div className="min-h-[calc(100vh-80px)] bg-cream-50">
 
-        {/* Hero Section */}
-        <section className="w-full max-w-6xl mx-auto px-4 py-16">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-navy-50 text-navy rounded-full text-sm font-medium mb-6">
-              <HelpCircle className="w-4 h-4" />
-              Centre d'aide et support
+      {/* ─── HERO ─── */}
+      <section className="relative w-full bg-navy overflow-hidden">
+        <div className="absolute top-10 right-20 w-80 h-80 bg-gold/8 rounded-full blur-3xl" />
+        <div className="absolute -bottom-10 left-10 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-center">
+          <p className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em] mb-4">
+            Centre d'aide
+          </p>
+          <h1 className="font-display text-white text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-5">
+            Une question ?
+            <span className="block text-gold mt-1">On est là.</span>
+          </h1>
+          <p className="text-steel text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            Notre équipe vous accompagne pour tirer le meilleur parti d'EasyScrapy
+            et résoudre vos problèmes techniques rapidement.
+          </p>
+
+          {/* Trust indicators */}
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
+            <div className="flex items-center gap-2 text-cream-300 text-[13px]">
+              <Clock className="w-4 h-4 text-gold" />
+              <span>Réponse sous 24-48h</span>
             </div>
-
-            <h1 className="text-5xl md:text-6xl font-bold text-navy mb-6 tracking-tight">
-              Support technique
-              <span className="block text-navy">professionnel</span>
-            </h1>
-
-            <p className="text-xl text-steel mb-8 max-w-3xl mx-auto leading-relaxed">
-              Notre équipe d'experts est à votre disposition pour vous accompagner dans l'utilisation
-              d'EasyScrapyMG et résoudre rapidement tous vos problèmes techniques.
-            </p>
-
-            {/* Trust Indicators */}
-            <div className="grid md:grid-cols-3 gap-6 mb-12">
-              <div className="flex items-center justify-center gap-3 text-steel">
-                <Clock className="w-6 h-6 text-navy" />
-                <span className="font-medium">Réponse sous 48h</span>
-              </div>
-              <div className="flex items-center justify-center gap-3 text-steel">
-                <Users className="w-6 h-6 text-green-500" />
-                <span className="font-medium">Équipe dédiée</span>
-              </div>
-              <div className="flex items-center justify-center gap-3 text-steel">
-                <Shield className="w-6 h-6 text-steel" />
-                <span className="font-medium">Support expert</span>
-              </div>
+            <div className="flex items-center gap-2 text-cream-300 text-[13px]">
+              <Users className="w-4 h-4 text-gold" />
+              <span>Équipe dédiée</span>
+            </div>
+            <div className="flex items-center gap-2 text-cream-300 text-[13px]">
+              <Shield className="w-4 h-4 text-gold" />
+              <span>Support expert</span>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Contact Principal */}
-        <section className="w-full max-w-4xl mx-auto px-4 mb-16">
-          <div className="bg-gradient-to-br from-navy-50 to-navy-50 rounded-2xl p-8 border border-navy-200 shadow-lg">
-            <div className="text-center space-y-6">
-              <div className="flex items-center justify-center gap-3">
-                <Mail className="w-8 h-8 text-navy" />
-                <h2 className="text-3xl font-bold text-navy">Contact Support</h2>
-              </div>
-
-              <p className="text-lg text-navy-700 max-w-2xl mx-auto">
-                Pour toute question technique, problème d'extraction ou demande d'assistance personnalisée.
-              </p>
-
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-cream-200">
+      {/* ─── CONTACT CARD ─── */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10 mb-16">
+        <Card className="bg-white border-cream-300 shadow-lg rounded-2xl overflow-hidden">
+          <CardContent className="p-0">
+            <div className="grid md:grid-cols-2">
+              {/* Left — email CTA */}
+              <div className="bg-navy p-8 sm:p-10 flex flex-col justify-center">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gold/15 rounded-xl flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-gold" />
+                  </div>
+                  <h2 className="text-white text-xl font-bold">Contactez-nous</h2>
+                </div>
+                <p className="text-steel text-[14px] leading-relaxed mb-6">
+                  Pour toute question technique, problème d'extraction ou demande d'assistance.
+                </p>
                 <button
                   onClick={handleEmailClick}
-                  className="text-2xl font-bold text-navy hover:text-navy-400 transition-colors"
+                  className="text-gold text-lg sm:text-xl font-bold hover:text-white transition-colors mb-6 text-left"
                 >
-                  support@easyscrapymg.com
+                  {SUPPORT_EMAIL}
                 </button>
+                <Button
+                  onClick={handleEmailClick}
+                  className="h-12 bg-gold text-navy font-bold hover:bg-gold/90 rounded-xl w-fit"
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  Envoyer un email
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="flex items-center justify-center gap-2 text-sm text-steel">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  <span>Support technique spécialisé</span>
+              {/* Right — info to include */}
+              <div className="p-8 sm:p-10">
+                <div className="flex items-center gap-2 mb-5">
+                  <MessageSquare className="w-5 h-5 text-navy" />
+                  <h3 className="text-navy font-bold text-lg">Pour un traitement rapide</h3>
                 </div>
-                <div className="flex items-center justify-center gap-2 text-sm text-steel">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  <span>Résolution rapide des problèmes</span>
-                </div>
-              </div>
-
-              <button
-                onClick={handleEmailClick}
-                className="bg-navy text-white px-8 py-4 rounded-xl font-semibold hover:bg-navy-400 transition-colors inline-flex items-center gap-2"
-              >
-                <Mail className="w-5 h-5" />
-                Contacter le support
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Guide pour contacter efficacement */}
-        <section className="w-full max-w-6xl mx-auto px-4 mb-16">
-          <div className="bg-white rounded-2xl shadow-lg border border-cream-200 p-8">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-navy mb-4 flex items-center justify-center gap-2">
-                <MessageSquare className="w-6 h-6 text-navy" />
-                Comment nous contacter efficacement
-              </h3>
-              <p className="text-steel max-w-2xl mx-auto">
-                Pour un traitement plus rapide de votre demande, suivez ces recommandations.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-6">
-                <h4 className="font-semibold text-navy flex items-center gap-2 text-lg">
-                  <AlertCircle className="w-5 h-5 text-navy" />
-                  Informations à inclure
-                </h4>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3 p-4 bg-cream-50 rounded-lg">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <p className="font-medium text-navy">ID scraping</p>
-                      <p className="text-sm text-steel">Format: scrape_xxxxxx (affiché pendant l'extraction)</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-4 bg-cream-50 rounded-lg">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <p className="font-medium text-navy">URL concernée</p>
-                      <p className="text-sm text-steel">L'adresse que vous tentez de scraper</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-4 bg-cream-50 rounded-lg">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <p className="font-medium text-navy">Description précise</p>
-                      <p className="text-sm text-steel">Étapes et message d'erreur si applicable</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                <h4 className="font-semibold text-navy flex items-center gap-2 text-lg">
-                  <Clock className="w-5 h-5 text-navy" />
-                  Délais de réponse
-                </h4>
-                <div className="space-y-4">
-                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <span className="font-medium text-navy">Problèmes techniques</span>
-                    </div>
-                    <p className="text-sm text-steel">Réponse sous 24-48h maximum</p>
-                  </div>
-                  <div className="p-4 bg-navy-50 rounded-lg border border-navy-200">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-3 h-3 bg-navy rounded-full"></div>
-                      <span className="font-medium text-navy">Questions générales</span>
-                    </div>
-                    <p className="text-sm text-steel">Réponse sous 24h en moyenne</p>
-                  </div>
-                  <div className="p-4 bg-steel-50 rounded-lg border border-steel-200">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-3 h-3 bg-steel rounded-full"></div>
-                      <span className="font-medium text-navy">Demandes urgentes</span>
-                    </div>
-                    <p className="text-sm text-steel">Priorité élevée, traitement accéléré</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 p-4 bg-navy-50 rounded-xl border border-navy-200 text-center">
-              <p className="text-sm text-navy">
-                <strong>Astuce :</strong> Les identifiants scraping et dataset sont affichés lors de l'extraction sur la page d'accueil.
-                Prenez-en note pour faciliter le support !
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Types de support disponibles */}
-        <section className="w-full max-w-6xl mx-auto px-4 mb-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-navy mb-4">
-              Types de support disponibles
-            </h2>
-            <p className="text-lg text-steel max-w-2xl mx-auto">
-              Notre équipe vous accompagne sur tous les aspects techniques et fonctionnels
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-cream-200">
-              <div className="w-12 h-12 bg-navy-100 rounded-xl flex items-center justify-center mb-4">
-                <Search className="w-6 h-6 text-navy" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Problèmes d'extraction</h3>
-              <p className="text-steel text-sm">Erreurs de scraping, URLs non supportées, problèmes de configuration</p>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-cream-200">
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
-                <Database className="w-6 h-6 text-green-600" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Export des données</h3>
-              <p className="text-steel text-sm">Problèmes de téléchargement, formats de fichiers, données manquantes</p>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-cream-200">
-              <div className="w-12 h-12 bg-steel-100 rounded-xl flex items-center justify-center mb-4">
-                <FileText className="w-6 h-6 text-steel" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Questions facturation</h3>
-              <p className="text-steel text-sm">Paiements, crédits, remboursements et problèmes de transaction</p>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-cream-200">
-              <div className="w-12 h-12 bg-gold-100 rounded-xl flex items-center justify-center mb-4">
-                <Users className="w-6 h-6 text-gold" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Formation & conseils</h3>
-              <p className="text-steel text-sm">Optimisation des extractions, bonnes pratiques, conseils d'usage</p>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-cream-200">
-              <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-4">
-                <AlertCircle className="w-6 h-6 text-red-600" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Incidents & bugs</h3>
-              <p className="text-steel text-sm">Signalement de bugs, problèmes techniques, améliorations suggérées</p>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-cream-200">
-              <div className="w-12 h-12 bg-navy-100 rounded-xl flex items-center justify-center mb-4">
-                <Zap className="w-6 h-6 text-navy" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Demandes spéciales</h3>
-              <p className="text-steel text-sm">Extractions personnalisées, volumes importants, intégrations spécifiques</p>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ Rapide */}
-        <section className="w-full max-w-4xl mx-auto px-4 mb-16">
-          <div className="bg-cream-50 rounded-2xl p-8">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-navy mb-4">
-                Questions fréquentes
-              </h2>
-              <p className="text-steel">
-                Consultez ces réponses avant de nous contacter
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <details className="bg-white rounded-xl p-4 cursor-pointer shadow-sm border border-cream-200">
-                <summary className="font-semibold text-navy flex items-center justify-between">
-                  Où trouver mon ID scraping ?
-                  <ArrowRight className="w-4 h-4 text-steel-200" />
-                </summary>
-                <p className="text-steel mt-3 text-sm leading-relaxed">
-                  Ces identifiants s'affichent automatiquement pendant et après l'extraction sur la page d'accueil et sur votre compte
-                  Notez-les pour faciliter le support en cas de problème.
+                <p className="text-steel text-[13px] mb-5">
+                  Incluez ces informations dans votre message :
                 </p>
-              </details>
-
-              <details className="bg-white rounded-xl p-4 cursor-pointer shadow-sm border border-cream-200">
-                <summary className="font-semibold text-navy flex items-center justify-between">
-                  Que faire si mon extraction échoue ?
-                  <ArrowRight className="w-4 h-4 text-steel-200" />
-                </summary>
-                <p className="text-steel mt-3 text-sm leading-relaxed">
-                  Contactez-nous avec votre ID scraping, l'URL problématique et une description de l'erreur.
-                  Nous investiguerons rapidement et rembourserons si nécessaire.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-xl p-4 cursor-pointer shadow-sm border border-cream-200">
-                <summary className="font-semibold text-navy flex items-center justify-between">
-                  Comment optimiser mes extractions ?
-                  <ArrowRight className="w-4 h-4 text-steel-200" />
-                </summary>
-                <p className="text-steel mt-3 text-sm leading-relaxed">
-                  Utilisez des filtres précis sur la plateforme source, évitez les URLs trop génériques
-                  et contactez-nous pour des conseils personnalisés selon votre secteur d'activité.
-                </p>
-              </details>
+                <div className="space-y-3">
+                  {infoItems.map((item, i) => (
+                    <div key={i} className="flex items-start gap-3 p-3 bg-cream-50 rounded-lg">
+                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-navy text-[13px] font-semibold">{item.label}</p>
+                        <p className="text-steel text-[12px]">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </section>
+          </CardContent>
+        </Card>
+      </section>
 
-        {/* CTA Final */}
-        <section className="w-full bg-navy py-16">
-          <div className="max-w-4xl mx-auto px-4 text-center text-white">
-            <h3 className="text-3xl font-bold mb-4">
-              Une question ? Nous sommes là pour vous aider
-            </h3>
-            <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-              Notre équipe technique vous accompagne pour tirer le meilleur parti d'EasyScrapyMG.
-            </p>
-            <button
-              onClick={handleEmailClick}
-              className="bg-white text-navy px-8 py-4 rounded-xl font-semibold hover:bg-cream-100 transition-colors inline-flex items-center gap-2"
-            >
-              <Mail className="w-5 h-5" />
-              Contacter le support
-              <ArrowRight className="w-5 h-5" />
-            </button>
-          </div>
-        </section>
-      </div>
+      {/* ─── SUPPORT TYPES ─── */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <div className="text-center mb-10">
+          <h2 className="text-navy text-2xl sm:text-3xl font-bold mb-3">On vous aide sur tout</h2>
+          <p className="text-steel text-base max-w-xl mx-auto">
+            Technique, facturation, conseils — notre équipe couvre tous les aspects.
+          </p>
+        </div>
 
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          {supportTypes.map((st, i) => (
+            <Card key={i} className="bg-white border-cream-300 shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-5">
+                <div className="w-10 h-10 bg-navy/5 rounded-xl flex items-center justify-center mb-3">
+                  <st.icon className="w-5 h-5 text-navy" />
+                </div>
+                <h3 className="text-navy font-bold text-[14px] mb-1">{st.label}</h3>
+                <p className="text-steel text-[12px] leading-relaxed">{st.desc}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── FAQ ─── */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <div className="text-center mb-8">
+          <h2 className="text-navy text-2xl font-bold mb-3">Questions fréquentes</h2>
+          <p className="text-steel text-[14px]">Consultez ces réponses avant de nous contacter</p>
+        </div>
+
+        <div className="space-y-3">
+          {faqs.map((faq, i) => (
+            <FaqItem key={i} q={faq.q} a={faq.a} />
+          ))}
+        </div>
+      </section>
+
+      {/* ─── CTA FOOTER ─── */}
+      <section className="relative w-full bg-navy overflow-hidden">
+        <div className="absolute top-0 right-0 w-72 h-72 bg-gold/8 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-20 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
+
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 text-center">
+          <h2 className="font-display text-white text-2xl sm:text-3xl font-bold mb-4">
+            Besoin d'aide maintenant ?
+          </h2>
+          <p className="text-steel text-base max-w-xl mx-auto mb-8">
+            Envoyez-nous un email — on vous répond sous 24 à 48 heures maximum.
+          </p>
+          <Button
+            onClick={handleEmailClick}
+            className="h-12 px-8 bg-gold text-navy font-bold text-[15px] hover:bg-gold/90 transition-all shadow-lg hover:shadow-xl rounded-xl"
+          >
+            <Mail className="w-4 h-4 mr-2" />
+            {SUPPORT_EMAIL}
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        </div>
+      </section>
+    </div>
   );
 }
