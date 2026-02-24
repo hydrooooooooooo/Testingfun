@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import AuditDetailView from '@/components/dashboard/AuditDetailView';
 import BenchmarkDetailView from '@/components/dashboard/BenchmarkDetailView';
 import api from '@/services/api';
@@ -723,9 +722,7 @@ const AiAnalysesPage: React.FC = () => {
 
   return (
     <div className="h-full bg-cream-50">
-      <DashboardHeader />
-      
-      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 pt-12 md:pt-4">
+      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 pt-4">
         {/* Header */}
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-navy">Analyses IA</h1>

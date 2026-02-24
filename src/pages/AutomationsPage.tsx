@@ -28,7 +28,6 @@ import { toast } from '@/hooks/use-toast';
 import api from '@/services/api';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import CreateAutomationModal from '@/components/automations/CreateAutomationModal';
 import AutomationDetailView from '@/components/automations/AutomationDetailView';
 import { useCredits } from '@/hooks/useCredits';
@@ -240,9 +239,7 @@ const AutomationsPage: React.FC = () => {
 
   return (
     <div className="h-full bg-cream-50">
-      <DashboardHeader />
-      
-      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 pt-12 md:pt-4">
+      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 pt-4">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>

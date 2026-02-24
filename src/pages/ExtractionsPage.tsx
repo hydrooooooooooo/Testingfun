@@ -27,8 +27,6 @@ import { toast } from '@/hooks/use-toast';
 import SessionItemsView from '@/components/dashboard/SessionItemsView';
 import FacebookPagesSessionCard from '@/components/dashboard/FacebookPagesSessionCard';
 import { useNavigate } from 'react-router-dom';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
-
 const ExtractionsPage: React.FC = () => {
   const navigate = useNavigate();
   const { userData, error, isLoading, fetchDashboardData } = useDashboard();
@@ -181,9 +179,7 @@ const ExtractionsPage: React.FC = () => {
 
   return (
     <div className="h-full bg-cream-50">
-      <DashboardHeader />
-      
-      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 pt-12 md:pt-4">
+      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 pt-4">
         {/* Header */}
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-navy">Mes Extractions</h1>
