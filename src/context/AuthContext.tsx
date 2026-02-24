@@ -8,6 +8,8 @@ interface User {
   name?: string;
   role: string;
   phone_number?: string;
+  business_sector?: string;
+  company_size?: string;
 }
 
 // Interface pour la valeur du contexte
@@ -37,6 +39,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             name: u.name,
             role: u.role,
             phone_number: u.phone_number,
+            business_sector: u.business_sector,
+            company_size: u.company_size,
           });
         }
       } catch {

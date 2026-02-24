@@ -14,8 +14,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Brain, Check, Loader2, Lock, Settings, Sparkles, User } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Brain, Building2, Check, Loader2, Lock, Settings, Sparkles, User, Users } from 'lucide-react';
 import type { AIModel } from '@/types';
+import { BUSINESS_SECTORS, COMPANY_SIZES } from '@/constants/userProfile';
 
 const BASE_CREDIT_COST = 2; // crédits de base par analyse IA (1 page)
 
@@ -23,6 +31,8 @@ const SettingsTab: React.FC = () => {
   const { user, login, logout } = useAuth();
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [businessSector, setBusinessSector] = useState('');
+  const [companySize, setCompanySize] = useState('');
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -41,6 +51,8 @@ const SettingsTab: React.FC = () => {
     if (user) {
       setName(user.name || '');
       setPhoneNumber(user.phone_number || '');
+      setBusinessSector(user.business_sector || '');
+      setCompanySize(user.company_size || '');
     }
   }, [user]);
 
@@ -70,7 +82,7 @@ const SettingsTab: React.FC = () => {
     e.preventDefault();
     setProfileLoading(true);
     try {
-      await api.put('/user/profile', { name, phone_number: phoneNumber });
+      await api.put('/user/profile', { name, phone_number: phoneNumber, business_sector: businessSector || undefined, company_size: companySize || undefined });
 
       // Refresh user info from the cookie-authenticated endpoint
       const meResponse = await api.get('/auth/me');
@@ -190,6 +202,40 @@ const SettingsTab: React.FC = () => {
                     placeholder="Ex: 0340012345"
                     className="border-cream-300 focus:border-gold"
                   />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-navy flex items-center gap-1.5">
+                      <Building2 className="w-3.5 h-3.5 text-steel" />
+                      Secteur d'activité
+                    </Label>
+                    <Select value={businessSector} onValueChange={setBusinessSector}>
+                      <SelectTrigger className="border-cream-300 focus:border-gold">
+                        <SelectValue placeholder="Sélectionner..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {BUSINESS_SECTORS.map((s) => (
+                          <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-navy flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5 text-steel" />
+                      Taille entreprise
+                    </Label>
+                    <Select value={companySize} onValueChange={setCompanySize}>
+                      <SelectTrigger className="border-cream-300 focus:border-gold">
+                        <SelectValue placeholder="Sélectionner..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {COMPANY_SIZES.map((s) => (
+                          <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
                 <Button
                   type="submit"

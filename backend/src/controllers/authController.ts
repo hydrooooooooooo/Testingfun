@@ -3,6 +3,8 @@ import { AuthService } from '../services/authService';
 import { UserRegistration, UserLogin } from '../models/User';
 import config from '../config/config';
 import { generateCsrfToken } from '../middlewares/csrf';
+import { BUSINESS_SECTOR_VALUES, COMPANY_SIZE_VALUES } from '../constants/userProfile';
+import db from '../database';
 
 const authService = new AuthService();
 
@@ -31,6 +33,19 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         res.status(400).json({ message: 'Passwords do not match.' });
         return;
     }
+
+    // Validate optional business_sector / company_size
+    const { business_sector, company_size } = req.body;
+    if (business_sector && !BUSINESS_SECTOR_VALUES.includes(business_sector)) {
+        res.status(400).json({ message: 'Invalid business_sector value.' });
+        return;
+    }
+    if (company_size && !COMPANY_SIZE_VALUES.includes(company_size)) {
+        res.status(400).json({ message: 'Invalid company_size value.' });
+        return;
+    }
+    userData.business_sector = business_sector || undefined;
+    userData.company_size = company_size || undefined;
 
     const { user, token } = await authService.register(userData);
     const isSecure = req.protocol === 'https' || (req.get('x-forwarded-proto') || '').includes('https');
@@ -185,13 +200,24 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
  * Return the current authenticated user info (reads from httpOnly cookie).
  */
 export const me = async (req: Request, res: Response): Promise<void> => {
-  // protect middleware already decoded the token and set req.user
-  const user = (req as any).user;
-  if (!user) {
+  const jwtUser = (req as any).user;
+  if (!jwtUser) {
     res.status(401).json({ message: 'Not authenticated' });
     return;
   }
-  res.status(200).json({ user });
+  try {
+    const user = await db('users')
+      .select('id', 'email', 'name', 'role', 'phone_number', 'business_sector', 'company_size')
+      .where({ id: jwtUser.userId ?? jwtUser.id })
+      .first();
+    if (!user) {
+      res.status(401).json({ message: 'User not found' });
+      return;
+    }
+    res.status(200).json({ user });
+  } catch {
+    res.status(500).json({ message: 'Internal error' });
+  }
 };
 
 // Serve a minimal HTML page for password reset (backend-only flow)

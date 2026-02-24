@@ -21,6 +21,7 @@ import {
   Bar,
 } from 'recharts';
 import { BarChart3 } from 'lucide-react';
+import { BUSINESS_SECTORS, COMPANY_SIZES } from '@/constants/userProfile';
 
 // Design system chart colors
 const CHART_COLORS = {
@@ -29,6 +30,12 @@ const CHART_COLORS = {
   accent: '#FAB95B',    // gold
   error: '#EF4444',     // red
 };
+
+const EXTENDED_COLORS = [
+  '#1A3263', '#547792', '#FAB95B', '#E8E2DB', '#3B82F6',
+  '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899',
+  '#06B6D4', '#84CC16', '#F97316',
+];
 
 const StatCard: React.FC<{ title: string; value: string | number }> = ({ title, value }) => (
   <Card className="bg-white border-cream-300 shadow-sm">
@@ -147,6 +154,18 @@ const AdminDashboard: React.FC = () => {
     return arr.map((it: any) => ({ date: (it.day || '').slice(0, 10), count: Number(it.count) || 0 }));
   }, [data]);
 
+  const sectorData = useMemo(() => {
+    const raw = data?.users?.sectorDistribution || [];
+    const labelMap = Object.fromEntries(BUSINESS_SECTORS.map((s) => [s.value, s.label]));
+    return raw.map((r: any) => ({ name: labelMap[r.sector] || r.sector, value: r.count }));
+  }, [data]);
+
+  const sizeData = useMemo(() => {
+    const raw = data?.users?.sizeDistribution || [];
+    const labelMap = Object.fromEntries(COMPANY_SIZES.map((s) => [s.value, s.label]));
+    return raw.map((r: any) => ({ name: labelMap[r.size] || r.size, value: r.count }));
+  }, [data]);
+
   useEffect(() => {
     (async () => {
       try {
@@ -226,6 +245,50 @@ const AdminDashboard: React.FC = () => {
                 <StatCard title="Email vérifiés %" value={`${Math.round((adv.verification?.rate || 0) * 100)}%`} />
                 <StatCard title="Conv. Signup→Recherche" value={`${Math.round((adv.signupToFirstSearch?.conversionRate || 0) * 100)}%`} />
                 <StatCard title="Échec recherches %" value={`${Math.round((adv.failuresAndLatency?.failureRate || 0) * 100)}%`} />
+              </div>
+            )}
+
+            {/* Sector & Size distribution charts */}
+            {(sectorData.length > 0 || sizeData.length > 0) && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {sectorData.length > 0 && (
+                  <Card className="bg-white border-cream-300 shadow-sm">
+                    <CardContent className="p-3">
+                      <div className="text-sm text-steel mb-1">Répartition par secteur d'activité</div>
+                      <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Tooltip />
+                            <Legend wrapperStyle={{ fontSize: 11 }} />
+                            <Pie data={sectorData} dataKey="value" nameKey="name" outerRadius={90} label={{ fontSize: 10 }}>
+                              {sectorData.map((_: any, idx: number) => (
+                                <Cell key={idx} fill={EXTENDED_COLORS[idx % EXTENDED_COLORS.length]} />
+                              ))}
+                            </Pie>
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+                {sizeData.length > 0 && (
+                  <Card className="bg-white border-cream-300 shadow-sm">
+                    <CardContent className="p-3">
+                      <div className="text-sm text-steel mb-1">Répartition par taille d'entreprise</div>
+                      <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={sizeData}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#E8E2DB" />
+                            <XAxis dataKey="name" tick={{ fontSize: 10 }} stroke="#547792" />
+                            <YAxis stroke="#547792" />
+                            <Tooltip />
+                            <Bar dataKey="value" fill={CHART_COLORS.accent} radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
               </div>
             )}
 

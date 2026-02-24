@@ -9,7 +9,7 @@ import { mailer, renderVerificationEmail, renderPasswordResetEmail } from './mai
 export class AuthService {
   
     async register(userData: UserRegistration): Promise<{ user: User; token: string }> {
-    const { password, name, phone_number } = userData;
+    const { password, name, phone_number, business_sector, company_size } = userData;
     const email = userData.email.trim().toLowerCase();
 
     // 1. Vérifier si l'email est unique
@@ -33,6 +33,8 @@ export class AuthService {
         password_hash: hashedPassword,
         name,
         phone_number,
+        business_sector: business_sector || undefined,
+        company_size: company_size || undefined,
         verification_token: verificationToken,
         verification_token_expires_at: verificationTokenExpiresAt,
         email_verified_at: null, // Important
@@ -235,7 +237,7 @@ export class AuthService {
     }
 
     return jwt.sign(
-      { userId: user.id, name: user.name, email: user.email, role: user.role, phone_number: user.phone_number },
+      { userId: user.id, name: user.name, email: user.email, role: user.role, phone_number: user.phone_number, business_sector: user.business_sector, company_size: user.company_size },
       config.api.jwtSecret,
       { expiresIn: '7d' }
     );

@@ -11,6 +11,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Users, Search, Coins, ShieldOff, ShieldCheck } from 'lucide-react';
+import { BUSINESS_SECTORS, COMPANY_SIZES } from '@/constants/userProfile';
 
 const AdminUsersPage: React.FC = () => {
   const { searchAdminUsers, getAdminUserById, adjustAdminUserCredits, toggleAdminUserStatus } = useApi();
@@ -146,6 +147,8 @@ const AdminUsersPage: React.FC = () => {
                     <th className="py-2 pr-2">Email</th>
                     <th className="py-2 pr-2">Nom</th>
                     <th className="py-2 pr-2">Rôle</th>
+                    <th className="py-2 pr-2">Secteur</th>
+                    <th className="py-2 pr-2">Taille</th>
                     <th className="py-2 pr-2">Crédits</th>
                     <th className="py-2 pr-2">Statut</th>
                     <th className="py-2 pr-2">Créé le</th>
@@ -166,6 +169,8 @@ const AdminUsersPage: React.FC = () => {
                           {u.role || 'user'}
                         </Badge>
                       </td>
+                      <td className="py-2 pr-2 text-xs">{BUSINESS_SECTORS.find((s) => s.value === u.business_sector)?.label || '—'}</td>
+                      <td className="py-2 pr-2 text-xs">{COMPANY_SIZES.find((s) => s.value === u.company_size)?.label || '—'}</td>
                       <td className="py-2 pr-2 font-medium">{parseFloat(u.credits_balance || 0).toFixed(1)}</td>
                       <td className="py-2 pr-2">
                         {u.is_suspended ? (
@@ -209,6 +214,10 @@ const AdminUsersPage: React.FC = () => {
                 <div className="font-medium">{selectedUser?.role || 'user'}</div>
                 <div className="text-steel">Crédits</div>
                 <div className="font-medium text-navy">{parseFloat(selectedUser?.credits_balance || 0).toFixed(1)}</div>
+                <div className="text-steel">Secteur</div>
+                <div className="font-medium">{BUSINESS_SECTORS.find((s) => s.value === selectedUser?.business_sector)?.label || '—'}</div>
+                <div className="text-steel">Taille</div>
+                <div className="font-medium">{COMPANY_SIZES.find((s) => s.value === selectedUser?.company_size)?.label || '—'}</div>
                 <div className="text-steel">Email vérifié</div>
                 <div className="font-medium">{selectedUser?.email_verified_at ? 'Oui' : 'Non'}</div>
                 <div className="text-steel">Sessions</div>

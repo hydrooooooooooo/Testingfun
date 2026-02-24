@@ -15,10 +15,18 @@ import {
 } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
 import {
-  Eye, EyeOff, ArrowRight, Check, User, Mail, Phone, Lock
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Eye, EyeOff, ArrowRight, Check, User, Mail, Phone, Lock, Building2, Users
 } from 'lucide-react';
 import api from '@/services/api';
 import SEOHead from '@/components/seo/SEOHead';
+import { BUSINESS_SECTORS, COMPANY_SIZES } from '@/constants/userProfile';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Le nom doit contenir au moins 2 caractères.' }),
@@ -31,6 +39,8 @@ const formSchema = z.object({
     .refine((val) => /^\+?\d{7,15}$/.test(val), {
       message: 'Numéro de téléphone invalide.',
     }),
+  business_sector: z.string().optional(),
+  company_size: z.string().optional(),
   confirm_password: z.string({ required_error: 'La confirmation du mot de passe est requise.' })
 }).refine((data) => data.password === data.confirm_password, {
   message: 'Les mots de passe ne correspondent pas.',
@@ -93,6 +103,8 @@ export default function RegisterPage() {
       email: '',
       password: '',
       phone_number: '',
+      business_sector: '',
+      company_size: '',
       confirm_password: '',
     },
   });
@@ -106,6 +118,8 @@ export default function RegisterPage() {
         email: values.email,
         password: values.password,
         phone_number: values.phone_number,
+        business_sector: values.business_sector || undefined,
+        company_size: values.company_size || undefined,
         confirm_password: values.confirm_password,
       });
 
@@ -231,6 +245,64 @@ export default function RegisterPage() {
                     </FormItem>
                   )}
                 />
+
+                {/* Row: Sector + Size side by side */}
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="business_sector"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-navy font-semibold text-[13px]">Secteur d'activité</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-11 bg-white border-cream-300 focus:border-navy focus:ring-navy/20">
+                              <div className="flex items-center gap-2">
+                                <Building2 className="w-4 h-4 text-steel" />
+                                <SelectValue placeholder="Optionnel" />
+                              </div>
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {BUSINESS_SECTORS.map((s) => (
+                              <SelectItem key={s.value} value={s.value}>
+                                {s.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="company_size"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-navy font-semibold text-[13px]">Taille de l'entreprise</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-11 bg-white border-cream-300 focus:border-navy focus:ring-navy/20">
+                              <div className="flex items-center gap-2">
+                                <Users className="w-4 h-4 text-steel" />
+                                <SelectValue placeholder="Optionnel" />
+                              </div>
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {COMPANY_SIZES.map((s) => (
+                              <SelectItem key={s.value} value={s.value}>
+                                {s.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
                 <FormField
                   control={form.control}

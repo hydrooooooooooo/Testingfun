@@ -112,18 +112,20 @@ export class AdminController {
       const adminId = (req as AuthenticatedRequest).user?.id;
       audit('admin.report_viewed', { adminId });
 
-      const [userStats, searchStats, sessionSeries, sessionBasic, paymentStats] = await Promise.all([
+      const [userStats, searchStats, sessionSeries, sessionBasic, paymentStats, sectorDistribution, sizeDistribution] = await Promise.all([
         analyticsService.getUserStats(),
         analyticsService.getSearchStats(),
         analyticsService.getSessionTimeseries(),
         sessionService.getStats(),
         analyticsService.getPaymentStats(),
+        analyticsService.getBusinessSectorDistribution(),
+        analyticsService.getCompanySizeDistribution(),
       ]);
 
       res.status(200).json({
         status: 'success',
         data: {
-          users: userStats,
+          users: { ...userStats, sectorDistribution, sizeDistribution },
           searches: searchStats,
           sessions: {
             ...sessionBasic,
@@ -276,7 +278,7 @@ export class AdminController {
 
       const limit = Math.min(50, Math.max(1, parseInt(String(req.query.limit || '20'), 10)));
       const rows = await db('users')
-        .select('id', 'email', 'name', 'role', 'credits_balance', 'is_suspended', 'created_at')
+        .select('id', 'email', 'name', 'role', 'credits_balance', 'is_suspended', 'created_at', 'business_sector', 'company_size')
         .modify((qb: any) => {
           if (q) qb.whereILike('email', `%${q}%`);
         })
@@ -299,7 +301,7 @@ export class AdminController {
       audit('admin.user_viewed', { adminId, userId });
 
       const user = await db('users')
-        .select('id', 'email', 'name', 'role', 'credits_balance', 'is_suspended', 'suspension_reason', 'created_at', 'email_verified_at')
+        .select('id', 'email', 'name', 'role', 'credits_balance', 'is_suspended', 'suspension_reason', 'created_at', 'email_verified_at', 'business_sector', 'company_size')
         .where({ id: userId })
         .first();
       if (!user) throw new ApiError(404, 'User not found');

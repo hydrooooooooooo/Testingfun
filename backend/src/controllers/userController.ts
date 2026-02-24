@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
 import bcrypt from 'bcryptjs';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
+import { BUSINESS_SECTOR_VALUES, COMPANY_SIZE_VALUES } from '../constants/userProfile';
 
 /**
  * Récupère l'historique des paiements pour l'utilisateur authentifié.
@@ -193,11 +194,19 @@ export const getDashboardData = async (req: AuthenticatedRequest, res: Response)
  * Change le mot de passe de l'utilisateur authentifié.
  */
 export const updateProfile = async (req: AuthenticatedRequest, res: Response) => {
-  const { name, email, phone_number } = req.body;
+  const { name, email, phone_number, business_sector, company_size } = req.body;
   const userId = req.user?.id;
 
   if (!userId) {
     return res.status(401).json({ message: 'Utilisateur non authentifié.' });
+  }
+
+  // Validate optional business_sector / company_size
+  if (business_sector && !BUSINESS_SECTOR_VALUES.includes(business_sector)) {
+    return res.status(400).json({ message: 'Valeur de secteur d\'activité invalide.' });
+  }
+  if (company_size && !COMPANY_SIZE_VALUES.includes(company_size)) {
+    return res.status(400).json({ message: 'Valeur de taille d\'entreprise invalide.' });
   }
 
   try {
@@ -219,6 +228,8 @@ export const updateProfile = async (req: AuthenticatedRequest, res: Response) =>
     if (name) updateData.name = name;
     if (email) updateData.email = email;
     if (phone_number) updateData.phone_number = phone_number;
+    if (business_sector !== undefined) updateData.business_sector = business_sector || null;
+    if (company_size !== undefined) updateData.company_size = company_size || null;
 
     await db('users')
       .where({ id: userId })
@@ -233,14 +244,14 @@ export const updateProfile = async (req: AuthenticatedRequest, res: Response) =>
         throw new Error('JWT_SECRET is not defined in the environment variables.');
     }
     const token = jwt.sign(
-        { userId: updatedUser.id, name: updatedUser.name, email: updatedUser.email, role: updatedUser.role, phone_number: updatedUser.phone_number },
+        { userId: updatedUser.id, name: updatedUser.name, email: updatedUser.email, role: updatedUser.role, phone_number: updatedUser.phone_number, business_sector: updatedUser.business_sector, company_size: updatedUser.company_size },
         config.api.jwtSecret,
         { expiresIn: '7d' }
     );
 
-    res.status(200).json({ 
+    res.status(200).json({
         message: 'Profil mis à jour avec succès.',
-        token: token 
+        token: token
     });
 
   } catch (error) {

@@ -319,6 +319,25 @@ export class AnalyticsService {
     }
     return results;
   }
+  async getBusinessSectorDistribution() {
+    const rows = await db('users')
+      .select('business_sector as sector')
+      .count('* as count')
+      .whereNotNull('business_sector')
+      .groupBy('business_sector')
+      .orderBy('count', 'desc');
+    return rows.map((r: any) => ({ sector: r.sector, count: Number(r.count) }));
+  }
+
+  async getCompanySizeDistribution() {
+    const rows = await db('users')
+      .select('company_size as size')
+      .count('* as count')
+      .whereNotNull('company_size')
+      .groupBy('company_size')
+      .orderBy('count', 'desc');
+    return rows.map((r: any) => ({ size: r.size, count: Number(r.count) }));
+  }
 }
 
 export const analyticsService = new AnalyticsService();

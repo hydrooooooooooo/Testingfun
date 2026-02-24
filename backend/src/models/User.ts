@@ -17,6 +17,8 @@ export interface User {
   profile_image?: string;
   subscription_status: 'free' | 'premium' | 'enterprise';
   last_verification_email_sent_at?: Date | null;
+  business_sector?: string;
+  company_size?: string;
 }
 
 export interface UserRegistration {
@@ -24,6 +26,8 @@ export interface UserRegistration {
   password: string;
   name?: string;
   phone_number: string;
+  business_sector?: string;
+  company_size?: string;
 }
 
 export interface UserLogin {
