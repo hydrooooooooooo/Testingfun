@@ -3,6 +3,7 @@ import { scrapeController } from '../controllers/scrapeController';
 import { body, query } from 'express-validator';
 import { validate } from '../middlewares/validationMiddleware';
 import { protect } from '../middlewares/authMiddleware';
+import { facebookPagesRoutes } from './facebookPagesRoutes';
 
 const router = Router();
 
@@ -48,5 +49,8 @@ router.post(
   '/webhook',
   scrapeController.handleApifyWebhook.bind(scrapeController)
 );
+
+// Mount Facebook Pages sub-routes
+router.use('/facebook-pages', facebookPagesRoutes);
 
 export { router as scrapeRoutes };

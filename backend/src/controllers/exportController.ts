@@ -229,7 +229,65 @@ export class ExportController {
       });
     }
   }
-  
+
+  /**
+   * GET /api/export/facebook-pages
+   * Export Facebook Pages data as JSON (page info and/or posts)
+   */
+  async exportFacebookPages(req: Request, res: Response, next: NextFunction) {
+    try {
+      const sessionId = (req.query.sessionId || req.query.session_id) as string;
+      const fileType = (req.query.fileType || 'zip') as string;
+      const pageName = req.query.pageName as string | undefined;
+
+      if (!sessionId) throw new ApiError(400, 'Session ID is required');
+
+      const userId = (req as AuthenticatedRequest).user?.id;
+      const session = await sessionService.getSession(sessionId);
+      if (!session) throw new ApiError(404, 'Session not found');
+      if (session.user_id !== userId) throw new ApiError(403, 'Not authorized');
+
+      // Read from backup file
+      const backupPath = path.join(__dirname, '../../data/backups', `fbpages_${sessionId}.json`);
+      if (!fs.existsSync(backupPath)) {
+        throw new ApiError(404, 'Session data not found. The extraction may still be in progress.');
+      }
+
+      const backupData = JSON.parse(fs.readFileSync(backupPath, 'utf-8'));
+      let responseData: any;
+
+      if (fileType === 'info') {
+        responseData = [];
+        for (const sub of backupData.subSessions || []) {
+          if (!pageName || sub.pageName === pageName) {
+            responseData.push(...(sub.infoData || []));
+          }
+        }
+      } else if (fileType === 'posts') {
+        responseData = [];
+        for (const sub of backupData.subSessions || []) {
+          if (!pageName || sub.pageName === pageName) {
+            responseData.push(...(sub.postsData || []));
+          }
+        }
+      } else {
+        // 'zip' or default - return everything
+        responseData = backupData;
+      }
+
+      const jsonStr = JSON.stringify(responseData, null, 2);
+      const buffer = Buffer.from(jsonStr, 'utf-8');
+      const filename = `facebook_pages_${sessionId}_${fileType}_${Date.now()}.json`;
+
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      res.setHeader('Content-Length', buffer.length);
+      res.send(buffer);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   /**
    * Gère l'exportation pour les sessions temporaires ou en cas de fallback
    */

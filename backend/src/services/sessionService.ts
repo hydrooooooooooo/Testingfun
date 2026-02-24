@@ -30,6 +30,13 @@ export interface Session {
   payment_intent_id?: string | null;
   created_at: Date;
   updated_at: Date;
+
+  // Facebook Pages fields (from migration 20251120000000)
+  scrape_type?: string;
+  page_urls?: string;
+  extraction_config?: string;
+  sub_sessions?: string;
+  data_types?: string;
 }
 
 /**
@@ -110,6 +117,10 @@ class SessionService {
     // Stringify JSON fields before updating
     if (updates.previewItems) {
       updates.previewItems = JSON.stringify(updates.previewItems);
+    }
+
+    if (updates.sub_sessions && typeof updates.sub_sessions !== 'string') {
+      (updates as any).sub_sessions = JSON.stringify(updates.sub_sessions);
     }
 
     const [updatedSession] = await db('scraping_sessions')

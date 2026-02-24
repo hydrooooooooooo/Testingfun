@@ -25,6 +25,17 @@ router.get(
 );
 
 /**
+ * @route   GET /api/export/facebook-pages
+ * @desc    Export Facebook Pages data as JSON
+ * @access  Protected
+ */
+router.get(
+  '/facebook-pages',
+  protect,
+  exportController.exportFacebookPages.bind(exportController)
+);
+
+/**
  * @route   GET /api/export/backup/:sessionId
  * @desc    Get backup data for a session
  * @access  Public
