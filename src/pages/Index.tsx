@@ -148,7 +148,7 @@ export default function Index() {
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/5 rounded-full blur-3xl" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24 lg:pt-28 lg:pb-32">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16 lg:pt-20 lg:pb-24">
           <div className="text-center max-w-4xl mx-auto">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 text-gold border border-gold/30 rounded-full text-sm font-semibold mb-8">
@@ -216,7 +216,7 @@ export default function Index() {
       {/* ================================================================
           2. FEATURES SECTION
       ================================================================= */}
-      <section id="features" className="w-full bg-cream-50 py-20 lg:py-28">
+      <section id="features" className="w-full bg-cream-50 py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-navy text-3xl lg:text-4xl font-bold mb-4">
@@ -255,7 +255,7 @@ export default function Index() {
       {/* ================================================================
           3. HOW IT WORKS
       ================================================================= */}
-      <section className="w-full bg-white py-20 lg:py-28">
+      <section className="w-full bg-white py-16 lg:py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-navy text-3xl lg:text-4xl font-bold mb-4">
@@ -360,7 +360,7 @@ export default function Index() {
       {/* ================================================================
           4. USE CASES
       ================================================================= */}
-      <section className="w-full bg-navy py-20 lg:py-28">
+      <section className="w-full bg-navy py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-white text-3xl lg:text-4xl font-bold mb-4">
@@ -391,7 +391,7 @@ export default function Index() {
       {/* ================================================================
           5. PRICING SECTION
       ================================================================= */}
-      <section className="w-full bg-cream-50 py-20 lg:py-28">
+      <section className="w-full bg-cream-50 py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-navy text-3xl lg:text-4xl font-bold mb-4">
@@ -462,7 +462,7 @@ export default function Index() {
       {/* ================================================================
           6. TRUST SECTION
       ================================================================= */}
-      <section className="w-full bg-white py-20 lg:py-28">
+      <section className="w-full bg-white py-16 lg:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-navy text-3xl lg:text-4xl font-bold">
@@ -513,7 +513,7 @@ export default function Index() {
       {/* ================================================================
           7. FAQ
       ================================================================= */}
-      <section id="faq" className="w-full bg-cream-50 py-20 lg:py-28">
+      <section id="faq" className="w-full bg-cream-50 py-16 lg:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-navy text-3xl lg:text-4xl font-bold">
@@ -540,7 +540,7 @@ export default function Index() {
       {/* ================================================================
           8. FINAL CTA
       ================================================================= */}
-      <section className="relative w-full bg-navy overflow-hidden py-20 lg:py-28">
+      <section className="relative w-full bg-navy overflow-hidden py-16 lg:py-20">
         {/* Decorative gold circles */}
         <div className="absolute top-10 right-20 w-64 h-64 bg-gold/10 rounded-full blur-3xl" />
         <div className="absolute bottom-10 left-20 w-80 h-80 bg-gold/5 rounded-full blur-3xl" />

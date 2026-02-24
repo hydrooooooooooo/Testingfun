@@ -133,7 +133,7 @@ export default function ExemplesPage() {
         <div className="absolute top-10 right-20 w-80 h-80 bg-gold/8 rounded-full blur-3xl" />
         <div className="absolute -bottom-10 left-10 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-center">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20 text-center">
           <p className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em] mb-4">
             Cas d'usage concrets
           </p>
@@ -149,7 +149,7 @@ export default function ExemplesPage() {
       </section>
 
       {/* ─── EXAMPLES GRID — 2 columns ─── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           {examples.map((ex, idx) => (
             <article
@@ -222,7 +222,7 @@ export default function ExemplesPage() {
         <div className="absolute top-0 right-0 w-72 h-72 bg-gold/8 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-20 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
 
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24 text-center">
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 text-center">
           <p className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em] mb-4">
             Prêt à essayer ?
           </p>
