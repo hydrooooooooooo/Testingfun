@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Users, Search, Coins, ShieldOff, ShieldCheck } from 'lucide-react';
 import { BUSINESS_SECTORS, COMPANY_SIZES } from '@/constants/userProfile';
+import { getModelName } from '@/lib/aiModels';
 
 const AdminUsersPage: React.FC = () => {
   const { searchAdminUsers, getAdminUserById, adjustAdminUserCredits, toggleAdminUserStatus } = useApi();
@@ -222,6 +223,12 @@ const AdminUsersPage: React.FC = () => {
                 <div className="font-medium">{selectedUser?.email_verified_at ? 'Oui' : 'Non'}</div>
                 <div className="text-steel">Sessions</div>
                 <div className="font-medium">{userDetail?.sessionCount ?? 0}</div>
+                <div className="text-steel">Modèle IA</div>
+                <div className="font-medium">{selectedUser?.preferred_ai_model ? getModelName(selectedUser.preferred_ai_model) : 'Défaut'}</div>
+                <div className="text-steel">Dernière connexion</div>
+                <div className="font-medium">{selectedUser?.last_login_at ? new Date(selectedUser.last_login_at).toLocaleString() : '—'}</div>
+                <div className="text-steel">Dernière IP</div>
+                <div className="font-medium text-xs">{selectedUser?.last_login_ip || '—'}</div>
                 <div className="text-steel">Statut</div>
                 <div>
                   {selectedUser?.is_suspended ? (
@@ -272,6 +279,46 @@ const AdminUsersPage: React.FC = () => {
                           <span className="ml-2 text-steel">{tx.transaction_type}</span>
                         </div>
                         <div className="text-steel">{new Date(tx.created_at).toLocaleDateString()}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Payments */}
+              <div>
+                <h4 className="text-sm font-semibold text-navy mb-2">Paiements</h4>
+                {(userDetail?.payments || []).length === 0 ? (
+                  <div className="text-sm text-steel">Aucun paiement</div>
+                ) : (
+                  <div className="space-y-1 max-h-48 overflow-y-auto">
+                    {(userDetail?.payments || []).map((p: any) => (
+                      <div key={p.id} className="flex items-center justify-between text-xs border-b border-cream-200 py-1.5">
+                        <div>
+                          <span className="font-medium text-navy">{p.packId || '—'}</span>
+                          <Badge className="ml-2 text-[10px]" variant="secondary">{p.payment_method}</Badge>
+                        </div>
+                        <div className="text-steel">{p.created_at ? new Date(p.created_at).toLocaleDateString() : '—'}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Downloads */}
+              <div>
+                <h4 className="text-sm font-semibold text-navy mb-2">Téléchargements</h4>
+                {(userDetail?.downloads || []).length === 0 ? (
+                  <div className="text-sm text-steel">Aucun téléchargement</div>
+                ) : (
+                  <div className="space-y-1 max-h-48 overflow-y-auto">
+                    {(userDetail?.downloads || []).map((d: any) => (
+                      <div key={d.id} className="flex items-center justify-between text-xs border-b border-cream-200 py-1.5">
+                        <div>
+                          <span className="font-medium text-navy">{d.session_id}</span>
+                          <span className="ml-2 text-steel">{d.format}</span>
+                        </div>
+                        <div className="text-steel">{d.created_at ? new Date(d.created_at).toLocaleDateString() : '—'}</div>
                       </div>
                     ))}
                   </div>
