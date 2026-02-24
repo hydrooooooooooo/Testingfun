@@ -69,11 +69,9 @@ export const corsForStripeWebhook = (req: Request, res: Response, next: NextFunc
       res.setHeader('Access-Control-Allow-Origin', allowedOrigins[0]);
     }
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, HEAD');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key, Cache-Control, Pragma, Expires, Origin, X-Requested-With, Accept');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key, X-CSRF-Token, Cache-Control, Pragma, Expires, Origin, X-Requested-With, Accept');
     res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition, Content-Type, Content-Length');
-    
-    // Log pour débogage
-    logger.info(`Configuration CORS spéciale appliquée pour ${req.path}`);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
     
     if (req.method === 'OPTIONS') {
       res.status(200).end();
@@ -96,10 +94,8 @@ export const corsForStripeWebhook = (req: Request, res: Response, next: NextFunc
   }
   
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key');
-  if (!config.server.isDev) {
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  }
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key, X-CSRF-Token');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   
   // Handle preflight requests
   if (req.method === 'OPTIONS') {

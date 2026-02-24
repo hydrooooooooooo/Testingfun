@@ -1,115 +1,138 @@
 #!/bin/bash
 
-# Couleurs pour une meilleure lisibilité
+# Couleurs
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
-NC='\033[0m' # No Color
+CYAN='\033[0;36m'
+NC='\033[0m'
 
-echo -e "${BLUE}=== Démarrage de l'application Marketplace Scraper Pro ===${NC}"
+PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
+BACKEND_DIR="$PROJECT_ROOT/backend"
+LOG_DIR="$PROJECT_ROOT/logs"
 
-# Vérifier si les dépendances sont installées
-check_dependencies() {
-  local dir=$1
-  local name=$2
-  
-  echo -e "${YELLOW}Vérification des dépendances pour $name...${NC}"
-  
-  if [ ! -d "$dir/node_modules" ]; then
-    echo -e "${YELLOW}Installation des dépendances pour $name...${NC}"
-    cd "$dir" && npm install
-    if [ $? -ne 0 ]; then
-      echo -e "${RED}Erreur lors de l'installation des dépendances pour $name${NC}"
-      return 1
-    fi
-    echo -e "${GREEN}Dépendances installées avec succès pour $name${NC}"
+mkdir -p "$LOG_DIR"
+
+BACKEND_LOG="$LOG_DIR/backend.log"
+FRONTEND_LOG="$LOG_DIR/frontend.log"
+
+echo -e "${BLUE}╔══════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║   EasyScrapy - Démarrage environnement dev   ║${NC}"
+echo -e "${BLUE}╚══════════════════════════════════════════════╝${NC}"
+
+# ─── 1. Tout couper proprement ───
+echo -e "\n${YELLOW}[1/5] Arrêt des processus existants...${NC}"
+pkill -f "ts-node-dev" 2>/dev/null
+pkill -f "vite.*marketplace-scraper" 2>/dev/null
+# Aussi tuer par ports
+lsof -ti:3001 | xargs kill -9 2>/dev/null
+lsof -ti:8080 | xargs kill -9 2>/dev/null
+lsof -ti:8081 | xargs kill -9 2>/dev/null
+lsof -ti:5173 | xargs kill -9 2>/dev/null
+sleep 2
+echo -e "${GREEN}  ✓ Processus arrêtés${NC}"
+
+# ─── 2. Vérifier PostgreSQL ───
+echo -e "\n${YELLOW}[2/5] Vérification PostgreSQL...${NC}"
+if pg_isready -q 2>/dev/null; then
+  echo -e "${GREEN}  ✓ PostgreSQL est en marche${NC}"
+else
+  echo -e "${RED}  ✗ PostgreSQL n'est pas démarré !${NC}"
+  echo -e "${YELLOW}  Tentative de démarrage...${NC}"
+  brew services start postgresql@14 2>/dev/null || brew services start postgresql 2>/dev/null
+  sleep 3
+  if pg_isready -q 2>/dev/null; then
+    echo -e "${GREEN}  ✓ PostgreSQL démarré avec succès${NC}"
   else
-    echo -e "${GREEN}Dépendances déjà installées pour $name${NC}"
+    echo -e "${RED}  ✗ Impossible de démarrer PostgreSQL. Vérifiez votre installation.${NC}"
+    exit 1
   fi
-  
-  return 0
-}
+fi
 
-# Vérifier si le fichier .env existe pour le backend
-check_env_file() {
-  if [ ! -f "./backend/.env" ]; then
-    echo -e "${YELLOW}Le fichier .env n'existe pas dans le backend. Création à partir de .env.example...${NC}"
-    cp "./backend/.env.example" "./backend/.env"
-    echo -e "${GREEN}Fichier .env créé. Veuillez vérifier et mettre à jour les variables d'environnement si nécessaire.${NC}"
-  fi
-}
-
-# Construire le backend
-build_backend() {
-  echo -e "${YELLOW}Construction du backend...${NC}"
-  cd backend && npm run build
-  if [ $? -ne 0 ]; then
-    echo -e "${RED}Erreur lors de la construction du backend${NC}"
-    return 1
-  fi
-  echo -e "${GREEN}Backend construit avec succès${NC}"
-  return 0
-}
-
-# Fonction pour démarrer le backend
-start_backend() {
-  echo -e "${YELLOW}Démarrage du backend...${NC}"
-  # Utiliser le chemin absolu pour le backend
-  PROJECT_ROOT="$(dirname "$(realpath "$0")")"
-  cd "$PROJECT_ROOT/backend" && npm run dev &
-  BACKEND_PID=$!
-  echo -e "${GREEN}Backend démarré avec PID: $BACKEND_PID${NC}"
+# ─── 3. Vérifier les dépendances ───
+echo -e "\n${YELLOW}[3/5] Vérification des dépendances...${NC}"
+if [ ! -d "$BACKEND_DIR/node_modules" ]; then
+  echo -e "${YELLOW}  Installation des dépendances backend...${NC}"
+  cd "$BACKEND_DIR" && npm install
   cd "$PROJECT_ROOT"
-}
+fi
+if [ ! -d "$PROJECT_ROOT/node_modules" ]; then
+  echo -e "${YELLOW}  Installation des dépendances frontend...${NC}"
+  cd "$PROJECT_ROOT" && npm install
+fi
+echo -e "${GREEN}  ✓ Dépendances OK${NC}"
 
-# Fonction pour démarrer le frontend
-start_frontend() {
-  echo -e "${YELLOW}Démarrage du frontend...${NC}"
-  # Utiliser le chemin absolu pour le frontend
-  PROJECT_ROOT="$(dirname "$(realpath "$0")")"
-  cd "$PROJECT_ROOT" || return 1
-  npm run dev &
-  FRONTEND_PID=$!
-  echo -e "${GREEN}Frontend démarré avec PID: $FRONTEND_PID${NC}"
-}
+# ─── 4. Démarrer le backend ───
+echo -e "\n${YELLOW}[4/5] Démarrage du backend...${NC}"
+cd "$BACKEND_DIR"
+npm run dev > "$BACKEND_LOG" 2>&1 &
+BACKEND_PID=$!
+cd "$PROJECT_ROOT"
 
-# Fonction pour arrêter proprement les processus lors de la sortie
-cleanup() {
-  echo -e "${YELLOW}Arrêt des services...${NC}"
-  if [ ! -z "$BACKEND_PID" ]; then
+# Attendre que le backend soit prêt
+for i in $(seq 1 15); do
+  if curl -s http://localhost:3001/health > /dev/null 2>&1; then
+    echo -e "${GREEN}  ✓ Backend démarré (PID: $BACKEND_PID) - http://localhost:3001${NC}"
+    break
+  fi
+  if [ $i -eq 15 ]; then
+    echo -e "${RED}  ✗ Le backend n'a pas démarré. Vérifiez les logs :${NC}"
+    echo -e "${CYAN}    tail -50 $BACKEND_LOG${NC}"
     kill $BACKEND_PID 2>/dev/null
-    echo -e "${GREEN}Backend arrêté${NC}"
+    exit 1
   fi
-  if [ ! -z "$FRONTEND_PID" ]; then
-    kill $FRONTEND_PID 2>/dev/null
-    echo -e "${GREEN}Frontend arrêté${NC}"
-  fi
-  echo -e "${BLUE}=== Application arrêtée ===${NC}"
+  sleep 1
+done
+
+# ─── 5. Démarrer le frontend ───
+echo -e "\n${YELLOW}[5/5] Démarrage du frontend...${NC}"
+cd "$PROJECT_ROOT"
+npm run dev > "$FRONTEND_LOG" 2>&1 &
+FRONTEND_PID=$!
+sleep 3
+
+# Détecter le port utilisé par Vite
+FRONTEND_PORT=$(grep -oP 'localhost:\K\d+' "$FRONTEND_LOG" | head -1)
+if [ -z "$FRONTEND_PORT" ]; then
+  FRONTEND_PORT="8080"
+fi
+
+if ps -p $FRONTEND_PID > /dev/null 2>&1; then
+  echo -e "${GREEN}  ✓ Frontend démarré (PID: $FRONTEND_PID) - http://localhost:${FRONTEND_PORT}${NC}"
+else
+  echo -e "${RED}  ✗ Le frontend n'a pas démarré. Vérifiez les logs :${NC}"
+  echo -e "${CYAN}    tail -50 $FRONTEND_LOG${NC}"
+  kill $BACKEND_PID 2>/dev/null
+  exit 1
+fi
+
+# ─── Résumé ───
+echo -e "\n${BLUE}╔══════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║          ${GREEN}Tout est prêt !${BLUE}                      ║${NC}"
+echo -e "${BLUE}╠══════════════════════════════════════════════╣${NC}"
+echo -e "${BLUE}║${NC}  Backend  : ${GREEN}http://localhost:3001${NC}             ${BLUE}║${NC}"
+echo -e "${BLUE}║${NC}  Frontend : ${GREEN}http://localhost:${FRONTEND_PORT}${NC}             ${BLUE}║${NC}"
+echo -e "${BLUE}╠══════════════════════════════════════════════╣${NC}"
+echo -e "${BLUE}║${NC}  Logs backend  : ${CYAN}logs/backend.log${NC}            ${BLUE}║${NC}"
+echo -e "${BLUE}║${NC}  Logs frontend : ${CYAN}logs/frontend.log${NC}           ${BLUE}║${NC}"
+echo -e "${BLUE}╠══════════════════════════════════════════════╣${NC}"
+echo -e "${BLUE}║${NC}  ${YELLOW}Ctrl+C pour tout arrêter${NC}                    ${BLUE}║${NC}"
+echo -e "${BLUE}╚══════════════════════════════════════════════╝${NC}"
+
+# ─── Cleanup on exit ───
+cleanup() {
+  echo -e "\n${YELLOW}Arrêt des services...${NC}"
+  kill $BACKEND_PID 2>/dev/null
+  kill $FRONTEND_PID 2>/dev/null
+  # S'assurer que tout est bien mort
+  lsof -ti:3001 | xargs kill -9 2>/dev/null
+  lsof -ti:${FRONTEND_PORT} | xargs kill -9 2>/dev/null
+  echo -e "${GREEN}Services arrêtés proprement.${NC}"
   exit 0
 }
-
-# Capturer les signaux pour arrêter proprement
 trap cleanup SIGINT SIGTERM
 
-# Vérifier et installer les dépendances
-check_dependencies "." "Frontend" || exit 1
-check_dependencies "./backend" "Backend" || exit 1
-
-# Vérifier le fichier .env
-check_env_file
-
-# Construire le backend
-build_backend || exit 1
-
-# Démarrer les services
-start_backend
-start_frontend
-
-echo -e "${GREEN}=== Services démarrés avec succès ===${NC}"
-echo -e "${BLUE}Frontend: ${GREEN}http://localhost:5173${NC}"
-echo -e "${BLUE}Backend: ${GREEN}http://localhost:3001${NC}"
-echo -e "${YELLOW}Appuyez sur Ctrl+C pour arrêter tous les services${NC}"
-
-# Attendre que l'utilisateur arrête le script avec Ctrl+C
-wait
+# ─── Tail des logs en live ───
+echo -e "\n${CYAN}─── Logs en temps réel (backend + frontend) ───${NC}\n"
+tail -f "$BACKEND_LOG" "$FRONTEND_LOG"
