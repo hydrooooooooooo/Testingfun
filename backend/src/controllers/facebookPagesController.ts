@@ -694,7 +694,12 @@ Génère un JSON avec EXACTEMENT cette structure:
       const content = response.data.choices?.[0]?.message?.content || '';
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        return JSON.parse(jsonMatch[0]);
+        const parsed = JSON.parse(jsonMatch[0]);
+        // Fill missing fields from fallback (AI often truncates the last fields)
+        const fallback = this.generateBasicBenchmark(pageName, infoData, postsData);
+        if (!parsed.strategies_to_adopt?.length) parsed.strategies_to_adopt = fallback.strategies_to_adopt;
+        if (!parsed.action_plan?.immediate_actions?.length) parsed.action_plan = fallback.action_plan;
+        return parsed;
       }
       logger.warn(`[AI] Could not parse benchmark JSON response for ${pageName}`);
     } catch (error: any) {
