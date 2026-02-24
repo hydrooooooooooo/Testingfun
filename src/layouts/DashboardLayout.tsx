@@ -10,9 +10,9 @@ const DashboardLayout: React.FC = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground">
+    <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
       <Header />
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 min-h-0">
         {/* Mobile sidebar toggle */}
         <Button
           variant="ghost"
@@ -31,9 +31,9 @@ const DashboardLayout: React.FC = () => {
           />
         )}
 
-        {/* Sidebar - hidden on mobile unless toggled */}
+        {/* Sidebar */}
         <div className={`
-          fixed md:relative z-40 md:z-auto h-[calc(100vh-80px)] md:h-auto
+          fixed md:relative z-40 md:z-auto h-[calc(100vh-80px)] md:h-full flex-shrink-0
           transition-transform duration-300 ease-in-out
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
         `}>
@@ -44,8 +44,8 @@ const DashboardLayout: React.FC = () => {
           />
         </div>
 
-        {/* Main content */}
-        <main className="flex-1 overflow-y-auto p-4 sm:px-6 sm:py-4 md:gap-8">
+        {/* Main content - only this scrolls */}
+        <main className="flex-1 overflow-y-auto">
           <Outlet />
         </main>
       </div>

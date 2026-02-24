@@ -165,7 +165,7 @@ const CollapsibleSidebar: React.FC<CollapsibleSidebarProps> = ({ isCollapsed, se
 
   return (
     <div className={cn(
-      "flex flex-col border-r border-navy-400 bg-navy transition-all duration-300 ease-in-out relative shadow-sm",
+      "flex flex-col h-full border-r border-navy-400 bg-navy transition-all duration-300 ease-in-out relative shadow-sm",
       isCollapsed ? "w-16" : "w-64"
     )}>
       {/* Toggle Button */}
