@@ -7,22 +7,31 @@ import { Menu } from 'lucide-react';
 
 const navItems = [
   { path: '/', label: 'Accueil' },
+  { path: '/#features', label: 'Fonctionnalités' },
   { path: '/pricing', label: 'Tarifs' },
   { path: '/support', label: 'Support' },
   { path: '/models', label: 'Modèles' },
 ];
 
 const Header = () => {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
 
+  const isActive = (path: string) => {
+    if (path === '/#features') return pathname === '/' && hash === '#features';
+    if (path === '/') return pathname === '/' && hash !== '#features';
+    return pathname === path;
+  };
+
   return (
-    <header className="sticky top-0 z-20 w-full bg-white border-b border-border shadow-sm flex items-center justify-between px-4 md:px-8 h-20">
-      <Link to="/" className="text-2xl font-extrabold tracking-tight text-primary uppercase mr-8 select-none">
-        EASYSCrapy<span className="text-primary font-black">.COM</span>
+    <header className="sticky top-0 z-20 w-full bg-navy shadow-sm flex items-center justify-between px-4 md:px-8 h-20">
+      <Link to="/" className="text-2xl font-extrabold tracking-tight uppercase mr-8 select-none">
+        <span className="text-white">EASY</span>
+        <span className="text-white">SCRAPY</span>
+        <span className="text-gold font-black">.COM</span>
       </Link>
 
       {/* Desktop Navigation */}
@@ -32,9 +41,9 @@ const Header = () => {
             key={path}
             to={path}
             className={`px-3 py-2 rounded transition-colors duration-150 ${
-              pathname === path
-                ? 'bg-primary text-primary-foreground'
-                : 'hover:bg-muted/70 text-muted-foreground'
+              isActive(path)
+                ? 'bg-gold text-navy font-semibold'
+                : 'text-cream-200 hover:text-gold transition'
             }`}
           >
             {label}
@@ -46,21 +55,29 @@ const Header = () => {
       <div className="hidden md:flex items-center gap-4 ml-auto">
         {isAuthenticated() ? (
           <>
-            <span className="text-sm text-muted-foreground hidden lg:inline">
+            <span className="text-sm text-cream-200 hidden lg:inline">
               {user?.email}
             </span>
             <Link to="/dashboard">
-              <Button variant="outline">Dashboard</Button>
+              <Button variant="outline" className="border-cream-300/30 text-white hover:bg-white/10">
+                Dashboard
+              </Button>
             </Link>
-            <Button onClick={logout}>Déconnexion</Button>
+            <Button onClick={logout} className="bg-gold text-navy hover:bg-gold-300 font-bold">
+              Déconnexion
+            </Button>
           </>
         ) : (
           <>
             <Link to="/login">
-              <Button variant="outline">Se connecter</Button>
+              <Button variant="outline" className="border-cream-300/30 text-white hover:bg-white/10">
+                Se connecter
+              </Button>
             </Link>
             <Link to="/register">
-              <Button>S'inscrire</Button>
+              <Button className="bg-gold text-navy hover:bg-gold-300 font-bold">
+                Commencer
+              </Button>
             </Link>
           </>
         )}
@@ -70,33 +87,49 @@ const Header = () => {
       <div className="md:hidden ml-auto">
         <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon">
+            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
               <Menu className="h-6 w-6" />
               <span className="sr-only">Ouvrir le menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left">
+          <SheetContent side="left" className="bg-navy border-navy-400">
             <nav className="grid gap-6 text-lg font-medium mt-10">
               {navItems.map(({ path, label }) => (
-                <Link key={path} to={path} onClick={closeMenu} className="hover:text-primary transition-colors">
+                <Link
+                  key={path}
+                  to={path}
+                  onClick={closeMenu}
+                  className="text-cream-200 hover:text-gold transition-colors"
+                >
                   {label}
                 </Link>
               ))}
-              <hr className="my-4" />
+              <hr className="my-4 border-navy-400" />
               {isAuthenticated() ? (
                 <div className="flex flex-col gap-4">
                   <Link to="/dashboard" onClick={closeMenu}>
-                    <Button variant="outline" className="w-full">Dashboard</Button>
+                    <Button variant="outline" className="w-full border-cream-300/30 text-white hover:bg-white/10">
+                      Dashboard
+                    </Button>
                   </Link>
-                  <Button onClick={() => { logout(); closeMenu(); }}>Déconnexion</Button>
+                  <Button
+                    onClick={() => { logout(); closeMenu(); }}
+                    className="bg-gold text-navy hover:bg-gold-300 font-bold"
+                  >
+                    Déconnexion
+                  </Button>
                 </div>
               ) : (
                 <div className="flex flex-col gap-4">
                   <Link to="/login" onClick={closeMenu}>
-                    <Button variant="outline" className="w-full">Se connecter</Button>
+                    <Button variant="outline" className="w-full border-cream-300/30 text-white hover:bg-white/10">
+                      Se connecter
+                    </Button>
                   </Link>
                   <Link to="/register" onClick={closeMenu}>
-                    <Button className="w-full">S'inscrire</Button>
+                    <Button className="w-full bg-gold text-navy hover:bg-gold-300 font-bold">
+                      Commencer
+                    </Button>
                   </Link>
                 </div>
               )}
