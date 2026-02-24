@@ -39,7 +39,7 @@ const TopContentCard: React.FC<TopContentCardProps> = ({ topContent, className }
 
   const getRankBadgeColor = (rank: number) => {
     if (rank === 1) return 'bg-gradient-to-r from-gold-400 to-yellow-400 text-gold-900';
-    if (rank === 2) return 'bg-gradient-to-r from-gray-300 to-gray-400 text-navy';
+    if (rank === 2) return 'bg-gradient-to-r from-steel-200 to-steel-200 text-navy';
     if (rank === 3) return 'bg-gradient-to-r from-gold-400 to-gold-600 text-gold-900';
     return 'bg-cream-100 text-navy-700';
   };

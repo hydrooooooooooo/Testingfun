@@ -12,7 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const features = [
   {
-    icon: <Database className="text-blue-600 w-6 h-6" />,
+    icon: <Database className="text-navy w-6 h-6" />,
     title: "Données complètes",
     desc: "Titre, prix, description, localisation",
   },
@@ -22,7 +22,7 @@ const features = [
     desc: "Import auto dans vos exports",
   },
   {
-    icon: <FileSpreadsheet className="text-blue-700 w-6 h-6" />,
+    icon: <FileSpreadsheet className="text-navy w-6 h-6" />,
     title: "Export Excel",
     desc: "Fichier formaté et optimisé",
   },
@@ -37,7 +37,7 @@ const features = [
     desc: "Chiffrement & confidentialité",
   },
   {
-    icon: <InfinityIcon className="text-purple-600 w-6 h-6" />,
+    icon: <InfinityIcon className="text-steel-600 w-6 h-6" />,
     title: "Crédits permanents",
     desc: "Jamais d'expiration",
   },
@@ -46,7 +46,7 @@ const features = [
 export default function PricingFeatures() {
   return (
     <section className="mx-auto w-full max-w-3xl mb-4">
-      <Card className="w-full bg-blue-50 bg-opacity-80 border-blue-100 rounded-xl shadow px-2 md:px-4 pt-3 pb-6">
+      <Card className="w-full bg-navy-50 bg-opacity-80 border-navy-200 rounded-xl shadow px-2 md:px-4 pt-3 pb-6">
         <CardContent className="flex flex-col w-full p-0">
           <span className="font-playfair text-md md:text-lg text-primary font-bold pr-1 mb-4 flex items-center">
             <span className="text-lg md:text-xl mr-2">✨</span>
@@ -67,7 +67,7 @@ export default function PricingFeatures() {
               <div
                 key={i}
                 className="
-                  flex flex-col items-center text-center bg-white bg-opacity-90 border border-blue-100/60 rounded-2xl shadow-sm px-4 py-4
+                  flex flex-col items-center text-center bg-white bg-opacity-90 border border-navy-200/60 rounded-2xl shadow-sm px-4 py-4
                   gap-2
                   min-h-[112px]
                   hover:shadow-md transition

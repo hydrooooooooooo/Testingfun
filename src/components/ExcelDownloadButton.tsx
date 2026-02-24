@@ -51,7 +51,7 @@ export default function ExcelDownloadButton({ disabled, pack, onDownload, onPayw
 
   return (
     <Button 
-      className="w-full font-bold text-lg gap-2 mt-3 bg-gradient-to-r from-green-400 to-blue-500" 
+      className="w-full font-bold text-lg gap-2 mt-3 bg-gradient-to-r from-green-400 to-navy-500" 
       onClick={handleDownload} 
       disabled={false}
       type="button"

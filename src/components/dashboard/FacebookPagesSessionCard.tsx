@@ -134,7 +134,7 @@ export default function FacebookPagesSessionCard({ session, onViewItems }: Faceb
           {/* Left: Info */}
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <div className="relative">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-navy-500 flex items-center justify-center shadow-sm">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-steel-500 to-navy-500 flex items-center justify-center shadow-sm">
                 <Facebook className="w-5 h-5 text-white" />
               </div>
               <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-sm border border-cream-300">
@@ -160,7 +160,7 @@ export default function FacebookPagesSessionCard({ session, onViewItems }: Faceb
               <Button
                 onClick={() => onViewItems(session.id)}
                 size="sm"
-                className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-medium shadow-sm text-xs sm:text-sm px-2 sm:px-3"
+                className="bg-gradient-to-r from-steel-600 to-navy hover:from-steel-700 hover:to-navy-400 text-white font-medium shadow-sm text-xs sm:text-sm px-2 sm:px-3"
               >
                 <Eye className="w-3.5 h-3.5 sm:mr-1.5" />
                 <span className="hidden sm:inline">Voir les détails</span>
@@ -172,7 +172,7 @@ export default function FacebookPagesSessionCard({ session, onViewItems }: Faceb
                 disabled={downloading || !session.isPaid}
                 size="sm"
                 variant="ghost"
-                className="hover:bg-cyan-500/20"
+                className="hover:bg-steel-500/20"
               >
                 {downloading && currentDownload?.includes('.zip') ? (
                   <Loader2 className="w-4 h-4 animate-spin text-steel-600" />
@@ -372,7 +372,7 @@ export default function FacebookPagesSessionCard({ session, onViewItems }: Faceb
 
       {/* Payment Banner */}
       {!session.isPaid && (
-        <div className="mx-4 mb-4 p-3 bg-gradient-to-r from-gold-500/10 via-gold-500/10 to-amber-500/10 border border-gold-500/30 rounded-lg">
+        <div className="mx-4 mb-4 p-3 bg-gradient-to-r from-gold-500/10 via-gold-500/10 to-gold-500/10 border border-gold-500/30 rounded-lg">
           <div className="flex items-center gap-3">
             <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-gold-400 to-gold-500 flex items-center justify-center shadow-sm">
               <span className="text-lg">🔒</span>

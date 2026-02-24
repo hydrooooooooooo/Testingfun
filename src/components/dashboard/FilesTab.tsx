@@ -129,7 +129,7 @@ const FilesTab: React.FC<FilesTabProps> = ({ sessions }) => {
                       )}
                     </TableCell>
                     <TableCell>
-                      <a href={session.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline truncate block max-w-xs">
+                      <a href={session.url} target="_blank" rel="noopener noreferrer" className="text-navy hover:underline truncate block max-w-xs">
                         {session.url}
                       </a>
                       <div className="text-xs text-muted-foreground mt-1">

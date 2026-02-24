@@ -117,7 +117,7 @@ const BenchmarkDetailView: React.FC<BenchmarkDetailViewProps> = ({ pageName, ben
                 <div className="text-2xl font-bold text-navy">{position.category}</div>
                 <div className="text-xs text-steel mt-1">Position vs Secteur</div>
               </div>
-              <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-lg p-4 text-center">
+              <div className="bg-steel-500/10 border border-steel-500/20 rounded-lg p-4 text-center">
                 <div className="text-sm text-steel-200 mb-1">Secteur</div>
                 <div className="text-2xl font-bold text-steel-400">{position.categoryName}</div>
               </div>

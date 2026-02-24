@@ -38,7 +38,7 @@ const TopContentSection: React.FC<TopContentSectionProps> = ({ items, className 
   const getRankBadge = (rank: number) => {
     const colors = {
       1: 'bg-gradient-to-r from-gold-400 to-yellow-400 text-gold-900',
-      2: 'bg-gradient-to-r from-gray-300 to-gray-400 text-navy',
+      2: 'bg-gradient-to-r from-steel-200 to-steel-200 text-navy',
       3: 'bg-gradient-to-r from-gold-400 to-gold-600 text-gold-900'
     };
     return colors[rank as keyof typeof colors] || 'bg-steel-700 text-steel-200';

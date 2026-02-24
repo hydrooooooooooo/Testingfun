@@ -64,13 +64,13 @@ export default function ScrapeForm({
     <section className="mx-auto w-full max-w-2xl flex flex-col items-center mb-1 px-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full bg-white/90 backdrop-blur rounded-3xl border border-gray-100 shadow-xl flex flex-col gap-4 px-5 md:px-6 py-5 animate-fade-in"
+        className="w-full bg-white/90 backdrop-blur rounded-3xl border border-cream-200 shadow-xl flex flex-col gap-4 px-5 md:px-6 py-5 animate-fade-in"
         autoComplete="off"
       >
         {/* URL Input */}
         <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4">
           <input
-            className="flex-1 h-12 border border-gray-200 rounded-xl px-4 md:px-5 text-base md:text-lg focus:ring-2 focus:ring-blue-500 focus:outline-none focus:border-blue-400 bg-white placeholder:text-gray-400 shadow-sm font-sans"
+            className="flex-1 h-12 border border-cream-300 rounded-xl px-4 md:px-5 text-base md:text-lg focus:ring-2 focus:ring-navy focus:outline-none focus:border-navy bg-white placeholder:text-steel-200 shadow-sm font-sans"
             type="url"
             placeholder="Lien Marketplace…"
             value={url}
@@ -80,7 +80,7 @@ export default function ScrapeForm({
           
           {/* Pack Selection */}
           <select
-            className="h-12 border border-gray-200 rounded-xl px-3 md:px-4 text-base bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-400 font-sans min-w-[180px] font-semibold shadow-sm"
+            className="h-12 border border-cream-300 rounded-xl px-3 md:px-4 text-base bg-white focus:ring-2 focus:ring-steel focus:border-steel font-sans min-w-[180px] font-semibold shadow-sm"
             value={selectedPackId || ''}
             onChange={e => setSelectedPackId(e.target.value)}
             aria-label="Pack sélectionné"
@@ -90,7 +90,7 @@ export default function ScrapeForm({
               <option
                 value={plan.id}
                 key={plan.id}
-                className={plan.popular ? "font-bold bg-blue-100" : ""}
+                className={plan.popular ? "font-bold bg-navy-100" : ""}
               >
                 {plan.name} ({plan.nbDownloads} téléchargements)
               </option>
@@ -103,7 +103,7 @@ export default function ScrapeForm({
         {/* Submit Button */}
         <Button 
           type="submit" 
-          className="h-12 min-w-[150px] text-base md:text-lg font-semibold rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-80 disabled:cursor-not-allowed"
+          className="h-12 min-w-[150px] text-base md:text-lg font-semibold rounded-xl bg-gradient-to-r from-navy to-steel text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-80 disabled:cursor-not-allowed"
           disabled={loading}
         >
           {loading ? (
@@ -115,7 +115,7 @@ export default function ScrapeForm({
             "Lancer l'extraction"
           )}
         </Button>
-        <p className="text-xs md:text-sm text-gray-500 mt-2 md:mt-3">
+        <p className="text-xs md:text-sm text-steel mt-2 md:mt-3">
           Note: il est nécessaire d'être inscrit sur la plateforme pour pouvoir télécharger les données.
         </p>
       </form>

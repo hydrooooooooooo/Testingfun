@@ -56,7 +56,7 @@ export default function ScrapeResultSection({
                   <FileSpreadsheet className="w-4 h-4 mr-2" />
                   Excel
                 </Button>
-                <Button onClick={() => exportData('csv')} className="bg-blue-600 hover:bg-blue-700">
+                <Button onClick={() => exportData('csv')} className="bg-navy hover:bg-navy-400">
                   <FileText className="w-4 h-4 mr-2" />
                   CSV
                 </Button>

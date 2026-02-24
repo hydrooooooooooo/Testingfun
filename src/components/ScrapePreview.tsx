@@ -145,7 +145,7 @@ export default function ScrapePreview({ items }: { items: Item[] }) {
             className="bg-muted rounded-lg border border-muted p-3 flex flex-col gap-2 hover:shadow-md transition-shadow duration-200 cursor-pointer"
             onClick={() => setSelectedItem(itm)}
           >
-            <div className="w-full h-36 bg-gray-100 flex items-center justify-center mb-2 rounded overflow-hidden relative">
+            <div className="w-full h-36 bg-cream-100 flex items-center justify-center mb-2 rounded overflow-hidden relative">
               <img 
                 src={itm.image} 
                 alt={itm.title} 
@@ -158,7 +158,7 @@ export default function ScrapePreview({ items }: { items: Item[] }) {
               </div>
             </div>
             <div className="font-semibold truncate" title={itm.title}>{itm.title}</div>
-            <div className="text-xs text-gray-500 line-clamp-3 min-h-[3rem]">{itm.desc}</div>
+            <div className="text-xs text-steel line-clamp-3 min-h-[3rem]">{itm.desc}</div>
             <div className="text-xs text-accent mt-1 flex items-center">
               <MapPin className="h-3 w-3 mr-1" />
               {itm.location}

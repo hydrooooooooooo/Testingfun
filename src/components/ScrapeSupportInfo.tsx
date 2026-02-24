@@ -16,11 +16,11 @@ export default function ScrapeSupportInfo({ sessionId, datasetId, stats }: Props
     <div className="w-full max-w-lg mx-auto bg-card rounded-xl border border-accent shadow flex flex-col gap-2 px-6 py-4 mt-6 mb-1 animate-fade-in">
       <div className="flex flex-col gap-0.5">
         <span className="font-semibold text-sm text-primary">ID Session scraping :</span>
-        <span className="font-mono text-blue-700/80 text-xs">{sessionId}</span>
+        <span className="font-mono text-navy/80 text-xs">{sessionId}</span>
       </div>
       <div className="flex flex-col gap-0.5">
         <span className="font-semibold text-sm text-primary">ID Dataset :</span>
-        <span className="font-mono text-blue-700/80 text-xs">{datasetId}</span>
+        <span className="font-mono text-navy/80 text-xs">{datasetId}</span>
       </div>
       {stats && (
         <>

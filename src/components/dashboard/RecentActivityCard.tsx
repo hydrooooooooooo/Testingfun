@@ -46,7 +46,7 @@ const RecentActivityCard: React.FC<RecentActivityCardProps> = ({ activities, cla
       case 'facebook':
         return 'bg-navy-100';
       case 'marketplace':
-        return 'bg-cyan-100';
+        return 'bg-steel-100';
       case 'mention':
         return 'bg-gold-100';
       case 'benchmark':

@@ -87,7 +87,7 @@ const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-[#1a1d29]/80 hover:bg-[#1a1d29] border border-gray-700"
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-[#1a1d29]/80 hover:bg-[#1a1d29] border border-cream-300"
                       onClick={prevImage}
                     >
                       <ChevronLeft className="w-6 h-6" />
@@ -95,7 +95,7 @@ const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#1a1d29]/80 hover:bg-[#1a1d29] border border-gray-700"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#1a1d29]/80 hover:bg-[#1a1d29] border border-cream-300"
                       onClick={nextImage}
                     >
                       <ChevronRight className="w-6 h-6" />

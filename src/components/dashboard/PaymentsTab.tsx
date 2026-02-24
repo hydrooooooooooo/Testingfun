@@ -68,7 +68,7 @@ const PaymentsTab: React.FC<PaymentsTabProps> = ({ payments }) => {
     if (s === 'succeeded' || s === 'completed') return 'bg-green-100 text-green-800 border-green-200';
     if (s === 'pending') return 'bg-yellow-100 text-yellow-800 border-yellow-200';
     if (['failed', 'refused', 'error', 'canceled', 'cancelled'].includes(s)) return 'bg-red-100 text-red-800 border-red-200';
-    return 'bg-gray-100 text-gray-800 border-gray-200';
+    return 'bg-cream-100 text-navy border-cream-300';
   };
   if (!payments) {
     return <div>Chargement des paiements...</div>;

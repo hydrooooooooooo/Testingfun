@@ -102,7 +102,7 @@ const AuditDetailView: React.FC<AuditDetailViewProps> = ({ pageName, analysisDat
                   <div className="flex-1">
                     <div className="h-2 bg-steel-700 rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-gradient-to-r from-blue-500 to-cyan-400" 
+                        className="h-full bg-gradient-to-r from-navy-500 to-steel-400" 
                         style={{ width: `${(globalScore / 10) * 100}%` }}
                       />
                     </div>

@@ -706,7 +706,7 @@ export function FacebookPageItemsView({ sessionId, pageName, pageData: initialPa
       <div className="relative overflow-hidden rounded-xl border border-cream-300">
         {/* Cover Photo */}
         {pageData.coverPhotoUrl && (
-          <div className="relative h-32 bg-gradient-to-br from-steel-100 to-pink-100">
+          <div className="relative h-32 bg-gradient-to-br from-steel-100 to-gold-100">
             <img 
               src={pageData.coverPhotoUrl} 
               alt="Cover" 
@@ -753,12 +753,12 @@ export function FacebookPageItemsView({ sessionId, pageName, pageData: initialPa
           <div className="text-xl font-bold text-navy">{(pageData.followers || 0).toLocaleString()}</div>
         </div>
 
-        <div className="p-3 bg-gradient-to-br from-pink-50 to-red-100 rounded-lg border border-pink-200">
+        <div className="p-3 bg-gradient-to-br from-gold-50 to-red-100 rounded-lg border border-gold-200">
           <div className="flex items-center gap-2 mb-1">
-            <Heart className="w-4 h-4 text-pink-600" />
-            <span className="text-xs font-medium text-pink-900">J'aime</span>
+            <Heart className="w-4 h-4 text-gold-600" />
+            <span className="text-xs font-medium text-gold-900">J'aime</span>
           </div>
-          <div className="text-xl font-bold text-pink-900">{(pageData.likes || 0).toLocaleString()}</div>
+          <div className="text-xl font-bold text-gold-900">{(pageData.likes || 0).toLocaleString()}</div>
         </div>
 
         <div className="p-3 bg-gradient-to-br from-steel-50 to-steel-100 rounded-lg border border-steel-200">
