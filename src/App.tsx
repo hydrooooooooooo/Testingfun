@@ -59,6 +59,7 @@ import AdminLayout from './layouts/AdminLayout';
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
+import ScrollToTop from './components/ScrollToTop';
 
 const queryClient = new QueryClient();
 
@@ -69,6 +70,7 @@ function App() {
         <AuthProvider>
           <DashboardProvider>
             <BrowserRouter>
+              <ScrollToTop />
               <LocaleProvider>
               <ScrapeProvider>
               <Toaster />
