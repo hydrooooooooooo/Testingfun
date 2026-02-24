@@ -17,7 +17,7 @@ const DashboardLayout: React.FC = () => {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden fixed bottom-4 left-4 z-50 bg-orange-500 text-white hover:bg-orange-600 shadow-lg rounded-full h-12 w-12"
+          className="md:hidden fixed bottom-4 left-4 z-50 bg-gold text-navy hover:bg-gold-500 shadow-lg rounded-full h-12 w-12"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
         >
           <Menu className="h-5 w-5" />
