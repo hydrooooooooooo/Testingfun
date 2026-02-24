@@ -442,19 +442,14 @@ export default function Index() {
                       {pack.name}
                     </h3>
                     <p className="text-navy text-3xl font-bold mb-1">
-                      {formatPrice(pack.price)}{" "}
-                      <span className="text-steel text-base font-normal">
-                        MGA
-                      </span>
+                      {pack.price_label || (pack.price_eur ? `${(Number(pack.price_eur) / 100).toLocaleString('fr-FR')} €` : `${formatPrice(pack.price)} MGA`)}
                     </p>
-                    {pack.downloads && (
-                      <p className="text-steel text-sm mb-6">
-                        {pack.downloads} téléchargements
-                      </p>
-                    )}
+                    <p className="text-steel text-sm mb-6">
+                      {formatPrice(pack.nb_downloads)} analyses
+                    </p>
                     <div className="mt-auto">
                       <Link
-                        to="/register"
+                        to="/pricing"
                         className="block w-full text-center bg-navy text-white font-semibold hover:bg-navy-400 rounded-xl py-3 transition"
                       >
                         Choisir ce pack

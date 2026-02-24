@@ -27,6 +27,22 @@ router.post(
 );
 
 /**
+ * @route   POST /api/payment/buy-pack
+ * @desc    Buy a credit pack (creates session + Stripe checkout)
+ * @access  Protected
+ */
+router.post(
+  '/buy-pack',
+  protect,
+  [
+    body('packId').isString().withMessage('Pack ID is required'),
+    body('currency').optional().isIn(['eur', 'mga']).withMessage('Currency must be eur or mga'),
+  ],
+  validate,
+  paymentController.buyPack.bind(paymentController)
+);
+
+/**
  * @route   POST /api/payment/webhook
  * @desc    Handle Stripe webhook events
  * @access  Public

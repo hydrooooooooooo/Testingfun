@@ -4,28 +4,18 @@ import { toast } from "@/hooks/use-toast";
 import { CheckCircle, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import api from "@/services/api";
+import { useAuth } from "@/context/AuthContext";
+import PaymentModal from "@/components/PaymentModal";
 import type { PricingPlanDisplay } from "@/components/PricingPlan";
 import SEOHead from '@/components/seo/SEOHead';
 
-// Fonction pour générer les features des plans de manière dynamique
-const formatPlanFeatures = (plan: any): string[] => {
-  const basePriceMGA = 500; // Prix unitaire de référence pour le calcul des économies
-  const unitPriceMGA = Math.round(plan.price / plan.nb_downloads);
-  const savings = unitPriceMGA < basePriceMGA ? Math.round(((basePriceMGA - unitPriceMGA) / basePriceMGA) * 100) : 0;
-
-  if (plan.nb_downloads <= 300) {
-    return ["Parfait pour démarrer", "Support par email", "Données structurées Excel"];
-  } else if (plan.nb_downloads <= 1000) {
-    return [`Économisez ${savings}%`, "Pack le plus populaire", "Support prioritaire"];
-  } else {
-    return [`Économisez ${savings}%`, "Meilleur rapport qualité/prix", "Support entreprise 24/7"];
-  }
-};
-
 export default function PricingPage() {
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
   const [pricingPlans, setPricingPlans] = useState<PricingPlanDisplay[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPack, setSelectedPack] = useState<PricingPlanDisplay | null>(null);
+  const [paying, setPaying] = useState(false);
 
   useEffect(() => {
     const fetchPacks = async () => {
@@ -33,9 +23,12 @@ export default function PricingPage() {
       try {
         const response = await api.get('/packs');
         const plans: PricingPlanDisplay[] = response.data.map((plan: any) => {
-          // Afficher le prix réel de la base (en Ariary)
-          const originalPrice = Number(plan.price) || 0;
-          const priceDisplay = `${originalPrice.toLocaleString('fr-FR')} MGA`;
+          // Use price_label if available (formatted "25 € / 115 000 Ar"), otherwise format EUR
+          const priceEurCents = Number(plan.price_eur) || 0;
+          const priceEur = priceEurCents / 100;
+          const priceMGA = Number(plan.price) || 0;
+          const priceDisplay = plan.price_label
+            || (priceEur > 0 ? `${priceEur.toLocaleString('fr-FR')} €` : `${priceMGA.toLocaleString('fr-FR')} MGA`);
           const desc = `${Number(plan.nb_downloads).toLocaleString('fr-FR')} analyses`;
           const descriptionBullets = (plan.description || '')
             .split('|')
@@ -46,7 +39,7 @@ export default function PricingPage() {
             name: plan.name,
             price: priceDisplay,
             desc,
-            features: features.length > 0 ? features : formatPlanFeatures(plan),
+            features: features.length > 0 ? features : [],
             cta: plan.popular ? 'Choix optimal' : 'Choisir ce pack',
             popular: !!plan.popular,
             packId: plan.id,
@@ -67,7 +60,42 @@ export default function PricingPage() {
   }, []);
 
   const handleSelectPack = (plan: PricingPlanDisplay) => {
-    navigate(`/?packId=${plan.packId}`);
+    if (!isAuthenticated()) {
+      // Redirect to login with return URL
+      navigate(`/login?redirect=/pricing&packId=${plan.packId}`);
+      return;
+    }
+    setSelectedPack(plan);
+  };
+
+  const handleStripePay = async (currency: 'eur' | 'mga') => {
+    if (!selectedPack) return;
+    setPaying(true);
+    try {
+      const response = await api.post('/payment/buy-pack', {
+        packId: selectedPack.packId,
+        currency,
+      });
+      const { url } = response.data;
+      if (url) {
+        window.location.href = url;
+      } else {
+        throw new Error('No checkout URL returned');
+      }
+    } catch (error: any) {
+      console.error('Payment error:', error);
+      toast({
+        title: "Erreur de paiement",
+        description: error.response?.data?.message || "Impossible de créer la session de paiement.",
+        variant: "destructive",
+      });
+    } finally {
+      setPaying(false);
+    }
+  };
+
+  const handleMvolaPay = async () => {
+    toast({ title: "MVola", description: "Le paiement MVola sera bientôt disponible." });
   };
 
   return (
@@ -104,7 +132,7 @@ export default function PricingPage() {
                   <PricingPlan
                     plan={plan}
                     onClickPay={() => handleSelectPack(plan)}
-                    isLoading={false}
+                    isLoading={paying && selectedPack?.packId === plan.packId}
                   />
                 </div>
               ))}
@@ -112,6 +140,15 @@ export default function PricingPage() {
           )}
         </div>
       </section>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={!!selectedPack}
+        onClose={() => setSelectedPack(null)}
+        onStripePay={handleStripePay}
+        onMvolaPay={handleMvolaPay}
+        planName={selectedPack?.name || ''}
+      />
     </main>
   );
 }

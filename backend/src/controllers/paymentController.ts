@@ -142,6 +142,68 @@ export class PaymentController {
   }
 
   /**
+   * Buy a credit pack directly (no scraping session needed).
+   * Creates a minimal session record for tracking, then redirects to Stripe.
+   */
+  async buyPack(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { packId, currency = 'eur' } = req.body;
+      const userId = (req as any).user?.id;
+
+      if (!packId) {
+        throw new ApiError(400, 'Pack ID is required');
+      }
+      if (!userId) {
+        throw new ApiError(401, 'User not authenticated');
+      }
+
+      const pack = await db('packs').where({ id: packId }).first();
+      if (!pack) {
+        throw new ApiError(404, `Pack ${packId} not found`);
+      }
+
+      // Create a minimal session for payment tracking
+      const sessionId = `sess_${nanoid()}`;
+      await db('scraping_sessions').insert({
+        id: sessionId,
+        user_id: userId,
+        status: 'pending_payment',
+        scrape_type: 'credit_purchase',
+        packId: pack.id,
+        isPaid: false,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
+
+      // Select the correct Stripe Price ID
+      const priceId = currency === 'mga' ? pack.stripe_price_id_mga : pack.stripe_price_id;
+      if (!priceId) {
+        throw new ApiError(500, `No Stripe Price ID for pack ${pack.id} in ${currency}`);
+      }
+
+      const metadata = {
+        sessionId,
+        userId: String(userId),
+        packId: pack.id,
+        currency,
+      };
+
+      logger.info(`[Payment] buyPack: creating Stripe checkout for pack ${pack.id}, currency ${currency}, user ${userId}`);
+
+      const checkoutSession = await stripeService.createCheckoutSession(
+        priceId,
+        sessionId,
+        metadata,
+        currency
+      );
+
+      res.status(200).json({ url: checkoutSession.url });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
    * Handle Stripe webhook events
    */
   async handleWebhook(req: Request, res: Response, next: NextFunction) {
