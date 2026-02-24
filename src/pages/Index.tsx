@@ -151,7 +151,7 @@ export default function Index() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24 lg:pt-28 lg:pb-32">
           <div className="text-center max-w-4xl mx-auto">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 text-gold-800 border border-gold/30 rounded-full text-sm font-semibold mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 text-gold border border-gold/30 rounded-full text-sm font-semibold mb-8">
               <Zap className="w-4 h-4" />
               Plateforme d'Intelligence Sociale
             </div>

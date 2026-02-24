@@ -75,7 +75,7 @@ const Header = () => {
               {user?.email}
             </span>
             <Link to="/dashboard">
-              <Button variant="outline" className="border-cream-300/30 text-white hover:bg-white/10">
+              <Button variant="outline" className="border-cream-200 bg-transparent text-white hover:bg-white/10">
                 Dashboard
               </Button>
             </Link>
@@ -86,7 +86,7 @@ const Header = () => {
         ) : (
           <>
             <Link to="/login">
-              <Button variant="outline" className="border-cream-300/30 text-white hover:bg-white/10">
+              <Button variant="outline" className="border-cream-200 bg-transparent text-white hover:bg-white/10">
                 Se connecter
               </Button>
             </Link>
@@ -124,7 +124,7 @@ const Header = () => {
               {isAuthenticated() ? (
                 <div className="flex flex-col gap-4">
                   <Link to="/dashboard" onClick={closeMenu}>
-                    <Button variant="outline" className="w-full border-cream-300/30 text-white hover:bg-white/10">
+                    <Button variant="outline" className="w-full border-cream-200 bg-transparent text-white hover:bg-white/10">
                       Dashboard
                     </Button>
                   </Link>
@@ -138,7 +138,7 @@ const Header = () => {
               ) : (
                 <div className="flex flex-col gap-4">
                   <Link to="/login" onClick={closeMenu}>
-                    <Button variant="outline" className="w-full border-cream-300/30 text-white hover:bg-white/10">
+                    <Button variant="outline" className="w-full border-cream-200 bg-transparent text-white hover:bg-white/10">
                       Se connecter
                     </Button>
                   </Link>
