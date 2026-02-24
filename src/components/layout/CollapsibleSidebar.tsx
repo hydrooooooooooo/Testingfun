@@ -15,7 +15,8 @@ import {
   ChevronRight,
   ArrowLeft,
   Menu,
-  Calendar
+  Calendar,
+  Shield
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -84,6 +85,14 @@ const CollapsibleSidebar: React.FC<CollapsibleSidebarProps> = ({ isCollapsed, se
       icon: Settings,
       href: '/dashboard/settings',
     },
+    // Admin link — only shown for admin users (filtered below)
+    ...(user?.role === 'admin' ? [{
+      title: 'Administration',
+      icon: Shield,
+      href: '/admin',
+      badge: 'Admin',
+      badgeColor: 'bg-red-500/20 text-red-300'
+    }] : []),
   ];
 
   const isActive = (href: string, exact?: boolean) => {

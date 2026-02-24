@@ -14,7 +14,8 @@ const AdminRoute: React.FC = () => {
     return <Navigate to="/dashboard" replace />;
   }
 
-  if (!user?.email || user.email.toLowerCase() !== String(ownerEmail).toLowerCase()) {
+  // If VITE_ADMIN_EMAIL is set, also check the email matches
+  if (ownerEmail && (!user?.email || user.email.toLowerCase() !== String(ownerEmail).toLowerCase())) {
     return <Navigate to="/dashboard" replace />;
   }
 
