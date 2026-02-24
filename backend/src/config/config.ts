@@ -85,9 +85,10 @@ export const config = {
   // CORS configuration
   cors: {
     allowedOrigins: [
-      process.env.FRONTEND_URL || 'http://localhost:8080', // CORRIGÉ
-      'http://localhost:8080', // AJOUTÉ - ton frontend
-      'http://localhost:3001', // Ton backend
+      process.env.FRONTEND_URL || 'http://localhost:8080',
+      'http://localhost:8080',
+      'http://localhost:8081',
+      'http://localhost:3001',
       'http://localhost:3000',
       'http://localhost:5173',
       'https://checkout.stripe.com',
