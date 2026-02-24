@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDashboard } from '@/context/DashboardContext';
 import { useCredits } from '@/hooks/useCredits';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,6 +26,7 @@ import { useToast } from '@/components/ui/use-toast';
 import type { AIModel } from '@/types';
 
 const AiAnalysesPage: React.FC = () => {
+  const navigate = useNavigate();
   const { userData, error, isLoading, fetchDashboardData } = useDashboard();
   const { balance, refreshBalance } = useCredits();
   const { toast } = useToast();
@@ -970,31 +972,19 @@ const AiAnalysesPage: React.FC = () => {
                                   Benchmark
                                 </Button>
                               ) : (
-                                <div className="flex items-center gap-1.5">
-                                  <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${canAffordBench ? 'border-green-300 text-green-600' : 'border-red-300 text-red-500'}`}>
-                                    {benchCost.toFixed(1)} cr
-                                  </Badge>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    className="border-steel-300 text-steel-600 hover:bg-steel-50 hover:border-steel-400"
-                                    onClick={() => launchBenchmark(session.id, sub.pageName)}
-                                    disabled={loadingAnalyses[benchmarkKey] || !canAffordBench}
-                                    title={canAffordBench ? `Benchmark (${benchCost.toFixed(1)} crédits)` : `Crédits insuffisants (${benchCost.toFixed(1)} requis)`}
-                                  >
-                                    {loadingAnalyses[benchmarkKey] ? (
-                                      <>
-                                        <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                                        Analyse...
-                                      </>
-                                    ) : (
-                                      <>
-                                        <GitCompare className="w-4 h-4 mr-1" />
-                                        Benchmark
-                                      </>
-                                    )}
-                                  </Button>
-                                </div>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="border-steel-300 text-steel-600 hover:bg-steel-50 hover:border-steel-400"
+                                  onClick={() => {
+                                    const pageUrl = sub.url || `https://www.facebook.com/${sub.pageName}`;
+                                    navigate(`/dashboard/benchmark?ref=${encodeURIComponent(pageUrl)}`);
+                                  }}
+                                  title="Lancer un benchmark concurrentiel"
+                                >
+                                  <GitCompare className="w-4 h-4 mr-1" />
+                                  Benchmark
+                                </Button>
                               )}
                             </div>
                           </div>

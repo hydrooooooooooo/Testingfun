@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -170,6 +171,7 @@ interface BenchmarkHistoryItem {
 }
 
 const BenchmarkPage: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const [competitors, setCompetitors] = useState<string[]>([]);
   const [newCompetitor, setNewCompetitor] = useState('');
   const [loading, setLoading] = useState(false);
@@ -181,13 +183,16 @@ const BenchmarkPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('config');
   const [history, setHistory] = useState<BenchmarkHistoryItem[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
-  const [config, setConfig] = useState<BenchmarkConfig>({
-    myPageUrl: '',
-    scrapePosts: true,
-    scrapeComments: true,
-    scrapePageInfo: true,
-    postsLimit: 20,
-    dateRange: 'last_month',
+  const [config, setConfig] = useState<BenchmarkConfig>(() => {
+    const refUrl = searchParams.get('ref') || '';
+    return {
+      myPageUrl: refUrl,
+      scrapePosts: true,
+      scrapeComments: true,
+      scrapePageInfo: true,
+      postsLimit: 20,
+      dateRange: 'last_month',
+    };
   });
   const [showFavoritesManager, setShowFavoritesManager] = useState(false);
 
