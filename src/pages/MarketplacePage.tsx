@@ -133,10 +133,29 @@ export default function MarketplacePage() {
     setLoading(false);
   };
 
-  const exportData = (format: 'excel' | 'csv') => {
+  const exportData = async (format: 'excel' | 'csv') => {
     if (!sessionId) return;
-    const exportUrl = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/export/${format}/${sessionId}`;
-    window.open(exportUrl, '_blank');
+    try {
+      const response = await api.get(`/sessions/${sessionId}/download`, {
+        params: { format },
+        responseType: 'blob',
+      });
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `marketplace_${sessionId}.${format === 'excel' ? 'xlsx' : 'csv'}`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch {
+      toast({
+        title: 'Erreur',
+        description: "Impossible de télécharger le fichier. Réessayez.",
+        variant: 'destructive',
+      });
+    }
   };
 
   const isRunning = loading || pollingLoading;

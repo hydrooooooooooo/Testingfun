@@ -125,10 +125,20 @@ class BenchmarkService {
     const totalPages = (myPageUrl ? 1 : 0) + competitorUrls.length;
     const estimatedCost = this.calculateEstimatedCost(totalPages, options.postsLimit);
 
-    // Vérifier les crédits disponibles
-    const userBalance = await creditServiceInstance.getUserCredits(userId);
-    if (userBalance < estimatedCost) {
-      throw new Error(`Crédits insuffisants. Requis: ${estimatedCost}, Disponible: ${userBalance}`);
+    // Réserver les crédits à l'avance
+    let reservationId: number | null = null;
+    try {
+      const reservation = await creditServiceInstance.reserveCredits(
+        userId,
+        estimatedCost,
+        'facebook_pages_benchmark',
+        benchmarkId,
+        `Benchmark: ${totalPages} pages, ${options.postsLimit} posts/page`
+      );
+      reservationId = reservation.id;
+      logger.info(`[BENCHMARK] Credits reserved: ${estimatedCost} for ${benchmarkId}`);
+    } catch (creditError: any) {
+      throw new Error(creditError.message || `Crédits insuffisants. Requis: ${estimatedCost}`);
     }
 
     // Créer l'entrée de benchmark
@@ -193,14 +203,9 @@ class BenchmarkService {
       report.creditsCost += BENCHMARK_COSTS.AI_ANALYSIS;
       report.creditsCost += BENCHMARK_COSTS.REPORT_GENERATION;
 
-      // 4. Déduire les crédits
-      await creditServiceInstance.deductCredits(
-        userId,
-        report.creditsCost,
-        'facebook_pages_benchmark',
-        benchmarkId,
-        `Benchmark: ${totalPages} pages, ${report.myPage?.pageData.posts.length || 0 + report.competitors.reduce((sum, c) => sum + c.pageData.posts.length, 0)} posts`
-      );
+      // 4. Confirmer la réservation avec le coût réel
+      await creditServiceInstance.confirmReservation(reservationId!, report.creditsCost);
+      logger.info(`[BENCHMARK] Credits confirmed: ${report.creditsCost} for ${benchmarkId}`);
 
       // 5. Sauvegarder le rapport
       report.status = 'completed';
@@ -210,6 +215,10 @@ class BenchmarkService {
       return report;
 
     } catch (error: any) {
+      // Annuler la réservation en cas d'échec
+      if (reservationId) {
+        try { await creditServiceInstance.cancelReservation(reservationId); } catch {}
+      }
       report.status = 'failed';
       logger.error(`[BENCHMARK] Failed benchmark ${benchmarkId}:`, error);
       throw error;

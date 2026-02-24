@@ -4,16 +4,17 @@ import { useCredits } from '@/hooks/useCredits';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
-  Sparkles, 
-  Facebook, 
+import {
+  Sparkles,
+  Facebook,
   Calendar,
   Loader2,
   AlertCircle,
   FileText,
   TrendingUp,
   GitCompare,
-  Download
+  Download,
+  Coins
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -117,6 +118,19 @@ const AiAnalysesPage: React.FC = () => {
       totalBenchmarks
     };
   }, [userData]);
+
+  // Estimation de coût côté client (basée sur COST_MATRIX backend)
+  const estimateAiCost = (postsCount: number) => {
+    // ai_analysis: perPage=2, perPost=0.05
+    return 2 + postsCount * 0.05;
+  };
+
+  const estimateBenchmarkCostLocal = (postsCount: number) => {
+    // benchmark: perPage=2, perPost=0.1, aiAnalysis=3, reportGeneration=1
+    return 2 + postsCount * 0.1 + 3 + 1;
+  };
+
+  const userBalance = balance?.total ?? 0;
 
   // Filtrer les sessions Facebook Pages avec analyses
   const facebookPagesSessions = useMemo(() => {
@@ -804,7 +818,29 @@ const AiAnalysesPage: React.FC = () => {
 
         {/* Contenu des onglets */}
         {activeTab === 'to_analyze' && (
-        <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
+        <div className="space-y-4 sm:space-y-6">
+          {/* Credit Balance Info */}
+          <Card className={`border shadow-sm ${userBalance > 0 ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'}`}>
+            <CardContent className="p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-lg ${userBalance > 0 ? 'bg-green-100' : 'bg-amber-100'}`}>
+                  <Coins className={`w-5 h-5 ${userBalance > 0 ? 'text-green-600' : 'text-amber-600'}`} />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-navy">Votre solde</p>
+                  <p className={`text-xl font-bold ${userBalance > 0 ? 'text-green-700' : 'text-amber-700'}`}>
+                    {userBalance.toFixed(1)} <span className="text-sm font-normal text-steel">crédits</span>
+                  </p>
+                </div>
+              </div>
+              <div className="text-right text-xs text-steel space-y-1">
+                <p>Analyse IA : ~2 cr/page + 0.05 cr/post</p>
+                <p>Benchmark : ~6 cr/page + 0.1 cr/post</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
           {/* Colonne gauche - Pages à analyser */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -846,74 +882,92 @@ const AiAnalysesPage: React.FC = () => {
                       const hasBenchmark = session.ai_benchmark_facebook_pages_by_page?.[sub.pageName];
                       const auditKey = `${session.id}-${sub.pageName}`;
                       const benchmarkKey = `benchmark-${session.id}-${sub.pageName}`;
+                      const postsCount = sub.postsData?.length || sub.postsCount || 0;
+                      const aiCost = estimateAiCost(postsCount);
+                      const benchCost = estimateBenchmarkCostLocal(postsCount);
+                      const canAffordAi = userBalance >= aiCost;
+                      const canAffordBench = userBalance >= benchCost;
 
                       return (
-                        <div key={idx} className="flex items-center justify-between p-3 bg-cream-50 rounded-lg border border-cream-300">
-                          <div className="flex-1">
-                            <p className="font-medium text-navy">{sub.pageName}</p>
-                            <p className="text-xs text-steel mt-1">
-                              {(sub.postsData?.length || sub.postsCount || 0)} posts • {(sub.infoData?.length || (sub.infoStatus === 'SUCCEEDED' ? 1 : 0))} infos
-                            </p>
-                          </div>
-                          <div className="flex gap-2">
-                            {hasAudit ? (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="bg-green-500/20 border-green-500/30 text-green-400 hover:bg-green-500/30"
-                                onClick={() => viewAnalysis(session, sub.pageName, 'audit')}
-                              >
-                                <FileText className="w-4 h-4 mr-1" />
-                                Voir rapport
-                              </Button>
-                            ) : (
-                              <Button
-                                size="sm"
-                                className="bg-gold hover:bg-gold-600 text-white"
-                                onClick={() => launchAiAnalysis(session.id, sub.pageName)}
-                                disabled={loadingAnalyses[auditKey]}
-                              >
-                                {loadingAnalyses[auditKey] ? (
-                                  <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                                ) : (
-                                  <Sparkles className="w-4 h-4 mr-1" />
-                                )}
-                                Analyser
-                              </Button>
-                            )}
-                            {hasBenchmark ? (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="bg-steel/20 border-steel/30 text-steel-600 hover:bg-steel-500/30"
-                                onClick={() => viewAnalysis(session, sub.pageName, 'benchmark')}
-                                title="Voir l'analyse concurrentielle"
-                              >
-                                <GitCompare className="w-4 h-4 mr-1" />
-                                Benchmark
-                              </Button>
-                            ) : (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="border-steel-300 text-steel-600 hover:bg-steel-50 hover:border-steel-400"
-                                onClick={() => launchBenchmark(session.id, sub.pageName)}
-                                disabled={loadingAnalyses[benchmarkKey]}
-                                title="Lancer une analyse concurrentielle pour comparer cette page aux standards du secteur"
-                              >
-                                {loadingAnalyses[benchmarkKey] ? (
-                                  <>
-                                    <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                                    Analyse...
-                                  </>
-                                ) : (
-                                  <>
-                                    <GitCompare className="w-4 h-4 mr-1" />
-                                    Benchmark
-                                  </>
-                                )}
-                              </Button>
-                            )}
+                        <div key={idx} className="p-3 bg-cream-50 rounded-lg border border-cream-300">
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1">
+                              <p className="font-medium text-navy">{sub.pageName}</p>
+                              <p className="text-xs text-steel mt-1">
+                                {postsCount} posts • {(sub.infoData?.length || (sub.infoStatus === 'SUCCEEDED' ? 1 : 0))} infos
+                              </p>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-2 items-end sm:items-center">
+                              {hasAudit ? (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="bg-green-500/20 border-green-500/30 text-green-400 hover:bg-green-500/30"
+                                  onClick={() => viewAnalysis(session, sub.pageName, 'audit')}
+                                >
+                                  <FileText className="w-4 h-4 mr-1" />
+                                  Voir rapport
+                                </Button>
+                              ) : (
+                                <div className="flex items-center gap-1.5">
+                                  <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${canAffordAi ? 'border-green-300 text-green-600' : 'border-red-300 text-red-500'}`}>
+                                    {aiCost.toFixed(1)} cr
+                                  </Badge>
+                                  <Button
+                                    size="sm"
+                                    className="bg-gold hover:bg-gold-600 text-white"
+                                    onClick={() => launchAiAnalysis(session.id, sub.pageName)}
+                                    disabled={loadingAnalyses[auditKey] || !canAffordAi}
+                                    title={canAffordAi ? `Analyser (${aiCost.toFixed(1)} crédits)` : `Crédits insuffisants (${aiCost.toFixed(1)} requis)`}
+                                  >
+                                    {loadingAnalyses[auditKey] ? (
+                                      <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                                    ) : (
+                                      <Sparkles className="w-4 h-4 mr-1" />
+                                    )}
+                                    Analyser
+                                  </Button>
+                                </div>
+                              )}
+                              {hasBenchmark ? (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="bg-steel/20 border-steel/30 text-steel-600 hover:bg-steel-500/30"
+                                  onClick={() => viewAnalysis(session, sub.pageName, 'benchmark')}
+                                  title="Voir l'analyse concurrentielle"
+                                >
+                                  <GitCompare className="w-4 h-4 mr-1" />
+                                  Benchmark
+                                </Button>
+                              ) : (
+                                <div className="flex items-center gap-1.5">
+                                  <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${canAffordBench ? 'border-green-300 text-green-600' : 'border-red-300 text-red-500'}`}>
+                                    {benchCost.toFixed(1)} cr
+                                  </Badge>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="border-steel-300 text-steel-600 hover:bg-steel-50 hover:border-steel-400"
+                                    onClick={() => launchBenchmark(session.id, sub.pageName)}
+                                    disabled={loadingAnalyses[benchmarkKey] || !canAffordBench}
+                                    title={canAffordBench ? `Benchmark (${benchCost.toFixed(1)} crédits)` : `Crédits insuffisants (${benchCost.toFixed(1)} requis)`}
+                                  >
+                                    {loadingAnalyses[benchmarkKey] ? (
+                                      <>
+                                        <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                                        Analyse...
+                                      </>
+                                    ) : (
+                                      <>
+                                        <GitCompare className="w-4 h-4 mr-1" />
+                                        Benchmark
+                                      </>
+                                    )}
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       );
@@ -1002,6 +1056,7 @@ const AiAnalysesPage: React.FC = () => {
                 })
             )}
           </div>
+        </div>
         </div>
         )}
 

@@ -36,6 +36,17 @@ router.get(
 );
 
 /**
+ * @route   GET /api/export/facebook-pages/complete
+ * @desc    Export complete Facebook Pages data (all pages info + posts) as JSON
+ * @access  Protected
+ */
+router.get(
+  '/facebook-pages/complete',
+  protect,
+  exportController.exportFacebookPagesComplete.bind(exportController)
+);
+
+/**
  * @route   GET /api/export/backup/:sessionId
  * @desc    Get backup data for a session
  * @access  Public

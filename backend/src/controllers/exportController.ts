@@ -289,6 +289,39 @@ export class ExportController {
   }
 
   /**
+   * GET /api/export/facebook-pages/complete
+   * Export complete Facebook Pages data (all info + posts combined) as JSON blob
+   */
+  async exportFacebookPagesComplete(req: Request, res: Response, next: NextFunction) {
+    try {
+      const sessionId = (req.query.sessionId || req.query.session_id) as string;
+      if (!sessionId) throw new ApiError(400, 'Session ID is required');
+
+      const userId = (req as AuthenticatedRequest).user?.id;
+      const session = await sessionService.getSession(sessionId);
+      if (!session) throw new ApiError(404, 'Session not found');
+      if (session.user_id !== userId) throw new ApiError(403, 'Not authorized');
+
+      const backupPath = path.join(__dirname, '../../data/backups', `fbpages_${sessionId}.json`);
+      if (!fs.existsSync(backupPath)) {
+        throw new ApiError(404, 'Session data not found. The extraction may still be in progress.');
+      }
+
+      const backupData = JSON.parse(fs.readFileSync(backupPath, 'utf-8'));
+      const jsonStr = JSON.stringify(backupData, null, 2);
+      const buffer = Buffer.from(jsonStr, 'utf-8');
+      const filename = `facebook_pages_${sessionId}_complete_${Date.now()}.json`;
+
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      res.setHeader('Content-Length', buffer.length);
+      res.send(buffer);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
    * Gère l'exportation pour les sessions temporaires ou en cas de fallback
    */
   private async handleTemporaryExport(

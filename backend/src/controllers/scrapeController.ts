@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { nanoid } from 'nanoid';
 import { apifyService } from '../services/apifyService';
 import { sessionService, Session, SessionStatus } from '../services/sessionService';
+import { creditService } from '../services/creditService';
+import { calculateSimpleCost } from '../services/costEstimationService';
 import { ApiError } from '../middlewares/errorHandler';
 import { logger } from '../utils/logger';
 import { config } from '../config/config';
@@ -18,6 +20,7 @@ export class ScrapeController {
     const { url, packId } = req.body;
     let { sessionId, resultsLimit, deepScrape, getProfileUrls } = req.body;
     let session: Session | null = null;
+    let reservationId: number | null = null;
 
     // Convertir resultsLimit en nombre et valider
     const limit = resultsLimit ? parseInt(resultsLimit, 10) : 3;
@@ -45,15 +48,34 @@ export class ScrapeController {
       // Get user ID from authenticated request
       const userId = (req as any).user?.id;
 
+      // Reserve credits before starting (skip if no user)
+      if (userId) {
+        const estimatedCost = calculateSimpleCost('marketplace', validLimit);
+        try {
+          const reservation = await creditService.reserveCredits(
+            userId,
+            estimatedCost,
+            'marketplace',
+            sessionId,
+            `Extraction Marketplace (${validLimit} annonces)`
+          );
+          reservationId = reservation.id;
+          logger.info(`[MARKETPLACE] Credits reserved: ${estimatedCost} for session ${sessionId}`);
+        } catch (creditError: any) {
+          throw new ApiError(402, creditError.message || 'Crédits insuffisants pour cette extraction.');
+        }
+      }
+
       // Create session record with PENDING status first
       session = await sessionService.createSession({
         id: sessionId,
         status: SessionStatus.PENDING,
         isPaid: false,
-        user_id: userId, // Attach user if available
-        packId: packId, // Attach packId
+        user_id: userId,
+        packId: packId,
         url: url,
-      });
+        credit_transaction_id: reservationId,
+      } as any);
 
       // Log search event
       try {
@@ -91,6 +113,11 @@ export class ScrapeController {
         }
       });
     } catch (error) {
+      // Cancel credit reservation on failure
+      if (reservationId) {
+        try { await creditService.cancelReservation(reservationId); } catch {}
+      }
+
       // If we have a session, update it with FAILED status
       if (session && sessionId) {
         await sessionService.updateSession(sessionId, {
@@ -214,7 +241,18 @@ export class ScrapeController {
             totalItems: normalizedItems.length,
             previewItems: previewItems,
             hasData: normalizedItems.length > 0,
+            isPaid: true,
           });
+
+          // Confirm credit reservation
+          if ((session as any).credit_transaction_id) {
+            try {
+              await creditService.confirmReservation((session as any).credit_transaction_id);
+              logger.info(`[MARKETPLACE] Credits confirmed for session ${sessionId}`);
+            } catch (e) {
+              logger.warn(`[MARKETPLACE] Failed to confirm credits for session ${sessionId}`, e);
+            }
+          }
 
           // Update search_events with FINISHED status and duration
           try {
@@ -348,7 +386,18 @@ export class ScrapeController {
           totalItems: totalItemsCount,
           previewItems: previewItems,
           hasData: totalItemsCount > 0,
+          isPaid: true,
         });
+
+        // Confirm credit reservation
+        if ((webhookSession as any)?.credit_transaction_id) {
+          try {
+            await creditService.confirmReservation((webhookSession as any).credit_transaction_id);
+            logger.info(`[MARKETPLACE] Credits confirmed via webhook for session ${sessionId}`);
+          } catch (e) {
+            logger.warn(`[MARKETPLACE] Failed to confirm credits via webhook for session ${sessionId}`, e);
+          }
+        }
 
         // Update search_events with FINISHED and duration
         try {
@@ -363,6 +412,16 @@ export class ScrapeController {
 
       } else if (isFailed) {
         logger.warn(`Scraping for session ${sessionId} FAILED with status: ${runStatus}.`);
+        // Cancel credit reservation on failure
+        const failedSession = await sessionService.getSession(sessionId);
+        if ((failedSession as any)?.credit_transaction_id) {
+          try {
+            await creditService.cancelReservation((failedSession as any).credit_transaction_id);
+            logger.info(`[MARKETPLACE] Credits canceled via webhook for session ${sessionId}`);
+          } catch (e) {
+            logger.warn(`[MARKETPLACE] Failed to cancel credits via webhook for session ${sessionId}`, e);
+          }
+        }
         await sessionService.updateSession(sessionId, {
           status: SessionStatus.FAILED,
         });

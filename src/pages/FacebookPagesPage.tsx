@@ -19,7 +19,7 @@ import api from "@/services/api";
 import { useFacebookPagesPolling } from "@/hooks/useFacebookPagesPolling";
 import FacebookPagesProgress from "@/components/FacebookPagesProgress";
 import { useToast } from "@/components/ui/use-toast";
-import { CostEstimator } from "@/components/CostEstimator";
+import { DetailedCostEstimator } from "@/components/CostEstimator";
 import { InsufficientCreditsModal } from "@/components/InsufficientCreditsModal";
 import { FavoriteButton, FavoriteSelector, FavoritesManager } from "@/components/favorites";
 import { Favorite } from "@/hooks/useFavorites";
@@ -516,15 +516,19 @@ export default function FacebookPagesPage() {
 
               {/* Cost estimator */}
               {isAuthenticated() && validCount > 0 && (extractInfo || extractPosts || extractSinglePost) && (
-                <CostEstimator
+                <DetailedCostEstimator
                   serviceType="facebook_pages"
-                  itemCount={
-                    (extractInfo && !extractSinglePost ? validCount : 0) +
-                    (extractPosts && !extractSinglePost ? validCount * postsLimit : 0) +
-                    (extractSinglePost ? 1 : 0) +
-                    (extractComments ? (extractSinglePost ? 1 : validCount * postsLimit) : 0)
-                  }
-                  onEstimateChange={setCreditEstimate}
+                  params={{
+                    pageCount: extractSinglePost ? 1 : validCount,
+                    postsPerPage: extractSinglePost ? 1 : (extractPosts ? postsLimit : 0),
+                    includeComments: extractComments,
+                    commentsPerPost: extractComments ? 10 : 0,
+                  }}
+                  onEstimateChange={(est) => setCreditEstimate({
+                    cost: est.cost,
+                    hasEnough: est.hasEnough,
+                    shortfall: est.shortfall,
+                  })}
                 />
               )}
 
