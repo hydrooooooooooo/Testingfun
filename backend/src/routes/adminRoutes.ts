@@ -24,4 +24,6 @@ router.get('/users/:userId', (req, res, next) => adminController.getUserById(req
 router.patch('/users/:userId/credits', (req, res, next) => adminController.adjustUserCredits(req, res, next));
 router.patch('/users/:userId/status', (req, res, next) => adminController.toggleUserStatus(req, res, next));
 
+router.get('/ai-usage', (req, res, next) => adminController.getAIUsageSummary(req, res, next));
+
 export default router;

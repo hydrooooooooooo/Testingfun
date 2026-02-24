@@ -7,6 +7,7 @@ import { config } from '../config/config';
 import { analyticsService } from '../services/analyticsService';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 import db from '../database';
+import { openRouterCostService } from '../services/openRouterCostService';
 
 export class AdminController {
   /**
@@ -301,7 +302,7 @@ export class AdminController {
       audit('admin.user_viewed', { adminId, userId });
 
       const user = await db('users')
-        .select('id', 'email', 'name', 'role', 'credits_balance', 'is_suspended', 'suspension_reason', 'created_at', 'email_verified_at', 'business_sector', 'company_size')
+        .select('id', 'email', 'name', 'role', 'credits_balance', 'is_suspended', 'suspension_reason', 'created_at', 'email_verified_at', 'business_sector', 'company_size', 'preferred_ai_model', 'last_login_at', 'last_login_ip')
         .where({ id: userId })
         .first();
       if (!user) throw new ApiError(404, 'User not found');
@@ -316,9 +317,22 @@ export class AdminController {
         .count('* as count')
         .first();
 
+      const payments = await db('scraping_sessions')
+        .where({ user_id: userId })
+        .whereNotNull('payment_method')
+        .select('id', 'packId', 'payment_method', 'payment_intent_id', 'isPaid', 'created_at', 'updated_at')
+        .orderBy('created_at', 'desc')
+        .limit(50);
+
+      const downloads = await db('downloads')
+        .where({ user_id: userId })
+        .select('id', 'session_id', 'format', 'created_at', 'expires_at')
+        .orderBy('created_at', 'desc')
+        .limit(50);
+
       res.status(200).json({
         status: 'success',
-        data: { user, transactions, sessionCount: Number(sessionCount?.count || 0) },
+        data: { user, transactions, sessionCount: Number(sessionCount?.count || 0), payments, downloads },
       });
     } catch (error) {
       next(error);
@@ -435,6 +449,32 @@ export class AdminController {
       });
 
       res.status(200).json({ status: 'success', message: 'Session archived' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Get AI usage summary (cost, tokens, model breakdown)
+   */
+  async getAIUsageSummary(req: Request, res: Response, next: NextFunction) {
+    try {
+      const adminId = (req as AuthenticatedRequest).user?.id;
+      const startDate = req.query.from ? new Date(req.query.from as string) : undefined;
+      const endDate = req.query.to ? new Date(req.query.to as string) : undefined;
+      const userId = req.query.userId ? Number(req.query.userId) : undefined;
+      audit('admin.ai_usage_viewed', { adminId, filters: { startDate, endDate, userId } });
+
+      const [summary, recentLogs, profitability] = await Promise.all([
+        openRouterCostService.getCostSummary({ startDate, endDate, userId }),
+        openRouterCostService.getRecentLogs(100),
+        openRouterCostService.getProfitabilityReport({ startDate, endDate }),
+      ]);
+
+      res.status(200).json({
+        status: 'success',
+        data: { summary, recentLogs, profitability },
+      });
     } catch (error) {
       next(error);
     }
