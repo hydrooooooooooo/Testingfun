@@ -19,6 +19,7 @@ import {
   Eye, EyeOff, Mail, Lock, ArrowRight, AlertCircle
 } from 'lucide-react';
 import api from '@/services/api';
+import SEOHead from '@/components/seo/SEOHead';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Veuillez saisir une adresse e-mail valide.' }),
@@ -71,13 +72,14 @@ export default function LoginPage() {
 
   const steps = [
     { num: '01', title: 'Créez votre compte', desc: 'Inscription gratuite en 30 secondes. Recevez des crédits d\'essai pour tester immédiatement.' },
-    { num: '02', title: 'Lancez vos extractions', desc: 'Marketplace, Pages Facebook, publications, commentaires — collez vos URLs et laissez notre moteur travailler.' },
+    { num: '02', title: 'Lancez vos analyses', desc: 'Marketplace, Pages Facebook, publications, commentaires — collez vos URLs et laissez la plateforme travailler.' },
     { num: '03', title: 'Analysez avec l\'IA', desc: 'Notre IA décrypte vos données : tendances, benchmark concurrentiel, recommandations stratégiques personnalisées.' },
-    { num: '04', title: 'Exploitez vos résultats', desc: 'Exportez en Excel, programmez des extractions récurrentes et recevez des alertes de mentions automatiques.' },
+    { num: '04', title: 'Exploitez vos résultats', desc: 'Exportez en Excel, programmez des collectes récurrentes et recevez des alertes de mentions automatiques.' },
   ];
 
   return (
     <div className="flex min-h-[calc(100vh-80px)] w-full">
+      <SEOHead title="Connexion" description="Connectez-vous a votre espace Easy." path="/login" noindex />
       {/* ─── LEFT FORM PANEL ─── */}
       <div className="flex-1 flex flex-col bg-cream-50">
         {/* Mobile branding header */}

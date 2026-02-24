@@ -6,6 +6,7 @@ import {
   Download, Bell, GitCompare, Facebook, Store,
   Car, GraduationCap
 } from 'lucide-react';
+import SEOHead from '@/components/seo/SEOHead';
 
 interface UseCaseExample {
   sector: string;
@@ -25,7 +26,7 @@ const examples: UseCaseExample[] = [
     accentText: 'text-gold',
     scenario: 'Une agence doit auditer la présence Facebook d\'un nouveau client et proposer une stratégie.',
     steps: [
-      { label: 'Extraction', detail: 'Elle extrait 6 mois de publications de la page du client et de 3 concurrents.', feature: 'Facebook Pages', featureIcon: Facebook },
+      { label: 'Collecte', detail: 'Elle collecte 6 mois de publications de la page du client et de 3 concurrents.', feature: 'Facebook Pages', featureIcon: Facebook },
       { label: 'Audit IA', detail: 'L\'analyse IA produit un score d\'engagement, identifie les top/flop posts et génère des recommandations.', feature: 'Analyse IA', featureIcon: Sparkles },
       { label: 'Rapport', detail: 'Elle exporte un rapport PDF professionnel à présenter au client.', feature: 'Export PDF', featureIcon: Download },
     ],
@@ -38,9 +39,9 @@ const examples: UseCaseExample[] = [
     accentText: 'text-violet-600',
     scenario: 'Une agence immobilière veut cartographier le marché locatif sur Facebook Marketplace.',
     steps: [
-      { label: 'Extraction', detail: 'Elle lance une recherche "appartement à louer Antananarivo" et scrape 500 annonces.', feature: 'Marketplace Scraper', featureIcon: Store },
+      { label: 'Collecte', detail: 'Elle lance une recherche "appartement à louer Antananarivo" et collecte 500 annonces.', feature: 'Analyse Marketplace', featureIcon: Store },
       { label: 'Export', detail: 'Elle exporte en Excel : prix, surface, quartier, photos — prêt pour analyse.', feature: 'Export Excel', featureIcon: Download },
-      { label: 'Veille', detail: 'Une extraction automatique hebdomadaire lui signale les nouvelles annonces sous-cotées.', feature: 'Automatisations', featureIcon: Bell },
+      { label: 'Veille', detail: 'Une collecte automatique hebdomadaire lui signale les nouvelles annonces sous-cotées.', feature: 'Automatisations', featureIcon: Bell },
     ],
     result: 'Elle identifie les opportunités avant la concurrence et constitue une base de données immobilière locale unique.',
   },
@@ -51,9 +52,9 @@ const examples: UseCaseExample[] = [
     accentText: 'text-emerald-600',
     scenario: 'Un vendeur de vêtements veut surveiller les prix de ses concurrents sur Facebook Marketplace à Antananarivo.',
     steps: [
-      { label: 'Extraction', detail: 'Il colle l\'URL de recherche Marketplace "vêtements Antananarivo" et lance le scraping.', feature: 'Marketplace Scraper', featureIcon: Store },
+      { label: 'Collecte', detail: 'Il colle l\'URL de recherche Marketplace "vêtements Antananarivo" et lance la collecte.', feature: 'Analyse Marketplace', featureIcon: Store },
       { label: 'Export', detail: 'Il télécharge les 200 annonces en Excel avec prix, localisation et photos.', feature: 'Export Excel/CSV', featureIcon: Download },
-      { label: 'Veille', detail: 'Il programme une extraction automatique chaque lundi pour suivre les évolutions.', feature: 'Automatisations', featureIcon: Bell },
+      { label: 'Veille', detail: 'Il programme une collecte automatique chaque lundi pour suivre les évolutions.', feature: 'Automatisations', featureIcon: Bell },
     ],
     result: 'Il ajuste ses prix chaque semaine en se basant sur les données réelles du marché, pas sur des suppositions.',
   },
@@ -64,9 +65,9 @@ const examples: UseCaseExample[] = [
     accentText: 'text-sky-600',
     scenario: 'Un concessionnaire veut surveiller le marché de l\'occasion sur Facebook Marketplace pour ajuster ses offres.',
     steps: [
-      { label: 'Extraction', detail: 'Il scrape "voiture occasion Antananarivo" et récupère 300+ annonces avec prix, kilométrage et modèle.', feature: 'Marketplace Scraper', featureIcon: Store },
+      { label: 'Collecte', detail: 'Il analyse "voiture occasion Antananarivo" et récupère 300+ annonces avec prix, kilométrage et modèle.', feature: 'Analyse Marketplace', featureIcon: Store },
       { label: 'Analyse', detail: 'Il exporte en Excel et identifie les modèles les plus demandés et les fourchettes de prix par catégorie.', feature: 'Export Excel', featureIcon: Download },
-      { label: 'Veille', detail: 'Une extraction bihebdomadaire lui permet de détecter les bonnes affaires dès leur publication.', feature: 'Automatisations', featureIcon: Bell },
+      { label: 'Veille', detail: 'Une collecte bihebdomadaire lui permet de détecter les bonnes affaires dès leur publication.', feature: 'Automatisations', featureIcon: Bell },
     ],
     result: 'Il repère les véhicules sous-cotés en quelques heures et propose des prix compétitifs à ses clients.',
   },
@@ -77,7 +78,7 @@ const examples: UseCaseExample[] = [
     accentText: 'text-blue-600',
     scenario: 'Une banque malgache veut comparer sa communication Facebook avec ses concurrentes (BNI, BOA, BRED).',
     steps: [
-      { label: 'Extraction', detail: 'Elle extrait les publications des 4 pages bancaires des 3 derniers mois.', feature: 'Facebook Pages', featureIcon: Facebook },
+      { label: 'Collecte', detail: 'Elle collecte les publications des 4 pages bancaires des 3 derniers mois.', feature: 'Facebook Pages', featureIcon: Facebook },
       { label: 'Benchmark', detail: 'Elle lance un benchmark concurrentiel pour comparer likes, commentaires et partages.', feature: 'Benchmark IA', featureIcon: GitCompare },
       { label: 'Analyse', detail: 'L\'IA identifie que les posts éducatifs ("comment épargner") génèrent 3× plus d\'engagement.', feature: 'Analyse IA', featureIcon: Sparkles },
     ],
@@ -90,7 +91,7 @@ const examples: UseCaseExample[] = [
     accentText: 'text-teal-600',
     scenario: 'Un centre de formation veut comprendre comment ses concurrents communiquent et attirent des étudiants sur Facebook.',
     steps: [
-      { label: 'Extraction', detail: 'Il extrait les pages Facebook de 5 centres de formation concurrents avec leurs publications récentes.', feature: 'Facebook Pages', featureIcon: Facebook },
+      { label: 'Collecte', detail: 'Il collecte les pages Facebook de 5 centres de formation concurrents avec leurs publications récentes.', feature: 'Facebook Pages', featureIcon: Facebook },
       { label: 'Analyse', detail: 'L\'IA révèle que les témoignages d\'anciens étudiants et les vidéos de cours génèrent le plus d\'interactions.', feature: 'Analyse IA', featureIcon: Sparkles },
       { label: 'Benchmark', detail: 'Le benchmark montre qu\'il est en retard sur la fréquence de publication mais devant sur l\'engagement par post.', feature: 'Benchmark IA', featureIcon: GitCompare },
     ],
@@ -103,7 +104,7 @@ const examples: UseCaseExample[] = [
     accentText: 'text-amber-600',
     scenario: 'Un hôtel de Nosy Be veut comprendre ce que ses clients et ceux de ses concurrents disent en ligne.',
     steps: [
-      { label: 'Extraction', detail: 'Il scrape les pages Facebook de 5 hôtels concurrents avec leurs publications et commentaires.', feature: 'Pages + Commentaires', featureIcon: Facebook },
+      { label: 'Collecte', detail: 'Il analyse les pages Facebook de 5 hôtels concurrents avec leurs publications et commentaires.', feature: 'Pages + Commentaires', featureIcon: Facebook },
       { label: 'Analyse', detail: 'L\'IA analyse le sentiment des commentaires et identifie les plaintes récurrentes (Wi-Fi, petit-déjeuner).', feature: 'Analyse IA', featureIcon: Sparkles },
       { label: 'Action', detail: 'Il exporte un rapport PDF avec les recommandations priorisées pour son équipe.', feature: 'Export PDF', featureIcon: Download },
     ],
@@ -116,7 +117,7 @@ const examples: UseCaseExample[] = [
     accentText: 'text-rose-600',
     scenario: 'Un restaurateur veut savoir quels plats et concepts sont tendance sur le marché local.',
     steps: [
-      { label: 'Extraction', detail: 'Il extrait les publications des 10 restaurants les plus populaires de Tana sur Facebook.', feature: 'Facebook Pages', featureIcon: Facebook },
+      { label: 'Collecte', detail: 'Il collecte les publications des 10 restaurants les plus populaires de Tana sur Facebook.', feature: 'Facebook Pages', featureIcon: Facebook },
       { label: 'Analyse', detail: 'L\'IA détecte que les posts avec vidéos de préparation génèrent 5× plus de partages.', feature: 'Analyse IA', featureIcon: Sparkles },
       { label: 'Benchmark', detail: 'Le benchmark révèle qu\'il publie 2× moins que la moyenne du secteur.', feature: 'Benchmark IA', featureIcon: GitCompare },
     ],
@@ -127,6 +128,12 @@ const examples: UseCaseExample[] = [
 export default function ExemplesPage() {
   return (
     <div className="min-h-[calc(100vh-80px)] bg-cream-50">
+      <SEOHead
+        title="Exemples — Cas d'usage par secteur"
+        description="Decouvrez comment les agences marketing, l'immobilier, l'e-commerce et d'autres secteurs utilisent notre plateforme de Social Media Analytics."
+        path="/exemples"
+        alternatePath="/en/examples"
+      />
 
       {/* ─── HERO ─── */}
       <section className="relative w-full bg-navy overflow-hidden">
@@ -142,7 +149,7 @@ export default function ExemplesPage() {
             <span className="block text-gold mt-1">de métiers.</span>
           </h1>
           <p className="text-steel text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Découvrez comment des professionnels de secteurs très différents utilisent EasyScrapy
+            Découvrez comment des professionnels de secteurs très différents utilisent Easy
             pour prendre de meilleures décisions, plus vite.
           </p>
         </div>
@@ -232,7 +239,7 @@ export default function ExemplesPage() {
           </h2>
           <p className="text-steel text-base max-w-xl mx-auto leading-relaxed mb-10">
             Tant qu'il y a des données sur Facebook Marketplace ou des Pages Facebook,
-            EasyScrapy peut les extraire et les analyser pour vous.
+            Easy peut les collecter et les analyser pour vous.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/register">

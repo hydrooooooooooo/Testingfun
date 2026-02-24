@@ -8,11 +8,12 @@ import {
   Database, ChevronDown
 } from 'lucide-react';
 import { useState } from 'react';
+import SEOHead from '@/components/seo/SEOHead';
 
 const SUPPORT_EMAIL = 'support@easyscrapy.com';
 
 function handleEmailClick() {
-  const subject = encodeURIComponent("Support EasyScrapy - Demande d'assistance");
+  const subject = encodeURIComponent("Support Easy - Demande d'assistance");
   const body = encodeURIComponent(
 `Bonjour,
 
@@ -20,7 +21,7 @@ Je vous contacte concernant :
 
 Nature du problème : [Décrivez votre problème ici]
 
-URL scrappée : [Indiquez l'URL si applicable]
+URL analysée : [Indiquez l'URL si applicable]
 
 ID de session : [Si vous en avez un : sess_xxxxxx]
 
@@ -37,31 +38,31 @@ Cordialement,
 }
 
 const supportTypes = [
-  { icon: Search, label: "Problèmes d'extraction", desc: "Erreurs de scraping, URLs non supportées, configuration" },
+  { icon: Search, label: "Problèmes d'analyse", desc: "Erreurs de collecte, URLs non supportées, configuration" },
   { icon: Database, label: 'Export des données', desc: "Téléchargement, formats de fichiers, données manquantes" },
   { icon: FileText, label: 'Questions facturation', desc: "Paiements, crédits, remboursements, transactions" },
   { icon: Users, label: 'Formation & conseils', desc: "Optimisation, bonnes pratiques, conseils d'usage" },
   { icon: AlertCircle, label: 'Incidents & bugs', desc: "Signalement de bugs, problèmes techniques" },
-  { icon: Zap, label: 'Demandes spéciales', desc: "Extractions personnalisées, volumes importants" },
+  { icon: Zap, label: 'Demandes spéciales', desc: "Analyses personnalisées, volumes importants" },
 ];
 
 const infoItems = [
-  { label: 'ID de session', desc: 'Format : sess_xxxxxx (affiché dans vos extractions)' },
-  { label: 'URL concernée', desc: "L'adresse que vous tentez de scraper" },
+  { label: 'ID de session', desc: 'Format : sess_xxxxxx (affiché dans vos analyses)' },
+  { label: 'URL concernée', desc: "L'adresse que vous tentez d'analyser" },
   { label: 'Description précise', desc: "Étapes effectuées et message d'erreur si applicable" },
 ];
 
 const faqs = [
   {
     q: 'Où trouver mon ID de session ?',
-    a: "L'ID de session s'affiche automatiquement pendant et après l'extraction dans votre dashboard, section Extractions. Il commence toujours par sess_.",
+    a: "L'ID de session s'affiche automatiquement pendant et après l'analyse dans votre dashboard, section Analyses. Il commence toujours par sess_.",
   },
   {
-    q: "Que faire si mon extraction échoue ?",
+    q: "Que faire si mon analyse échoue ?",
     a: "Contactez-nous avec votre ID de session et l'URL problématique. Nous investiguerons rapidement et rembourserons les crédits si l'erreur vient de notre côté.",
   },
   {
-    q: 'Comment optimiser mes extractions ?',
+    q: 'Comment optimiser mes analyses ?',
     a: "Utilisez des filtres précis sur la plateforme source (localisation, catégorie) et évitez les URLs trop génériques. Pour les pages Facebook, limitez le nombre de pages par session pour de meilleurs résultats.",
   },
 ];
@@ -89,6 +90,12 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 export default function SupportPage() {
   return (
     <div className="min-h-[calc(100vh-80px)] bg-cream-50">
+      <SEOHead
+        title="Support — Centre d'aide"
+        description="Besoin d'aide ? Notre equipe vous accompagne pour tirer le meilleur parti de la plateforme. Reponse sous 24-48h."
+        path="/support"
+        alternatePath="/en/support"
+      />
 
       {/* ─── HERO ─── */}
       <section className="relative w-full bg-navy overflow-hidden">
@@ -104,7 +111,7 @@ export default function SupportPage() {
             <span className="block text-gold mt-1">On est là.</span>
           </h1>
           <p className="text-steel text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-            Notre équipe vous accompagne pour tirer le meilleur parti d'EasyScrapy
+            Notre équipe vous accompagne pour tirer le meilleur parti d'Easy
             et résoudre vos problèmes techniques rapidement.
           </p>
 
@@ -140,7 +147,7 @@ export default function SupportPage() {
                   <h2 className="text-white text-xl font-bold">Contactez-nous</h2>
                 </div>
                 <p className="text-steel text-[14px] leading-relaxed mb-6">
-                  Pour toute question technique, problème d'extraction ou demande d'assistance.
+                  Pour toute question technique, problème d'analyse ou demande d'assistance.
                 </p>
                 <button
                   onClick={handleEmailClick}

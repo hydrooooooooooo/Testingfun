@@ -5,6 +5,8 @@ import {
   Shield, Users, Home, Car, BarChart3, UserPlus, Settings, Download,
   ArrowRight, Zap
 } from "lucide-react";
+import SEOHead from '@/components/seo/SEOHead';
+import { organizationSchema, faqSchema, softwareApplicationSchema } from '@/components/seo/schemas';
 
 export default function Index() {
   /* ---------- Pricing packs from API ---------- */
@@ -25,7 +27,7 @@ export default function Index() {
   const features = [
     {
       icon: ShoppingBag,
-      title: "Extraction Marketplace",
+      title: "Analyse Marketplace",
       description:
         "Transformez une recherche Facebook Marketplace en fichier Excel structuré en 3 minutes. Titres, prix, descriptions, images, localisations.",
       tag: "Agents immo · E-commerce · Revendeurs",
@@ -55,7 +57,7 @@ export default function Index() {
       icon: Calendar,
       title: "Automatisations",
       description:
-        "Programmez des extractions récurrentes et recevez vos données automatiquement, sans intervention.",
+        "Programmez des collectes récurrentes et recevez vos données automatiquement, sans intervention.",
       tag: "Équipes marketing · Veilleurs",
     },
     {
@@ -102,14 +104,14 @@ export default function Index() {
   /* ---------- FAQ data ---------- */
   const faqItems = [
     {
-      question: "Quelles données puis-je extraire ?",
+      question: "Quelles données puis-je collecter ?",
       answer:
         "Titres, prix, descriptions, images, localisations, contacts, URLs… Toutes les données sont organisées dans un fichier Excel prêt à utiliser.",
     },
     {
       question: "C'est vraiment si rapide ?",
       answer:
-        "Oui ! 3 minutes en moyenne pour extraire des centaines d'annonces, au lieu des heures de copier-coller manuel.",
+        "Oui ! 3 minutes en moyenne pour collecter des centaines d'annonces, au lieu des heures de copier-coller manuel.",
     },
     {
       question: "Mes données sont-elles protégées ?",
@@ -124,12 +126,12 @@ export default function Index() {
     {
       question: "Quelles sont les fonctionnalités avancées ?",
       answer:
-        "Au-delà de l'extraction, EasyScrapy propose l'analyse IA de vos données, le benchmark concurrentiel, les automatisations programmées et la surveillance de mentions en temps réel.",
+        "Au-delà de la collecte, Easy propose l'analyse IA de vos données, le benchmark concurrentiel, les automatisations programmées et la surveillance de mentions en temps réel.",
     },
     {
       question: "Comment fonctionne le système de crédits ?",
       answer:
-        "Vous achetez un pack de crédits. Chaque extraction consomme un nombre de crédits proportionnel au volume de données. Vos crédits n'expirent jamais.",
+        "Vous achetez un pack de crédits. Chaque analyse consomme un nombre de crédits proportionnel au volume de données. Vos crédits n'expirent jamais.",
     },
   ];
 
@@ -139,6 +141,17 @@ export default function Index() {
 
   return (
     <div className="flex flex-col min-h-screen w-full">
+      <SEOHead
+        title="Social Media Analytics pour Agences"
+        description="Plateforme d'analyse de donnees sociales pour agences. Collectez, analysez et surveillez les donnees Facebook avec l'IA. Essai gratuit."
+        path="/"
+        alternatePath="/en/"
+        jsonLd={[
+          organizationSchema(),
+          softwareApplicationSchema(),
+          faqSchema(faqItems),
+        ]}
+      />
       {/* ================================================================
           1. HERO SECTION
       ================================================================= */}
@@ -153,19 +166,19 @@ export default function Index() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 text-gold border border-gold/30 rounded-full text-sm font-semibold mb-8">
               <Zap className="w-4 h-4" />
-              Plateforme d'Intelligence Sociale
+              Social Media Analytics
             </div>
 
             {/* H1 */}
             <h1 className="font-display text-white text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              Extrayez, analysez et surveillez
+              Collectez, analysez et surveillez
               <span className="block text-gold">vos données sociales</span>
             </h1>
 
             {/* Subtitle */}
             <p className="text-steel-200 text-lg sm:text-xl max-w-3xl mx-auto mb-10 leading-relaxed">
               La plateforme tout-en-un pour transformer les données Facebook en
-              avantage concurrentiel. Extraction automatique, analyse IA,
+              avantage concurrentiel. Collecte automatique, analyse IA,
               benchmark et surveillance en temps réel.
             </p>
 
@@ -193,7 +206,7 @@ export default function Index() {
                   10 000+
                 </p>
                 <p className="text-steel-200 text-sm mt-1">
-                  extractions réalisées
+                  analyses réalisées
                 </p>
               </div>
               <div className="text-center">
@@ -295,10 +308,10 @@ export default function Index() {
                 <Settings className="w-6 h-6 text-white" />
               </div>
               <h3 className="font-display text-navy text-lg font-bold mb-2">
-                Lancez vos extractions
+                Lancez vos analyses
               </h3>
               <p className="text-steel text-sm leading-relaxed">
-                Marketplace, Pages Facebook, publications, commentaires — collez vos URLs et laissez notre moteur travailler.
+                Marketplace, Pages Facebook, publications, commentaires — collez vos URLs et laissez la plateforme travailler.
               </p>
             </div>
 
@@ -330,7 +343,7 @@ export default function Index() {
                 Exploitez vos résultats
               </h3>
               <p className="text-steel text-sm leading-relaxed">
-                Exportez en Excel, programmez des extractions récurrentes et recevez des alertes de mentions automatiques.
+                Exportez en Excel, programmez des collectes récurrentes et recevez des alertes de mentions automatiques.
               </p>
             </div>
           </div>
@@ -550,7 +563,7 @@ export default function Index() {
             Prêt à transformer vos données sociales en avantage concurrentiel ?
           </h2>
           <p className="text-steel-200 text-lg mb-10 leading-relaxed">
-            Rejoignez des centaines de professionnels qui utilisent EasyScrapy
+            Rejoignez des centaines de professionnels qui utilisent Easy
             pour prendre de meilleures décisions, plus vite.
           </p>
           <Link

@@ -5,6 +5,7 @@ import { CheckCircle, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import api from "@/services/api";
 import type { PricingPlanDisplay } from "@/components/PricingPlan";
+import SEOHead from '@/components/seo/SEOHead';
 
 // Fonction pour générer les features des plans de manière dynamique
 const formatPlanFeatures = (plan: any): string[] => {
@@ -39,7 +40,7 @@ export default function PricingPage() {
           // Afficher le prix réel de la base (en Ariary)
           const originalPrice = Number(plan.price) || 0;
           const priceDisplay = `${originalPrice.toLocaleString('fr-FR')} MGA`;
-          const desc = `${Number(plan.nb_downloads).toLocaleString('fr-FR')} extractions`;
+          const desc = `${Number(plan.nb_downloads).toLocaleString('fr-FR')} analyses`;
           const descriptionBullets = (plan.description || '')
             .split('|')
             .map((s: string) => s.trim())
@@ -75,6 +76,12 @@ export default function PricingPage() {
 
   return (
     <main className="bg-cream-50 min-h-screen">
+      <SEOHead
+        title="Tarifs — Packs de credits"
+        description="Decouvrez nos offres de credits pour l'analyse de donnees sociales. Pas d'abonnement, payez uniquement ce que vous utilisez."
+        path="/pricing"
+        alternatePath="/en/pricing"
+      />
       <section className="w-full bg-white py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -82,7 +89,7 @@ export default function PricingPage() {
               Des tarifs flexibles pour chaque besoin
             </h1>
             <p className="max-w-2xl mx-auto text-lg text-steel">
-              Choisissez le pack qui correspond à votre volume d'extraction et commencez à scraper en quelques secondes.
+              Choisissez le pack qui correspond à votre volume d'analyse et commencez à analyser en quelques secondes.
             </p>
             <div className="mt-6 inline-flex items-center gap-2 bg-gold/20 text-navy px-4 py-2 rounded-full text-sm font-medium">
               <CheckCircle className="w-4 h-4" />
