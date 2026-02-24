@@ -27,43 +27,43 @@ export default function Index() {
       icon: ShoppingBag,
       title: "Extraction Marketplace",
       description:
-        "Transformez une recherche Facebook Marketplace en fichier Excel structur\u00e9 en 3 minutes. Titres, prix, descriptions, images, localisations.",
-      tag: "Agents immo \u00b7 E-commerce \u00b7 Revendeurs",
+        "Transformez une recherche Facebook Marketplace en fichier Excel structuré en 3 minutes. Titres, prix, descriptions, images, localisations.",
+      tag: "Agents immo · E-commerce · Revendeurs",
     },
     {
       icon: FileText,
       title: "Analyse Facebook Pages",
       description:
-        "Analysez les publications, l\u2019engagement et la strat\u00e9gie de contenu de n\u2019importe quelle Page Facebook.",
-      tag: "Community managers \u00b7 Agences",
+        "Analysez les publications, l'engagement et la stratégie de contenu de n'importe quelle Page Facebook.",
+      tag: "Community managers · Agences",
     },
     {
       icon: TrendingUp,
       title: "Benchmark Concurrentiel",
       description:
-        "Comparez les performances de marques concurrentes : engagement, fr\u00e9quence de publication, types de contenu.",
-      tag: "Directeurs marketing \u00b7 Analystes",
+        "Comparez les performances de marques concurrentes : engagement, fréquence de publication, types de contenu.",
+      tag: "Directeurs marketing · Analystes",
     },
     {
       icon: Sparkles,
       title: "Analyses IA",
       description:
-        "L\u2019intelligence artificielle d\u00e9crypte vos donn\u00e9es et g\u00e9n\u00e8re des insights actionnables pour votre strat\u00e9gie.",
-      tag: "Data analysts \u00b7 D\u00e9cideurs",
+        "L'intelligence artificielle décrypte vos données et génère des insights actionnables pour votre stratégie.",
+      tag: "Data analysts · Décideurs",
     },
     {
       icon: Calendar,
       title: "Automatisations",
       description:
-        "Programmez des extractions r\u00e9currentes et recevez vos donn\u00e9es automatiquement, sans intervention.",
-      tag: "\u00c9quipes marketing \u00b7 Veilleurs",
+        "Programmez des extractions récurrentes et recevez vos données automatiquement, sans intervention.",
+      tag: "Équipes marketing · Veilleurs",
     },
     {
       icon: Bell,
       title: "Surveillance & Mentions",
       description:
-        "Soyez alert\u00e9 en temps r\u00e9el d\u00e8s que votre marque, vos produits ou vos concurrents sont mentionn\u00e9s.",
-      tag: "E-r\u00e9putation \u00b7 Relations presse",
+        "Soyez alerté en temps réel dès que votre marque, vos produits ou vos concurrents sont mentionnés.",
+      tag: "E-réputation · Relations presse",
     },
   ];
 
@@ -73,63 +73,63 @@ export default function Index() {
       icon: Home,
       title: "Immobilier",
       description:
-        "Suivez les prix, identifiez les opportunit\u00e9s et analysez le march\u00e9 locatif ou de vente en temps r\u00e9el.",
-      audience: "Agents \u00b7 Promoteurs \u00b7 Investisseurs",
+        "Suivez les prix, identifiez les opportunités et analysez le marché locatif ou de vente en temps réel.",
+      audience: "Agents · Promoteurs · Investisseurs",
     },
     {
       icon: ShoppingBag,
       title: "E-commerce",
       description:
-        "Analysez les prix, la disponibilit\u00e9 et les strat\u00e9gies de vos concurrents sur Marketplace.",
-      audience: "Vendeurs \u00b7 Analystes pricing",
+        "Analysez les prix, la disponibilité et les stratégies de vos concurrents sur Marketplace.",
+      audience: "Vendeurs · Analystes pricing",
     },
     {
       icon: Car,
       title: "Automobile",
       description:
-        "\u00c9valuez la cote des v\u00e9hicules, suivez les tendances et trouvez les meilleures affaires.",
-      audience: "Concessionnaires \u00b7 Particuliers",
+        "Évaluez la cote des véhicules, suivez les tendances et trouvez les meilleures affaires.",
+      audience: "Concessionnaires · Particuliers",
     },
     {
       icon: BarChart3,
-      title: "\u00c9tudes de march\u00e9",
+      title: "Études de marché",
       description:
-        "Collectez des donn\u00e9es terrain \u00e0 grande \u00e9chelle pour alimenter vos analyses sectorielles.",
-      audience: "Cabinets conseil \u00b7 Chercheurs",
+        "Collectez des données terrain à grande échelle pour alimenter vos analyses sectorielles.",
+      audience: "Cabinets conseil · Chercheurs",
     },
   ];
 
   /* ---------- FAQ data ---------- */
   const faqItems = [
     {
-      question: "Quelles donn\u00e9es puis-je extraire ?",
+      question: "Quelles données puis-je extraire ?",
       answer:
-        "Titres, prix, descriptions, images, localisations, contacts, URLs\u2026 Toutes les donn\u00e9es sont organis\u00e9es dans un fichier Excel pr\u00eat \u00e0 utiliser.",
+        "Titres, prix, descriptions, images, localisations, contacts, URLs… Toutes les données sont organisées dans un fichier Excel prêt à utiliser.",
     },
     {
-      question: "C\u2019est vraiment si rapide ?",
+      question: "C'est vraiment si rapide ?",
       answer:
-        "Oui ! 3 minutes en moyenne pour extraire des centaines d\u2019annonces, au lieu des heures de copier-coller manuel.",
+        "Oui ! 3 minutes en moyenne pour extraire des centaines d'annonces, au lieu des heures de copier-coller manuel.",
     },
     {
-      question: "Mes donn\u00e9es sont-elles prot\u00e9g\u00e9es ?",
+      question: "Mes données sont-elles protégées ?",
       answer:
-        "Absolument. Nous ne stockons aucune donn\u00e9e. Vos URL et donn\u00e9es sont trait\u00e9es en temps r\u00e9el puis supprim\u00e9es automatiquement.",
+        "Absolument. Nous ne stockons aucune donnée. Vos URL et données sont traitées en temps réel puis supprimées automatiquement.",
     },
     {
-      question: "Dois-je m\u2019abonner ?",
+      question: "Dois-je m'abonner ?",
       answer:
-        "Non ! Pas d\u2019abonnement. Vous achetez des cr\u00e9dits et les utilisez quand vous voulez. Id\u00e9al pour une utilisation ponctuelle ou r\u00e9guli\u00e8re.",
+        "Non ! Pas d'abonnement. Vous achetez des crédits et les utilisez quand vous voulez. Idéal pour une utilisation ponctuelle ou régulière.",
     },
     {
-      question: "Quelles sont les fonctionnalit\u00e9s avanc\u00e9es ?",
+      question: "Quelles sont les fonctionnalités avancées ?",
       answer:
-        "Au-del\u00e0 de l\u2019extraction, EasyScrapy propose l\u2019analyse IA de vos donn\u00e9es, le benchmark concurrentiel, les automatisations programm\u00e9es et la surveillance de mentions en temps r\u00e9el.",
+        "Au-delà de l'extraction, EasyScrapy propose l'analyse IA de vos données, le benchmark concurrentiel, les automatisations programmées et la surveillance de mentions en temps réel.",
     },
     {
-      question: "Comment fonctionne le syst\u00e8me de cr\u00e9dits ?",
+      question: "Comment fonctionne le système de crédits ?",
       answer:
-        "Vous achetez un pack de cr\u00e9dits. Chaque extraction consomme un nombre de cr\u00e9dits proportionnel au volume de donn\u00e9es. Vos cr\u00e9dits n\u2019expirent jamais.",
+        "Vous achetez un pack de crédits. Chaque extraction consomme un nombre de crédits proportionnel au volume de données. Vos crédits n'expirent jamais.",
     },
   ];
 
@@ -159,14 +159,14 @@ export default function Index() {
             {/* H1 */}
             <h1 className="font-display text-white text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
               Extrayez, analysez et surveillez
-              <span className="block text-gold">vos donn\u00e9es sociales</span>
+              <span className="block text-gold">vos données sociales</span>
             </h1>
 
             {/* Subtitle */}
             <p className="text-steel-200 text-lg sm:text-xl max-w-3xl mx-auto mb-10 leading-relaxed">
-              La plateforme tout-en-un pour transformer les donn\u00e9es Facebook en
+              La plateforme tout-en-un pour transformer les données Facebook en
               avantage concurrentiel. Extraction automatique, analyse IA,
-              benchmark et surveillance en temps r\u00e9el.
+              benchmark et surveillance en temps réel.
             </p>
 
             {/* CTA Buttons */}
@@ -182,7 +182,7 @@ export default function Index() {
                 href="#features"
                 className="inline-flex items-center gap-2 border border-white/30 text-white rounded-xl px-8 py-4 hover:bg-white/10 transition text-lg"
               >
-                D\u00e9couvrir les fonctionnalit\u00e9s
+                Découvrir les fonctionnalités
               </a>
             </div>
 
@@ -193,14 +193,14 @@ export default function Index() {
                   10 000+
                 </p>
                 <p className="text-steel-200 text-sm mt-1">
-                  extractions r\u00e9alis\u00e9es
+                  extractions réalisées
                 </p>
               </div>
               <div className="text-center">
                 <p className="text-gold font-display text-3xl sm:text-4xl font-bold">
                   99.9%
                 </p>
-                <p className="text-steel-200 text-sm mt-1">de fiabilit\u00e9</p>
+                <p className="text-steel-200 text-sm mt-1">de fiabilité</p>
               </div>
               <div className="text-center">
                 <p className="text-gold font-display text-3xl sm:text-4xl font-bold">
@@ -223,8 +223,8 @@ export default function Index() {
               Une plateforme, six superpouvoirs
             </h2>
             <p className="text-steel text-lg max-w-2xl mx-auto">
-              Tout ce dont vous avez besoin pour exploiter les donn\u00e9es Facebook
-              de mani\u00e8re professionnelle.
+              Tout ce dont vous avez besoin pour exploiter les données Facebook
+              de manière professionnelle.
             </p>
           </div>
 
@@ -259,10 +259,10 @@ export default function Index() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-navy text-3xl lg:text-4xl font-bold mb-4">
-              Comment \u00e7a marche ?
+              Comment ça marche ?
             </h2>
             <p className="text-steel text-lg">
-              Trois \u00e9tapes simples pour acc\u00e9der \u00e0 vos donn\u00e9es.
+              Trois étapes simples pour accéder à vos données.
             </p>
           </div>
 
@@ -282,7 +282,7 @@ export default function Index() {
                 Inscrivez-vous
               </h3>
               <p className="text-steel">
-                Cr\u00e9ez votre compte gratuitement en 30 secondes
+                Créez votre compte gratuitement en 30 secondes
               </p>
             </div>
 
@@ -298,7 +298,7 @@ export default function Index() {
                 Configurez
               </h3>
               <p className="text-steel">
-                Choisissez votre type d'extraction et vos param\u00e8tres
+                Choisissez votre type d'extraction et vos paramètres
               </p>
             </div>
 
@@ -311,10 +311,10 @@ export default function Index() {
                 <Download className="w-6 h-6 text-white" />
               </div>
               <h3 className="font-display text-navy text-xl font-bold mb-2">
-                R\u00e9cup\u00e9rez
+                Récupérez
               </h3>
               <p className="text-steel">
-                T\u00e9l\u00e9chargez vos donn\u00e9es en Excel, pr\u00eates \u00e0 l'emploi
+                Téléchargez vos données en Excel, prêtes à l'emploi
               </p>
             </div>
           </div>
@@ -328,7 +328,7 @@ export default function Index() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-white text-3xl lg:text-4xl font-bold mb-4">
-              Con\u00e7u pour les professionnels qui comptent sur leurs donn\u00e9es
+              Conçu pour les professionnels qui comptent sur leurs données
             </h2>
           </div>
 
@@ -365,7 +365,7 @@ export default function Index() {
               Pas d'abonnement. Payez uniquement ce que vous utilisez.
             </p>
             <span className="inline-block bg-gold/20 text-gold-700 text-sm font-semibold px-4 py-2 rounded-full">
-              \u00c9conomisez jusqu'\u00e0 38% avec les gros volumes
+              Économisez jusqu'à 38% avec les gros volumes
             </span>
           </div>
 
@@ -400,7 +400,7 @@ export default function Index() {
                     </p>
                     {pack.downloads && (
                       <p className="text-steel text-sm mb-6">
-                        {pack.downloads} t\u00e9l\u00e9chargements
+                        {pack.downloads} téléchargements
                       </p>
                     )}
                     <div className="mt-auto">
@@ -438,21 +438,21 @@ export default function Index() {
             {[
               {
                 icon: Shield,
-                title: "100% S\u00e9curis\u00e9",
+                title: "100% Sécurisé",
                 description:
-                  "Aucune donn\u00e9e stock\u00e9e. Chiffrement de bout en bout pour prot\u00e9ger vos recherches.",
+                  "Aucune donnée stockée. Chiffrement de bout en bout pour protéger vos recherches.",
               },
               {
                 icon: TrendingUp,
                 title: "99.9% Fiable",
                 description:
-                  "Infrastructure robuste qui traite des milliers de requ\u00eates chaque jour.",
+                  "Infrastructure robuste qui traite des milliers de requêtes chaque jour.",
               },
               {
                 icon: Users,
                 title: "Support Expert",
                 description:
-                  "\u00c9quipe technique disponible sous 48h pour vous aider.",
+                  "Équipe technique disponible sous 48h pour vous aider.",
               },
             ].map((item) => (
               <div
@@ -481,7 +481,7 @@ export default function Index() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-navy text-3xl lg:text-4xl font-bold">
-              Questions fr\u00e9quentes
+              Questions fréquentes
             </h2>
           </div>
 
@@ -511,11 +511,11 @@ export default function Index() {
 
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-display text-white text-3xl lg:text-4xl font-bold mb-6">
-            Pr\u00eat \u00e0 transformer vos donn\u00e9es sociales en avantage concurrentiel ?
+            Prêt à transformer vos données sociales en avantage concurrentiel ?
           </h2>
           <p className="text-steel-200 text-lg mb-10 leading-relaxed">
             Rejoignez des centaines de professionnels qui utilisent EasyScrapy
-            pour prendre de meilleures d\u00e9cisions, plus vite.
+            pour prendre de meilleures décisions, plus vite.
           </p>
           <Link
             to="/register"
@@ -525,7 +525,7 @@ export default function Index() {
             <ArrowRight className="w-5 h-5" />
           </Link>
           <p className="text-steel-200 text-sm mt-6">
-            Inscription gratuite \u00b7 Aucun engagement \u00b7 Paiement s\u00e9curis\u00e9
+            Inscription gratuite · Aucun engagement · Paiement sécurisé
           </p>
         </div>
       </section>
@@ -588,7 +588,7 @@ export default function Index() {
                     href="#features"
                     className="text-steel-200 hover:text-gold transition text-sm"
                   >
-                    Fonctionnalit\u00e9s
+                    Fonctionnalités
                   </a>
                 </li>
                 <li>
@@ -602,9 +602,9 @@ export default function Index() {
               </ul>
             </div>
 
-            {/* L\u00e9gal */}
+            {/* Légal */}
             <div>
-              <h4 className="text-white font-bold mb-4">L\u00e9gal</h4>
+              <h4 className="text-white font-bold mb-4">Légal</h4>
               <ul className="space-y-3">
                 <li>
                   <a
@@ -619,7 +619,7 @@ export default function Index() {
                     href="#"
                     className="text-steel-200 hover:text-gold transition text-sm"
                   >
-                    Politique de confidentialit\u00e9
+                    Politique de confidentialité
                   </a>
                 </li>
                 <li>
@@ -627,7 +627,7 @@ export default function Index() {
                     href="#"
                     className="text-steel-200 hover:text-gold transition text-sm"
                   >
-                    Mentions l\u00e9gales
+                    Mentions légales
                   </a>
                 </li>
               </ul>
@@ -637,7 +637,7 @@ export default function Index() {
           {/* Bottom bar */}
           <div className="border-t border-navy-700 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-steel-200 text-sm">
-              &copy; 2026 EasyScrapy.com &mdash; Tous droits r\u00e9serv\u00e9s
+              &copy; 2026 EasyScrapy.com &mdash; Tous droits réservés
             </p>
             <p className="text-steel-200 text-sm">
               Fait avec passion depuis Madagascar

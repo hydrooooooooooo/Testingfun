@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState, useCallback } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -15,6 +15,7 @@ const navItems = [
 
 const Header = () => {
   const { pathname, hash } = useLocation();
+  const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -25,6 +26,21 @@ const Header = () => {
     if (path === '/') return pathname === '/' && hash !== '#features';
     return pathname === path;
   };
+
+  const handleNavClick = useCallback((e: React.MouseEvent, path: string) => {
+    if (path === '/#features') {
+      e.preventDefault();
+      if (pathname === '/') {
+        document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+        window.history.replaceState(null, '', '/#features');
+      } else {
+        navigate('/');
+        setTimeout(() => {
+          document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [pathname, navigate]);
 
   return (
     <header className="sticky top-0 z-20 w-full bg-navy shadow-sm flex items-center justify-between px-4 md:px-8 h-20">
@@ -40,6 +56,7 @@ const Header = () => {
           <Link
             key={path}
             to={path}
+            onClick={(e) => handleNavClick(e, path)}
             className={`px-3 py-2 rounded transition-colors duration-150 ${
               isActive(path)
                 ? 'bg-gold text-navy font-semibold'
@@ -98,7 +115,7 @@ const Header = () => {
                 <Link
                   key={path}
                   to={path}
-                  onClick={closeMenu}
+                  onClick={(e) => { handleNavClick(e, path); closeMenu(); }}
                   className="text-cream-200 hover:text-gold transition-colors"
                 >
                   {label}
