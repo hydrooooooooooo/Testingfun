@@ -43,3 +43,33 @@ export const authLimiter = rateLimit({
     res.status(options.statusCode).send(options.message);
   },
 });
+
+/**
+ * Rate limiter for admin endpoints
+ */
+export const adminLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: 'Trop de requêtes admin.',
+  handler: (req, res, next, options) => {
+    audit('security.admin_rate_limited', { ip: req.ip, url: req.originalUrl });
+    res.status(options.statusCode).send(options.message);
+  },
+});
+
+/**
+ * Stricter rate limiter for admin export endpoints
+ */
+export const adminExportLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: "Trop d'exports.",
+  handler: (req, res, next, options) => {
+    audit('security.admin_export_rate_limited', { ip: req.ip });
+    res.status(options.statusCode).send(options.message);
+  },
+});

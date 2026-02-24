@@ -4,7 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 
 const AdminRoute: React.FC = () => {
   const { isAuthenticated, user } = useAuth();
-  const ownerEmail = (import.meta as any).env?.VITE_ADMIN_EMAIL || 'hydrocaptorix@gmail.com';
+  const ownerEmail = (import.meta as any).env?.VITE_ADMIN_EMAIL;
 
   if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;
