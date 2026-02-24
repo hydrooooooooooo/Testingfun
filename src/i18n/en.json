@@ -1,0 +1,42 @@
+{
+  "nav": {
+    "home": "Home",
+    "features": "Features",
+    "examples": "Examples",
+    "pricing": "Pricing",
+    "support": "Support",
+    "about": "About",
+    "login": "Sign in",
+    "register": "Get started",
+    "dashboard": "Dashboard",
+    "logout": "Sign out"
+  },
+  "hero": {
+    "badge": "Social Media Analytics",
+    "h1_line1": "Collect, analyze and monitor",
+    "h1_line2": "your social data",
+    "subtitle": "The all-in-one platform to turn Facebook data into competitive advantage. Automated collection, AI analysis, benchmarking and real-time monitoring.",
+    "cta_primary": "Start for free",
+    "cta_secondary": "Discover features",
+    "stats_analyses": "analyses completed",
+    "stats_reliability": "reliability",
+    "stats_support": "support max"
+  },
+  "seo": {
+    "home_title": "Social Media Analytics for Agencies",
+    "home_desc": "Social data analytics platform for agencies. Collect, analyze and monitor Facebook data with AI. Free trial.",
+    "pricing_title": "Pricing — Credit packs",
+    "pricing_desc": "Discover our credit packs for social data analytics. No subscription, pay only for what you use.",
+    "support_title": "Support — Help center",
+    "support_desc": "Need help? Our team is here for you. Response within 24-48h.",
+    "examples_title": "Examples — Use cases by industry",
+    "examples_desc": "Discover how marketing agencies and other industries use our platform.",
+    "about_title": "About — Our mission",
+    "about_desc": "Meet the team behind Easy, our mission and why agencies trust us."
+  },
+  "footer": {
+    "tagline": "Social Media Analytics for agencies and professionals",
+    "copyright": "All rights reserved",
+    "made_with": "Made with passion from Madagascar"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "features": "Fonctionnalites",
+    "examples": "Exemples",
+    "pricing": "Tarifs",
+    "support": "Support",
+    "about": "A propos",
+    "login": "Se connecter",
+    "register": "Commencer",
+    "dashboard": "Dashboard",
+    "logout": "Deconnexion"
+  },
+  "hero": {
+    "badge": "Social Media Analytics",
+    "h1_line1": "Collectez, analysez et surveillez",
+    "h1_line2": "vos donnees sociales",
+    "subtitle": "La plateforme tout-en-un pour transformer les donnees Facebook en avantage concurrentiel. Collecte automatique, analyse IA, benchmark et surveillance en temps reel.",
+    "cta_primary": "Commencer gratuitement",
+    "cta_secondary": "Decouvrir les fonctionnalites",
+    "stats_analyses": "analyses realisees",
+    "stats_reliability": "de fiabilite",
+    "stats_support": "support max"
+  },
+  "seo": {
+    "home_title": "Social Media Analytics pour Agences",
+    "home_desc": "Plateforme d'analyse de donnees sociales pour agences. Collectez, analysez et surveillez les donnees Facebook avec l'IA. Essai gratuit.",
+    "pricing_title": "Tarifs — Packs de credits",
+    "pricing_desc": "Decouvrez nos offres de credits pour l'analyse de donnees sociales. Pas d'abonnement, payez uniquement ce que vous utilisez.",
+    "support_title": "Support — Centre d'aide",
+    "support_desc": "Besoin d'aide ? Notre equipe vous accompagne. Reponse sous 24-48h.",
+    "examples_title": "Exemples — Cas d'usage par secteur",
+    "examples_desc": "Decouvrez comment les agences marketing et d'autres secteurs utilisent notre plateforme.",
+    "about_title": "A propos — Notre mission",
+    "about_desc": "Decouvrez l'equipe derriere Easy, notre mission et pourquoi les agences nous font confiance."
+  },
+  "footer": {
+    "tagline": "Social Media Analytics pour agences et professionnels",
+    "copyright": "Tous droits reserves",
+    "made_with": "Fait avec passion depuis Madagascar"
+  }
+}
