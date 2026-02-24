@@ -8,11 +8,10 @@ export default function Footer() {
           {/* Brand column */}
           <div>
             <p className="text-white text-2xl font-bold mb-3">
-              Easy<span className="text-gold">Scrapy</span>
-              <span className="text-gold">.com</span>
+              Easy
             </p>
             <p className="text-steel-200 text-sm leading-relaxed">
-              Intelligence sociale pour les professionnels
+              Social Media Analytics pour agences et professionnels
             </p>
           </div>
 
@@ -21,7 +20,7 @@ export default function Footer() {
             <h4 className="text-white font-bold mb-4">Produit</h4>
             <ul className="space-y-3">
               {[
-                { label: 'Extraction Marketplace', href: '/#features' },
+                { label: 'Analyse Marketplace', href: '/#features' },
                 { label: 'Facebook Pages', href: '/#features' },
                 { label: 'Benchmark', href: '/#features' },
                 { label: 'Analyses IA', href: '/#features' },

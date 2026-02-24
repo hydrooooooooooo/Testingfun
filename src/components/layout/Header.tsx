@@ -44,10 +44,9 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-20 w-full bg-navy shadow-sm flex items-center justify-between px-4 md:px-8 h-20">
-      <Link to="/" className="text-2xl font-extrabold tracking-tight uppercase mr-8 select-none">
-        <span className="text-white">EASY</span>
-        <span className="text-white">SCRAPY</span>
-        <span className="text-gold font-black">.COM</span>
+      <Link to="/" className="text-2xl font-extrabold tracking-tight mr-8 select-none">
+        <span className="text-white">Easy</span>
+        <span className="text-gold font-black ml-1 text-sm align-middle">Social Media Analytics</span>
       </Link>
 
       {/* Desktop Navigation */}
