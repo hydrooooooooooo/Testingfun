@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Download, TrendingUp, AlertTriangle, Target, Zap } from 'lucide-react';
+import { ArrowLeft, Download, TrendingUp, AlertTriangle, Target, Zap, Lightbulb, CheckCircle } from 'lucide-react';
 
 interface BenchmarkDetailViewProps {
   pageName: string;
@@ -70,10 +70,12 @@ const BenchmarkDetailView: React.FC<BenchmarkDetailViewProps> = ({ pageName, ben
     engagementRate: metricsComparison.engagement_rate?.page_average || sectorBenchmarks.page_metrics?.engagement_rate || '0%',
     engagementRateBenchmark: metricsComparison.engagement_rate?.sector_benchmark || sectorBenchmarks.industry_averages?.engagement_rate || '0%'
   };
-  const gaps = data.competitive_gaps || [];
-  const opportunities = data.differentiation_opportunities || [];
-  // Support des deux formats: strategies_to_adopt (nouveau) et leader_strategies_to_adopt (ancien)
-  const strategies = data.strategies_to_adopt || data.leader_strategies_to_adopt || [];
+  const gaps = data.competitive_gaps || data.gaps || [];
+  const opportunities = data.differentiation_opportunities || data.opportunities || [];
+  // Support de multiples formats de nommage IA
+  const strategies = data.strategies_to_adopt || data.leader_strategies_to_adopt || data.strategic_recommendations || data.strategies || [];
+  const actionPlan = data.action_plan || data.plan_action || {};
+  const immediateActions = actionPlan.immediate_actions || actionPlan.actions || data.immediate_actions || [];
 
   return (
     <div className="h-full bg-cream-50 overflow-y-auto">
@@ -267,6 +269,42 @@ const BenchmarkDetailView: React.FC<BenchmarkDetailViewProps> = ({ pageName, ben
                   )}
                 </div>
               ))}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Recommandations Stratégiques (Plan d'Action) */}
+        {immediateActions.length > 0 && (
+          <Card className="bg-white border-cream-300">
+            <CardHeader>
+              <CardTitle className="text-navy flex items-center gap-2">
+                <Lightbulb className="w-5 h-5 text-gold" />
+                Recommandations Stratégiques
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {immediateActions.map((action: any, idx: number) => (
+                  <div key={idx} className="flex items-start gap-3 p-3 bg-gold/5 border border-gold/20 rounded-lg">
+                    <CheckCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <div className="flex-1">
+                      <p className="font-medium text-navy">{action.action || action.title || action.recommendation}</p>
+                      {action.expected_result && (
+                        <p className="text-sm text-green-600 mt-1">Résultat attendu : {action.expected_result}</p>
+                      )}
+                      {action.effort && (
+                        <Badge className={`mt-2 text-[10px] ${
+                          action.effort === 'Faible' ? 'bg-green-100 text-green-700' :
+                          action.effort === 'Moyen' ? 'bg-gold/20 text-gold' :
+                          'bg-red-100 text-red-700'
+                        }`}>
+                          Effort : {action.effort}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
         )}
