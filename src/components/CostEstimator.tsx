@@ -364,13 +364,17 @@ export const DetailedCostEstimator = ({
                   <div key={index} className="flex items-center justify-between text-sm">
                     <span className="text-navy-700">
                       {item.label}
-                      <span className="text-steel ml-1">
-                        ({item.quantity} × {item.unitCost.toFixed(2)})
+                      {item.subtotal > 0 && (
+                        <span className="text-steel ml-1">
+                          ({item.quantity} × {item.unitCost.toFixed(2)})
+                        </span>
+                      )}
+                    </span>
+                    {item.subtotal > 0 && (
+                      <span className="font-medium text-navy">
+                        {item.subtotal.toFixed(1)} cr
                       </span>
-                    </span>
-                    <span className="font-medium text-navy">
-                      {item.subtotal.toFixed(1)} cr
-                    </span>
+                    )}
                   </div>
                 ))}
                 <div className={cn(

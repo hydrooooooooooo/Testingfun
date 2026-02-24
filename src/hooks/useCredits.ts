@@ -66,11 +66,13 @@ export interface BenchmarkEstimateParams {
   competitorCount: number;
   postsLimit: number;
   includeAiAnalysis?: boolean;
+  modelId?: string;
 }
 
 export interface AiAnalysisEstimateParams {
   pageCount: number;
   postsPerPage: number;
+  modelId?: string;
 }
 
 export const useCredits = () => {
