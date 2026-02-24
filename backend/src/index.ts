@@ -78,10 +78,18 @@ process.on('unhandledRejection', (reason, promise) => {
   // Ne pas arrêter le serveur en cas de promesse rejetée non gérée
 });
 
+// Background services
+import { scheduledScrapeService } from './services/scheduledScrapeService';
+import { SessionCleanupService } from './services/sessionCleanupService';
+
 // Start server
 const server = app.listen(port, () => {
   logger.info(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${port}`);
   logger.info(`Health check available at http://localhost:${port}/health`);
+
+  // Start background services after server is ready
+  scheduledScrapeService.startScheduler();
+  SessionCleanupService.startAutoCleanup();
   
   // Afficher toutes les routes enregistrées de manière récursive
   if (config.server.isDev) {
@@ -104,6 +112,8 @@ const server = app.listen(port, () => {
 // Gestion de l'arrêt du serveur
 const gracefulShutdown = () => {
   logger.info('Shutting down server gracefully...');
+  scheduledScrapeService.stopScheduler();
+  SessionCleanupService.stopAutoCleanup();
   server.close(() => {
     logger.info('Server closed successfully');
     process.exit(0);
