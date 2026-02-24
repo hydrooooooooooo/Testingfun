@@ -399,11 +399,88 @@ export function useApi() {
     }
   };
 
-  return { 
-    loading, 
-    error, 
-    startScraping, 
-    getScrapeResults, 
+  const getAdminUserById = useCallback(async (userId: number) => {
+    try {
+      const response = await api.get(`/admin/users/${userId}`);
+      return response.data?.data || response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors du chargement utilisateur';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, []);
+
+  const adjustAdminUserCredits = useCallback(async (userId: number, amount: number, reason: string) => {
+    try {
+      const response = await api.patch(`/admin/users/${userId}/credits`, { amount, reason });
+      return response.data?.data || response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors de l\'ajustement crédits';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, []);
+
+  const toggleAdminUserStatus = useCallback(async (userId: number, suspended: boolean, reason?: string) => {
+    try {
+      const response = await api.patch(`/admin/users/${userId}/status`, { suspended, reason });
+      return response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors du changement de statut';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, []);
+
+  const refundAdminSession = useCallback(async (sessionId: string) => {
+    try {
+      const response = await api.get(`/admin/sessions/${sessionId}/refund`);
+      return response.data?.data || response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors du remboursement';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, []);
+
+  const archiveAdminSession = useCallback(async (sessionId: string) => {
+    try {
+      const response = await api.delete(`/admin/sessions/${sessionId}`);
+      return response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors de l\'archivage';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, []);
+
+  const getAdminSessions = useCallback(async () => {
+    try {
+      const response = await api.get('/admin/sessions');
+      return response.data || [];
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors du chargement sessions';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, []);
+
+  const getAdminSessionById = useCallback(async (sessionId: string) => {
+    try {
+      const response = await api.get(`/admin/sessions/${sessionId}`);
+      return response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur chargement session';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, []);
+
+  return {
+    loading,
+    error,
+    startScraping,
+    getScrapeResults,
     getApifyRunStatus,
     createMvolaPayment,
     cancelApifyRun,
@@ -415,6 +492,13 @@ export function useApi() {
     getAdminAdvancedMetrics,
     exportAdminSearchesCsv,
     searchAdminUsers,
-    startTrialScrape
+    startTrialScrape,
+    getAdminUserById,
+    adjustAdminUserCredits,
+    toggleAdminUserStatus,
+    refundAdminSession,
+    archiveAdminSession,
+    getAdminSessions,
+    getAdminSessionById,
   };
 }

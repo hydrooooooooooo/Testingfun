@@ -99,7 +99,7 @@ export class AnalyticsService {
 
   async getSearchEventsPaginatedFiltered(params: { page?: number; limit?: number; from?: string; to?: string; userId?: number | null }) {
     const page = Math.max(1, Number(params.page || 1));
-    const limit = Math.min(200, Math.max(1, Number(params.limit || 50)));
+    const limit = Math.min(1000, Math.max(1, Number(params.limit || 50)));
     const offset = (page - 1) * limit;
     const q = db({ se: 'search_events' })
       .leftJoin({ u: 'users' }, 'se.user_id', 'u.id')

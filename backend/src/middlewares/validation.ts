@@ -199,6 +199,26 @@ export const adminUserSearchSchema = z.object({
   }),
 });
 
+export const adminCreditAdjustSchema = z.object({
+  body: z.object({
+    amount: z.number().refine((v) => v !== 0, 'amount must be non-zero'),
+    reason: z.string().min(1, 'reason is required').max(500),
+  }),
+  params: z.object({
+    userId: z.coerce.number().int().positive(),
+  }),
+});
+
+export const adminUserStatusSchema = z.object({
+  body: z.object({
+    suspended: z.boolean(),
+    reason: z.string().max(500).optional(),
+  }),
+  params: z.object({
+    userId: z.coerce.number().int().positive(),
+  }),
+});
+
 // ============================================================================
 // VALIDATION MIDDLEWARE FACTORY
 // ============================================================================

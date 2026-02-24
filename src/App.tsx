@@ -44,6 +44,8 @@ import FacebookPagesFilesPage from './pages/FacebookPagesFilesPage';
 
 // Pages - Admin
 import AdminDashboard from './pages/AdminDashboard';
+import AdminUsersPage from './pages/AdminUsersPage';
+import AdminSessionsPage from './pages/AdminSessionsPage';
 import NotFound from './pages/NotFound';
 
 // Layouts
@@ -113,6 +115,9 @@ function App() {
                   <Route element={<AdminRoute />}>
                     <Route path="/admin" element={<AdminLayout />}>
                       <Route index element={<AdminDashboard />} />
+                      <Route path="users" element={<AdminUsersPage />} />
+                      <Route path="sessions" element={<AdminSessionsPage />} />
+                      <Route path="reporting" element={<AdminDashboard />} />
                     </Route>
                   </Route>
                 </Route>
