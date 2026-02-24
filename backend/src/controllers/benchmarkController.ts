@@ -39,18 +39,12 @@ interface PageAnalysis {
 }
 
 interface BenchmarkResult {
-  dateRange: {
-    start: string;
-    end: string;
-    label: string;
-  };
   myPage: PageAnalysis | null;
   competitors: PageAnalysis[];
   allPosts: PostData[];
   summary: {
     totalPostsAnalyzed: number;
     totalPagesAnalyzed: number;
-    dateRangeLabel: string;
   };
   insights: {
     strengths: string[];
@@ -101,13 +95,6 @@ export const analyzeBenchmark = async (req: AuthenticatedRequest, res: Response)
 
   try {
     logger.info(`[BENCHMARK] Starting analysis for user ${userId} with ${competitors?.length || 0} competitors`);
-
-    // Récupérer la configuration de dates
-    const dateRange = analysisConfig?.dateRange || {
-      start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-      end: new Date().toISOString(),
-      label: 'Dernier mois'
-    };
 
     // 1. Récupérer les données de l'utilisateur (ma page)
     const userSessions = await db('scraping_sessions')
@@ -225,18 +212,12 @@ export const analyzeBenchmark = async (req: AuthenticatedRequest, res: Response)
 
     // 4. Construire la réponse
     const result: BenchmarkResult = {
-      dateRange: {
-        start: dateRange.start,
-        end: dateRange.end,
-        label: dateRange.label
-      },
       myPage,
       competitors: competitorAnalyses,
-      allPosts: allPosts.sort((a, b) => b.likes - a.likes), // Trier par likes décroissants
+      allPosts: allPosts.sort((a, b) => b.likes - a.likes),
       summary: {
         totalPostsAnalyzed: allPosts.length,
         totalPagesAnalyzed: (myPage ? 1 : 0) + competitorAnalyses.length,
-        dateRangeLabel: dateRange.label
       },
       insights
     };
@@ -596,11 +577,6 @@ export const runFullBenchmark = async (req: AuthenticatedRequest, res: Response)
         scrapeComments: options?.scrapeComments !== false,
         scrapePageInfo: options?.scrapePageInfo !== false,
         postsLimit: options?.postsLimit || 20,
-        dateRange: options?.dateRange || {
-          start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-          end: new Date().toISOString(),
-          label: 'Dernier mois'
-        }
       }
     );
 

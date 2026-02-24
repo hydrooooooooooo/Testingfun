@@ -86,7 +86,6 @@ export interface FullBenchmarkReport {
   id: string;
   userId: number;
   createdAt: string;
-  dateRange: { start: string; end: string; label: string };
   myPage: CompetitorBenchmarkResult | null;
   competitors: CompetitorBenchmarkResult[];
   comparativeAnalysis: {
@@ -114,7 +113,6 @@ class BenchmarkService {
       scrapeComments: boolean;
       scrapePageInfo: boolean;
       postsLimit: number;
-      dateRange: { start: string; end: string; label: string };
     }
   ): Promise<FullBenchmarkReport> {
     const benchmarkId = `benchmark_${Date.now()}_${userId}`;
@@ -146,7 +144,6 @@ class BenchmarkService {
       id: benchmarkId,
       userId,
       createdAt: new Date().toISOString(),
-      dateRange: options.dateRange,
       myPage: null,
       competitors: [],
       comparativeAnalysis: {
@@ -725,7 +722,7 @@ Génère une analyse JSON avec cette structure exacte:
     recommendations.push('Adaptez votre stratégie de publication aux horaires optimaux identifiés.');
 
     return {
-      summary: `Analyse comparative de ${allPages.length} pages Facebook sur la période ${report.dateRange.label}.`,
+      summary: `Analyse comparative de ${allPages.length} pages Facebook.`,
       rankings,
       recommendations
     };

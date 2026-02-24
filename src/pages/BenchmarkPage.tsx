@@ -36,7 +36,6 @@ import {
   Download,
   Share2,
   Eye,
-  Calendar,
   Activity,
   Settings,
   Crown,
@@ -55,7 +54,7 @@ import {
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import api from '@/services/api';
-import { format, subMonths } from 'date-fns';
+import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { BenchmarkRadarChart, BenchmarkBarChart } from '@/components/benchmark';
 import { FavoriteButton, FavoriteSelector, FavoritesManager } from '@/components/favorites';
@@ -112,7 +111,6 @@ interface FullBenchmarkReport {
   id: string;
   userId: number;
   createdAt: string;
-  dateRange: { start: string; end: string; label: string };
   myPage: CompetitorResult | null;
   competitors: CompetitorResult[];
   comparativeAnalysis: {
@@ -147,7 +145,6 @@ interface BenchmarkConfig {
   scrapeComments: boolean;
   scrapePageInfo: boolean;
   postsLimit: number;
-  dateRange: 'last_30_days' | 'last_90_days' | 'last_6_months' | 'last_year';
 }
 
 // Messages de progression pour le spinner
@@ -194,7 +191,6 @@ const BenchmarkPage: React.FC = () => {
       scrapeComments: true,
       scrapePageInfo: true,
       postsLimit: 20,
-      dateRange: 'last_30_days',
     };
   });
   const [showFavoritesManager, setShowFavoritesManager] = useState(false);
@@ -235,31 +231,6 @@ const BenchmarkPage: React.FC = () => {
       setLoadingPage('');
     }
   }, [loading]);
-
-  const getDateRange = () => {
-    const now = new Date();
-    switch (config.dateRange) {
-      case 'last_30_days': {
-        const start = new Date(now);
-        start.setDate(start.getDate() - 30);
-        return { start, end: now, label: '30 derniers jours' };
-      }
-      case 'last_90_days': {
-        const start = new Date(now);
-        start.setDate(start.getDate() - 90);
-        return { start, end: now, label: '90 derniers jours' };
-      }
-      case 'last_6_months':
-        return { start: subMonths(now, 6), end: now, label: '6 derniers mois' };
-      case 'last_year':
-        return { start: subMonths(now, 12), end: now, label: '12 derniers mois' };
-      default: {
-        const start = new Date(now);
-        start.setDate(start.getDate() - 30);
-        return { start, end: now, label: '30 derniers jours' };
-      }
-    }
-  };
 
   const addCompetitor = () => {
     if (newCompetitor && !competitors.includes(newCompetitor)) {
@@ -322,9 +293,8 @@ const BenchmarkPage: React.FC = () => {
       return;
     }
 
-    const dateRange = getDateRange();
     setLoading(true);
-    
+
     try {
       const response = await api.post('/benchmark/full', {
         myPageUrl: config.myPageUrl || null,
@@ -334,11 +304,6 @@ const BenchmarkPage: React.FC = () => {
           scrapeComments: config.scrapeComments,
           scrapePageInfo: config.scrapePageInfo,
           postsLimit: config.postsLimit,
-          dateRange: {
-            start: dateRange.start.toISOString(),
-            end: dateRange.end.toISOString(),
-            label: dateRange.label
-          }
         }
       });
       
@@ -582,7 +547,6 @@ const BenchmarkPage: React.FC = () => {
     <div class="subtitle">Analyse comparative des performances sur les réseaux sociaux</div>
     <div class="meta">
       <div class="meta-item">📅 ${dateGeneration}</div>
-      <div class="meta-item">📊 ${report.dateRange.label}</div>
       <div class="meta-item">📄 ${allPages.length} pages analysées</div>
     </div>
   </div>
@@ -863,7 +827,6 @@ const BenchmarkPage: React.FC = () => {
       const allPages = getAllPages();
       const exportData = {
         exportDate: new Date().toISOString(),
-        period: report.dateRange,
         pages: allPages.map(page => ({
           pageName: page.pageData.pageName,
           pageUrl: page.pageData.pageUrl,
@@ -1014,37 +977,6 @@ const BenchmarkPage: React.FC = () => {
 
         {/* Configuration Tab */}
         <TabsContent value="config" className="space-y-4 mt-4">
-          {/* Date Range */}
-          <Card className="bg-gradient-to-r from-gold-50 to-gold-50 border-gold-200">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-navy flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-gold" />
-                Période d'analyse
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap items-center gap-4">
-                <Select 
-                  value={config.dateRange} 
-                  onValueChange={(value: any) => setConfig({...config, dateRange: value})}
-                >
-                  <SelectTrigger className="w-[250px] bg-white border-cream-300 text-navy">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border-cream-300">
-                    <SelectItem value="last_30_days" className="text-navy">30 derniers jours</SelectItem>
-                    <SelectItem value="last_90_days" className="text-navy">90 derniers jours</SelectItem>
-                    <SelectItem value="last_6_months" className="text-navy">6 derniers mois</SelectItem>
-                    <SelectItem value="last_year" className="text-navy">12 derniers mois</SelectItem>
-                  </SelectContent>
-                </Select>
-                <span className="text-steel text-sm">
-                  Du {format(getDateRange().start, 'd MMM yyyy', { locale: fr })} au {format(getDateRange().end, 'd MMM yyyy', { locale: fr })}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-
           {/* Analysis Options */}
           <Card className="bg-white border-cream-300 shadow-sm">
             <CardHeader>
@@ -1665,11 +1597,6 @@ const BenchmarkPage: React.FC = () => {
                           {getAllPages().reduce((sum, p) => sum + p.quantitativeMetrics.totalPosts, 0)}
                         </div>
                         <div className="text-xs text-steel-200">Posts analysés</div>
-                      </div>
-                      <div className="h-10 w-px bg-navy-700" />
-                      <div className="text-center">
-                        <div className="text-lg font-medium text-cream-400">{report.dateRange.label}</div>
-                        <div className="text-xs text-steel-200">Période</div>
                       </div>
                       <div className="h-10 w-px bg-navy-700" />
                       <div className="text-center">
