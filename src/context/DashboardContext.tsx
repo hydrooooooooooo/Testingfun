@@ -13,13 +13,13 @@ interface DashboardContextType {
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
 export const DashboardProvider = ({ children }: { children: ReactNode }) => {
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchDashboardData = useCallback(async () => {
-    if (!token) {
+    if (!user) {
       setError('Vous n\'êtes pas authentifié.');
       setIsLoading(false);
       return;
@@ -27,7 +27,6 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
 
     setIsLoading(true);
     try {
-      const cacheBuster = `_=${new Date().getTime()}`;
       const response = await api.get<UserData>('/user/dashboard');
       const data = response.data;
       setUserData(data);
@@ -37,7 +36,7 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [token]);
+  }, [user]);
 
   const value = { userData, error, isLoading, fetchDashboardData };
 
