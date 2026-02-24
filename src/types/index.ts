@@ -1,3 +1,13 @@
+export interface AIModel {
+  id: string;
+  name: string;
+  provider: string;
+  description: string;
+  costMultiplier: number;
+  recommended?: boolean;
+  default?: boolean;
+}
+
 export interface Purchase {
   id: number;
   user_id: number;
