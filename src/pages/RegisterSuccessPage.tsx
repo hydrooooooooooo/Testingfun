@@ -46,7 +46,7 @@ export default function RegisterSuccessPage() {
   ];
 
   const benefits = [
-    { icon: ShoppingBag, text: 'Extraction Marketplace en 3 min' },
+    { icon: ShoppingBag, text: 'Analyse Marketplace en 3 min' },
     { icon: TrendingUp, text: 'Benchmark concurrentiel automatisé' },
     { icon: Sparkles, text: 'Analyses IA de vos données' },
     { icon: Shield, text: 'Données sécurisées, jamais stockées' },
@@ -65,14 +65,14 @@ export default function RegisterSuccessPage() {
         <div className="relative z-10">
           <Link to="/" className="inline-block mb-14">
             <span className="text-white text-2xl font-bold font-display">
-              EASY<span className="text-gold">SCRAPY</span>
+              Easy
               <span className="text-gold">.COM</span>
             </span>
           </Link>
 
           <h1 className="font-display text-white text-3xl xl:text-4xl font-bold leading-tight mb-4">
             Bienvenue dans la
-            <span className="block text-gold mt-1">communauté EasyScrapy</span>
+            <span className="block text-gold mt-1">communauté Easy</span>
           </h1>
           <p className="text-steel-200 text-base leading-relaxed max-w-md">
             Votre compte est presque prêt. Plus qu'une étape pour accéder à tous vos outils d'intelligence sociale.
@@ -108,7 +108,7 @@ export default function RegisterSuccessPage() {
           <div className="relative z-10 text-center">
             <Link to="/" className="inline-block mb-3">
               <span className="text-white text-xl font-bold font-display">
-                EASY<span className="text-gold">SCRAPY</span>
+                Easy
                 <span className="text-gold">.COM</span>
               </span>
             </Link>

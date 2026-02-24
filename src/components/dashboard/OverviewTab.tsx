@@ -96,7 +96,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ userData }) => {
       {userData.user && userData.user.trial_used !== true && (
         <Card className="border-primary/30">
           <CardHeader>
-            <CardTitle>Essai gratuit – Scrape 10 annonces</CardTitle>
+            <CardTitle>Essai gratuit – Collectez 10 annonces</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-3 md:flex-row md:items-center">
@@ -137,7 +137,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ userData }) => {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Total Scrapes</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Analyses</CardTitle>
             <BarChart2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>

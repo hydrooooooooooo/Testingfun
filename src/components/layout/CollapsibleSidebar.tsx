@@ -197,7 +197,7 @@ const CollapsibleSidebar: React.FC<CollapsibleSidebarProps> = ({ isCollapsed, se
               <span className="text-navy font-bold text-sm">ES</span>
             </div>
             <div>
-              <div className="text-sm font-bold text-white">EasyScrapy</div>
+              <div className="text-sm font-bold text-white">Easy</div>
               <div className="text-xs text-cream-300">Intelligence Sociale</div>
             </div>
           </div>
@@ -211,7 +211,7 @@ const CollapsibleSidebar: React.FC<CollapsibleSidebarProps> = ({ isCollapsed, se
               </div>
             </TooltipTrigger>
             <TooltipContent side="right" className="bg-navy-700 text-white border-navy-400">
-              EasyScrapy
+              Easy
             </TooltipContent>
           </Tooltip>
         )}

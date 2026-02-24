@@ -468,7 +468,7 @@ const BenchmarkPage: React.FC = () => {
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Rapport Benchmark Concurrentiel - EasyScrapy</title>
+  <title>Rapport Benchmark Concurrentiel - Easy</title>
   <style>
     @page { margin: 15mm; size: A4; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -580,7 +580,7 @@ const BenchmarkPage: React.FC = () => {
 <body>
   <!-- Cover Page -->
   <div class="cover">
-    <div class="logo">EASYSCRAPY</div>
+    <div class="logo">EASY</div>
     <h1>Rapport Benchmark Concurrentiel</h1>
     <div class="subtitle">Analyse comparative des performances sur les réseaux sociaux</div>
     <div class="meta">
@@ -783,9 +783,9 @@ const BenchmarkPage: React.FC = () => {
 
   <!-- Footer -->
   <div class="footer">
-    <div class="brand">EASYSCRAPY</div>
+    <div class="brand">EASY</div>
     <div class="tagline">Intelligence Sociale & Veille Concurrentielle</div>
-    <div class="legal">© ${new Date().getFullYear()} EasyScrapy - Rapport généré automatiquement - Tous droits réservés</div>
+    <div class="legal">© ${new Date().getFullYear()} Easy - Rapport généré automatiquement - Tous droits réservés</div>
   </div>
 </body>
 </html>`;
@@ -932,7 +932,7 @@ const BenchmarkPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-navy">Benchmark Concurrentiel</h1>
-          <p className="text-steel mt-1 text-sm sm:text-base">Analyse complète avec scraping et rapport IA</p>
+          <p className="text-steel mt-1 text-sm sm:text-base">Analyse complète avec collecte et rapport IA</p>
         </div>
         <Badge className="bg-steel-100 text-steel-700 border-steel-200 flex items-center gap-2 w-fit">
           <Activity className="w-4 h-4" />
@@ -1519,7 +1519,7 @@ const BenchmarkPage: React.FC = () => {
   ` : ''}
   
   <div style="text-align: center; margin-top: 40px; color: #6b7280; font-size: 12px;">
-    <p>Rapport généré par EasyScrapy - Intelligence Sociale</p>
+    <p>Rapport généré par Easy - Intelligence Sociale</p>
   </div>
 </body>
 </html>`;

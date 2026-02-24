@@ -71,7 +71,7 @@ export default function ResendVerificationPage() {
   };
 
   const benefits = [
-    { icon: ShoppingBag, text: 'Extraction Marketplace en 3 min' },
+    { icon: ShoppingBag, text: 'Analyse Marketplace en 3 min' },
     { icon: TrendingUp, text: 'Benchmark concurrentiel automatisé' },
     { icon: Sparkles, text: 'Analyses IA de vos données' },
     { icon: Shield, text: 'Données sécurisées, jamais stockées' },
@@ -90,7 +90,7 @@ export default function ResendVerificationPage() {
         <div className="relative z-10">
           <Link to="/" className="inline-block mb-14">
             <span className="text-white text-2xl font-bold font-display">
-              EASY<span className="text-gold">SCRAPY</span>
+              Easy
               <span className="text-gold">.COM</span>
             </span>
           </Link>
@@ -133,7 +133,7 @@ export default function ResendVerificationPage() {
           <div className="relative z-10 text-center">
             <Link to="/" className="inline-block mb-3">
               <span className="text-white text-xl font-bold font-display">
-                EASY<span className="text-gold">SCRAPY</span>
+                Easy
                 <span className="text-gold">.COM</span>
               </span>
             </Link>

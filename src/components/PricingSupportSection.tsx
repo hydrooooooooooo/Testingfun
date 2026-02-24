@@ -14,7 +14,7 @@ export default function PricingSupportSection() {
           </div>
           <p className="text-sm text-muted-foreground text-center mb-3">
             Pour toute question ou problème, contactez-nous par email.<br />
-            Indiquez bien votre <span className="font-semibold">ID scraping</span> et votre <span className="font-semibold">ID Dataset</span> dans votre message pour un traitement plus rapide&nbsp;!
+            Indiquez bien votre <span className="font-semibold">ID session</span> et votre <span className="font-semibold">ID Dataset</span> dans votre message pour un traitement plus rapide&nbsp;!
           </p>
           <div className="flex items-center gap-2 text-navy font-semibold">
             <Mail size={18} className="inline" />
@@ -23,8 +23,8 @@ export default function PricingSupportSection() {
             </a>
           </div>
           <div className="mt-2 text-xs text-muted-foreground text-center">
-            Ces identifiants sont affichés lors de l’extraction sur la page d’accueil.<br />
-            <span className="italic">Exemple : ID scraping : <code className="font-mono px-1 text-navy/80">scrape_xxxxxx</code> – ID Dataset : <code className="font-mono px-1 text-navy/80">ds_xxxxxx</code></span>
+            Ces identifiants sont affichés lors de l'analyse sur la page d'accueil.<br />
+            <span className="italic">Exemple : ID session : <code className="font-mono px-1 text-navy/80">scrape_xxxxxx</code> – ID Dataset : <code className="font-mono px-1 text-navy/80">ds_xxxxxx</code></span>
           </div>
         </CardContent>
       </Card>

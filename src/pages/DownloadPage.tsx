@@ -193,7 +193,7 @@ export default function DownloadPage() {
                 <p className="text-navy-700">Nous espérons que nos données vous seront utiles pour vos projets.</p>
                 <Button onClick={handleNewScraping} className="bg-navy hover:bg-navy-400 text-white font-semibold">
                   <Home className="w-4 h-4 mr-2" />
-                  Nouveau scraping
+                  Nouvelle analyse
                 </Button>
               </div>
             </div>

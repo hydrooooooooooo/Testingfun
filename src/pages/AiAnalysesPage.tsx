@@ -676,7 +676,7 @@ const AiAnalysesPage: React.FC = () => {
         drawRoundedRect(0, pageHeight - 15, pageWidth, 15, 0, [243, 244, 246]);
         doc.setFontSize(8);
         doc.setTextColor(107, 114, 128);
-        doc.text('EasyScrapy - Marketplace Scraper Pro', margin, pageHeight - 6);
+        doc.text('Easy - Social Media Analytics', margin, pageHeight - 6);
         doc.text(`Page ${i}/${totalPages}`, pageWidth - margin - 20, pageHeight - 6);
         doc.text(cleanText(selectedAnalysis?.pageName || ''), pageWidth / 2, pageHeight - 6, { align: 'center' });
       }

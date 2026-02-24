@@ -153,7 +153,7 @@ const DashboardPage: React.FC = () => {
             Bonjour, {user?.name || 'utilisateur'}
           </h1>
           <p className="text-steel mt-1">
-            Voici un résumé de votre activité sur EasyScrapy
+            Voici un résumé de votre activité sur Easy
           </p>
         </div>
         <div className="flex gap-2">
@@ -271,7 +271,7 @@ const DashboardPage: React.FC = () => {
               <ShoppingBag className="h-6 w-6 text-navy" />
             </div>
             <div className="flex-1">
-              <p className="font-semibold text-navy">Scraping Marketplace</p>
+              <p className="font-semibold text-navy">Analyse Marketplace</p>
               <p className="text-xs text-steel">
                 Extraire des annonces Facebook
               </p>

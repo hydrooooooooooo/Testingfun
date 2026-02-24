@@ -74,8 +74,8 @@ const CreditsPage = () => {
 
   const getServiceLabel = (service: string) => {
     const services: Record<string, string> = {
-      'marketplace_scraping': 'Scraping Marketplace',
-      'facebook_pages_scraping': 'Scraping Facebook Pages',
+      'marketplace_scraping': 'Analyse Marketplace',
+      'facebook_pages_scraping': 'Analyse Facebook Pages',
       'ai_analysis': 'Analyse IA',
       'data_export': 'Export de données'
     };

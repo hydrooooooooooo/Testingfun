@@ -114,7 +114,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isCollapsed, setIsCollapsed
             </div>
             <div>
               <div className="text-sm font-bold text-white">Administration</div>
-              <div className="text-xs text-cream-300">EasyScrapy</div>
+              <div className="text-xs text-cream-300">Easy</div>
             </div>
           </div>
         ) : (

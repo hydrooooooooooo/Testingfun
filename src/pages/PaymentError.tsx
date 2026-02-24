@@ -264,7 +264,7 @@ export default function PaymentErrorPage() {
                 size="lg"
               >
                 <Home className="h-4 w-4 mr-2" />
-                Nouveau scraping
+                Nouvelle analyse
               </Button>
               
               <Link to="/support">

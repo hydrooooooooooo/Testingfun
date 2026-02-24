@@ -144,8 +144,8 @@ export default function ModelsPage() {
             La Qualité de nos Données en Action
           </h1>
           <p className="max-w-3xl mx-auto text-lg text-muted-foreground">
-            Découvrez la qualité et la structure de nos extractions de données !
-            Ces exemples vous montrent exactement ce que vous obtiendrez avec EasyScrapyMG.
+            Découvrez la qualité et la structure de nos analyses de données !
+            Ces exemples vous montrent exactement ce que vous obtiendrez avec Easy.
           </p>
 
           <div className="bg-cream rounded-2xl p-6 max-w-2xl mx-auto">
@@ -316,7 +316,7 @@ export default function ModelsPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="text-lg px-8" onClick={() => window.location.href = '/#scraping-form'}>
                 <ArrowRight className="w-5 h-5 mr-2" />
-                Commencer une extraction
+                Commencer une analyse
               </Button>
               <Button variant="outline" size="lg" className="text-lg px-8" onClick={() => window.location.href = '/pricing'}>
                 Voir les tarifs

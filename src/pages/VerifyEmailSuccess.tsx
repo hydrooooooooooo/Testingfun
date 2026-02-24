@@ -6,7 +6,7 @@ import {
 
 export default function VerifyEmailSuccess() {
   const benefits = [
-    { icon: ShoppingBag, text: 'Extraction Marketplace en 3 min' },
+    { icon: ShoppingBag, text: 'Analyse Marketplace en 3 min' },
     { icon: TrendingUp, text: 'Benchmark concurrentiel automatisé' },
     { icon: Sparkles, text: 'Analyses IA de vos données' },
     { icon: Shield, text: 'Données sécurisées, jamais stockées' },
@@ -23,7 +23,7 @@ export default function VerifyEmailSuccess() {
         <div className="relative z-10">
           <Link to="/" className="inline-block mb-14">
             <span className="text-white text-2xl font-bold font-display">
-              EASY<span className="text-gold">SCRAPY</span>
+              Easy
               <span className="text-gold">.COM</span>
             </span>
           </Link>
@@ -64,7 +64,7 @@ export default function VerifyEmailSuccess() {
           <div className="relative z-10 text-center">
             <Link to="/" className="inline-block mb-3">
               <span className="text-white text-xl font-bold font-display">
-                EASY<span className="text-gold">SCRAPY</span>
+                Easy
                 <span className="text-gold">.COM</span>
               </span>
             </Link>
@@ -89,7 +89,7 @@ export default function VerifyEmailSuccess() {
               E-mail vérifié avec succès
             </h2>
             <p className="text-steel text-sm leading-relaxed mb-8 max-w-sm mx-auto">
-              Votre adresse e-mail a été confirmée. Vous pouvez maintenant vous connecter et profiter de toutes les fonctionnalités d'EasyScrapy.
+              Votre adresse e-mail a été confirmée. Vous pouvez maintenant vous connecter et profiter de toutes les fonctionnalités d'Easy.
             </p>
 
             {/* CTA buttons */}

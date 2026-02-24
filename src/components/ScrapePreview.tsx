@@ -128,7 +128,7 @@ export default function ScrapePreview({ items }: { items: Item[] }) {
           <ImageOff className="h-16 w-16 text-muted-foreground mb-4 opacity-50" />
           <h3 className="text-xl font-bold mb-2 tracking-tight">Aucun aperçu disponible</h3>
           <p className="text-muted-foreground text-center max-w-md">
-            Le scraping n'a retourné aucune annonce. Veuillez vérifier l'URL ou réessayer.
+            La collecte n'a retourné aucune annonce. Veuillez vérifier l'URL ou réessayer.
           </p>
         </div>
       </div>
