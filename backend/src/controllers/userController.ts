@@ -111,7 +111,14 @@ export const getDashboardData = async (req: AuthenticatedRequest, res: Response)
         'isPaid',
         'is_trial',
         'downloadToken',
-        'url'
+        'url',
+        'scrape_type',
+        'sub_sessions',
+        'data_types',
+        'page_urls',
+        'extraction_config',
+        'ai_analysis_facebook_pages_by_page',
+        'ai_benchmark_facebook_pages_by_page'
       )
       .orderBy('created_at', 'desc');
 
