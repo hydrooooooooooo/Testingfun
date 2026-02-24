@@ -37,6 +37,7 @@ export interface Session {
   extraction_config?: string;
   sub_sessions?: string;
   data_types?: string;
+  items_scraped?: number;
 }
 
 /**
