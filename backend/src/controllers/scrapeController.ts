@@ -8,6 +8,7 @@ import { config } from '../config/config';
 import fs from 'fs';
 import path from 'path';
 import db from '../database';
+import { persistScrapedItems } from '../services/itemPersistenceService';
 
 export class ScrapeController {
   /**
@@ -195,6 +196,13 @@ export class ScrapeController {
           }
           // getDatasetItems() already normalizes via extractItemData()
           const normalizedItems = await apifyService.getDatasetItems(session.datasetId);
+
+          // Persist items to scraped_items table (fire-and-forget)
+          if (session.user_id) {
+            persistScrapedItems(sessionId, session.user_id, normalizedItems, 'marketplace')
+              .catch(err => logger.warn(`[PERSISTENCE] Background persist failed for ${sessionId}:`, err));
+          }
+
           const previewItems = normalizedItems.slice(0, 3);
 
           // Créer le fichier de backup
@@ -320,6 +328,14 @@ export class ScrapeController {
 
         // Single API call - getDatasetItems already normalizes via extractItemData()
         const allItems = await apifyService.getDatasetItems(datasetId);
+
+        // Persist items to scraped_items table (fire-and-forget)
+        const webhookSession = await sessionService.getSession(sessionId);
+        if (webhookSession?.user_id) {
+          persistScrapedItems(sessionId, webhookSession.user_id, allItems, 'marketplace')
+            .catch(err => logger.warn(`[PERSISTENCE] Background persist failed for ${sessionId}:`, err));
+        }
+
         const totalItemsCount = allItems.length;
         const previewItems = allItems.slice(0, 3);
 
