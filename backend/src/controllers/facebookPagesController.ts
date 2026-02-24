@@ -430,7 +430,9 @@ export class FacebookPagesController {
           `Analyse IA: ${pageName} (${postsData.length} posts)`
         );
       } catch (error) {
-        throw new ApiError(402, 'Crédits insuffisants pour cette analyse.');
+        const userBalance = await creditService.getUserCreditBalance(userId);
+        logger.warn(`[AI] Insufficient credits for user ${userId}: required=${cost}, available=${userBalance.total}, model=${modelId}`);
+        throw new ApiError(402, `Crédits insuffisants. Requis: ${cost.toFixed(1)}, disponible: ${userBalance.total.toFixed(1)}`);
       }
 
       try {

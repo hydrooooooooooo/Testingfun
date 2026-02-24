@@ -172,7 +172,7 @@ const ExtractionsPage: React.FC = () => {
 
   // Vue détaillée Facebook Pages - rediriger vers la page dédiée
   if (selectedFacebookSessionId) {
-    navigate(`/dashboard/facebook-pages?session=${selectedFacebookSessionId}`);
+    navigate(`/dashboard/facebook-pages-files?session=${selectedFacebookSessionId}`);
     return null;
   }
 
@@ -268,7 +268,7 @@ const ExtractionsPage: React.FC = () => {
                 <FacebookPagesSessionCard 
                   key={session.id} 
                   session={session} 
-                  onViewItems={(id) => navigate(`/dashboard/facebook-pages?session=${id}`)}
+                  onViewItems={(id) => navigate(`/dashboard/facebook-pages-files?session=${id}`)}
                 />
               ))}
               {filteredFacebook.length > 3 && (
@@ -508,7 +508,7 @@ const ExtractionsPage: React.FC = () => {
                     <FacebookPagesSessionCard 
                       key={session.id} 
                       session={session} 
-                      onViewItems={(id) => navigate(`/dashboard/facebook-pages?session=${id}`)}
+                      onViewItems={(id) => navigate(`/dashboard/facebook-pages-files?session=${id}`)}
                     />
                   ))}
                 </div>
