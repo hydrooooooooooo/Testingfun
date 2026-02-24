@@ -18,7 +18,7 @@ export class ScrapeController {
    */
   async startScrape(req: Request, res: Response, next: NextFunction) {
     const { url, packId } = req.body;
-    let { sessionId, resultsLimit, deepScrape, getProfileUrls } = req.body;
+    let { sessionId, resultsLimit, deepScrape } = req.body;
     let session: Session | null = null;
     let reservationId: number | null = null;
 
@@ -28,8 +28,7 @@ export class ScrapeController {
 
     // Préparer les options de scraping
     const scrapingOptions = {
-      deepScrape: deepScrape !== undefined ? Boolean(deepScrape) : (validLimit > 5),
-      getProfileUrls: getProfileUrls !== undefined ? Boolean(getProfileUrls) : false
+      deepScrape: deepScrape !== undefined ? Boolean(deepScrape) : true,
     };
 
     try {
@@ -174,7 +173,7 @@ export class ScrapeController {
 
       await db('users').where({ id: userId, trial_used: false }).update({ trial_used: true, updated_at: new Date() });
 
-      const scrapingOptions = { deepScrape: false, getProfileUrls: false };
+      const scrapingOptions = { deepScrape: false };
       const { datasetId, actorRunId } = await apifyService.startScraping(url, sessionId, TRIAL_LIMIT, scrapingOptions);
 
       await sessionService.updateSession(sessionId, { datasetId, actorRunId, status: SessionStatus.RUNNING });

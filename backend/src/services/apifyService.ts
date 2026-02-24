@@ -95,27 +95,25 @@ export class ApifyService {
     resultsLimit: number = 3,
     options: {
       deepScrape?: boolean;
-      getProfileUrls?: boolean;
     } = {}
   ): Promise<{ datasetId: string; actorRunId: string }> {
     try {
       this.validateConfig();
-      
+
       const actorId = this.getActorIdFromUrl(url);
-      
-      logger.info(`Starting APIFY scraping job for URL: ${url} with actor: ${actorId}`, { 
-        sessionId, 
-        resultsLimit, 
+
+      logger.info(`Starting APIFY scraping job for URL: ${url} with actor: ${actorId}`, {
+        sessionId,
+        resultsLimit,
         deepScrape: options.deepScrape,
-        getProfileUrls: options.getProfileUrls 
       });
       
       // Configuration selon le format attendu par l'acteur Facebook Marketplace
       const input: any = {
         urls: [url],
         count: resultsLimit,
-        deepScrape: options.deepScrape !== undefined ? options.deepScrape : (resultsLimit > 5),
-        getProfileUrls: options.getProfileUrls !== undefined ? options.getProfileUrls : false,
+        deepScrape: options.deepScrape !== undefined ? options.deepScrape : true,
+        strictFiltering: true,
         proxy: {
           useApifyProxy: true,
           apifyProxyGroups: ["RESIDENTIAL"]
