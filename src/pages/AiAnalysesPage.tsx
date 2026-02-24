@@ -313,7 +313,7 @@ const AiAnalysesPage: React.FC = () => {
       doc.text(dateStr, margin, 38);
       
       // Modele IA utilise
-      const modelInfo = `Modele: ${selectedAnalysis?.data?.model || 'google/gemini-2.0-flash-001'} | Cout: ${selectedAnalysis?.data?.costCredits || 2} credit(s)`;
+      const modelInfo = `Modele: ${selectedAnalysis?.data?.model || 'Modèle par défaut'} | Cout: ${selectedAnalysis?.data?.costCredits || 2} credit(s)`;
       doc.text(cleanText(modelInfo), pageWidth - margin - doc.getTextWidth(modelInfo), 38);
       
       yPos = 55;

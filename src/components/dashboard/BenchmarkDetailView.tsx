@@ -88,7 +88,7 @@ const BenchmarkDetailView: React.FC<BenchmarkDetailViewProps> = ({ pageName, ben
             <div>
               <h1 className="text-2xl font-bold text-navy">Analyse Concurrence : {pageName}</h1>
               <p className="text-sm text-steel-200 mt-1">
-                Modèle : {benchmarkData.model || 'google/gemini-2.0-flash-001'} • Coût : {benchmarkData.costCredits || 2} crédit(s)
+                Modèle : {benchmarkData.model || 'Modèle par défaut'} • Coût : {benchmarkData.costCredits || 2} crédit(s)
               </p>
             </div>
           </div>

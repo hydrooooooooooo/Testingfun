@@ -8,6 +8,7 @@ import { calculateFacebookPagesCost, calculateAiAnalysisCost, calculateBenchmark
 import { ApiError } from '../middlewares/errorHandler';
 import { logger } from '../utils/logger';
 import { config } from '../config/config';
+import { getDefaultAIModel } from '../config/aiModels';
 import db from '../database';
 import { persistScrapedItems } from '../services/itemPersistenceService';
 
@@ -414,8 +415,12 @@ export class FacebookPagesController {
       const postsData = subSession.postsData || [];
       const infoData = subSession.infoData?.[0] || {};
 
-      // Calculate cost & reserve credits
-      const cost = calculateAiAnalysisCost(1, postsData.length);
+      // Fetch user's preferred AI model
+      const userPrefs = await db('users').where({ id: userId }).select('preferred_ai_model').first();
+      const modelId = userPrefs?.preferred_ai_model || getDefaultAIModel().id;
+
+      // Calculate cost & reserve credits (with model multiplier)
+      const cost = calculateAiAnalysisCost(1, postsData.length, modelId);
       let reservation;
       try {
         reservation = await creditService.reserveCredits(
@@ -428,11 +433,11 @@ export class FacebookPagesController {
       }
 
       try {
-        const analysis = await this.callOpenRouterForAudit(pageName, infoData, postsData);
+        const analysis = await this.callOpenRouterForAudit(pageName, infoData, postsData, modelId);
 
         existingAnalyses[pageName] = {
           raw: JSON.stringify(analysis),
-          model: config.ai.defaultModel || 'google/gemini-2.0-flash-001',
+          model: modelId,
           costCredits: cost,
           created_at: new Date().toISOString(),
         };
@@ -488,8 +493,12 @@ export class FacebookPagesController {
       const postsData = subSession.postsData || [];
       const infoData = subSession.infoData?.[0] || {};
 
+      // Fetch user's preferred AI model
+      const userPrefs = await db('users').where({ id: userId }).select('preferred_ai_model').first();
+      const modelId = userPrefs?.preferred_ai_model || getDefaultAIModel().id;
+
       // Calculate cost & reserve credits (benchmark: perPage + perPost*n + aiAnalysis + reportGeneration)
-      const cost = calculateBenchmarkCost(1, postsData.length, true);
+      const cost = calculateBenchmarkCost(1, postsData.length, true, modelId);
       let reservation;
       try {
         reservation = await creditService.reserveCredits(
@@ -502,11 +511,11 @@ export class FacebookPagesController {
       }
 
       try {
-        const benchmark = await this.callOpenRouterForBenchmark(pageName, infoData, postsData);
+        const benchmark = await this.callOpenRouterForBenchmark(pageName, infoData, postsData, modelId);
 
         existingBenchmarks[pageName] = {
           raw: JSON.stringify(benchmark),
-          model: config.ai.defaultModel || 'google/gemini-2.0-flash-001',
+          model: modelId,
           costCredits: cost,
           created_at: new Date().toISOString(),
         };
@@ -531,7 +540,7 @@ export class FacebookPagesController {
   /**
    * Call OpenRouter for page audit analysis
    */
-  private async callOpenRouterForAudit(pageName: string, infoData: any, postsData: any[]): Promise<any> {
+  private async callOpenRouterForAudit(pageName: string, infoData: any, postsData: any[], modelId: string): Promise<any> {
     const openRouterKey = config.ai.openRouterApiKey;
     if (!openRouterKey) {
       return this.generateBasicAudit(pageName, infoData, postsData);
@@ -590,7 +599,7 @@ Génère un JSON avec EXACTEMENT cette structure:
       const response = await axios.post(
         `${config.ai.openRouterBaseUrl}/chat/completions`,
         {
-          model: 'google/gemini-2.0-flash-001',
+          model: modelId,
           messages: [{ role: 'user', content: prompt }],
           temperature: 0.3,
         },
@@ -619,7 +628,7 @@ Génère un JSON avec EXACTEMENT cette structure:
   /**
    * Call OpenRouter for competitive benchmark analysis
    */
-  private async callOpenRouterForBenchmark(pageName: string, infoData: any, postsData: any[]): Promise<any> {
+  private async callOpenRouterForBenchmark(pageName: string, infoData: any, postsData: any[], modelId: string): Promise<any> {
     const openRouterKey = config.ai.openRouterApiKey;
     if (!openRouterKey) {
       return this.generateBasicBenchmark(pageName, infoData, postsData);
@@ -666,7 +675,7 @@ Génère un JSON avec EXACTEMENT cette structure:
       const response = await axios.post(
         `${config.ai.openRouterBaseUrl}/chat/completions`,
         {
-          model: 'google/gemini-2.0-flash-001',
+          model: modelId,
           messages: [{ role: 'user', content: prompt }],
           temperature: 0.3,
         },

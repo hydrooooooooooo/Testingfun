@@ -37,7 +37,7 @@ export const config = {
   ai: {
     openRouterApiKey: process.env.OPENROUTER_API_KEY || '',
     openRouterBaseUrl: process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
-    defaultModel: process.env.AI_DEFAULT_MODEL || 'meta-llama/llama-3-8b-instruct',
+    defaultModel: process.env.AI_DEFAULT_MODEL || 'google/gemini-2.5-flash',
   },
 
   // Mail configuration (SMTP)

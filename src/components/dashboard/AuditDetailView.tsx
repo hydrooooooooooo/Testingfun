@@ -73,7 +73,7 @@ const AuditDetailView: React.FC<AuditDetailViewProps> = ({ pageName, analysisDat
             <div>
               <h1 className="text-2xl font-bold text-navy">Analyse IA : {pageName}</h1>
               <p className="text-sm text-steel-200 mt-1">
-                Modèle : {analysisData.model || 'google/gemini-2.0-flash-001'} • Coût : {analysisData.costCredits || 2} crédit(s)
+                Modèle : {analysisData.model || 'Modèle par défaut'} • Coût : {analysisData.costCredits || 2} crédit(s)
               </p>
             </div>
           </div>
