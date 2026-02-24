@@ -28,7 +28,7 @@ import DownloadPage from "./pages/DownloadPage";
 
 // Pages - Dashboard
 import DashboardPage from './pages/DashboardPage';
-import ProfilePage from './pages/ProfilePage';
+import SettingsTab from './components/dashboard/SettingsTab';
 import CreditsPage from './pages/CreditsPage';
 import ExtractionsPage from './pages/ExtractionsPage';
 import AiAnalysesPage from './pages/AiAnalysesPage';
@@ -107,10 +107,10 @@ function App() {
                     <Route path="marketplace-files" element={<MarketplaceFilesPage />} />
                     <Route path="facebook-pages" element={<FacebookPagesPage />} />
                     <Route path="facebook-pages-files" element={<FacebookPagesFilesPage />} />
-                    <Route path="settings" element={<ProfilePage />} />
+                    <Route path="settings" element={<SettingsTab />} />
                   </Route>
                   <Route path="/profile" element={<DashboardLayout />}>
-                    <Route index element={<ProfilePage />} />
+                    <Route index element={<SettingsTab />} />
                   </Route>
                   <Route element={<AdminRoute />}>
                     <Route path="/admin" element={<AdminLayout />}>
