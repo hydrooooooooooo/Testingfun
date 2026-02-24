@@ -19,7 +19,7 @@ import {
 
 const StatCard: React.FC<{ title: string; value: string | number }> = ({ title, value }) => (
   <div className="rounded-lg border bg-white p-4 shadow-sm">
-    <div className="text-sm text-gray-500">{title}</div>
+    <div className="text-sm text-steel">{title}</div>
     <div className="mt-1 text-2xl font-semibold">{value}</div>
   </div>
 );
@@ -187,14 +187,14 @@ const AdminDashboard: React.FC = () => {
                         {userOptions.map((u) => (
                           <div
                             key={u.id}
-                            className="px-2 py-1 hover:bg-gray-100 cursor-pointer"
+                            className="px-2 py-1 hover:bg-cream-100 cursor-pointer"
                             onClick={() => {
                               setUserId(String(u.id));
                               setUserQuery(u.email);
                               setUserOptions([]);
                             }}
                           >
-                            {u.email} <span className="text-xs text-gray-500">(#{u.id})</span>
+                            {u.email} <span className="text-xs text-steel">(#{u.id})</span>
                           </div>
                         ))}
                       </div>
@@ -205,7 +205,7 @@ const AdminDashboard: React.FC = () => {
                       Effacer utilisateur
                     </button>
                   )}
-                  <label className="text-gray-600">Par page</label>
+                  <label className="text-steel">Par page</label>
                   <select className="border rounded px-2 py-1" value={limit} onChange={(e) => { setPage(1); setLimit(parseInt(e.target.value, 10)); }}>
                     {[25, 50, 100, 150, 200].map((n) => <option key={n} value={n}>{n}</option>)}
                   </select>
@@ -215,7 +215,7 @@ const AdminDashboard: React.FC = () => {
               {adv && (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
                   <div className="h-64 p-2 border rounded">
-                    <div className="text-sm text-gray-600 mb-1">Recherches/jour (MA7)</div>
+                    <div className="text-sm text-steel mb-1">Recherches/jour (MA7)</div>
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={searchesTs} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -229,7 +229,7 @@ const AdminDashboard: React.FC = () => {
                     </ResponsiveContainer>
                   </div>
                   <div className="h-64 p-2 border rounded">
-                    <div className="text-sm text-gray-600 mb-1">Paiements par méthode</div>
+                    <div className="text-sm text-steel mb-1">Paiements par méthode</div>
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Tooltip />
@@ -243,7 +243,7 @@ const AdminDashboard: React.FC = () => {
                     </ResponsiveContainer>
                   </div>
                   <div className="h-64 p-2 border rounded">
-                    <div className="text-sm text-gray-600 mb-1">Latence (ms) p50/p95/p99</div>
+                    <div className="text-sm text-steel mb-1">Latence (ms) p50/p95/p99</div>
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={latencyData}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -259,7 +259,7 @@ const AdminDashboard: React.FC = () => {
               <div className="overflow-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-left text-gray-600 border-b">
+                    <tr className="text-left text-steel border-b">
                       <th className="py-2 pr-2">#</th>
                       <th className="py-2 pr-2">Date</th>
                       <th className="py-2 pr-2">Utilisateur</th>
@@ -272,7 +272,7 @@ const AdminDashboard: React.FC = () => {
                   </thead>
                   <tbody>
                     {(searches?.items || []).map((it) => (
-                      <tr key={it.id} className="border-b hover:bg-gray-50">
+                      <tr key={it.id} className="border-b hover:bg-cream-50">
                         <td className="py-2 pr-2">{it.id}</td>
                         <td className="py-2 pr-2 whitespace-nowrap">{new Date(it.created_at).toLocaleString()}</td>
                         <td className="py-2 pr-2">{it.user_id ?? 'anon'}</td>
@@ -309,14 +309,14 @@ const AdminDashboard: React.FC = () => {
                         {userOptions.map((u) => (
                           <div
                             key={u.id}
-                            className="px-2 py-1 hover:bg-gray-100 cursor-pointer"
+                            className="px-2 py-1 hover:bg-cream-100 cursor-pointer"
                             onClick={() => {
                               setUserId(String(u.id));
                               setUserQuery(u.email);
                               setUserOptions([]);
                             }}
                           >
-                            {u.email} <span className="text-xs text-gray-500">(#{u.id})</span>
+                            {u.email} <span className="text-xs text-steel">(#{u.id})</span>
                           </div>
                         ))}
                       </div>
@@ -327,7 +327,7 @@ const AdminDashboard: React.FC = () => {
                       Effacer utilisateur
                     </button>
                   )}
-                  <label className="text-gray-600">Par page</label>
+                  <label className="text-steel">Par page</label>
                   <select className="border rounded px-2 py-1" value={limit} onChange={(e) => { setPage(1); setLimit(parseInt(e.target.value, 10)); }}>
                     {[25, 50, 100, 150, 200].map((n) => <option key={n} value={n}>{n}</option>)}
                   </select>
@@ -336,7 +336,7 @@ const AdminDashboard: React.FC = () => {
               <div className="overflow-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-left text-gray-600 border-b">
+                    <tr className="text-left text-steel border-b">
                       <th className="py-2 pr-2">Date</th>
                       <th className="py-2 pr-2">Utilisateur</th>
                       <th className="py-2 pr-2">Lien</th>
@@ -346,18 +346,18 @@ const AdminDashboard: React.FC = () => {
                   </thead>
                   <tbody>
                     {(searches?.items || []).map((it: any) => (
-                      <tr key={it.id} className="border-b hover:bg-gray-50">
+                      <tr key={it.id} className="border-b hover:bg-cream-50">
                         <td className="py-2 pr-2 whitespace-nowrap">{new Date(it.created_at).toLocaleString()}</td>
                         <td className="py-2 pr-2">{it.user_email || it.user_id || 'anon'}</td>
                         <td className="py-2 pr-2 max-w-[420px] truncate" title={it.url}>
-                          <a href={it.url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">{it.url}</a>
+                          <a href={it.url} target="_blank" rel="noreferrer" className="text-navy hover:underline">{it.url}</a>
                         </td>
                         <td className="py-2 pr-2">{it.session_name || it.session_id}</td>
                         <td className="py-2 pr-2">
                           {it.download_url ? (
-                            <a href={it.download_url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Télécharger</a>
+                            <a href={it.download_url} target="_blank" rel="noreferrer" className="text-navy hover:underline">Télécharger</a>
                           ) : (
-                            <span className="text-gray-400">—</span>
+                            <span className="text-steel-200">—</span>
                           )}
                         </td>
                       </tr>
@@ -367,7 +367,7 @@ const AdminDashboard: React.FC = () => {
               </div>
               <div className="flex items-center justify-end gap-2 mt-3">
                 <button className="border rounded px-2 py-1" disabled={page <= 1} onClick={() => setPage((p) => Math.max(1, p - 1))}>Préc.</button>
-                <span className="text-sm text-gray-600">Page {page} / {totalPages}</span>
+                <span className="text-sm text-steel">Page {page} / {totalPages}</span>
                 <button className="border rounded px-2 py-1" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>Suiv.</button>
               </div>
             </div>
@@ -376,7 +376,7 @@ const AdminDashboard: React.FC = () => {
           <Tabs.Content value="historique" className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div className="h-64 p-2 border rounded bg-white">
-                <div className="text-sm text-gray-600 mb-1">Inscriptions/jour</div>
+                <div className="text-sm text-steel mb-1">Inscriptions/jour</div>
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={signupsTs}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -388,7 +388,7 @@ const AdminDashboard: React.FC = () => {
                 </ResponsiveContainer>
               </div>
               <div className="h-64 p-2 border rounded bg-white">
-                <div className="text-sm text-gray-600 mb-1">Sessions/jour</div>
+                <div className="text-sm text-steel mb-1">Sessions/jour</div>
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={sessionsTs}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -400,7 +400,7 @@ const AdminDashboard: React.FC = () => {
                 </ResponsiveContainer>
               </div>
               <div className="h-64 p-2 border rounded bg-white">
-                <div className="text-sm text-gray-600 mb-1">Paiements/jour</div>
+                <div className="text-sm text-steel mb-1">Paiements/jour</div>
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={paidSessionsTs}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -412,7 +412,7 @@ const AdminDashboard: React.FC = () => {
                 </ResponsiveContainer>
               </div>
               <div className="h-64 p-2 border rounded bg-white">
-                <div className="text-sm text-gray-600 mb-1">Recherches/jour (MA7)</div>
+                <div className="text-sm text-steel mb-1">Recherches/jour (MA7)</div>
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={searchesTs}>
                     <CartesianGrid strokeDasharray="3 3" />
