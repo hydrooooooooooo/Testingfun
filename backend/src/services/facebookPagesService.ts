@@ -51,9 +51,10 @@ class FacebookPagesService {
     const input: any = {
       startUrls: [{ url: pageUrl }],
       resultsLimit: options.postsLimit,
+      captionText: true,
     };
-    if (options.dateFrom) input.startDate = options.dateFrom;
-    if (options.dateTo) input.endDate = options.dateTo;
+    if (options.dateFrom) input.onlyPostsNewerThan = options.dateFrom;
+    if (options.dateTo) input.onlyPostsOlderThan = options.dateTo;
 
     const run = await Promise.race([
       this.client.actor(actorId).start(input),
