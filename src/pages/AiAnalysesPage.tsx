@@ -22,6 +22,7 @@ import AuditDetailView from '@/components/dashboard/AuditDetailView';
 import BenchmarkDetailView from '@/components/dashboard/BenchmarkDetailView';
 import api from '@/services/api';
 import { useToast } from '@/components/ui/use-toast';
+import type { AIModel } from '@/types';
 
 const AiAnalysesPage: React.FC = () => {
   const { userData, error, isLoading, fetchDashboardData } = useDashboard();
@@ -31,11 +32,35 @@ const AiAnalysesPage: React.FC = () => {
   useEffect(() => {
     fetchDashboardData();
   }, [fetchDashboardData]);
-  
+
   const [loadingAnalyses, setLoadingAnalyses] = useState<Record<string, boolean>>({});
   const [selectedSession, setSelectedSession] = useState<any>(null);
   const [selectedAnalysis, setSelectedAnalysis] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<'to_analyze' | 'analyzed' | 'benchmarks'>('to_analyze');
+
+  // Fetch user's preferred AI model and its cost multiplier
+  const [modelMultiplier, setModelMultiplier] = useState<number>(1.0);
+  const [modelName, setModelName] = useState<string>('');
+  useEffect(() => {
+    const loadModelPreference = async () => {
+      try {
+        const [modelsRes, prefRes] = await Promise.all([
+          api.get('/user/models'),
+          api.get('/user/preferred-model'),
+        ]);
+        const models: AIModel[] = modelsRes.data.models || [];
+        const preferredId = prefRes.data.modelId || '';
+        const preferred = models.find(m => m.id === preferredId);
+        if (preferred) {
+          setModelMultiplier(preferred.costMultiplier);
+          setModelName(preferred.name);
+        }
+      } catch {
+        // Fallback to 1.0 multiplier
+      }
+    };
+    loadModelPreference();
+  }, []);
 
   // Sessions avec analyses complètes
   const analyzedSessions = useMemo(() => {
@@ -118,15 +143,19 @@ const AiAnalysesPage: React.FC = () => {
     };
   }, [userData]);
 
-  // Estimation de coût côté client (basée sur COST_MATRIX backend)
+  // Estimation de coût côté client (basée sur COST_MATRIX backend + multiplicateur modèle IA)
   const estimateAiCost = (postsCount: number) => {
-    // ai_analysis: perPage=2, perPost=0.05
-    return 2 + postsCount * 0.05;
+    // ai_analysis: perPage=2, perPost=0.05, avec multiplicateur du modèle IA choisi
+    const baseCost = 2 + postsCount * 0.05;
+    return Math.ceil(baseCost * modelMultiplier * 100) / 100;
   };
 
   const estimateBenchmarkCostLocal = (postsCount: number) => {
-    // benchmark: perPage=2, perPost=0.1, aiAnalysis=3, reportGeneration=1
-    return 2 + postsCount * 0.1 + 3 + 1;
+    // benchmark: perPage=2, perPost=0.1, reportGeneration=1 (base, pas affecté par modèle)
+    // + aiAnalysis=3 (affecté par multiplicateur modèle)
+    const baseCost = 2 + postsCount * 0.1 + 1;
+    const aiCost = 3 * modelMultiplier;
+    return Math.ceil((baseCost + aiCost) * 10) / 10;
   };
 
   const userBalance = balance?.total ?? 0;
@@ -831,8 +860,11 @@ const AiAnalysesPage: React.FC = () => {
                 </div>
               </div>
               <div className="text-right text-xs text-steel space-y-1">
-                <p>Analyse IA : ~2 cr/page + 0.05 cr/post</p>
-                <p>Benchmark : ~6 cr/page + 0.1 cr/post</p>
+                {modelName && modelMultiplier > 1 && (
+                  <p className="font-medium text-navy">Modèle : {modelName} ({modelMultiplier}x)</p>
+                )}
+                <p>Analyse IA : ~{estimateAiCost(0)} cr/page + {(0.05 * modelMultiplier).toFixed(2)} cr/post</p>
+                <p>Benchmark : ~{estimateBenchmarkCostLocal(0)} cr/page + {(0.1).toFixed(1)} cr/post</p>
               </div>
             </CardContent>
           </Card>
