@@ -35,6 +35,17 @@ export class FacebookPagesController {
       if (urls.length > 20) {
         throw new ApiError(400, 'Maximum 20 pages par extraction.');
       }
+      for (const url of urls) {
+        try {
+          const parsed = new URL(url);
+          if (!['www.facebook.com', 'facebook.com', 'm.facebook.com'].includes(parsed.hostname)) {
+            throw new ApiError(400, `URL invalide: ${url}. Seules les URLs Facebook sont acceptees.`);
+          }
+        } catch (e) {
+          if (e instanceof ApiError) throw e;
+          throw new ApiError(400, `URL invalide: ${url}`);
+        }
+      }
 
       // Check no active extraction for this user
       const activeSession = await db('scraping_sessions')
@@ -84,7 +95,7 @@ export class FacebookPagesController {
         extraction_config: JSON.stringify(extractionConfig),
         sub_sessions: JSON.stringify([]),
         data_types: JSON.stringify({ extractInfo, extractPosts, extractComments }),
-      } as any);
+      });
 
       // Launch pipeline in background
       this.launchPipeline(sessionId, userId, urls, extractionConfig, reservation.id)
@@ -222,8 +233,12 @@ export class FacebookPagesController {
   async getStatus(req: Request, res: Response, next: NextFunction) {
     try {
       const { sessionId } = req.params;
+      const userId = (req as any).user?.id;
+      if (!userId) throw new ApiError(401, 'Authentication required');
+
       const session = await db('scraping_sessions').where({ id: sessionId }).first();
       if (!session) throw new ApiError(404, 'Session not found');
+      if (session.user_id !== userId) throw new ApiError(403, 'Not authorized');
 
       const subSessions = typeof session.sub_sessions === 'string'
         ? JSON.parse(session.sub_sessions || '[]')
@@ -262,8 +277,14 @@ export class FacebookPagesController {
   async getPageInfo(req: Request, res: Response, next: NextFunction) {
     try {
       const { sessionId } = req.params;
-      const { pageName } = req.query;
+      const userId = (req as any).user?.id;
+      if (!userId) throw new ApiError(401, 'Authentication required');
 
+      const session = await db('scraping_sessions').where({ id: sessionId }).first();
+      if (!session) throw new ApiError(404, 'Session not found');
+      if (session.user_id !== userId) throw new ApiError(403, 'Not authorized');
+
+      const { pageName } = req.query;
       const backup = facebookPagesService.readBackup(sessionId);
       if (!backup) throw new ApiError(404, 'Session data not found');
 
@@ -284,8 +305,14 @@ export class FacebookPagesController {
   async getPagePosts(req: Request, res: Response, next: NextFunction) {
     try {
       const { sessionId } = req.params;
-      const { pageName } = req.query;
+      const userId = (req as any).user?.id;
+      if (!userId) throw new ApiError(401, 'Authentication required');
 
+      const session = await db('scraping_sessions').where({ id: sessionId }).first();
+      if (!session) throw new ApiError(404, 'Session not found');
+      if (session.user_id !== userId) throw new ApiError(403, 'Not authorized');
+
+      const { pageName } = req.query;
       const backup = facebookPagesService.readBackup(sessionId);
       if (!backup) throw new ApiError(404, 'Session data not found');
 

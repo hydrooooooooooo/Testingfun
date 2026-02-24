@@ -90,27 +90,31 @@ class FacebookPagesService {
     if (!subSessions || subSessions.length === 0) return { status: 'RUNNING', progress: 0 };
 
     let totalSteps = 0;
-    let completedSteps = 0;
-    let hasFailed = false;
+    let succeededSteps = 0;
+    let failedSteps = 0;
+    const TERMINAL_STATUSES = ['FAILED', 'TIMED-OUT', 'ABORTED', 'ERROR'];
 
     for (const sub of subSessions) {
       if (options.extractInfo) {
         totalSteps++;
-        if (sub.infoStatus === 'SUCCEEDED') completedSteps++;
-        if (['FAILED', 'TIMED-OUT', 'ABORTED', 'ERROR'].includes(sub.infoStatus || '')) hasFailed = true;
+        if (sub.infoStatus === 'SUCCEEDED') succeededSteps++;
+        if (TERMINAL_STATUSES.includes(sub.infoStatus || '')) failedSteps++;
       }
       if (options.extractPosts) {
         totalSteps++;
-        if (sub.postsStatus === 'SUCCEEDED') completedSteps++;
-        if (['FAILED', 'TIMED-OUT', 'ABORTED', 'ERROR'].includes(sub.postsStatus || '')) hasFailed = true;
+        if (sub.postsStatus === 'SUCCEEDED') succeededSteps++;
+        if (TERMINAL_STATUSES.includes(sub.postsStatus || '')) failedSteps++;
       }
     }
 
     if (totalSteps === 0) return { status: 'SUCCEEDED', progress: 100 };
-    const progress = Math.round((completedSteps / totalSteps) * 100);
 
-    if (completedSteps === totalSteps) return { status: 'SUCCEEDED', progress: 100 };
-    if (hasFailed && completedSteps >= totalSteps - 1) return { status: 'FAILED', progress };
+    const finishedSteps = succeededSteps + failedSteps;
+    const progress = Math.round((finishedSteps / totalSteps) * 100);
+
+    if (finishedSteps === totalSteps) {
+      return { status: failedSteps > 0 ? 'FAILED' : 'SUCCEEDED', progress: 100 };
+    }
     return { status: 'RUNNING', progress };
   }
 
@@ -135,6 +139,7 @@ class FacebookPagesService {
 
   readBackup(sessionId: string): any | null {
     try {
+      if (!/^sess_[A-Za-z0-9_-]+$/.test(sessionId)) return null;
       const filePath = path.join(__dirname, '../../data/backups', `fbpages_${sessionId}.json`);
       if (!fs.existsSync(filePath)) return null;
       return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
