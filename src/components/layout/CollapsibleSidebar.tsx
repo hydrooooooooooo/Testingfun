@@ -19,6 +19,7 @@ import {
   Shield
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { useUnreadAlerts } from '@/hooks/useUnreadAlerts';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { CreditBadge } from '@/components/CreditBadge';
@@ -35,6 +36,7 @@ const CollapsibleSidebar: React.FC<CollapsibleSidebarProps> = ({ isCollapsed, se
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { unreadCount } = useUnreadAlerts();
 
   const menuItems = [
     {
@@ -74,6 +76,7 @@ const CollapsibleSidebar: React.FC<CollapsibleSidebarProps> = ({ isCollapsed, se
       title: 'Surveillance',
       icon: Bell,
       href: '/dashboard/mentions',
+      ...(unreadCount > 0 ? { badge: String(unreadCount), badgeColor: 'bg-red-500 text-white' } : {}),
     },
     {
       title: 'Paiements',

@@ -36,6 +36,7 @@ import {
   Filter,
 } from 'lucide-react';
 import api from '@/services/api';
+import { useUnreadAlerts } from '@/hooks/useUnreadAlerts';
 import { formatDistanceToNow, format, subDays, subWeeks, subMonths, isAfter } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { toast } from '@/hooks/use-toast';
@@ -101,6 +102,7 @@ const MentionsPage: React.FC = () => {
   const [mentions, setMentions] = useState<Mention[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const navigate = useNavigate();
+  const { markAllAsRead } = useUnreadAlerts();
   const [keywords, setKeywords] = useState<KeywordDetailed[]>([]);
   const [sessions, setSessions] = useState<FacebookSession[]>([]);
   const [loading, setLoading] = useState(true);
@@ -120,6 +122,7 @@ const MentionsPage: React.FC = () => {
     fetchStats();
     fetchKeywords();
     fetchSessions();
+    markAllAsRead();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
