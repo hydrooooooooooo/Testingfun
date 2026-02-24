@@ -187,8 +187,11 @@ export class FacebookPagesController {
             url: sub.url || '',
             postedAt: '',
           }));
-          persistScrapedItems(sessionId, userId, infoItems, 'facebook_page_info')
-            .catch(err => logger.warn(`[PERSISTENCE] FB info persist failed for ${sessionId}:`, err));
+          try {
+            await persistScrapedItems(sessionId, userId, infoItems, 'facebook_page_info');
+          } catch (err) {
+            logger.warn(`[PERSISTENCE] FB info persist failed for ${sessionId}:`, err);
+          }
         }
         if (sub.postsData?.length) {
           const postItems = sub.postsData.map((post: any) => ({
@@ -201,8 +204,11 @@ export class FacebookPagesController {
             url: post.url || post.postUrl || '',
             postedAt: post.time || post.date || post.createdTime || '',
           }));
-          persistScrapedItems(sessionId, userId, postItems, 'facebook_page_post')
-            .catch(err => logger.warn(`[PERSISTENCE] FB posts persist failed for ${sessionId}:`, err));
+          try {
+            await persistScrapedItems(sessionId, userId, postItems, 'facebook_page_post');
+          } catch (err) {
+            logger.warn(`[PERSISTENCE] FB posts persist failed for ${sessionId}:`, err);
+          }
         }
       }
 
