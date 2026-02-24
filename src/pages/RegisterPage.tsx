@@ -15,8 +15,8 @@ import {
 } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
 import {
-  Eye, EyeOff, ShoppingBag, TrendingUp, Sparkles,
-  Shield, ArrowRight, Check, User, Mail, Phone, Lock
+  Eye, EyeOff, Globe, Database, FileJson,
+  Cpu, ArrowRight, Check, User, Mail, Phone, Lock
 } from 'lucide-react';
 import api from '@/services/api';
 
@@ -126,73 +126,21 @@ export default function RegisterPage() {
     }
   }
 
-  const benefits = [
-    { icon: ShoppingBag, text: 'Extraction Marketplace en 3 min' },
-    { icon: TrendingUp, text: 'Benchmark concurrentiel automatisé' },
-    { icon: Sparkles, text: 'Analyses IA de vos données' },
-    { icon: Shield, text: 'Données sécurisées, jamais stockées' },
+  const endpoints = [
+    { icon: Globe, label: 'API Base URL', value: 'https://easyscrapy.com/api' },
+    { icon: Database, label: 'Facebook Scraping', value: 'Apify Actor — Pages & Posts' },
+    { icon: FileJson, label: 'Formats d\'export', value: 'CSV, Excel, JSON, PDF' },
+    { icon: Cpu, label: 'Analyses IA', value: 'OpenRouter — Multi-modèles' },
   ];
 
   return (
     <div className="flex min-h-[calc(100vh-80px)] w-full">
-      {/* ─── LEFT BRANDING PANEL (desktop only) ─── */}
-      <div className="hidden lg:flex lg:w-[45%] xl:w-[42%] relative bg-navy overflow-hidden flex-col justify-between p-10 xl:p-14">
-        {/* Decorative circles */}
-        <div className="absolute top-16 -left-20 w-72 h-72 bg-gold/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/3 w-48 h-48 bg-gold/8 rounded-full blur-2xl" />
-
-        {/* Top content */}
-        <div className="relative z-10">
-          <Link to="/" className="inline-block mb-14">
-            <span className="text-white text-2xl font-bold font-display">
-              EASY<span className="text-gold">SCRAPY</span>
-              <span className="text-gold">.COM</span>
-            </span>
-          </Link>
-
-          <h1 className="font-display text-white text-3xl xl:text-4xl font-bold leading-tight mb-4">
-            Rejoignez la plateforme
-            <span className="block text-gold mt-1">d'intelligence sociale</span>
-          </h1>
-          <p className="text-steel-200 text-base leading-relaxed max-w-md">
-            Créez votre compte en quelques secondes et commencez à transformer les données Facebook en avantage concurrentiel.
-          </p>
-        </div>
-
-        {/* Benefits list */}
-        <div className="relative z-10 space-y-4">
-          {benefits.map((b, i) => (
-            <div
-              key={i}
-              className="flex items-center gap-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-5 py-3.5"
-            >
-              <div className="w-9 h-9 bg-gold/15 rounded-lg flex items-center justify-center flex-shrink-0">
-                <b.icon className="w-[18px] h-[18px] text-gold" />
-              </div>
-              <span className="text-cream-200 text-sm font-medium">{b.text}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Bottom text */}
-        <p className="relative z-10 text-steel-200 text-xs">
-          Inscription gratuite &middot; Crédits d'essai inclus &middot; Sans engagement
-        </p>
-      </div>
-
-      {/* ─── RIGHT FORM PANEL ─── */}
+      {/* ─── LEFT FORM PANEL ─── */}
       <div className="flex-1 flex flex-col bg-cream-50">
         {/* Mobile branding header */}
         <div className="lg:hidden bg-navy px-6 py-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-48 h-48 bg-gold/10 rounded-full blur-3xl" />
           <div className="relative z-10 text-center">
-            <Link to="/" className="inline-block mb-3">
-              <span className="text-white text-xl font-bold font-display">
-                EASY<span className="text-gold">SCRAPY</span>
-                <span className="text-gold">.COM</span>
-              </span>
-            </Link>
             <h1 className="font-display text-white text-xl font-bold">
               Créez votre compte
             </h1>
@@ -205,7 +153,7 @@ export default function RegisterPage() {
         {/* Form container */}
         <div className="flex-1 flex items-center justify-center px-5 sm:px-8 py-8 sm:py-12">
           <div className="w-full max-w-md">
-            {/* Desktop heading (hidden on mobile since branding header shows) */}
+            {/* Desktop heading */}
             <div className="hidden lg:block mb-8">
               <h2 className="font-display text-navy text-2xl font-bold">
                 Créer un compte
@@ -394,6 +342,48 @@ export default function RegisterPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* ─── RIGHT BRANDING PANEL (desktop only) ─── */}
+      <div className="hidden lg:flex lg:w-[45%] xl:w-[42%] relative bg-navy overflow-hidden flex-col justify-between p-10 xl:p-14">
+        {/* Decorative circles */}
+        <div className="absolute top-16 -right-20 w-72 h-72 bg-gold/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 right-1/3 w-48 h-48 bg-gold/8 rounded-full blur-2xl" />
+
+        {/* Top content */}
+        <div className="relative z-10">
+          <h1 className="font-display text-white text-3xl xl:text-4xl font-bold leading-tight mb-4">
+            Rejoignez la plateforme
+            <span className="block text-gold mt-1">d'intelligence sociale</span>
+          </h1>
+          <p className="text-steel-200 text-base leading-relaxed max-w-md">
+            Créez votre compte en quelques secondes et commencez à transformer les données Facebook en avantage concurrentiel.
+          </p>
+        </div>
+
+        {/* Technical endpoints */}
+        <div className="relative z-10 space-y-3">
+          {endpoints.map((ep, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-5 py-3.5"
+            >
+              <div className="w-9 h-9 bg-gold/15 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                <ep.icon className="w-[18px] h-[18px] text-gold" />
+              </div>
+              <div>
+                <span className="text-steel-200 text-[11px] font-medium uppercase tracking-wider">{ep.label}</span>
+                <p className="text-cream-200 text-sm font-mono mt-0.5">{ep.value}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom text */}
+        <p className="relative z-10 text-steel-200 text-xs">
+          Inscription gratuite &middot; Crédits d'essai inclus &middot; Sans engagement
+        </p>
       </div>
     </div>
   );
