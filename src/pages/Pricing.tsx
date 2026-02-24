@@ -90,22 +90,23 @@ export default function PricingPage() {
             </div>
           </div>
 
-          <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 justify-items-center items-stretch">
-            {loading ? (
-              <div className="col-span-full flex justify-center items-center py-12">
-                <Loader2 className="h-12 w-12 animate-spin text-navy" />
-              </div>
-            ) : (
-              pricingPlans.map((plan) => (
-                <PricingPlan 
-                  key={plan.packId} 
-                  plan={plan} 
-                  onClickPay={() => handleSelectPack(plan)} 
-                  isLoading={false} 
-                />
-              ))
-            )}
-          </div>
+          {loading ? (
+            <div className="flex justify-center items-center py-12">
+              <Loader2 className="h-12 w-12 animate-spin text-navy" />
+            </div>
+          ) : (
+            <div className="flex flex-wrap justify-center gap-6">
+              {pricingPlans.map((plan) => (
+                <div key={plan.packId} className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] xl:w-[260px]">
+                  <PricingPlan
+                    plan={plan}
+                    onClickPay={() => handleSelectPack(plan)}
+                    isLoading={false}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </main>

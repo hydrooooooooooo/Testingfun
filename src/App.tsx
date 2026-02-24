@@ -11,7 +11,7 @@ import { DashboardProvider } from "./context/DashboardContext";
 import Index from "./pages/Index";
 import Pricing from "./pages/Pricing";
 import Support from "./pages/Support";
-import Models from "./pages/Models";
+// Models page removed
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import RegisterSuccessPage from "./pages/RegisterSuccessPage";
@@ -72,7 +72,7 @@ function App() {
                   <Route path="/" element={<Index />} />
                   <Route path="/pricing" element={<Pricing />} />
                   <Route path="/support" element={<Support />} />
-                  <Route path="/models" element={<Models />} />
+                  {/* /models route removed */}
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/register" element={<RegisterPage />} />
                   <Route path="/register/success" element={<RegisterSuccessPage />} />

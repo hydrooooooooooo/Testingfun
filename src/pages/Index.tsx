@@ -256,19 +256,19 @@ export default function Index() {
           3. HOW IT WORKS
       ================================================================= */}
       <section className="w-full bg-white py-20 lg:py-28">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-display text-navy text-3xl lg:text-4xl font-bold mb-4">
               Comment ça marche ?
             </h2>
-            <p className="text-steel text-lg">
-              Trois étapes simples pour accéder à vos données.
+            <p className="text-steel text-lg max-w-2xl mx-auto">
+              De la collecte brute à l'insight stratégique en 4 étapes.
             </p>
           </div>
 
-          <div className="relative grid md:grid-cols-3 gap-12">
+          <div className="relative grid md:grid-cols-4 gap-8 lg:gap-10">
             {/* Connecting line (desktop) */}
-            <div className="hidden md:block absolute top-16 left-[16.5%] right-[16.5%] h-0.5 bg-cream-300" />
+            <div className="hidden md:block absolute top-16 left-[12.5%] right-[12.5%] h-0.5 bg-cream-300" />
 
             {/* Step 1 */}
             <div className="text-center relative">
@@ -278,11 +278,11 @@ export default function Index() {
               <div className="w-14 h-14 bg-navy rounded-full flex items-center justify-center mx-auto mb-5 relative z-10">
                 <UserPlus className="w-6 h-6 text-white" />
               </div>
-              <h3 className="font-display text-navy text-xl font-bold mb-2">
-                Inscrivez-vous
+              <h3 className="font-display text-navy text-lg font-bold mb-2">
+                Créez votre compte
               </h3>
-              <p className="text-steel">
-                Créez votre compte gratuitement en 30 secondes
+              <p className="text-steel text-sm leading-relaxed">
+                Inscription gratuite en 30 secondes. Recevez des crédits d'essai pour tester immédiatement.
               </p>
             </div>
 
@@ -294,11 +294,11 @@ export default function Index() {
               <div className="w-14 h-14 bg-navy rounded-full flex items-center justify-center mx-auto mb-5 relative z-10">
                 <Settings className="w-6 h-6 text-white" />
               </div>
-              <h3 className="font-display text-navy text-xl font-bold mb-2">
-                Configurez
+              <h3 className="font-display text-navy text-lg font-bold mb-2">
+                Lancez vos extractions
               </h3>
-              <p className="text-steel">
-                Choisissez votre type d'extraction et vos paramètres
+              <p className="text-steel text-sm leading-relaxed">
+                Marketplace, Pages Facebook, publications, commentaires — collez vos URLs et laissez notre moteur travailler.
               </p>
             </div>
 
@@ -307,16 +307,52 @@ export default function Index() {
               <p className="text-gold font-display text-4xl font-bold mb-4">
                 03
               </p>
+              <div className="w-14 h-14 bg-gold rounded-full flex items-center justify-center mx-auto mb-5 relative z-10">
+                <Sparkles className="w-6 h-6 text-navy" />
+              </div>
+              <h3 className="font-display text-navy text-lg font-bold mb-2">
+                Analysez avec l'IA
+              </h3>
+              <p className="text-steel text-sm leading-relaxed">
+                Notre IA décrypte vos données : tendances, benchmark concurrentiel, recommandations stratégiques personnalisées.
+              </p>
+            </div>
+
+            {/* Step 4 */}
+            <div className="text-center relative">
+              <p className="text-gold font-display text-4xl font-bold mb-4">
+                04
+              </p>
               <div className="w-14 h-14 bg-navy rounded-full flex items-center justify-center mx-auto mb-5 relative z-10">
                 <Download className="w-6 h-6 text-white" />
               </div>
-              <h3 className="font-display text-navy text-xl font-bold mb-2">
-                Récupérez
+              <h3 className="font-display text-navy text-lg font-bold mb-2">
+                Exploitez vos résultats
               </h3>
-              <p className="text-steel">
-                Téléchargez vos données en Excel, prêtes à l'emploi
+              <p className="text-steel text-sm leading-relaxed">
+                Exportez en Excel, programmez des extractions récurrentes et recevez des alertes de mentions automatiques.
               </p>
             </div>
+          </div>
+
+          {/* Feature highlights strip */}
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { icon: ShoppingBag, label: "Marketplace", desc: "Annonces, prix, vendeurs" },
+              { icon: FileText, label: "Facebook Pages", desc: "Posts, engagement, stats" },
+              { icon: TrendingUp, label: "Benchmark", desc: "Comparez vos concurrents" },
+              { icon: Sparkles, label: "Analyse IA", desc: "Insights automatiques" },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center gap-3 bg-cream-50 border border-cream-300 rounded-xl p-4">
+                <div className="w-10 h-10 bg-navy/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <item.icon className="w-5 h-5 text-navy" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-navy">{item.label}</p>
+                  <p className="text-xs text-steel">{item.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

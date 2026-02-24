@@ -33,7 +33,7 @@ const DashboardLayout: React.FC = () => {
 
         {/* Sidebar - hidden on mobile unless toggled */}
         <div className={`
-          fixed md:relative z-40 md:z-auto h-[calc(100vh-64px)] md:h-auto
+          fixed md:relative z-40 md:z-auto h-[calc(100vh-80px)] md:h-auto
           transition-transform duration-300 ease-in-out
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
         `}>

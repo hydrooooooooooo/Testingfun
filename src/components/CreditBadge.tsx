@@ -25,8 +25,8 @@ export const CreditBadge = () => {
     return null;
   }
 
-  const isLowBalance = balance.balance < 5;
-  const isTrialExpiringSoon = balance.trial_expires_at && 
+  const isLowBalance = balance.total < 5;
+  const isTrialExpiringSoon = balance.trial_expires_at &&
     new Date(balance.trial_expires_at).getTime() - Date.now() < 24 * 60 * 60 * 1000; // 24h
 
   return (
@@ -42,7 +42,7 @@ export const CreditBadge = () => {
             >
               <Coins className={`h-4 w-4 ${isLowBalance ? 'text-gold-600' : 'text-primary'}`} />
               <span className={`font-semibold ${isLowBalance ? 'text-gold-700' : ''}`}>
-                {Number(balance.balance).toFixed(1)}
+                {Number(balance.total).toFixed(1)}
               </span>
               <span className="text-xs text-muted-foreground hidden sm:inline">crédits</span>
             </Button>
@@ -54,7 +54,7 @@ export const CreditBadge = () => {
             <div className="text-sm space-y-1">
               <div className="flex justify-between gap-4">
                 <span className="text-muted-foreground">Total:</span>
-                <span className="font-medium">{Number(balance.balance).toFixed(1)} crédits</span>
+                <span className="font-medium">{Number(balance.total).toFixed(1)} crédits</span>
               </div>
               {balance.trial > 0 && (
                 <div className="flex justify-between gap-4">

@@ -10,7 +10,6 @@ const navItems = [
   { path: '/#features', label: 'Fonctionnalités' },
   { path: '/pricing', label: 'Tarifs' },
   { path: '/support', label: 'Support' },
-  { path: '/models', label: 'Modèles' },
 ];
 
 const Header = () => {
