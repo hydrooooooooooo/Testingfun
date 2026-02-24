@@ -322,11 +322,14 @@ const FacebookPagesFilesPage: React.FC = () => {
       )
     );
     
-    // Filter by data type
-    const matchesDataType = dataTypeFilter === 'all' || 
-      (dataTypeFilter === 'page_info' && session.data_types?.includes('page_info')) ||
-      (dataTypeFilter === 'posts' && session.data_types?.includes('posts')) ||
-      (dataTypeFilter === 'both' && session.data_types?.includes('page_info') && session.data_types?.includes('posts'));
+    // Filter by data type — data_types is a JSONB object { extractInfo, extractPosts }
+    const dt = session.data_types;
+    const dtHasInfo = dt && (typeof dt === 'object' ? dt.extractInfo : String(dt).includes('page_info'));
+    const dtHasPosts = dt && (typeof dt === 'object' ? dt.extractPosts : String(dt).includes('posts'));
+    const matchesDataType = dataTypeFilter === 'all' ||
+      (dataTypeFilter === 'page_info' && dtHasInfo) ||
+      (dataTypeFilter === 'posts' && dtHasPosts) ||
+      (dataTypeFilter === 'both' && dtHasInfo && dtHasPosts);
     
     return matchesSearch && matchesDataType;
   });
@@ -422,8 +425,9 @@ const FacebookPagesFilesPage: React.FC = () => {
 
   if (selectedSessionId) {
     const selectedSession = facebookPagesSessions.find(s => s.id === selectedSessionId);
-    const hasPageInfo = selectedSession?.data_types?.includes('page_info');
-    const hasPosts = selectedSession?.data_types?.includes('posts');
+    const sdt = selectedSession?.data_types;
+    const hasPageInfo = sdt && (typeof sdt === 'object' ? sdt.extractInfo : String(sdt).includes('page_info'));
+    const hasPosts = sdt && (typeof sdt === 'object' ? sdt.extractPosts : String(sdt).includes('posts'));
     const requestedInfo = selectedSession?.extraction_config?.extractInfo;
     const requestedPosts = selectedSession?.extraction_config?.extractPosts;
 
@@ -1635,7 +1639,7 @@ const FacebookPagesFilesPage: React.FC = () => {
                           <span className="h-3 w-px bg-slate-300" />
                           <span>
                             Infos&nbsp;:
-                            {session.data_types?.includes('page_info') ? (
+                            {(session.data_types && (typeof session.data_types === 'object' ? session.data_types.extractInfo : String(session.data_types).includes('page_info'))) ? (
                               <span className="text-emerald-600 font-semibold"> ✓ disponibles</span>
                             ) : (
                               <span className="text-slate-400"> —</span>
@@ -1644,7 +1648,7 @@ const FacebookPagesFilesPage: React.FC = () => {
                           <span className="h-3 w-px bg-slate-300" />
                           <span>
                             Posts&nbsp;:
-                            {session.data_types?.includes('posts') ? (
+                            {(session.data_types && (typeof session.data_types === 'object' ? session.data_types.extractPosts : String(session.data_types).includes('posts'))) ? (
                               <span className="text-emerald-600 font-semibold"> ✓ disponibles</span>
                             ) : (
                               <span className="text-slate-400"> —</span>
