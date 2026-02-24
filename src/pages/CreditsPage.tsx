@@ -130,7 +130,7 @@ const CreditsPage = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl sm:text-4xl font-bold text-gold-500">
-              {balance ? Number(balance.balance).toFixed(1) : '0.0'}
+              {balance ? Number(balance.total).toFixed(1) : '0.0'}
             </div>
             <p className="text-xs text-steel mt-2">crédits disponibles</p>
           </CardContent>
@@ -263,11 +263,11 @@ const CreditsPage = () => {
               </div>
 
               {/* Pagination */}
-              {history.pagination.totalPages > 1 && (
+              {history.total > 20 && (
                 <div className="flex items-center justify-between mt-6 pt-6 border-t border-cream-300">
                   <p className="text-sm text-steel">
-                    Page {history.pagination.page} sur {history.pagination.totalPages}
-                    {' '}({history.pagination.total} transactions)
+                    Page {currentPage} sur {Math.ceil(history.total / 20)}
+                    {' '}({history.total} transactions)
                   </p>
                   <div className="flex gap-2">
                     <Button
@@ -283,7 +283,7 @@ const CreditsPage = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => loadHistory(currentPage + 1)}
-                      disabled={currentPage >= history.pagination.totalPages || historyLoading}
+                      disabled={currentPage >= Math.ceil(history.total / 20) || historyLoading}
                       className="border-cream-300 text-navy-700 hover:bg-cream-100"
                     >
                       Suivant
