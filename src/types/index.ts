@@ -30,6 +30,7 @@ export interface Session {
   id: string;
   user_id: number;
   status: 'pending' | 'running' | 'completed' | 'failed';
+  scrape_type?: 'marketplace' | 'facebook_pages';
   actorRunId?: string;
   datasetId?: string;
   isPaid: boolean;
@@ -39,8 +40,17 @@ export interface Session {
   downloadToken?: string;
   payment_intent_id?: string | null;
   url?: string;
-  // Trial flag for free trial sessions
   is_trial?: boolean;
+  sub_sessions?: Array<{
+    pageName: string;
+    postsData?: any[];
+    postsCount?: number;
+    infoData?: any[];
+    infoStatus?: string;
+  }>;
+  ai_analysis_facebook_pages_by_page?: any;
+  ai_benchmark_facebook_pages_by_page?: any;
+  ai_analysis_created_at?: string;
   created_at: string;
   updated_at: string;
 }
