@@ -55,7 +55,7 @@ import {
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import api from '@/services/api';
-import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
+import { format, subMonths } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { BenchmarkRadarChart, BenchmarkBarChart } from '@/components/benchmark';
 import { FavoriteButton, FavoriteSelector, FavoritesManager } from '@/components/favorites';
@@ -147,7 +147,7 @@ interface BenchmarkConfig {
   scrapeComments: boolean;
   scrapePageInfo: boolean;
   postsLimit: number;
-  dateRange: 'last_month' | 'last_3_months' | 'last_6_months' | 'last_year';
+  dateRange: 'last_30_days' | 'last_90_days' | 'last_6_months' | 'last_year';
 }
 
 // Messages de progression pour le spinner
@@ -168,6 +168,9 @@ interface BenchmarkHistoryItem {
   created_at: string;
   competitors: string[];
   creditsCost: number;
+  myPageUrl?: string | null;
+  myPageName?: string | null;
+  competitorNames?: string[];
 }
 
 const BenchmarkPage: React.FC = () => {
@@ -191,7 +194,7 @@ const BenchmarkPage: React.FC = () => {
       scrapeComments: true,
       scrapePageInfo: true,
       postsLimit: 20,
-      dateRange: 'last_month',
+      dateRange: 'last_30_days',
     };
   });
   const [showFavoritesManager, setShowFavoritesManager] = useState(false);
@@ -236,36 +239,25 @@ const BenchmarkPage: React.FC = () => {
   const getDateRange = () => {
     const now = new Date();
     switch (config.dateRange) {
-      case 'last_month':
-        return {
-          start: startOfMonth(subMonths(now, 1)),
-          end: endOfMonth(subMonths(now, 1)),
-          label: format(subMonths(now, 1), 'MMMM yyyy', { locale: fr })
-        };
-      case 'last_3_months':
-        return {
-          start: startOfMonth(subMonths(now, 3)),
-          end: endOfMonth(subMonths(now, 1)),
-          label: `${format(subMonths(now, 3), 'MMM', { locale: fr })} - ${format(subMonths(now, 1), 'MMM yyyy', { locale: fr })}`
-        };
+      case 'last_30_days': {
+        const start = new Date(now);
+        start.setDate(start.getDate() - 30);
+        return { start, end: now, label: '30 derniers jours' };
+      }
+      case 'last_90_days': {
+        const start = new Date(now);
+        start.setDate(start.getDate() - 90);
+        return { start, end: now, label: '90 derniers jours' };
+      }
       case 'last_6_months':
-        return {
-          start: startOfMonth(subMonths(now, 6)),
-          end: endOfMonth(subMonths(now, 1)),
-          label: `${format(subMonths(now, 6), 'MMM', { locale: fr })} - ${format(subMonths(now, 1), 'MMM yyyy', { locale: fr })}`
-        };
+        return { start: subMonths(now, 6), end: now, label: '6 derniers mois' };
       case 'last_year':
-        return {
-          start: startOfMonth(subMonths(now, 12)),
-          end: endOfMonth(subMonths(now, 1)),
-          label: `${format(subMonths(now, 12), 'MMM yyyy', { locale: fr })} - ${format(subMonths(now, 1), 'MMM yyyy', { locale: fr })}`
-        };
-      default:
-        return {
-          start: startOfMonth(subMonths(now, 1)),
-          end: endOfMonth(subMonths(now, 1)),
-          label: format(subMonths(now, 1), 'MMMM yyyy', { locale: fr })
-        };
+        return { start: subMonths(now, 12), end: now, label: '12 derniers mois' };
+      default: {
+        const start = new Date(now);
+        start.setDate(start.getDate() - 30);
+        return { start, end: now, label: '30 derniers jours' };
+      }
     }
   };
 
@@ -719,10 +711,12 @@ const BenchmarkPage: React.FC = () => {
               <div class="ai-item">
                 <div class="title">🎨 Style visuel</div>
                 <div class="content">${page.qualitativeAnalysis.visualStyle.description}</div>
+                ${page.qualitativeAnalysis.visualStyle.characteristics?.length ? `<ul style="margin-top:4px;padding-left:14px;font-size:9px;color:#6b7280">${page.qualitativeAnalysis.visualStyle.characteristics.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
               </div>
               <div class="ai-item">
                 <div class="title">🎤 Tonalité</div>
                 <div class="content">${page.qualitativeAnalysis.tonality.description}</div>
+                ${page.qualitativeAnalysis.tonality.characteristics?.length ? `<ul style="margin-top:4px;padding-left:14px;font-size:9px;color:#6b7280">${page.qualitativeAnalysis.tonality.characteristics.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
               </div>
               <div class="ai-item">
                 <div class="title">🎯 Thématiques principales</div>
@@ -772,6 +766,45 @@ const BenchmarkPage: React.FC = () => {
           `).join('')}
         </div>
       `).join('')}
+    </div>
+
+    <!-- Comparatif Détaillé -->
+    <div class="section" style="page-break-before: always;">
+      <div class="section-title">Comparatif Détaillé</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Page</th>
+            <th style="text-align:right">Followers</th>
+            <th style="text-align:right">Likes/post</th>
+            <th style="text-align:right">Comments/post</th>
+            <th style="text-align:right">Partages/post</th>
+            <th style="text-align:right">Engagement %</th>
+            <th style="text-align:right">Posts/mois</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${[...allPages].sort((a, b) => b.quantitativeMetrics.engagementRate - a.quantitativeMetrics.engagementRate).map((page, idx) => {
+            const isRef = report.myPage && page.pageData.pageUrl === report.myPage.pageData.pageUrl;
+            return `
+            <tr style="${isRef ? 'background:#ecfdf5;font-weight:600;' : ''}">
+              <td>${page.pageData.pageName}${isRef ? ' <span class="page-badge">Réf.</span>' : ''}</td>
+              <td style="text-align:right">${page.pageData.followers.toLocaleString()}</td>
+              <td style="text-align:right">${page.quantitativeMetrics.avgLikesPerPost}</td>
+              <td style="text-align:right">${page.quantitativeMetrics.avgCommentsPerPost}</td>
+              <td style="text-align:right">${page.quantitativeMetrics.avgSharesPerPost}</td>
+              <td style="text-align:right;color:#f97316;font-weight:700">${page.quantitativeMetrics.engagementRate}%</td>
+              <td style="text-align:right">${page.quantitativeMetrics.postFrequencyPerMonth}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+      ${(() => {
+        const avgFollowers = allPages.length ? Math.round(allPages.reduce((s, p) => s + p.pageData.followers, 0) / allPages.length) : 0;
+        const avgEngRate = allPages.length ? (allPages.reduce((s, p) => s + p.quantitativeMetrics.engagementRate, 0) / allPages.length).toFixed(2) : '0';
+        const avgLikes = allPages.length ? Math.round(allPages.reduce((s, p) => s + p.quantitativeMetrics.avgLikesPerPost, 0) / allPages.length) : 0;
+        return `<p style="font-size:10px;color:#6b7280;margin-top:8px;">Moyennes du panel : ${avgFollowers.toLocaleString()} followers, ${avgEngRate}% engagement, ${avgLikes} likes/post</p>`;
+      })()}
     </div>
 
     <!-- Recommendations -->
@@ -999,13 +1032,15 @@ const BenchmarkPage: React.FC = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-white border-cream-300">
-                    <SelectItem value="last_month" className="text-navy">Mois précédent</SelectItem>
-                    <SelectItem value="last_3_months" className="text-navy">3 derniers mois</SelectItem>
+                    <SelectItem value="last_30_days" className="text-navy">30 derniers jours</SelectItem>
+                    <SelectItem value="last_90_days" className="text-navy">90 derniers jours</SelectItem>
                     <SelectItem value="last_6_months" className="text-navy">6 derniers mois</SelectItem>
                     <SelectItem value="last_year" className="text-navy">12 derniers mois</SelectItem>
                   </SelectContent>
                 </Select>
-                <span className="text-gold-600 font-medium">{getDateRange().label}</span>
+                <span className="text-steel text-sm">
+                  Du {format(getDateRange().start, 'd MMM yyyy', { locale: fr })} au {format(getDateRange().end, 'd MMM yyyy', { locale: fr })}
+                </span>
               </div>
             </CardContent>
           </Card>
@@ -1375,9 +1410,25 @@ const BenchmarkPage: React.FC = () => {
                           <p className="text-navy font-medium">
                             Analyse du {format(new Date(item.created_at), 'dd MMMM yyyy à HH:mm', { locale: fr })}
                           </p>
-                          <p className="text-steel text-sm">
-                            {item.competitors?.length || 0} page(s) analysée(s) • {item.creditsCost || 0} crédits
-                          </p>
+                          {item.myPageName || (item.competitorNames && item.competitorNames.length > 0) ? (
+                            <div className="flex flex-wrap gap-1.5 mt-1">
+                              {item.myPageName && (
+                                <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-medium">
+                                  {item.myPageName} (Réf.)
+                                </span>
+                              )}
+                              {item.competitorNames?.map((name, idx) => (
+                                <span key={idx} className="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-cream-200 text-steel">
+                                  {name}
+                                </span>
+                              ))}
+                              <span className="text-xs text-steel ml-1">• {item.creditsCost || 0} crédits</span>
+                            </div>
+                          ) : (
+                            <p className="text-steel text-sm">
+                              {item.competitors?.length || 0} page(s) analysée(s) • {item.creditsCost || 0} crédits
+                            </p>
+                          )}
                         </div>
                       </div>
                       <div className="flex gap-2">

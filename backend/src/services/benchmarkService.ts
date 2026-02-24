@@ -743,6 +743,9 @@ Génère une analyse JSON avec cette structure exacte:
       competitors_data: JSON.stringify(report.competitors),
       insights: JSON.stringify(report.comparativeAnalysis),
       credits_cost: report.creditsCost || 0,
+      my_page_url: report.myPage?.pageData.pageUrl || null,
+      my_page_name: report.myPage?.pageData.pageName || null,
+      competitor_names: JSON.stringify(report.competitors.map(c => c.pageData.pageName)),
       created_at: new Date(report.createdAt)
     });
   }
