@@ -8,6 +8,7 @@ import { Menu } from 'lucide-react';
 const navItems = [
   { path: '/', label: 'Accueil' },
   { path: '/#features', label: 'Fonctionnalités' },
+  { path: '/exemples', label: 'Exemples' },
   { path: '/pricing', label: 'Tarifs' },
   { path: '/support', label: 'Support' },
 ];
