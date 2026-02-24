@@ -193,11 +193,8 @@ export class ScrapeController {
           if (!session.datasetId) {
             throw new ApiError(500, 'Dataset ID is missing from the session.');
           }
-          // Récupérer les items du dataset
-          const rawItems = await apifyService.getDatasetItems(session.datasetId);
-          
-          // Normaliser les données pour avoir une structure cohérente
-          const normalizedItems = this.normalizeApifyData(rawItems);
+          // getDatasetItems() already normalizes via extractItemData()
+          const normalizedItems = await apifyService.getDatasetItems(session.datasetId);
           const previewItems = normalizedItems.slice(0, 3);
 
           // Créer le fichier de backup
@@ -321,12 +318,13 @@ export class ScrapeController {
       if (isSucceeded && datasetId) {
         logger.info(`Scraping for session ${sessionId} SUCCEEDED. Processing results from dataset ${datasetId}...`);
 
-        // Get all items to count them
+        // Single API call - getDatasetItems already normalizes via extractItemData()
         const allItems = await apifyService.getDatasetItems(datasetId);
         const totalItemsCount = allItems.length;
+        const previewItems = allItems.slice(0, 3);
 
-        // Get preview items
-        const previewItems = await apifyService.getPreviewItems(datasetId, 3);
+        // Create backup file (same as polling path)
+        this.createBackupFile(sessionId, datasetId, totalItemsCount, previewItems, allItems);
 
         // Update session in DB
         await sessionService.updateSession(sessionId, {
@@ -439,68 +437,6 @@ export class ScrapeController {
     return /^https:\/\/(www\.)?(facebook|linkedin)\.com\/marketplace\/[\w-]+/.test(url.trim());
   }
 
-  /**
-   * Normalise les données brutes d'Apify en une structure de données simple.
-   */
-  private normalizeApifyData(items: any[]): any[] {
-    if (!items || !Array.isArray(items)) {
-        return [];
-    }
-
-    return items.map(item => {
-        // Gérer les variations de noms de champs
-        const title = item.title || item.name || item.marketplace_listing_title || item.custom_title || 'Titre non disponible';
-        
-        // Gérer la structure de prix imbriquée
-        let price = 'Prix non disponible';
-        if (item.listing_price && item.listing_price.amount && item.listing_price.currency) {
-            price = `${parseFloat(item.listing_price.amount).toFixed(2)} ${item.listing_price.currency}`;
-        } else if (item.price) {
-            price = item.price;
-        }
-
-        // Gérer les images (jusqu'à 3) et l'image principale
-        let images: string[] = [];
-        if (Array.isArray(item.images)) {
-          images = item.images.filter((u: any) => typeof u === 'string').slice(0, 3);
-        } else {
-          const tmp: string[] = [];
-          const push = (u?: any) => { if (typeof u === 'string') tmp.push(u); };
-          push(item.primary_listing_photo?.listing_image?.uri);
-          if (Array.isArray(item.listing_photos)) {
-            for (const p of item.listing_photos) push(p?.image?.uri);
-          }
-          push(item.image);
-          push(item.imageUrl);
-          // dédupliquer et limiter à 3
-          const seen = new Set<string>();
-          for (const u of tmp) {
-            if (typeof u !== 'string') continue;
-            const fixed = u.startsWith('//') ? 'https:' + u : u;
-            if (!fixed.startsWith('http')) continue;
-            if (!seen.has(fixed)) {
-              seen.add(fixed);
-              images.push(fixed);
-            }
-            if (images.length >= 3) break;
-          }
-        }
-        const image = item.image || (images.length > 0 ? images[0] : null);
-
-        return {
-            title: title,
-            price: price,
-            desc: item.desc || item.description || '',
-            image: image,
-            images: images,
-            location: item.location?.reverse_geocode_detailed?.city || item.location?.reverse_geocode?.city || item.location || 'Lieu non disponible',
-            url: item.url || item.listing_url || '#',
-            postedAt: item.postedAt || item.creation_time || null,
-            // Inclure d'autres champs si nécessaire
-            ...item 
-        };
-    });
-  }
 }
 
 export const scrapeController = new ScrapeController();

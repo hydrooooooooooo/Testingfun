@@ -33,6 +33,7 @@ export const csrfProtect = (req: Request, res: Response, next: NextFunction) => 
   if (
     path.startsWith('/api/payment/webhook') ||
     path.startsWith('/api/stripe/webhook') ||
+    path.startsWith('/api/scrape/webhook') ||
     path.startsWith('/api/auth/login') ||
     path.startsWith('/api/auth/register') ||
     path.startsWith('/api/auth/reset-password') ||

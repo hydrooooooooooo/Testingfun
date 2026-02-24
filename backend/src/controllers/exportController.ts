@@ -193,10 +193,8 @@ export class ExportController {
       // Configurer les en-têtes CORS et envoyer le fichier
       this.sendFileWithHeaders(res, buffer, filename, contentType, requestId, req.headers.origin);
       audit('export.success', { sessionId, userId: reqUserId ?? tokenUserId, format, size: buffer.length });
-      // Schedule Apify dataset cleanup (non-blocking, fire and forget)
-      if (session.datasetId) {
-        apifyService.deleteDataset(session.datasetId).catch(() => {});
-      }
+      // NOTE: Do NOT delete Apify dataset here - users may need to re-export.
+      // Datasets are cleaned up by Apify's retention policy automatically.
       // Si c'est un export de trial, désactiver le flag pour empêcher d'autres téléchargements gratuits
       if (isTrial) {
         try {

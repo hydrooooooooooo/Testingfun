@@ -4,6 +4,6 @@ import { downloadSessionData } from '../controllers/sessionController';
 
 const router = Router();
 
-router.get('/:sessionId/download', downloadSessionData);
+router.get('/:sessionId/download', protect, downloadSessionData);
 
 export { router as sessionRoutes };

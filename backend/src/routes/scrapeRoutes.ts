@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { scrapeController } from '../controllers/scrapeController';
 import { body, query } from 'express-validator';
 import { validate } from '../middlewares/validationMiddleware';
+import { protect } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -10,10 +11,11 @@ const router = Router();
 /**
  * @route   POST /api/scrape
  * @desc    Start a new scraping job
- * @access  Public
+ * @access  Protected
  */
 router.post(
   '/',
+  protect,
   [
     body('url').isURL().withMessage('URL invalide'),
     body('sessionId').optional().isString().withMessage('Session ID must be a string'),
@@ -25,10 +27,11 @@ router.post(
 /**
  * @route   GET /api/scrape-result
  * @desc    Get scraping job results
- * @access  Public
+ * @access  Protected
  */
 router.get(
   '/result',
+  protect,
   [
     query('sessionId').isString().withMessage('Session ID is required'),
   ],

@@ -1,12 +1,8 @@
 import { ApifyClient } from 'apify-client';
-import { nanoid } from 'nanoid';
-import { ScrapingJob } from '../models/ScrapingJob';
-import knex from 'knex';
-import knexConfig from '../config/knexfile';
+import db from '../database';
 import { logger } from '../utils/logger';
 import { config } from '../config/config';
 import {
-  ApifyActorInput,
   ApifyItem,
   ApifyLocation,
   ApifyItemAttribute,
@@ -198,8 +194,6 @@ export class ApifyService {
       });
 
       // Enregistrer l'URL dans la session
-            const environment = process.env.NODE_ENV || 'development';
-            const db = knex(knexConfig[environment]);
       await db('scraping_sessions').where({ id: sessionId }).update({ url: url });
       
       return {
@@ -259,41 +253,6 @@ export class ApifyService {
         progress: 0
       };
     }
-  }
-
-  async startScrapingForUser(
-    userId: number,
-    url: string,
-    options: ApifyActorInput
-  ): Promise<ScrapingJob> {
-    // 1. Créer session avec user_id
-    // 2. Lancer scraping
-    // 3. Enregistrer job en base (sans paiement initial)
-    // Note: Le paiement se fait au moment du téléchargement
-    throw new Error('Method not implemented.');
-  }
-
-  async linkPaymentToJob(jobId: number, paymentId: number): Promise<void> {
-    // Associer un paiement à un job de scraping
-    throw new Error('Method not implemented.');
-  }
-
-  async getUserScrapingHistory(
-    userId: number,
-    page: number = 1,
-    limit: number = 10
-  ): Promise<{
-    jobs: ScrapingJob[];
-    total: number;
-    hasMore: boolean;
-  }> {
-    // Historique paginé des scrapes utilisateur
-    throw new Error('Method not implemented.');
-  }
-
-  async getScrapingJobDetails(jobId: number, userId: number): Promise<ScrapingJob | null> {
-    // Détails d'un job spécifique
-    throw new Error('Method not implemented.');
   }
 
   /**

@@ -4,6 +4,16 @@ import { Router } from 'express';
 import authRoutes from './authRoutes';
 import mvolaRoutes from './mvolaRoutes';
 import userRoutes from './userRoutes';
+import adminRoutes from './adminRoutes';
+import trialRoutes from './trialRoutes';
+import commentRoutes from './commentRoutes';
+import mentionRoutes from './mentionRoutes';
+import estimateRoutes from './estimateRoutes';
+import benchmarkRoutes from './benchmarkRoutes';
+import automationRoutes from './automationRoutes';
+import favoriteRoutes from './favoriteRoutes';
+import newsletterRoutes from './newsletterRoutes';
+import logsRoutes from './logsRoutes';
 
 // Importations nommées
 import { exportRoutes } from './exportRoutes';
@@ -12,8 +22,7 @@ import { paymentRoutes } from './paymentRoutes';
 import { previewRoutes } from './previewRoutes';
 import { scrapeRoutes } from './scrapeRoutes';
 import { sessionRoutes } from './sessionRoutes';
-import adminRoutes from './adminRoutes';
-import trialRoutes from './trialRoutes';
+import { scrapedItemsRoutes } from './scrapedItemsRoutes';
 
 const router = Router();
 
@@ -29,6 +38,15 @@ router.use('/sessions', sessionRoutes);
 router.use('/user', userRoutes);
 router.use('/admin', adminRoutes);
 router.use('/trial', trialRoutes);
+router.use('/comments', commentRoutes);
+router.use('/mentions', mentionRoutes);
+router.use('/estimate', estimateRoutes);
+router.use('/benchmark', benchmarkRoutes);
+router.use('/automations', automationRoutes);
+router.use('/favorites', favoriteRoutes);
+router.use('/newsletter', newsletterRoutes);
+router.use('/scraped-items', scrapedItemsRoutes);
+router.use('/logs', logsRoutes);
 
 // Health check endpoint
 router.get('/health', (req, res) => {

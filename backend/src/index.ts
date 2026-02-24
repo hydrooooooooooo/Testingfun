@@ -36,6 +36,7 @@ import { apiLimiter } from './middlewares/rateLimiter';
 app.use('/api/auth', apiLimiter);
 app.use('/api/payment', apiLimiter);
 app.use('/api/export', apiLimiter);
+app.use('/api/scrape', apiLimiter);
 
 // Special handling for Stripe webhook routes (support both paths for compatibilité)
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));

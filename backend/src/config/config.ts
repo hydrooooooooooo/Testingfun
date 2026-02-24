@@ -28,8 +28,18 @@ export const config = {
     stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
     adminApiKey: process.env.ADMIN_API_KEY,
     jwtSecret: process.env.JWT_SECRET,
+    apifyPagesInfoActorId: process.env.APIFY_PAGES_INFO_ACTOR_ID || 'apify/facebook-pages-scraper',
+    apifyPagesPostsActorId: process.env.APIFY_PAGES_POSTS_ACTOR_ID || 'apify/facebook-posts-scraper',
+    apifyCommentsActorId: process.env.APIFY_COMMENTS_ACTOR_ID || 'us5srxAYnsrkgUv2v',
   },
-  
+
+  // AI / OpenRouter configuration
+  ai: {
+    openRouterApiKey: process.env.OPENROUTER_API_KEY || '',
+    openRouterBaseUrl: process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
+    defaultModel: process.env.AI_DEFAULT_MODEL || 'meta-llama/llama-3-8b-instruct',
+  },
+
   // Mail configuration (SMTP)
   mail: {
     host: process.env.SMTP_HOST || 'localhost',
