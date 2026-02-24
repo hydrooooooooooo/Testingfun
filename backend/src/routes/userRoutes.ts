@@ -3,6 +3,9 @@ import { getDashboardData, getPaymentHistory, getDownloadHistory, changePassword
 import { protect, AuthenticatedRequest } from '../middlewares/authMiddleware';
 import { creditService } from '../services/creditService';
 import { logger } from '../utils/logger';
+import { getModelsForAPI, isValidModelId, getDefaultAIModel } from '../config/aiModels';
+import { validate, preferredModelSchema } from '../middlewares/validation';
+import db from '../database';
 
 const router = Router();
 
@@ -49,6 +52,54 @@ router.get('/credits/history', async (req: Request, res: Response) => {
   } catch (error) {
     logger.error('Error fetching credit history:', error);
     res.status(500).json({ message: 'Erreur lors de la récupération de l\'historique.' });
+  }
+});
+
+// Route pour la liste des modèles IA disponibles
+router.get('/models', async (req: Request, res: Response) => {
+  try {
+    const models = getModelsForAPI();
+    res.json({ models });
+  } catch (error) {
+    logger.error('Error fetching AI models:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+// Route pour récupérer le modèle IA préféré
+router.get('/preferred-model', async (req: Request, res: Response) => {
+  try {
+    const userId = (req as AuthenticatedRequest).user?.id;
+    if (!userId) return res.status(401).json({ message: 'Non authentifié' });
+
+    const user = await db('users').where({ id: userId }).select('preferred_ai_model').first();
+    const modelId = user?.preferred_ai_model || getDefaultAIModel().id;
+
+    res.json({ modelId });
+  } catch (error) {
+    logger.error('Error fetching preferred model:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+// Route pour modifier le modèle IA préféré
+router.put('/preferred-model', validate(preferredModelSchema), async (req: Request, res: Response) => {
+  try {
+    const userId = (req as AuthenticatedRequest).user?.id;
+    if (!userId) return res.status(401).json({ message: 'Non authentifié' });
+
+    const { modelId } = req.body;
+
+    if (!isValidModelId(modelId)) {
+      return res.status(400).json({ message: 'Modèle IA invalide' });
+    }
+
+    await db('users').where({ id: userId }).update({ preferred_ai_model: modelId });
+
+    res.json({ success: true, modelId });
+  } catch (error) {
+    logger.error('Error updating preferred model:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 });
 
