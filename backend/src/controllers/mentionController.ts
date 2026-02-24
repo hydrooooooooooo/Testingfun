@@ -2,6 +2,8 @@ import { Response, NextFunction } from 'express';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 import mentionDetectionService from '../services/mentionDetectionService';
 import mentionAlertService from '../services/mentionAlertService';
+import { creditService } from '../services/creditService';
+import { COST_MATRIX, calculateMentionsCost } from '../services/costEstimationService';
 import { logger } from '../utils/logger';
 import db from '../database';
 
@@ -20,41 +22,79 @@ export const analyzeMentions = async (
   }
 
   try {
-    // Récupérer les mots-clés de l'utilisateur
+    // Valider le format du sessionId
+    if (!sessionId || !/^sess_[A-Za-z0-9_-]+$/.test(sessionId)) {
+      return res.status(400).json({ message: 'Format de session invalide' });
+    }
+
+    // 1. Récupérer les mots-clés de l'utilisateur
     const keywords = await mentionDetectionService.getUserKeywords(req.user.id);
 
     if (keywords.length === 0) {
-      return res.status(400).json({ 
-        message: 'Aucun mot-clé configuré. Veuillez d\'abord configurer vos mots-clés de surveillance.' 
+      return res.status(400).json({
+        message: 'Aucun mot-clé configuré. Veuillez d\'abord configurer vos mots-clés de surveillance.'
       });
     }
 
-    // Analyser les mentions
+    // 2. Vérifier que l'utilisateur a assez de crédits (estimation minimum)
+    const minCost = COST_MATRIX.mentions.perKeyword * keywords.length;
+    const hasEnough = await creditService.hasEnoughCredits(req.user.id, minCost);
+    if (!hasEnough) {
+      return res.status(402).json({
+        message: 'Crédits insuffisants pour l\'analyse de mentions',
+        required: minCost,
+      });
+    }
+
+    // 3. Analyser les mentions (utilise l'IA — coûte des crédits)
     const mentions = await mentionDetectionService.detectMentionsInSession(
       sessionId,
       req.user.id,
       keywords
     );
 
-    // Envoyer des alertes pour les mentions urgentes
+    // 4. Calculer le coût réel et déduire les crédits
+    const cost = calculateMentionsCost(mentions.length) + (COST_MATRIX.mentions.perKeyword * keywords.length);
+    if (cost > 0) {
+      await creditService.deductCredits(
+        req.user.id,
+        cost,
+        'mention_analysis',
+        sessionId,
+        `Analyse mentions: ${mentions.length} mentions, ${keywords.length} mots-clés`
+      );
+    }
+
+    // 5. Envoyer des alertes pour les mentions urgentes (respecter préférence email)
     const urgentMentions = mentions.filter(m => m.priority_level === 'urgent');
     for (const mention of urgentMentions) {
       try {
-        await mentionAlertService.sendAlert(mention, req.user, 'email');
-      } catch (error: any) {
-        logger.error('[MENTIONS] Failed to send alert:', error.message);
+        const mentionKeywords = mention.brand_keywords || [];
+        const keywordsWithEmail = await db('brand_keywords')
+          .where({ user_id: req.user.id, is_active: true, email_alerts: true })
+          .whereIn('keyword', Array.isArray(mentionKeywords) ? mentionKeywords : []);
+
+        if (keywordsWithEmail.length > 0) {
+          await mentionAlertService.sendAlert(mention, req.user, 'email');
+        }
+      } catch (alertError: any) {
+        logger.warn('[MENTIONS] Failed to send alert:', alertError.message);
       }
     }
 
-    logger.info(`[MENTIONS] Analysis complete: ${mentions.length} mentions found, ${urgentMentions.length} urgent`);
+    logger.info(`[MENTIONS] Analysis complete: ${mentions.length} mentions, cost: ${cost} credits`);
 
     return res.status(200).json({
       success: true,
       mentionsFound: mentions.length,
       urgentMentions: urgentMentions.length,
+      creditsUsed: cost,
       mentions,
     });
   } catch (error: any) {
+    if (error.message?.includes('Insufficient credits')) {
+      return res.status(402).json({ message: 'Crédits insuffisants' });
+    }
     logger.error('[MENTIONS] Error analyzing mentions:', error);
     next(error);
   }

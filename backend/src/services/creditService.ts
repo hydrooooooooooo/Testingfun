@@ -33,6 +33,7 @@ export type ServiceType =
   | 'facebook_pages_calendar'   // Agent 3: Calendrier Éditorial (futur)
   | 'facebook_pages_copywriting' // Agent 4: Optimiseur Copywriting (futur)
   | 'ai_analysis'               // Analyse IA par page
+  | 'mention_analysis'          // Détection mentions (IA)
   | 'marketplace';
 
 export type TransactionStatus = 'completed' | 'reserved' | 'refunded';

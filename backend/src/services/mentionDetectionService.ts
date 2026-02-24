@@ -76,7 +76,7 @@ class MentionDetectionService {
         const mentionData = {
           user_id: userId,
           session_id: sessionId,
-          brand_keywords: JSON.stringify(analysis.detectedKeywords),
+          brand_keywords: analysis.detectedKeywords,
           mention_type: analysis.type,
           confidence_score: analysis.confidence,
           sentiment: analysis.sentiment,
@@ -92,6 +92,20 @@ class MentionDetectionService {
           post_type: post.sourceType || post.type || 'post', // 'post' ou 'comment'
           status: 'new',
         };
+
+        // Guard de déduplication — éviter les doublons si même session analysée 2 fois
+        const existingMention = await db('brand_mentions')
+          .where({
+            user_id: userId,
+            session_id: sessionId,
+            comment_text: mentionData.comment_text,
+          })
+          .first();
+
+        if (existingMention) {
+          logger.info(`[MENTIONS] Skipping duplicate mention for "${mentionData.comment_text.substring(0, 50)}..."`);
+          continue;
+        }
 
         // Sauvegarder en base de données
         const [savedMention] = await db('brand_mentions')

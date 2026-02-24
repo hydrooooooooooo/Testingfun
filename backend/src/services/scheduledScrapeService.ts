@@ -6,12 +6,13 @@ import { apifyService } from './apifyService';
 import { creditService } from './creditService';
 import { mailer } from './mailerService';
 import { sessionService } from './sessionService';
-import { 
-  COST_MATRIX, 
-  calculateAiAnalysisCost, 
-  calculateBenchmarkCost, 
-  calculateMentionsCost 
+import {
+  COST_MATRIX,
+  calculateAiAnalysisCost,
+  calculateBenchmarkCost,
+  calculateMentionsCost
 } from './costEstimationService';
+import mentionDetectionService from './mentionDetectionService';
 
 interface ScheduledScrape {
   id: string;
@@ -437,25 +438,30 @@ class ScheduledScrapeService {
    */
   private async runMentionDetection(sessionId: string, userId: number): Promise<number> {
     try {
-      // Récupérer les données de la session
-      const sessionData = await sessionService.getSession(sessionId);
-      const itemsScraped = sessionData?.totalItems || sessionData?.items_scraped || 10;
-      
-      // Calculer le coût de détection de mentions (estimation basée sur les items)
-      // On estime environ 10% des items contiennent des mentions
-      const estimatedMentions = Math.ceil(itemsScraped * 0.1);
-      const cost = calculateMentionsCost(estimatedMentions) + COST_MATRIX.mentions.perKeyword;
-      
-      // Déduire les crédits pour la détection de mentions
-      await creditService.deductCredits(
-        userId,
-        cost,
-        'facebook_pages',
-        sessionId,
-        `Détection mentions automatisée: ~${estimatedMentions} mentions`
+      // 1. Récupérer les mots-clés actifs de l'utilisateur
+      const keywords = await mentionDetectionService.getUserKeywords(userId);
+      if (!keywords || keywords.length === 0) {
+        logger.warn('[AUTOMATION] No keywords configured, skipping mention detection');
+        return 0;
+      }
+
+      // 2. Exécuter la détection de mentions (appel IA réel)
+      const mentions = await mentionDetectionService.detectMentionsInSession(
+        sessionId, userId, keywords
       );
-      
-      logger.info(`[AUTOMATION] Mention detection cost: ${cost} credits for ~${estimatedMentions} mentions`);
+
+      // 3. Calculer le coût réel basé sur les résultats
+      const cost = calculateMentionsCost(mentions.length) + (COST_MATRIX.mentions.perKeyword * keywords.length);
+
+      // 4. Déduire les crédits uniquement si coût > 0
+      if (cost > 0) {
+        await creditService.deductCredits(
+          userId, cost, 'mention_analysis' as any, sessionId,
+          `Détection mentions automatisée: ${mentions.length} mentions, ${keywords.length} mots-clés`
+        );
+      }
+
+      logger.info(`[AUTOMATION] Mention detection: ${mentions.length} mentions found, cost: ${cost} credits`);
       return cost;
     } catch (error) {
       logger.error(`[AUTOMATION] Failed to run mention detection:`, error);

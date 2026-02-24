@@ -190,9 +190,10 @@ const MentionsPage: React.FC = () => {
       setAnalyzingSession(sessionId);
       const response = await api.post(`/mentions/sessions/${sessionId}/analyze`);
       
+      const creditsInfo = response.data.creditsUsed ? ` — ${response.data.creditsUsed.toFixed(2)} credit(s)` : '';
       toast({
         title: 'Analyse terminée',
-        description: `${response.data.mentionsFound} mention(s) détectée(s)${response.data.urgentMentions > 0 ? ` dont ${response.data.urgentMentions} urgente(s)` : ''}`,
+        description: `${response.data.mentionsFound} mention(s) detectee(s)${response.data.urgentMentions > 0 ? ` dont ${response.data.urgentMentions} urgente(s)` : ''}${creditsInfo}`,
       });
 
       // Rafraîchir les données
@@ -237,15 +238,6 @@ const MentionsPage: React.FC = () => {
     }
   };
 
-  const formatLastMention = (date: string | null) => {
-    if (!date) return null;
-    try {
-      return formatDistanceToNow(new Date(date), { addSuffix: false, locale: fr });
-    } catch {
-      return null;
-    }
-  };
-
   const handleResolve = async (mentionId: number) => {
     try {
       await api.post(`/mentions/${mentionId}/resolve`);
@@ -262,45 +254,6 @@ const MentionsPage: React.FC = () => {
         description: errorMessage,
         variant: 'destructive',
       });
-    }
-  };
-
-  const getMentionIcon = (type: string) => {
-    switch (type) {
-      case 'recommendation':
-        return <ThumbsUp className="w-4 h-4 text-green-600" />;
-      case 'question':
-        return <HelpCircle className="w-4 h-4 text-navy" />;
-      case 'complaint':
-        return <AlertTriangle className="w-4 h-4 text-gold-600" />;
-      default:
-        return <MessageSquare className="w-4 h-4" />;
-    }
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'urgent':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'high':
-        return 'bg-gold-100 text-gold-800 border-gold-200';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      default:
-        return 'bg-green-100 text-green-800 border-green-200';
-    }
-  };
-
-  const getTypeLabel = (type: string) => {
-    switch (type) {
-      case 'recommendation':
-        return 'Recommandation';
-      case 'question':
-        return 'Question';
-      case 'complaint':
-        return 'Plainte';
-      default:
-        return type;
     }
   };
 
@@ -363,9 +316,14 @@ const MentionsPage: React.FC = () => {
       // Préparer les données CSV
       const headers = ['ID', 'Date', 'Page Source', 'Type', 'Priorité', 'Statut', 'Mots-clés', 'Texte', 'Lien Post'];
       const rows = filteredMentions.map(m => {
-        const keywordsArr = Array.isArray(m.brand_keywords) 
-          ? m.brand_keywords 
-          : (typeof m.brand_keywords === 'string' ? JSON.parse(m.brand_keywords || '[]') : []);
+        let keywordsArr: string[] = [];
+        try {
+          keywordsArr = Array.isArray(m.brand_keywords)
+            ? m.brand_keywords
+            : (typeof m.brand_keywords === 'string' ? JSON.parse(m.brand_keywords || '[]') : []);
+        } catch {
+          keywordsArr = [];
+        }
         
         return [
           m.id,
@@ -461,7 +419,7 @@ const MentionsPage: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => navigate('/dashboard/mentions/settings')}
+            onClick={() => navigate('/dashboard/mention-settings')}
             className="border-cream-300 text-navy-700 hover:bg-cream-100 flex items-center gap-1 sm:gap-2"
           >
             <Settings className="w-4 h-4" />
@@ -677,23 +635,28 @@ const MentionsPage: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                      <Button
-                        onClick={() => handleAnalyzeSession(session.sessionId)}
-                        disabled={!hasKeywords || analyzingSession === session.sessionId}
-                        className="bg-gold hover:bg-gold-600 text-white"
-                      >
-                        {analyzingSession === session.sessionId ? (
-                          <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            Analyse...
-                          </>
-                        ) : (
-                          <>
-                            <Play className="w-4 h-4 mr-2" />
-                            Analyser
-                          </>
-                        )}
-                      </Button>
+                      <div className="flex flex-col items-end gap-1">
+                        <Button
+                          onClick={() => handleAnalyzeSession(session.sessionId)}
+                          disabled={!hasKeywords || analyzingSession === session.sessionId}
+                          className="bg-gold hover:bg-gold-600 text-white"
+                        >
+                          {analyzingSession === session.sessionId ? (
+                            <>
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              Analyse...
+                            </>
+                          ) : (
+                            <>
+                              <Play className="w-4 h-4 mr-2" />
+                              Analyser
+                            </>
+                          )}
+                        </Button>
+                        <span className="text-xs text-steel">
+                          ~{(keywords.length * 0.1).toFixed(1)} cr + 0.05 cr/mention
+                        </span>
+                      </div>
                     </div>
                   ))}
 
@@ -870,12 +833,17 @@ const MentionsPage: React.FC = () => {
           ) : (
             <div className="space-y-4">
               {filteredMentions.map((mention) => {
-                // Parser les keywords si c'est une string JSON
-                const keywordsArray = Array.isArray(mention.brand_keywords) 
-                  ? mention.brand_keywords 
-                  : (typeof mention.brand_keywords === 'string' 
-                    ? JSON.parse(mention.brand_keywords || '[]') 
-                    : []);
+                // Parser les keywords si c'est une string JSON (avec safety)
+                let keywordsArray: string[] = [];
+                try {
+                  keywordsArray = Array.isArray(mention.brand_keywords)
+                    ? mention.brand_keywords
+                    : (typeof mention.brand_keywords === 'string'
+                      ? JSON.parse(mention.brand_keywords || '[]')
+                      : []);
+                } catch {
+                  keywordsArray = [];
+                }
                 
                 return (
                   <Card
@@ -964,6 +932,27 @@ const MentionsPage: React.FC = () => {
                             {mention.mention_type === 'question' && '❓ Question'}
                             {mention.mention_type === 'complaint' && '⚠️ Plainte'}
                           </Badge>
+
+                          {/* Sentiment score */}
+                          {mention.sentiment_score != null && (
+                            <Badge className={`text-xs ${
+                              mention.sentiment_score >= 60 ? 'bg-green-100 text-green-700 border-green-200'
+                              : mention.sentiment_score >= 40 ? 'bg-yellow-100 text-yellow-700 border-yellow-200'
+                              : 'bg-red-100 text-red-700 border-red-200'
+                            }`}>
+                              {mention.sentiment_score >= 60 ? 'Positif' : mention.sentiment_score >= 40 ? 'Neutre' : 'Negatif'}{' '}
+                              {mention.sentiment_score}%
+                            </Badge>
+                          )}
+
+                          {/* Temps de reponse suggere */}
+                          {mention.suggested_response_time > 0 && mention.status === 'new' && (
+                            <span className="text-xs text-steel flex items-center gap-1">
+                              Reponse suggeree: {mention.suggested_response_time < 60
+                                ? `${mention.suggested_response_time}min`
+                                : `${Math.round(mention.suggested_response_time / 60)}h`}
+                            </span>
+                          )}
                         </div>
 
                         {/* Actions */}
