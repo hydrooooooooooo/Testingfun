@@ -3,6 +3,7 @@ import { useApi } from '@/hooks/useApi';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import SearchFiltersBar from '@/components/admin/SearchFiltersBar';
 import * as Tabs from '@radix-ui/react-tabs';
 import {
@@ -62,7 +63,7 @@ const EmptyTable: React.FC<{ message?: string }> = ({ message }) => (
 );
 
 const AdminDashboard: React.FC = () => {
-  const { getAdminReport, getAdminSearches, getAdminAdvancedMetrics, exportAdminSearchesCsv, searchAdminUsers, loading, error } = useApi();
+  const { getAdminReport, getAdminSearches, getAdminAdvancedMetrics, exportAdminSearchesCsv, searchAdminUsers, getAdminAIUsage, loading, error } = useApi();
   const [data, setData] = useState<any>(null);
   const [adv, setAdv] = useState<any>(null);
   const [page, setPage] = useState(1);
@@ -74,6 +75,7 @@ const AdminDashboard: React.FC = () => {
   const [userQuery, setUserQuery] = useState<string>('');
   const [userOptions, setUserOptions] = useState<Array<{ id: number; email: string }>>([]);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [aiUsage, setAiUsage] = useState<any>(null);
 
   useEffect(() => {
     (async () => {
@@ -98,6 +100,17 @@ const AdminDashboard: React.FC = () => {
       }
     })();
   }, [getAdminAdvancedMetrics]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const a = await getAdminAIUsage();
+        setAiUsage(a);
+      } catch (e) {
+        // handled
+      }
+    })();
+  }, [getAdminAIUsage]);
 
   useEffect(() => {
     let active = true;
@@ -225,6 +238,9 @@ const AdminDashboard: React.FC = () => {
             </Tabs.Trigger>
             <Tabs.Trigger value="recherches" className="px-4 py-2 text-sm font-medium text-steel data-[state=active]:text-navy data-[state=active]:border-b-2 data-[state=active]:border-navy transition-colors">
               Recherches
+            </Tabs.Trigger>
+            <Tabs.Trigger value="ia" className="px-4 py-2 text-sm font-medium text-steel data-[state=active]:text-navy data-[state=active]:border-b-2 data-[state=active]:border-navy transition-colors">
+              {'IA & Coûts'}
             </Tabs.Trigger>
           </Tabs.List>
 
@@ -519,6 +535,171 @@ const AdminDashboard: React.FC = () => {
                 </CardContent>
               </Card>
             </div>
+          </Tabs.Content>
+
+          <Tabs.Content value="ia" className="space-y-4">
+            {!aiUsage ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
+              </div>
+            ) : (
+              <>
+                {/* KPI Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <StatCard title="Requêtes IA" value={aiUsage.summary?.total_requests ?? 0} />
+                  <StatCard title="Coût API (USD)" value={`$${(aiUsage.summary?.total_cost_usd ?? 0).toFixed(4)}`} />
+                  <StatCard title="Crédits facturés" value={(aiUsage.summary?.total_credits_charged ?? 0).toFixed(1)} />
+                  <StatCard title="Marge brute" value={`${(aiUsage.profitability?.margin_percentage ?? 0).toFixed(1)}%`} />
+                </div>
+
+                {/* Charts: By Model & By Agent Type */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <Card className="bg-white border-cream-300 shadow-sm">
+                    <CardContent className="p-3">
+                      <div className="text-sm text-steel mb-1">Requêtes par modèle IA</div>
+                      <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Tooltip />
+                            <Legend wrapperStyle={{ fontSize: 11 }} />
+                            <Pie
+                              data={Object.entries(aiUsage.summary?.by_model || {}).map(([name, d]: [string, any]) => ({ name, value: d.requests }))}
+                              dataKey="value"
+                              nameKey="name"
+                              outerRadius={90}
+                              label={{ fontSize: 10 }}
+                            >
+                              {Object.keys(aiUsage.summary?.by_model || {}).map((_: string, idx: number) => (
+                                <Cell key={idx} fill={EXTENDED_COLORS[idx % EXTENDED_COLORS.length]} />
+                              ))}
+                            </Pie>
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white border-cream-300 shadow-sm">
+                    <CardContent className="p-3">
+                      <div className="text-sm text-steel mb-1">{"Coût API par type d'agent"}</div>
+                      <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={Object.entries(aiUsage.summary?.by_agent_type || {}).map(([name, d]: [string, any]) => ({ name, cost: parseFloat((d.cost_usd ?? 0).toFixed(4)), credits: d.credits_charged ?? 0 }))}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#E8E2DB" />
+                            <XAxis dataKey="name" tick={{ fontSize: 10 }} stroke="#547792" />
+                            <YAxis stroke="#547792" />
+                            <Tooltip />
+                            <Legend />
+                            <Bar dataKey="cost" fill="#1A3263" name="Coût USD" radius={[4, 4, 0, 0]} />
+                            <Bar dataKey="credits" fill="#FAB95B" name="Crédits" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Daily cost timeseries */}
+                {(aiUsage.summary?.by_day || []).length > 0 && (
+                  <Card className="bg-white border-cream-300 shadow-sm">
+                    <CardContent className="p-3">
+                      <div className="text-sm text-steel mb-1">Coût IA par jour</div>
+                      <div className="h-52">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <LineChart data={aiUsage.summary.by_day}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#E8E2DB" />
+                            <XAxis dataKey="date" tick={{ fontSize: 10 }} stroke="#547792" />
+                            <YAxis stroke="#547792" />
+                            <Tooltip />
+                            <Legend />
+                            <Line type="monotone" dataKey="cost_usd" stroke="#1A3263" dot={false} name="Coût USD" />
+                            <Line type="monotone" dataKey="credits_charged" stroke="#FAB95B" dot={false} name="Crédits" />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Profitability Table */}
+                {(aiUsage.profitability?.details || []).length > 0 && (
+                  <Card className="bg-white border-cream-300 shadow-sm">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg text-navy">{"Rentabilité par type d'agent"}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="overflow-auto">
+                        <table className="w-full text-sm">
+                          <thead>
+                            <tr className="text-left text-steel border-b border-cream-300">
+                              <th className="py-2 pr-2">Type</th>
+                              <th className="py-2 pr-2">Revenus (EUR)</th>
+                              <th className="py-2 pr-2">Coût API (EUR)</th>
+                              <th className="py-2 pr-2">Marge (EUR)</th>
+                              <th className="py-2 pr-2">Marge %</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {(aiUsage.profitability?.details || []).map((d: any, i: number) => (
+                              <tr key={i} className="border-b border-cream-200 hover:bg-cream-50">
+                                <td className="py-2 pr-2 font-medium text-navy">{d.agent_type}</td>
+                                <td className="py-2 pr-2">{(d.credits_revenue_eur ?? 0).toFixed(2)} EUR</td>
+                                <td className="py-2 pr-2">{(d.api_cost_eur ?? 0).toFixed(4)} EUR</td>
+                                <td className="py-2 pr-2 font-medium">{(d.margin_eur ?? 0).toFixed(2)} EUR</td>
+                                <td className="py-2 pr-2">
+                                  <Badge className={(d.margin_pct ?? 0) >= 50 ? 'bg-green-100 text-green-800' : (d.margin_pct ?? 0) >= 0 ? 'bg-gold text-navy' : 'bg-red-100 text-red-800'}>
+                                    {(d.margin_pct ?? 0).toFixed(1)}%
+                                  </Badge>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Recent AI Logs Table */}
+                <Card className="bg-white border-cream-300 shadow-sm">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg text-navy">Logs IA récents</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="overflow-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="text-left text-steel border-b border-cream-300">
+                            <th className="py-2 pr-2">Date</th>
+                            <th className="py-2 pr-2">Utilisateur</th>
+                            <th className="py-2 pr-2">Modèle</th>
+                            <th className="py-2 pr-2">Type</th>
+                            <th className="py-2 pr-2">Tokens</th>
+                            <th className="py-2 pr-2">Coût USD</th>
+                            <th className="py-2 pr-2">Crédits</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {(aiUsage.recentLogs || []).length === 0 ? (
+                            <tr><td colSpan={7}><EmptyTable message="Aucun log IA" /></td></tr>
+                          ) : (aiUsage.recentLogs || []).map((log: any) => (
+                            <tr key={log.id} className="border-b border-cream-200 hover:bg-cream-50">
+                              <td className="py-2 pr-2 whitespace-nowrap">{log.created_at ? new Date(log.created_at).toLocaleString() : '\u2014'}</td>
+                              <td className="py-2 pr-2">{log.user_email || log.user_id}</td>
+                              <td className="py-2 pr-2 text-xs">{log.model}</td>
+                              <td className="py-2 pr-2">{log.agent_type}</td>
+                              <td className="py-2 pr-2">{(log.tokens_total ?? 0).toLocaleString()}</td>
+                              <td className="py-2 pr-2">${parseFloat(log.cost_usd || 0).toFixed(4)}</td>
+                              <td className="py-2 pr-2 font-medium">{parseFloat(log.credits_charged || 0).toFixed(1)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            )}
           </Tabs.Content>
         </Tabs.Root>
       )}
