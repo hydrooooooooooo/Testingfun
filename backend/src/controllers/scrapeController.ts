@@ -74,6 +74,7 @@ export class ScrapeController {
         user_id: userId,
         packId: packId,
         url: url,
+        scrape_type: 'marketplace',
         credit_transaction_id: reservationId,
       } as any);
 
@@ -161,6 +162,7 @@ export class ScrapeController {
         user_id: userId,
         packId: 'TRIAL',
         url,
+        scrape_type: 'marketplace',
       });
 
       try {
