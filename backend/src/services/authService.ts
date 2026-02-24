@@ -82,8 +82,8 @@ export class AuthService {
       throw new Error('Email not verified');
     }
 
-    // Optionnel : Mettre à jour la date de dernière connexion
-    // await db('users').where({ id: user.id }).update({ last_login: new Date() });
+    // Mettre à jour la date de dernière connexion
+    await db('users').where({ id: user.id }).update({ last_login_at: new Date() });
 
     // 4. Générer et retourner le token JWT
     const token = this.generateJWT(user);

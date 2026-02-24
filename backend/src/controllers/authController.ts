@@ -119,6 +119,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     const { user, token } = await authService.login(credentials);
+
+    // Track login IP (non-blocking)
+    const loginIp = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.ip || '';
+    db('users').where({ id: user.id }).update({ last_login_ip: loginIp }).catch(() => {});
+
     const isSecure = req.protocol === 'https' || (req.get('x-forwarded-proto') || '').includes('https');
     res.cookie('access_token', token, {
       httpOnly: true,
