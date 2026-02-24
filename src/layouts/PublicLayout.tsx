@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from '../components/layout/Header';
+import Footer from '../components/layout/Footer';
 
 const PublicLayout: React.FC = () => {
   return (
@@ -10,9 +10,7 @@ const PublicLayout: React.FC = () => {
       <main className="flex-1 flex flex-col px-0">
         <Outlet />
       </main>
-      <footer className="border-t border-border py-3 mt-6 text-center text-xs text-muted-foreground tracking-wide">
-        &copy; {new Date().getFullYear()} easyscrapy.com &mdash; Tous droits réservés.
-      </footer>
+      <Footer />
     </div>
   );
 };
