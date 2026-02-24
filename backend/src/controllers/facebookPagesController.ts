@@ -7,6 +7,7 @@ import { calculateFacebookPagesCost } from '../services/costEstimationService';
 import { ApiError } from '../middlewares/errorHandler';
 import { logger } from '../utils/logger';
 import db from '../database';
+import { persistScrapedItems } from '../services/itemPersistenceService';
 
 export class FacebookPagesController {
 
@@ -170,6 +171,38 @@ export class FacebookPagesController {
         }
         if (sub.postsStatus === 'SUCCEEDED' && sub.postsDatasetId) {
           sub.postsData = await facebookPagesService.getDatasetItems(sub.postsDatasetId);
+        }
+      }
+
+      // Persist fetched items to scraped_items table
+      for (const sub of subSessions) {
+        if (sub.infoData?.length) {
+          const infoItems = sub.infoData.map((item: any) => ({
+            title: item.name || item.title || sub.pageName || 'Facebook Page',
+            price: '',
+            desc: item.about || item.description || '',
+            image: item.profilePic || item.profilePhoto || '',
+            images: [item.profilePic, item.coverPhoto].filter(Boolean),
+            location: item.address || item.location || '',
+            url: sub.url || '',
+            postedAt: '',
+          }));
+          persistScrapedItems(sessionId, userId, infoItems, 'facebook_page_info')
+            .catch(err => logger.warn(`[PERSISTENCE] FB info persist failed for ${sessionId}:`, err));
+        }
+        if (sub.postsData?.length) {
+          const postItems = sub.postsData.map((post: any) => ({
+            title: (post.text || post.message || '').substring(0, 200) || `Post from ${sub.pageName}`,
+            price: '',
+            desc: post.text || post.message || '',
+            image: post.photoUrl || post.imageUrl || '',
+            images: (post.photos || post.images || []).slice(0, 3),
+            location: '',
+            url: post.url || post.postUrl || '',
+            postedAt: post.time || post.date || post.createdTime || '',
+          }));
+          persistScrapedItems(sessionId, userId, postItems, 'facebook_page_post')
+            .catch(err => logger.warn(`[PERSISTENCE] FB posts persist failed for ${sessionId}:`, err));
         }
       }
 
