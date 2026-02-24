@@ -15,8 +15,7 @@ import {
 } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
 import {
-  Eye, EyeOff, Globe, Database, FileJson,
-  Cpu, ArrowRight, Check, User, Mail, Phone, Lock
+  Eye, EyeOff, ArrowRight, Check, User, Mail, Phone, Lock
 } from 'lucide-react';
 import api from '@/services/api';
 
@@ -126,11 +125,11 @@ export default function RegisterPage() {
     }
   }
 
-  const endpoints = [
-    { icon: Globe, label: 'API Base URL', value: 'https://easyscrapy.com/api' },
-    { icon: Database, label: 'Facebook Scraping', value: 'Apify Actor — Pages & Posts' },
-    { icon: FileJson, label: 'Formats d\'export', value: 'CSV, Excel, JSON, PDF' },
-    { icon: Cpu, label: 'Analyses IA', value: 'OpenRouter — Multi-modèles' },
+  const steps = [
+    { num: '01', title: 'Créez votre compte', desc: 'Inscription gratuite en 30 secondes. Recevez des crédits d\'essai pour tester immédiatement.' },
+    { num: '02', title: 'Lancez vos extractions', desc: 'Marketplace, Pages Facebook, publications, commentaires — collez vos URLs et laissez notre moteur travailler.' },
+    { num: '03', title: 'Analysez avec l\'IA', desc: 'Notre IA décrypte vos données : tendances, benchmark concurrentiel, recommandations stratégiques personnalisées.' },
+    { num: '04', title: 'Exploitez vos résultats', desc: 'Exportez en Excel, programmez des extractions récurrentes et recevez des alertes de mentions automatiques.' },
   ];
 
   return (
@@ -346,41 +345,46 @@ export default function RegisterPage() {
 
       {/* ─── RIGHT BRANDING PANEL (desktop only) ─── */}
       <div className="hidden lg:flex lg:w-[45%] xl:w-[42%] relative bg-navy overflow-hidden flex-col justify-between p-10 xl:p-14">
-        {/* Decorative circles */}
+        {/* Decorative accents */}
         <div className="absolute top-16 -right-20 w-72 h-72 bg-gold/10 rounded-full blur-3xl" />
         <div className="absolute bottom-20 left-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 right-1/3 w-48 h-48 bg-gold/8 rounded-full blur-2xl" />
 
-        {/* Top content */}
+        {/* Header */}
         <div className="relative z-10">
-          <h1 className="font-display text-white text-3xl xl:text-4xl font-bold leading-tight mb-4">
-            Rejoignez la plateforme
-            <span className="block text-gold mt-1">d'intelligence sociale</span>
+          <p className="text-gold text-[11px] font-semibold uppercase tracking-[0.2em] mb-3">Comment ça marche ?</p>
+          <h1 className="font-display text-white text-2xl xl:text-[28px] font-bold leading-snug">
+            De la collecte brute à l'insight
+            <span className="block text-gold mt-0.5">stratégique en 4 étapes.</span>
           </h1>
-          <p className="text-steel-200 text-base leading-relaxed max-w-md">
-            Créez votre compte en quelques secondes et commencez à transformer les données Facebook en avantage concurrentiel.
-          </p>
         </div>
 
-        {/* Technical endpoints */}
-        <div className="relative z-10 space-y-3">
-          {endpoints.map((ep, i) => (
-            <div
-              key={i}
-              className="flex items-start gap-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-5 py-3.5"
-            >
-              <div className="w-9 h-9 bg-gold/15 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                <ep.icon className="w-[18px] h-[18px] text-gold" />
-              </div>
-              <div>
-                <span className="text-steel-200 text-[11px] font-medium uppercase tracking-wider">{ep.label}</span>
-                <p className="text-cream-200 text-sm font-mono mt-0.5">{ep.value}</p>
-              </div>
+        {/* Vertical timeline steps */}
+        <div className="relative z-10 flex-1 flex flex-col justify-center py-6">
+          <div className="relative">
+            {/* Vertical connector line */}
+            <div className="absolute left-[15px] top-4 bottom-4 w-px bg-gradient-to-b from-gold/40 via-gold/20 to-gold/5" />
+
+            <div className="space-y-6">
+              {steps.map((step, i) => (
+                <div key={i} className="flex gap-5 group">
+                  {/* Number dot */}
+                  <div className="relative flex-shrink-0">
+                    <div className="w-[31px] h-[31px] rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center">
+                      <span className="text-gold text-[11px] font-bold font-mono">{step.num}</span>
+                    </div>
+                  </div>
+                  {/* Content */}
+                  <div className="pt-0.5">
+                    <h3 className="text-white text-[15px] font-semibold leading-tight">{step.title}</h3>
+                    <p className="text-steel-200 text-[13px] leading-relaxed mt-1.5 max-w-xs">{step.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
-        {/* Bottom text */}
+        {/* Bottom */}
         <p className="relative z-10 text-steel-200 text-xs">
           Inscription gratuite &middot; Crédits d'essai inclus &middot; Sans engagement
         </p>
