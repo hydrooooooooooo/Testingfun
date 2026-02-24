@@ -9,6 +9,8 @@ import {
   RotateCw,
   ShoppingBag,
   Settings2,
+  Info,
+  Lightbulb,
 } from "lucide-react";
 import { FavoriteButton, FavoriteSelector, FavoritesManager } from "@/components/favorites";
 import { Favorite } from "@/hooks/useFavorites";
@@ -154,6 +156,16 @@ export default function MarketplacePage() {
         </p>
       </div>
 
+      {/* Quick guide */}
+      <div className="flex items-start gap-3 bg-navy/5 border border-navy/10 rounded-lg px-4 py-3">
+        <Lightbulb className="h-4 w-4 text-gold-500 mt-0.5 flex-shrink-0" />
+        <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-steel">
+          <span><span className="font-semibold text-navy">1.</span> Collez une URL Marketplace</span>
+          <span><span className="font-semibold text-navy">2.</span> Choisissez le nombre d'annonces</span>
+          <span><span className="font-semibold text-navy">3.</span> Lancez et exportez en Excel/CSV</span>
+        </div>
+      </div>
+
       {/* Form */}
       <Card className="bg-white border-cream-300 shadow-sm">
         <CardContent className="p-5 sm:p-6">
@@ -190,7 +202,7 @@ export default function MarketplacePage() {
                   type="url"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
-                  placeholder="https://www.facebook.com/marketplace/..."
+                  placeholder="https://www.facebook.com/marketplace/category/vehicles"
                   className="w-full h-11 border border-cream-300 rounded-lg px-4 pr-12 text-sm focus:ring-2 focus:ring-navy/30 focus:border-navy bg-cream-50"
                   required
                   disabled={isRunning}
@@ -209,6 +221,14 @@ export default function MarketplacePage() {
               </div>
             </div>
 
+            {/* URL hint */}
+            {!url.trim() && (
+              <p className="text-xs text-steel flex items-center gap-1.5 -mt-1">
+                <Info className="h-3 w-3 flex-shrink-0" />
+                Ouvrez Facebook Marketplace, faites une recherche, puis copiez l'URL de la page
+              </p>
+            )}
+
             {/* Max Items */}
             <div>
               <label htmlFor="maxItems" className="text-sm font-medium text-navy-700 mb-1.5 block">
@@ -224,6 +244,7 @@ export default function MarketplacePage() {
                 className="w-full h-11 border border-cream-300 rounded-lg px-4 text-sm focus:ring-2 focus:ring-navy/30 focus:border-navy bg-cream-50"
                 disabled={isRunning}
               />
+              <p className="text-xs text-steel mt-1">De 1 à 500 — plus d'annonces = plus de crédits</p>
             </div>
 
             {/* Advanced Options Toggle */}

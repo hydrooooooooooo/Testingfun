@@ -10,6 +10,8 @@ import {
   TrendingUp,
   Settings2,
   ArrowRight,
+  Lightbulb,
+  Info,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -236,6 +238,16 @@ export default function FacebookPagesPage() {
         </p>
       </div>
 
+      {/* Quick guide */}
+      <div className="flex items-start gap-3 bg-navy/5 border border-navy/10 rounded-lg px-4 py-3">
+        <Lightbulb className="h-4 w-4 text-gold-500 mt-0.5 flex-shrink-0" />
+        <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-steel">
+          <span><span className="font-semibold text-navy">1.</span> Ajoutez une ou plusieurs pages Facebook</span>
+          <span><span className="font-semibold text-navy">2.</span> Choisissez les données (infos, posts)</span>
+          <span><span className="font-semibold text-navy">3.</span> Lancez et consultez les résultats</span>
+        </div>
+      </div>
+
       <div className="grid lg:grid-cols-[1fr,320px] gap-4">
         {/* Form */}
         <Card className="bg-white border-cream-300 shadow-sm">
@@ -301,15 +313,23 @@ export default function FacebookPagesPage() {
                   ))}
                 </div>
 
-                <button
-                  type="button"
-                  onClick={addUrl}
-                  disabled={urls.length >= MAX_PAGES}
-                  className="mt-2 flex items-center gap-1.5 text-xs font-medium text-steel hover:text-navy transition-colors disabled:opacity-40"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  Ajouter une page
-                </button>
+                <div className="mt-2 flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={addUrl}
+                    disabled={urls.length >= MAX_PAGES}
+                    className="flex items-center gap-1.5 text-xs font-medium text-steel hover:text-navy transition-colors disabled:opacity-40"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    Ajouter une page
+                  </button>
+                  {validCount === 0 && (
+                    <p className="text-xs text-steel flex items-center gap-1">
+                      <Info className="h-3 w-3" />
+                      Ex: facebook.com/NomDeLaPage
+                    </p>
+                  )}
+                </div>
               </div>
 
               {/* Data type toggles */}
@@ -566,11 +586,31 @@ export default function FacebookPagesPage() {
 
           <Card className="bg-cream-50 border-cream-300">
             <CardContent className="p-4">
-              <p className="text-xs font-medium text-navy mb-2">Conseils</p>
-              <ul className="space-y-1 text-xs text-steel">
-                <li>• URLs complètes de pages Facebook</li>
-                <li>• Max {MAX_PAGES} pages par extraction</li>
-                <li>• Les dates sont optionnelles</li>
+              <p className="text-xs font-medium text-navy mb-2 flex items-center gap-1.5">
+                <Lightbulb className="h-3.5 w-3.5 text-gold-500" />
+                Guide rapide
+              </p>
+              <ul className="space-y-2 text-xs text-steel">
+                <li className="flex gap-2">
+                  <span className="font-semibold text-navy flex-shrink-0">URL</span>
+                  <span>Collez l'URL complète de la page Facebook (ex: facebook.com/cocacola)</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-semibold text-navy flex-shrink-0">Infos</span>
+                  <span>Nom, description, abonnés, catégorie, coordonnées</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-semibold text-navy flex-shrink-0">Posts</span>
+                  <span>Texte, images, likes, commentaires, partages, date</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-semibold text-navy flex-shrink-0">Dates</span>
+                  <span>Filtrez par période pour cibler les posts récents</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-semibold text-navy flex-shrink-0">Multi</span>
+                  <span>Jusqu'à {MAX_PAGES} pages en une seule extraction</span>
+                </li>
               </ul>
             </CardContent>
           </Card>
