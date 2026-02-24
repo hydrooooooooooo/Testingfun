@@ -202,22 +202,17 @@ export function useApi() {
   /**
    * Create a payment session
    */
-  const createPayment = async (sessionId: string, packId: string) => {
+  const createPayment = async (sessionId: string, packId: string, currency: 'eur' | 'mga' = 'eur') => {
     setLoading(true);
     setError(null);
 
-    // --- Débogage Amélioré ---
-    console.log('%c[Payment] Tentative de création de paiement...', 'color: blue; font-weight: bold;');
-    console.log(`[Payment] Session ID: ${sessionId}`);
-    console.log(`[Payment] Pack ID: ${packId}`);
-    
-    // Auth is handled via httpOnly cookies; token in localStorage is no longer required
-    // --- Fin Débogage ---
+    console.log(`[Payment] Creating payment: session=${sessionId}, pack=${packId}, currency=${currency}`);
 
     try {
       const response = await api.post(`/payment/create-payment`, {
         sessionId,
         packId,
+        currency,
       });
       console.log('%c[Payment] Succès de la création du paiement !', 'color: green; font-weight: bold;', response.data);
       return response.data;

@@ -31,6 +31,12 @@ export const config = {
     apifyPagesInfoActorId: process.env.APIFY_PAGES_INFO_ACTOR_ID || 'apify/facebook-pages-scraper',
     apifyPagesPostsActorId: process.env.APIFY_PAGES_POSTS_ACTOR_ID || 'apify/facebook-posts-scraper',
     apifyCommentsActorId: process.env.APIFY_COMMENTS_ACTOR_ID || 'us5srxAYnsrkgUv2v',
+    stripePriceStarter: process.env.STRIPE_PRICE_STARTER,
+    stripePricePro: process.env.STRIPE_PRICE_PRO,
+    stripePriceBusiness: process.env.STRIPE_PRICE_BUSINESS,
+    stripePriceStarterMga: process.env.STRIPE_PRICE_STARTER_MGA,
+    stripePriceProMga: process.env.STRIPE_PRICE_PRO_MGA,
+    stripePriceBusinessMga: process.env.STRIPE_PRICE_BUSINESS_MGA,
   },
 
   // AI / OpenRouter configuration
@@ -57,14 +63,6 @@ export const config = {
   session: {
     // Can be 'memory' or 'database'
     storage: process.env.SESSION_STORAGE || 'memory',
-  },
-  
-  // Pricing configuration
-  pricing: {
-    // Price in euros
-    standardPack: 9.99,
-    premiumPack: 19.99,
-    enterprisePack: 49.99,
   },
   
   // Logging configuration

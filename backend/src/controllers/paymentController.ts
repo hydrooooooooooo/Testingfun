@@ -44,16 +44,22 @@ export class PaymentController {
       logger.info(`Vérification du paiement pour la session: ${sessionId}`);
       
       const session = await sessionService.getSession(sessionId);
-      
+
       if (!session) {
         throw new ApiError(404, `Session with ID ${sessionId} not found.`);
       }
-      
+
+      // Ownership check: only the session owner can verify payment
+      const userId = (req as any).user?.id;
+      if (session.user_id && userId && Number(session.user_id) !== Number(userId)) {
+        throw new ApiError(403, 'Not authorized to verify this session');
+      }
+
       const isPaid = session.isPaid;
-      
+
       const response = {
         isPaid,
-        packId: session.packId || 'pack-decouverte',
+        packId: session.packId || 'pack-starter',
         datasetId: session.datasetId || null,
         createdAt: session.created_at || new Date(),
         downloadUrl: session.downloadUrl || null,
@@ -72,10 +78,10 @@ export class PaymentController {
    */
   async createPayment(req: Request, res: Response, next: NextFunction) {
     try {
-      const { packId, sessionId } = req.body;
+      const { packId, sessionId, currency = 'eur' } = req.body;
       const userId = (req as any).user?.id;
 
-      logger.info(`[Payment] Attempting to create payment for session: ${sessionId}, pack: ${packId}, user: ${userId}`);
+      logger.info(`[Payment] Attempting to create payment for session: ${sessionId}, pack: ${packId}, currency: ${currency}, user: ${userId}`);
 
       if (!packId || !sessionId) {
         throw new ApiError(400, 'Pack ID and Session ID are required');
@@ -103,23 +109,27 @@ export class PaymentController {
 
       logger.info(`[Payment] Session ${sessionId} successfully updated with userId: ${userId} and packId: ${packId}`);
 
-      if (!pack.stripe_price_id) {
-        logger.error(`[Payment] Stripe Price ID manquant pour le pack: ${pack.id}`);
-        throw new ApiError(500, "Configuration de paiement incomplète pour ce pack.");
+      // Select the correct Stripe Price ID based on currency
+      const priceId = currency === 'mga' ? pack.stripe_price_id_mga : pack.stripe_price_id;
+      if (!priceId) {
+        logger.error(`[Payment] Stripe Price ID manquant pour le pack: ${pack.id}, currency: ${currency}`);
+        throw new ApiError(500, "Configuration de paiement incomplète pour ce pack et cette devise.");
       }
 
       const metadata = {
         sessionId: updatedSession.id,
         userId: String(userId),
         packId: pack.id,
+        currency,
       };
 
       logger.info(`[Payment] Creating Stripe session with metadata: ${JSON.stringify(metadata)}`);
 
       const checkoutSession = await stripeService.createCheckoutSession(
-        pack.stripe_price_id,
+        priceId,
         updatedSession.id,
-        metadata
+        metadata,
+        currency
       );
 
       res.status(200).json({
@@ -169,7 +179,7 @@ export class PaymentController {
       logger.error('❌ Error handling webhook:', error);
       audit('stripe.webhook_verification_failed', { error: (error as Error).message });
       await alertService.notify('stripe.webhook_verification_failed', { error: (error as Error).message });
-      res.status(400).json({ error: (error as Error).message });
+      res.status(400).json({ error: 'Webhook verification failed' });
     }
   }
 

@@ -13,16 +13,12 @@ const formatPlanFeatures = (plan: any): string[] => {
   const unitPriceMGA = Math.round(plan.price / plan.nb_downloads);
   const savings = unitPriceMGA < basePriceMGA ? Math.round(((basePriceMGA - unitPriceMGA) / basePriceMGA) * 100) : 0;
 
-  if (plan.nb_downloads <= 50) {
-    return ["Parfait pour tester", "Support par email", "Données structurées Excel"];
-  } else if (plan.nb_downloads <= 150) {
+  if (plan.nb_downloads <= 300) {
+    return ["Parfait pour démarrer", "Support par email", "Données structurées Excel"];
+  } else if (plan.nb_downloads <= 1000) {
     return [`Économisez ${savings}%`, "Pack le plus populaire", "Support prioritaire"];
-  } else if (plan.nb_downloads <= 350) {
-    return [`Économisez ${savings}%`, "Idéal projets moyens", "Support technique dédié"];
-  } else if (plan.nb_downloads <= 700) {
-    return [`Économisez ${savings}%`, "Volume professionnel", "Support prioritaire 24/7"];
   } else {
-    return [`Économisez ${savings}%`, "Meilleur rapport qualité/prix", "Support entreprise"];
+    return [`Économisez ${savings}%`, "Meilleur rapport qualité/prix", "Support entreprise 24/7"];
   }
 };
 

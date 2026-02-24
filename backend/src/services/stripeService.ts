@@ -1,25 +1,23 @@
 import Stripe from 'stripe';
 import { logger } from '../utils/logger';
-import { PLANS } from '../config/plans';
 import { config } from '../config/config';
 
-// Initialize Stripe with the secret key
-const stripe = new Stripe(config.api.stripeSecretKey || '', {
-  apiVersion: '2023-10-16',
-});
+// Initialize Stripe with the secret key — use SDK default API version
+const stripe = new Stripe(config.api.stripeSecretKey || '');
 
 export class StripeService {
   /**
-   * Create a dynamic Stripe checkout session
+   * Create a Stripe checkout session.
+   * Omits payment_method_types to enable dynamic payment methods (Apple Pay, Google Pay, etc.)
    */
   async createCheckoutSession(
     priceId: string,
     clientReferenceId: string,
-    metadata: Record<string, string>
+    metadata: Record<string, string>,
+    currency?: string
   ): Promise<Stripe.Checkout.Session> {
     try {
       const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
         line_items: [
           {
             price: priceId,
@@ -27,8 +25,7 @@ export class StripeService {
           },
         ],
         mode: 'payment',
-        // Important: rediriger avec l'ID de session interne (clientReferenceId)
-        success_url: `${config.server.frontendUrl}/download?session_id=${clientReferenceId}`,
+        success_url: `${config.server.frontendUrl}/download?session_id=${clientReferenceId}&checkout_session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${config.server.frontendUrl}/pricing`,
         client_reference_id: clientReferenceId,
         metadata: metadata,
@@ -36,13 +33,13 @@ export class StripeService {
           metadata: metadata,
         },
       });
-      
+
       logger.info(`Created Stripe checkout session ${session.id} for pack ${metadata.packId}, session ${clientReferenceId}`);
-      
+
       if (!session.url) {
         throw new Error('Stripe did not return a checkout URL');
       }
-      
+
       return session;
     } catch (error) {
       logger.error('Error creating Stripe checkout session:', error);
@@ -51,7 +48,7 @@ export class StripeService {
   }
 
   /**
-   * Verify a Stripe webhook event
+   * Retrieve a payment intent by ID
    */
   async retrievePaymentIntent(paymentIntentId: string): Promise<Stripe.PaymentIntent> {
     try {
@@ -68,11 +65,14 @@ export class StripeService {
    * Verify a Stripe webhook event
    */
   constructEvent(payload: string, signature: string): Stripe.Event {
+    if (!config.api.stripeWebhookSecret) {
+      throw new Error('Stripe webhook secret is not configured');
+    }
     try {
       return stripe.webhooks.constructEvent(
         payload,
         signature,
-        config.api.stripeWebhookSecret || ''
+        config.api.stripeWebhookSecret
       );
     } catch (error) {
       logger.error('Error verifying webhook signature:', error);
@@ -91,7 +91,7 @@ export class StripeService {
       throw new Error(`Failed to retrieve checkout session: ${(error as Error).message}`);
     }
   }
-  
+
   /**
    * Retrieve a payment intent by ID
    */

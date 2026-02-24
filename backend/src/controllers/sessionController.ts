@@ -38,7 +38,7 @@ export const downloadSessionData = async (req: AuthenticatedRequest, res: Respon
     }
 
     // Déterminer le packId à utiliser
-    const packIdToUse = session.packId || packIdQuery || 'pack-decouverte';
+    const packIdToUse = session.packId || packIdQuery || 'pack-starter';
 
     // Si la session n'a pas de packId mais qu'un pack_id est fourni dans la requête, persister pour les prochaines fois
     if (!session.packId && packIdQuery) {

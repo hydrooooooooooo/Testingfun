@@ -40,11 +40,9 @@ export const isValidPackId = (packId: string): boolean => {
   
   // Pack ID should match one of our defined packs
   const validPackIds = [
-    'pack-decouverte',
-    'pack-essentiel',
-    'pack-business',
+    'pack-starter',
     'pack-pro',
-    'pack-enterprise'
+    'pack-business',
   ];
   
   return validPackIds.includes(packId);

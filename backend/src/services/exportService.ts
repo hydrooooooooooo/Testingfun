@@ -2,7 +2,7 @@ import ExcelJS from 'exceljs';
 import axios from 'axios';
 import { logger } from '../utils/logger';
 import { apifyService } from './apifyService';
-import { PLANS } from '../config/plans';
+import db from '../database';
 
 export class ExportService {
   
@@ -122,10 +122,11 @@ export class ExportService {
 
       // Normaliser les données
       const items = rawItems.map(item => this.normalizeItem(item));
-      const pack = PLANS.find(p => p.id === packId) || PLANS[0];
-      const limitedItems = items.slice(0, pack.nbDownloads);
+      const pack = await db('packs').where({ id: packId }).first();
+      const downloadLimit = pack?.nb_downloads || 100;
+      const limitedItems = items.slice(0, downloadLimit);
 
-      logger.info(`${limitedItems.length} éléments à traiter pour le pack ${pack.name}`);
+      logger.info(`${limitedItems.length} éléments à traiter pour le pack ${pack?.name || packId}`);
 
       // Créer le classeur Excel
       const workbook = new ExcelJS.Workbook();
@@ -366,8 +367,8 @@ export class ExportService {
    * Générer des données de démonstration pour les exports
    */
   private generateDemoData(packId: string): any[] {
-    const pack = PLANS.find(p => p.id === packId) || PLANS[0];
-    const nbItems = pack.nbDownloads || 50;
+    // Use a simple default for demo data — no DB call needed
+    const nbItems = 50;
     
     const demoItems = [];
     const sampleImages = [
@@ -380,7 +381,7 @@ export class ExportService {
     
     for (let i = 1; i <= nbItems; i++) {
       demoItems.push({
-        title: `Annonce démonstration #${i} - ${pack.name}`,
+        title: `Annonce démonstration #${i} - ${packId}`,
         price: `${Math.floor(Math.random() * 1000) + 100} €`,
         description: `Ceci est une description de démonstration pour l'annonce #${i}. Ce fichier est généré pour montrer le format des données exportées avec images intégrées.`,
         location: ['Paris', 'Lyon', 'Marseille', 'Bordeaux', 'Lille'][Math.floor(Math.random() * 5)],
@@ -474,8 +475,9 @@ export class ExportService {
       }
 
       const items = rawItems.map(item => this.normalizeItem(item));
-      const pack = PLANS.find(p => p.id === packId) || PLANS[0];
-      const limitedItems = items.slice(0, pack.nbDownloads);
+      const pack = await db('packs').where({ id: packId }).first();
+      const downloadLimit = pack?.nb_downloads || 100;
+      const limitedItems = items.slice(0, downloadLimit);
 
       let csv = 'Titre;Prix;Description;Localisation;URL;Date;Image URL\n';
       

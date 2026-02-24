@@ -60,7 +60,7 @@ export class ExportController {
           const newSession: Partial<Session> = {
             id: sessionId,
             isPaid: true,
-            packId: 'pack-decouverte',
+            packId: 'pack-starter',
             status: SessionStatus.FINISHED,  // La session est considérée comme terminée
             hasData: true // On considère qu'une session temporaire a des données
           };
@@ -144,7 +144,7 @@ export class ExportController {
       
       // Si le pack n'est pas défini, utiliser un pack par défaut
       if (!session.packId) {
-        const defaultPack = 'pack-decouverte';
+        const defaultPack = 'pack-starter';
         logger.info(`[${requestId}] Utilisation du pack par défaut ${defaultPack} pour la session ${sessionId}`);
         
         // Mettre à jour la session avec le pack par défaut
@@ -159,7 +159,7 @@ export class ExportController {
       }
       
       // Pour les sessions normales, continuer avec le processus standard
-      const packId = session.packId || 'pack-decouverte';
+      const packId = session.packId || 'pack-starter';
       let buffer: Buffer;
       let filename: string;
       let contentType: string;
@@ -334,8 +334,8 @@ export class ExportController {
     isFallback: boolean = false
   ): Promise<void> {
     try {
-      // Déterminer le pack à utiliser (par défaut pack-decouverte)
-      const packId = 'pack-decouverte';
+      // Déterminer le pack à utiliser (par défaut pack-starter)
+      const packId = 'pack-starter';
       
       // Log approprié
       if (isFallback) {

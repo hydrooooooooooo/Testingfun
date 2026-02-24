@@ -1,9 +1,6 @@
-// This is a mock implementation. Replace with actual plan logic.
-export function getPlanDetails(packId: string): { limit: number } {
-  console.log(`Getting plan details for packId: ${packId}`);
-  // Mock response
-  if (packId === 'pro') {
-    return { limit: 1000 };
-  }
-  return { limit: 100 };
+import db from '../database';
+
+export async function getPlanDetails(packId: string): Promise<{ limit: number }> {
+  const pack = await db('packs').where({ id: packId }).first();
+  return { limit: pack?.nb_downloads || 100 };
 }

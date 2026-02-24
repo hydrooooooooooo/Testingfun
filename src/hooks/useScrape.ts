@@ -207,11 +207,11 @@ export function useScrape(initialSessionId?: string) {
     setPaymentModalOpen(true);
   };
 
-  const onStripePay = async () => {
+  const onStripePay = async (currency: 'eur' | 'mga' = 'eur') => {
     if (!sessionId || !paymentInfo) return;
     setLoading(true);
     try {
-      const paymentData = await createPayment(sessionId, paymentInfo.pack.id);
+      const paymentData = await createPayment(sessionId, paymentInfo.pack.id, currency);
       const redirectUrl = paymentData?.url || paymentData?.stripeUrl;
       if (redirectUrl) {
         window.location.href = redirectUrl;

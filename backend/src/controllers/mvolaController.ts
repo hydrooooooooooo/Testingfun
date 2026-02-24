@@ -1,7 +1,6 @@
 import { Response } from 'express';
 import { MVolaMerchantPay } from 'mvola-merchant-pay';
 import db from '../database';
-import { PLANS } from '../config/plans';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 
 import { nanoid } from 'nanoid';
