@@ -108,10 +108,10 @@ export default function DownloadPage() {
 
   if (isVerifying) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-cream-50 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-12 h-12 text-blue-600 animate-spin" />
-          <p className="text-lg font-semibold text-gray-700">Vérification du paiement...</p>
+          <Loader2 className="w-12 h-12 text-navy animate-spin" />
+          <p className="text-lg font-semibold text-navy-700">Vérification du paiement...</p>
         </div>
       </div>
     );
@@ -119,19 +119,19 @@ export default function DownloadPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-cream-50 flex items-center justify-center p-4">
         <div className="w-full max-w-md mx-auto text-center">
           <div className="rounded-xl border p-8 shadow-lg bg-white">
             <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
               <CheckCircle className="w-8 h-8 text-red-600" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-800">Erreur de vérification</h1>
-            <p className="text-gray-600 mt-2 mb-6">{error}</p>
+            <h1 className="text-2xl font-bold text-navy">Erreur de vérification</h1>
+            <p className="text-steel mt-2 mb-6">{error}</p>
             <Button onClick={verifyPayment} disabled={isVerifying} className="w-full">
               {isVerifying ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RotateCcw className="w-4 h-4 mr-2" />}
               Réessayer
             </Button>
-            <Button variant="link" onClick={handleReturnHome} className="mt-4 text-gray-600">Retour à l'accueil</Button>
+            <Button variant="link" onClick={handleReturnHome} className="mt-4 text-steel">Retour à l'accueil</Button>
           </div>
         </div>
       </div>
@@ -143,7 +143,7 @@ export default function DownloadPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-b from-cream-50 to-navy-50">
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-3xl mx-auto">
           <div className="space-y-8">
@@ -151,14 +151,14 @@ export default function DownloadPage() {
               <div className="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
                 <CheckCircle className="w-12 h-12 text-green-600" />
               </div>
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900">Paiement réussi !</h1>
-              <p className="mt-4 text-lg text-gray-600">Votre fichier est prêt à être téléchargé.</p>
+              <h1 className="text-4xl font-bold tracking-tight text-navy">Paiement réussi !</h1>
+              <p className="mt-4 text-lg text-steel">Votre fichier est prêt à être téléchargé.</p>
             </div>
             <div className="rounded-2xl border p-8 shadow-lg bg-white/70 backdrop-blur-sm">
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-800">Détails de votre achat</h2>
-                  <div className="mt-2 text-sm text-gray-600 space-y-1">
+                  <h2 className="text-lg font-semibold text-navy">Détails de votre achat</h2>
+                  <div className="mt-2 text-sm text-steel space-y-1">
                     <p><span className="font-medium">Pack :</span> {pack.name}</p>
                     <p><span className="font-medium">Session ID :</span> {sessionId}</p>
                   </div>
@@ -187,22 +187,22 @@ export default function DownloadPage() {
                 )}
               </div>
             </div>
-            <div className="rounded-xl border p-6 shadow-lg bg-blue-50 border-blue-200">
+            <div className="rounded-xl border p-6 shadow-lg bg-navy-50 border-navy-200">
               <div className="text-center space-y-4">
-                <h2 className="text-xl font-semibold text-blue-900">Merci d'utiliser notre service ! 🎉</h2>
-                <p className="text-blue-700">Nous espérons que nos données vous seront utiles pour vos projets.</p>
-                <Button onClick={handleNewScraping} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold">
+                <h2 className="text-xl font-semibold text-navy">Merci d'utiliser notre service !</h2>
+                <p className="text-navy-700">Nous espérons que nos données vous seront utiles pour vos projets.</p>
+                <Button onClick={handleNewScraping} className="bg-navy hover:bg-navy-400 text-white font-semibold">
                   <Home className="w-4 h-4 mr-2" />
                   Nouveau scraping
                 </Button>
               </div>
             </div>
-            <div className="rounded-xl border p-6 shadow-lg bg-gray-50 border-gray-200">
+            <div className="rounded-xl border p-6 shadow-lg bg-cream-50 border-cream-300">
               <div className="text-center space-y-3">
-                <h3 className="text-lg font-semibold text-gray-900">Une question ou un problème ?</h3>
-                <p className="text-gray-600 text-sm">En cas de réclamation, contactez notre support en mentionnant votre Session ID :</p>
+                <h3 className="text-lg font-semibold text-navy">Une question ou un problème ?</h3>
+                <p className="text-steel text-sm">En cas de réclamation, contactez notre support en mentionnant votre Session ID :</p>
                 <p className="font-mono text-sm bg-white px-3 py-2 rounded border">{sessionId}</p>
-                <a href={`mailto:support@easyscrapymg.com?subject=Réclamation - Session ${sessionId}`} className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold text-sm">
+                <a href={`mailto:support@easyscrapymg.com?subject=Réclamation - Session ${sessionId}`} className="inline-flex items-center gap-2 text-navy hover:text-navy-400 font-semibold text-sm">
                   <Mail className="w-4 h-4 mr-2" />
                   Contacter le support
                 </a>

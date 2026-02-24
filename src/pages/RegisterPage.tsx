@@ -87,7 +87,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-950">
+    <div className="flex items-center justify-center min-h-screen bg-cream-100 dark:bg-navy">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-xl">S'inscrire</CardTitle>
@@ -150,7 +150,7 @@ export default function RegisterPage() {
                         <button
                           type="button"
                           onClick={() => setShowPassword((v) => !v)}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-steel hover:text-navy-700"
                           aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                         >
                           {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -173,7 +173,7 @@ export default function RegisterPage() {
                         <button
                           type="button"
                           onClick={() => setShowConfirm((v) => !v)}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-steel hover:text-navy-700"
                           aria-label={showConfirm ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                         >
                           {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}

@@ -74,17 +74,17 @@ export default function PricingPage() {
   };
 
   return (
-    <main className="bg-gray-50 min-h-screen">
+    <main className="bg-cream-50 min-h-screen">
       <section className="w-full bg-white py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-4">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-navy tracking-tight mb-4">
               Des tarifs flexibles pour chaque besoin
             </h1>
-            <p className="max-w-2xl mx-auto text-lg text-gray-600">
+            <p className="max-w-2xl mx-auto text-lg text-steel">
               Choisissez le pack qui correspond à votre volume d'extraction et commencez à scraper en quelques secondes.
             </p>
-            <div className="mt-6 inline-flex items-center gap-2 bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+            <div className="mt-6 inline-flex items-center gap-2 bg-gold/20 text-navy px-4 py-2 rounded-full text-sm font-medium">
               <CheckCircle className="w-4 h-4" />
               Économisez jusqu'à 38% avec les gros volumes
             </div>
@@ -93,7 +93,7 @@ export default function PricingPage() {
           <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 justify-items-center items-stretch">
             {loading ? (
               <div className="col-span-full flex justify-center items-center py-12">
-                <Loader2 className="h-12 w-12 animate-spin text-indigo-600" />
+                <Loader2 className="h-12 w-12 animate-spin text-navy" />
               </div>
             ) : (
               pricingPlans.map((plan) => (

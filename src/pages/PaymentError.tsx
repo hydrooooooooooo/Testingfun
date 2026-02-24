@@ -154,10 +154,10 @@ export default function PaymentErrorPage() {
           {/* En-tête d'erreur */}
           <div className="text-center mb-8">
             <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-navy mb-2">
               Échec du paiement
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-steel">
               Votre paiement n'a pas pu être traité
             </p>
           </div>
@@ -192,37 +192,37 @@ export default function PaymentErrorPage() {
           {/* Informations sur la commande */}
           {sessionValid && (
             <div className="bg-white rounded-lg border shadow-sm p-6 mb-8">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Détails de votre commande</h2>
+              <h2 className="text-xl font-semibold text-navy mb-4">Détails de votre commande</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-600">Pack sélectionné</p>
+                  <p className="text-sm text-steel">Pack sélectionné</p>
                   <p className="font-semibold">{pack.name}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Prix</p>
+                  <p className="text-sm text-steel">Prix</p>
                   <p className="font-semibold">{pack.priceLabel}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Nombre d'annonces</p>
+                  <p className="text-sm text-steel">Nombre d'annonces</p>
                   <p className="font-semibold">{pack.nbDownloads} éléments</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Session ID</p>
-                  <p className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">{sessionId}</p>
+                  <p className="text-sm text-steel">Session ID</p>
+                  <p className="font-mono text-xs bg-cream-100 px-2 py-1 rounded">{sessionId}</p>
                 </div>
               </div>
             </div>
           )}
 
           {/* Solutions et actions */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+          <div className="bg-navy-50 border border-navy-200 rounded-lg p-6 mb-8">
             <div className="flex items-start space-x-3">
-              <Info className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+              <Info className="h-5 w-5 text-navy mt-0.5 flex-shrink-0" />
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-blue-900 mb-3">
+                <h3 className="text-lg font-semibold text-navy mb-3">
                   Solutions suggérées
                 </h3>
-                <ul className="text-blue-800 space-y-2 mb-4">
+                <ul className="text-navy space-y-2 mb-4">
                   <li>• Vérifiez que votre carte est valide et non expirée</li>
                   <li>• Assurez-vous d'avoir des fonds suffisants</li>
                   <li>• Vérifiez que les informations saisies sont correctes</li>
@@ -239,7 +239,7 @@ export default function PaymentErrorPage() {
               <Button 
                 onClick={handleRetryPayment}
                 disabled={isRetrying}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3"
+                className="w-full bg-navy hover:bg-navy-400 text-white font-semibold py-3"
                 size="lg"
               >
                 {isRetrying ? (

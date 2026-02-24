@@ -318,10 +318,10 @@ export default function PaymentSuccessPage() {
   return (
 
       <section className="mx-auto w-full max-w-xl my-20 px-2 flex flex-col items-center gap-6">
-        <div className={`rounded-xl border p-8 shadow-lg flex flex-col items-center gap-2 ${isVerifying ? 'bg-blue-50 border-blue-200' : error ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
+        <div className={`rounded-xl border p-8 shadow-lg flex flex-col items-center gap-2 ${isVerifying ? 'bg-navy-50 border-navy-200' : error ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
           {isVerifying ? (
             <div className="flex flex-col items-center gap-4 py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              <Loader2 className="h-8 w-8 animate-spin text-navy" />
               <p className="text-md text-muted-foreground">Vérification du paiement en cours...</p>
               <p className="text-sm text-muted-foreground">Session ID: <span className="font-mono text-xs bg-white px-2 py-1 rounded">{sessionId}</span></p>
             </div>
@@ -341,7 +341,7 @@ export default function PaymentSuccessPage() {
                   <RefreshCw className="h-4 w-4" />
                   Réessayer
                 </Button>
-                <Link to="/" className="flex items-center gap-1 text-blue-600 font-semibold hover:underline">
+                <Link to="/" className="flex items-center gap-1 text-navy font-semibold hover:underline">
                   <Home className="h-4 w-4" />
                   Accueil
                 </Link>
@@ -365,16 +365,16 @@ export default function PaymentSuccessPage() {
               {/* Afficher la prévisualisation des données */}
               {isLoadingPreview ? (
                 <div className="flex flex-col items-center gap-4 py-4 mt-4 w-full">
-                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 w-full text-center">
-                    <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-blue-600" />
+                  <div className="bg-navy-50 p-4 rounded-lg border border-navy-200 w-full text-center">
+                    <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-navy" />
                     <p className="text-sm text-muted-foreground">Chargement de la prévisualisation...</p>
                   </div>
                 </div>
               ) : previewItems && previewItems.length > 0 ? (
                 <div className="mt-4 w-full">
                   <div className="flex items-center justify-center gap-2 mb-2">
-                    <Eye className="h-5 w-5 text-blue-600" />
-                    <h3 className="text-lg font-semibold text-blue-700">Prévisualisation des données</h3>
+                    <Eye className="h-5 w-5 text-navy" />
+                    <h3 className="text-lg font-semibold text-navy">Prévisualisation des données</h3>
                   </div>
                   <ScrapePreview items={previewItems.slice(0, 3)} />
                   <p className="text-xs text-center text-muted-foreground mt-2">
@@ -382,10 +382,10 @@ export default function PaymentSuccessPage() {
                   </p>
                 </div>
               ) : (
-                <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-200 w-full text-center">
-                  <AlertTriangle className="h-5 w-5 mx-auto mb-2 text-amber-600" />
-                  <p className="text-sm text-amber-700">Aucun élément de prévisualisation disponible</p>
-                  <p className="text-xs text-amber-600 mt-1">Vous pouvez tout de même télécharger vos données</p>
+                <div className="mt-4 p-4 bg-gold-50 rounded-lg border border-gold-200 w-full text-center">
+                  <AlertTriangle className="h-5 w-5 mx-auto mb-2 text-gold" />
+                  <p className="text-sm text-gold-700">Aucun élément de prévisualisation disponible</p>
+                  <p className="text-xs text-gold mt-1">Vous pouvez tout de même télécharger vos données</p>
                 </div>
               )}
               
@@ -400,7 +400,7 @@ export default function PaymentSuccessPage() {
                   Télécharger Excel ({pack.nbDownloads} annonces)
                 </Button>
                 <Button 
-                  className="w-full font-bold text-lg gap-2 bg-gradient-to-r from-blue-500 to-blue-700"
+                  className="w-full font-bold text-lg gap-2 bg-gradient-to-r from-navy to-steel"
                   onClick={() => handleDownload('csv')}
                   disabled={isLoading}
                   type="button"
@@ -409,7 +409,7 @@ export default function PaymentSuccessPage() {
                   Télécharger CSV ({pack.nbDownloads} annonces)
                 </Button>
               </div>
-              <Link to="/" className="mt-4 flex items-center gap-1 text-blue-600 font-semibold hover:underline">
+              <Link to="/" className="mt-4 flex items-center gap-1 text-navy font-semibold hover:underline">
                 <Home className="h-4 w-4" />
                 Retour à l'accueil
               </Link>

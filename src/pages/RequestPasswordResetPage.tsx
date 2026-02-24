@@ -39,7 +39,7 @@ export default function RequestPasswordResetPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-950">
+    <div className="flex items-center justify-center min-h-screen bg-cream-100 dark:bg-navy">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Réinitialiser le mot de passe</CardTitle>

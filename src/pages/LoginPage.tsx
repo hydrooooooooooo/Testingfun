@@ -75,7 +75,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-950">
+    <div className="flex items-center justify-center min-h-screen bg-cream-100 dark:bg-navy">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Connexion</CardTitle>
@@ -117,7 +117,7 @@ export default function LoginPage() {
                   {form.formState.isSubmitting ? 'Connexion en cours...' : 'Se connecter'}
                 </Button>
                 {unverified && (
-                  <div className="text-center text-sm text-amber-600 dark:text-amber-400">
+                  <div className="text-center text-sm text-gold dark:text-gold-400">
                     Votre e-mail n’est pas vérifié. Veuillez consulter votre boîte de réception pour valider votre compte.
                   </div>
                 )}
