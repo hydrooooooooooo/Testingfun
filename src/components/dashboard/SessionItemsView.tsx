@@ -202,7 +202,7 @@ const SessionItemsView: React.FC<SessionItemsViewProps> = ({ sessionId, sessionU
       ) : (
         <>
           {viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {items.map((item) => (
                 <ItemCard
                   key={item.id}
@@ -947,7 +947,7 @@ export function FacebookPageItemsView({ sessionId, pageName, pageData: initialPa
               type="button"
               size="sm"
               variant="outline"
-              className="h-8 px-3 border-steel-700 bg-[#1a1d29] text-steel-200 text-xs font-medium flex items-center gap-1.5"
+              className="h-8 px-3 border-cream-300 bg-white text-navy text-xs font-medium flex items-center gap-1.5"
               onClick={() => setShowPosts((prev) => !prev)}
             >
               <span>{showPosts ? 'Masquer les posts' : 'Afficher les posts'}</span>

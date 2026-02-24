@@ -71,7 +71,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onToggleFavorite, onUpdateNot
 
             {/* Prix */}
             {item.price && (
-              <div className="absolute top-2 right-2 bg-[#1a1d29]/95 backdrop-blur px-3 py-1 rounded-full shadow-lg border border-cream-300">
+              <div className="absolute top-2 right-2 bg-white/95 backdrop-blur px-3 py-1 rounded-full shadow-lg border border-cream-300">
                 <span className="font-bold text-navy">{item.price}</span>
               </div>
             )}
@@ -80,7 +80,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onToggleFavorite, onUpdateNot
             <Button
               variant="ghost"
               size="icon"
-              className="absolute bottom-2 right-2 bg-[#1a1d29]/90 hover:bg-[#1a1d29] shadow-md border border-cream-300"
+              className="absolute bottom-2 right-2 bg-white/90 hover:bg-white shadow-md border border-cream-300"
               onClick={(e) => {
                 e.stopPropagation();
                 onToggleFavorite(item.id);

@@ -154,11 +154,10 @@ const ExtractionsPage: React.FC = () => {
   if (selectedMarketplaceSessionId) {
     const selectedSession = marketplaceSessions.find(s => s.id === selectedMarketplaceSessionId);
     return (
-      <div className="space-y-4">
+      <div className="h-full bg-cream-50 p-4 sm:p-6 space-y-4 pt-12 md:pt-4">
         <Button
           variant="outline"
           onClick={() => setSelectedMarketplaceSessionId(null)}
-          className="mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Retour aux extractions
@@ -178,8 +177,7 @@ const ExtractionsPage: React.FC = () => {
   }
 
   return (
-    <div className="h-full bg-cream-50">
-      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 pt-4">
+    <div className="h-full bg-cream-50 p-4 sm:p-6 space-y-4 sm:space-y-6 pt-12 md:pt-4">
         {/* Header */}
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-navy">Mes Extractions</h1>
@@ -519,7 +517,6 @@ const ExtractionsPage: React.FC = () => {
           </Card>
         </TabsContent>
       </Tabs>
-      </div>
     </div>
   );
 };
