@@ -236,6 +236,7 @@ export class FacebookPagesController {
         sub_sessions: JSON.stringify(subSessions),
         totalItems,
         hasData: totalItems > 0,
+        isPaid: true,
         updated_at: new Date(),
       });
 
