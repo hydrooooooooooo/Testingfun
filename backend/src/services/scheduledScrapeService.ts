@@ -15,7 +15,7 @@ import {
 import mentionDetectionService from './mentionDetectionService';
 import { saveMarketplaceBackup } from './backupService';
 import { ApifyClient } from 'apify-client';
-import { config } from '../config/config';
+import { config as appConfig } from '../config/config';
 
 interface ScheduledScrape {
   id: string;
@@ -227,8 +227,8 @@ class ScheduledScrapeService {
         );
       } else {
         // facebook_pages and posts_comments both use the Facebook Pages Posts actor
-        const client = new ApifyClient({ token: config.api.apifyToken });
-        const actorId = config.api.apifyPagesPostsActorId;
+        const client = new ApifyClient({ token: appConfig.api.apifyToken });
+        const actorId = appConfig.api.apifyPagesPostsActorId;
         const run = await client.actor(actorId).start({
           startUrls: [{ url: scraper.target_url }],
           resultsLimit,
