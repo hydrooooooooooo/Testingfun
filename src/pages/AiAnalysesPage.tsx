@@ -38,7 +38,7 @@ const AiAnalysesPage: React.FC = () => {
   const [loadingAnalyses, setLoadingAnalyses] = useState<Record<string, boolean>>({});
   const [selectedSession, setSelectedSession] = useState<any>(null);
   const [selectedAnalysis, setSelectedAnalysis] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<'to_analyze' | 'analyzed' | 'benchmarks'>('to_analyze');
+  const [activeTab, setActiveTab] = useState<'to_analyze' | 'analyzed'>('to_analyze');
 
   // Fetch user's preferred AI model and its cost multiplier
   const [modelMultiplier, setModelMultiplier] = useState<number>(1.0);
@@ -70,15 +70,6 @@ const AiAnalysesPage: React.FC = () => {
     return userData.sessions.filter((s: any) => 
       s.scrape_type === 'facebook_pages' && 
       s.ai_analysis_facebook_pages_by_page
-    );
-  }, [userData]);
-
-  // Sessions avec benchmarks
-  const benchmarkSessions = useMemo(() => {
-    if (!userData?.sessions) return [];
-    return userData.sessions.filter((s: any) => 
-      s.scrape_type === 'facebook_pages' && 
-      s.ai_benchmark_facebook_pages_by_page
     );
   }, [userData]);
 
@@ -194,32 +185,6 @@ const AiAnalysesPage: React.FC = () => {
       toast({
         title: 'Erreur',
         description: error.response?.data?.message || 'Erreur lors du lancement de l\'analyse',
-        variant: 'destructive'
-      });
-    } finally {
-      setLoadingAnalyses(prev => ({ ...prev, [key]: false }));
-    }
-  };
-
-  // Lancer un benchmark pour une page
-  const launchBenchmark = async (sessionId: string, pageName: string) => {
-    const key = `benchmark-${sessionId}-${pageName}`;
-    setLoadingAnalyses(prev => ({ ...prev, [key]: true }));
-
-    try {
-      const response = await api.post(`/sessions/facebook-pages/${sessionId}/ai-benchmark/page`, { pageName });
-      
-      toast({
-        title: 'Benchmark lancé',
-        description: `Le benchmark pour ${pageName} a été lancé avec succès.`,
-      });
-
-      await fetchDashboardData();
-      await refreshBalance();
-    } catch (error: any) {
-      toast({
-        title: 'Erreur',
-        description: error.response?.data?.message || 'Erreur lors du lancement du benchmark',
         variant: 'destructive'
       });
     } finally {
@@ -831,17 +796,6 @@ const AiAnalysesPage: React.FC = () => {
               {computedStats.totalAnalyses}
             </Badge>
           </Button>
-          <Button
-            variant="ghost"
-            className={`rounded-none text-xs sm:text-sm px-2 sm:px-4 ${activeTab === 'benchmarks' ? 'border-b-2 border-gold text-gold-600' : 'text-steel hover:text-navy'}`}
-            onClick={() => setActiveTab('benchmarks')}
-          >
-            <GitCompare className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-            <span className="hidden sm:inline">Benchmarks</span>
-            <Badge className={`ml-1 sm:ml-2 text-[10px] sm:text-xs ${activeTab === 'benchmarks' ? 'bg-steel/20 text-steel-400' : 'bg-navy text-cream-400'}`}>
-              {computedStats.totalBenchmarks}
-            </Badge>
-          </Button>
         </div>
 
         {/* Contenu des onglets */}
@@ -1151,77 +1105,6 @@ const AiAnalysesPage: React.FC = () => {
           </div>
         )}
 
-        {/* Onglet Benchmarks */}
-        {activeTab === 'benchmarks' && (
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 mb-4">
-              <GitCompare className="w-5 h-5 text-steel-400" />
-              <h2 className="text-lg font-semibold text-navy">Benchmarks concurrentiels</h2>
-            </div>
-
-            {benchmarkSessions.length === 0 ? (
-              <Card className="bg-white border-cream-300 shadow-sm">
-                <CardContent className="p-6 text-center">
-                  <GitCompare className="w-12 h-12 text-steel mx-auto mb-3" />
-                  <p className="text-steel">Aucun benchmark disponible</p>
-                  <p className="text-sm text-steel mt-1">Lancez un benchmark depuis l'onglet "À analyser" en cliquant sur l'icône de comparaison</p>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {benchmarkSessions.map((session: any) => {
-                  const benchmarks = typeof session.ai_benchmark_facebook_pages_by_page === 'string'
-                    ? JSON.parse(session.ai_benchmark_facebook_pages_by_page)
-                    : session.ai_benchmark_facebook_pages_by_page;
-
-                  return Object.entries(benchmarks || {}).map(([pageName, benchmark]: [string, any]) => (
-                    <Card 
-                      key={`benchmark-${session.id}-${pageName}`} 
-                      className="bg-white border-cream-300 shadow-sm hover:border-gold-300 transition-colors cursor-pointer"
-                      onClick={() => viewAnalysis(session, pageName, 'benchmark')}
-                    >
-                      <CardContent className="p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="p-2 bg-steel/20 rounded-lg">
-                            <GitCompare className="w-5 h-5 text-steel-400" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-navy">{pageName}</h3>
-                            <div className="flex items-center gap-3 mt-1 text-xs text-steel">
-                              <span className="flex items-center gap-1">
-                                <Calendar className="w-3 h-3" />
-                                {format(new Date(benchmark.created_at || session.created_at), 'd MMM yyyy', { locale: fr })}
-                              </span>
-                            </div>
-                            <div className="flex gap-2 mt-2">
-                              <Badge className="bg-steel/20 text-steel-400 border-steel/30 text-xs">
-                                {benchmark.costCredits || 5} crédits
-                              </Badge>
-                              <Badge className="bg-navy text-cream-400 text-xs">
-                                Benchmark
-                              </Badge>
-                            </div>
-                          </div>
-                        </div>
-                        <Button
-                          size="sm"
-                          className="w-full mt-3 bg-gold hover:bg-gold-600 text-white"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            viewAnalysis(session, pageName, 'benchmark');
-                          }}
-                        >
-                          <GitCompare className="w-4 h-4 mr-2" />
-                          Voir le benchmark
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  ));
-                })}
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );
