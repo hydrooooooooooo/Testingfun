@@ -107,14 +107,12 @@ export default function MarketplacePage() {
         throw new Error('Session ID non reçu du serveur');
       }
     } catch (error: any) {
-      let errorMessage = 'Une erreur est survenue';
+      let errorMessage = error.response?.data?.message || 'Une erreur est survenue';
       if (error.response?.status === 409) {
         errorMessage = 'Une extraction est déjà en cours. Veuillez attendre.';
       } else if (error.response?.status === 402) {
-        errorMessage = 'Crédits insuffisants.';
+        errorMessage = error.response?.data?.message || 'Crédits insuffisants.';
         setShowInsufficientModal(true);
-      } else if (error.response?.data?.error) {
-        errorMessage = error.response.data.error;
       }
 
       toast({

@@ -459,7 +459,7 @@ export class ScrapeController {
    * Validate marketplace URL
    */
   private isValidMarketplaceUrl(url: string): boolean {
-    return /^https:\/\/(www\.)?(facebook|linkedin)\.com\/marketplace\/[\w-]+/.test(url.trim());
+    return /^https?:\/\/(www\.|web\.|m\.)?(facebook|linkedin)\.com\/marketplace\/[\w-]+/.test(url.trim());
   }
 
 }
