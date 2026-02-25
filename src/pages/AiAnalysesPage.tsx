@@ -493,145 +493,317 @@ const AiAnalysesPage: React.FC = () => {
           }
           
         } else if (selectedAnalysis?.type === 'benchmark') {
-          // ========== BENCHMARK PDF ==========
-          
-          // Support des deux formats: nouveau (benchmark_positioning) et ancien (competitive_positioning)
-          const globalScore = parsedData.benchmark_positioning?.overall_score || parsedData.competitive_positioning?.overall_score || 0;
-          drawRoundedRect(margin, yPos, 50, 25, 3, [168, 85, 247]);
-          doc.setFontSize(28);
-          doc.setTextColor(255, 255, 255);
-          doc.text(`${globalScore}/10`, margin + 8, yPos + 17);
-          
-          // Positionnement
-          doc.setFontSize(10);
-          doc.setTextColor(50, 50, 50);
-          const sector = parsedData.meta?.sector_detected || parsedData.meta?.detected_sector?.primary || 'Secteur non detecte';
-          const position = parsedData.benchmark_positioning?.position || parsedData.competitive_positioning?.sector_position || 'Position non determinee';
-          doc.text(cleanText(`Secteur: ${sector}`), margin + 55, yPos + 8);
-          doc.text(cleanText(`Position: ${position}`), margin + 55, yPos + 15);
-          yPos += 32;
-          
-          // Benchmarks sectoriels - Support des deux formats
-          addSection('COMPARAISON AUX BENCHMARKS SECTORIELS', [168, 85, 247]);
+          // ========== BENCHMARK PDF - CORPORATE MODERNE ==========
+
           const metricsComp = parsedData.metrics_comparison || {};
           const sectorBench = parsedData.sector_benchmarks || {};
-          
-          // Nouveau format: metrics_comparison.likes.page_average, ancien: sector_benchmarks.page_metrics.likes
-          const benchData = [
-            { 
-              label: 'Likes', 
-              value: metricsComp.likes?.page_average || sectorBench.page_metrics?.likes || 0, 
-              bench: metricsComp.likes?.sector_benchmark || sectorBench.industry_averages?.likes || 0, 
-              delta: metricsComp.likes?.gap_percentage || sectorBench.performance_vs_benchmark?.likes_delta || '' 
+          const globalScore = parsedData.benchmark_positioning?.overall_score || parsedData.competitive_positioning?.overall_score || 0;
+          const sector = parsedData.meta?.sector_detected || parsedData.meta?.detected_sector?.primary || 'Secteur non detecte';
+          const positionText = parsedData.benchmark_positioning?.position || parsedData.competitive_positioning?.sector_position || 'Position non determinee';
+          const summary = parsedData.benchmark_positioning?.summary || parsedData.competitive_positioning?.summary || '';
+
+          // --- POSITIONNEMENT CONCURRENTIEL ---
+          // Score box (purple gradient)
+          drawRoundedRect(margin, yPos, 55, 30, 3, [109, 40, 217]); // purple-600
+          drawRoundedRect(margin + 1, yPos + 1, 53, 28, 3, [139, 92, 246]); // purple-500
+          doc.setFontSize(32);
+          doc.setTextColor(255, 255, 255);
+          doc.text(`${globalScore}`, margin + 10, yPos + 18);
+          doc.setFontSize(14);
+          doc.text('/10', margin + 34, yPos + 18);
+          doc.setFontSize(7);
+          doc.setTextColor(233, 213, 255); // purple-200
+          doc.text('SCORE GLOBAL', margin + 8, yPos + 26);
+
+          // Sector & Position boxes
+          const infoX = margin + 62;
+          const infoW = (contentWidth - 62 - 3) / 2;
+
+          drawRoundedRect(infoX, yPos, infoW, 30, 2, [243, 244, 246]);
+          doc.setFontSize(7);
+          doc.setTextColor(107, 114, 128);
+          doc.text('SECTEUR DETECTE', infoX + 4, yPos + 8);
+          doc.setFontSize(12);
+          doc.setTextColor(17, 24, 39);
+          const sectorLines = doc.splitTextToSize(cleanText(sector), infoW - 8);
+          doc.text(sectorLines[0] || '', infoX + 4, yPos + 17);
+
+          drawRoundedRect(infoX + infoW + 3, yPos, infoW, 30, 2, [243, 244, 246]);
+          doc.setFontSize(7);
+          doc.setTextColor(107, 114, 128);
+          doc.text('POSITION VS SECTEUR', infoX + infoW + 7, yPos + 8);
+          doc.setFontSize(12);
+          doc.setTextColor(17, 24, 39);
+          const posLines = doc.splitTextToSize(cleanText(positionText), infoW - 8);
+          doc.text(posLines[0] || '', infoX + infoW + 7, yPos + 17);
+
+          yPos += 36;
+
+          // Summary insight box (if available)
+          if (summary) {
+            drawRoundedRect(margin, yPos, contentWidth, 18, 3, [245, 243, 255]); // purple-50
+            doc.setFontSize(7);
+            doc.setTextColor(109, 40, 217); // purple-600
+            doc.text('POSITIONNEMENT', margin + 4, yPos + 5);
+            doc.setFontSize(8);
+            doc.setTextColor(88, 28, 135); // purple-800
+            const summaryLines = doc.splitTextToSize(cleanText(summary), contentWidth - 8);
+            doc.text(summaryLines.slice(0, 2), margin + 4, yPos + 11);
+            yPos += 22;
+          }
+
+          // --- COMPARAISON MULTI-METRIQUE (barres visuelles) ---
+          addSection('COMPARAISON MULTI-METRIQUE', [109, 40, 217]);
+
+          const multiMetrics = [
+            {
+              label: 'Likes',
+              page: parseFloat(String(metricsComp.likes?.page_average || sectorBench.page_metrics?.likes || 0)),
+              bench: parseFloat(String(metricsComp.likes?.sector_benchmark || sectorBench.industry_averages?.likes || 0)),
+              delta: metricsComp.likes?.gap_percentage || sectorBench.performance_vs_benchmark?.likes_delta || ''
             },
-            { 
-              label: 'Comments', 
-              value: metricsComp.comments?.page_average || sectorBench.page_metrics?.comments || 0, 
-              bench: metricsComp.comments?.sector_benchmark || sectorBench.industry_averages?.comments || 0, 
-              delta: metricsComp.comments?.gap_percentage || sectorBench.performance_vs_benchmark?.comments_delta || '' 
+            {
+              label: 'Commentaires',
+              page: parseFloat(String(metricsComp.comments?.page_average || sectorBench.page_metrics?.comments || 0)),
+              bench: parseFloat(String(metricsComp.comments?.sector_benchmark || sectorBench.industry_averages?.comments || 0)),
+              delta: metricsComp.comments?.gap_percentage || sectorBench.performance_vs_benchmark?.comments_delta || ''
             },
-            { 
-              label: 'Shares', 
-              value: metricsComp.shares?.page_average || sectorBench.page_metrics?.shares || 0, 
-              bench: metricsComp.shares?.sector_benchmark || sectorBench.industry_averages?.shares || 0, 
-              delta: metricsComp.shares?.gap_percentage || sectorBench.performance_vs_benchmark?.shares_delta || '' 
+            {
+              label: 'Partages',
+              page: parseFloat(String(metricsComp.shares?.page_average || sectorBench.page_metrics?.shares || 0)),
+              bench: parseFloat(String(metricsComp.shares?.sector_benchmark || sectorBench.industry_averages?.shares || 0)),
+              delta: metricsComp.shares?.gap_percentage || sectorBench.performance_vs_benchmark?.shares_delta || ''
             },
-            { 
-              label: 'Engagement', 
-              value: metricsComp.engagement_rate?.page_average || sectorBench.page_metrics?.engagement_rate || '0%', 
-              bench: metricsComp.engagement_rate?.sector_benchmark || sectorBench.industry_averages?.engagement_rate || '0%', 
-              delta: '' 
+            {
+              label: 'Engagement',
+              page: parseFloat(String(metricsComp.engagement_rate?.page_average || sectorBench.page_metrics?.engagement_rate || 0)),
+              bench: parseFloat(String(metricsComp.engagement_rate?.sector_benchmark || sectorBench.industry_averages?.engagement_rate || 0)),
+              delta: ''
             }
           ];
-          
+
+          // Legend
+          doc.setFontSize(7);
+          doc.setTextColor(139, 92, 246);
+          drawRoundedRect(margin, yPos, 8, 4, 1, [139, 92, 246]);
+          doc.text('Votre page', margin + 10, yPos + 3.5);
+          drawRoundedRect(margin + 45, yPos, 8, 4, 1, [209, 213, 219]);
+          doc.setTextColor(107, 114, 128);
+          doc.text('Benchmark secteur', margin + 55, yPos + 3.5);
+          yPos += 8;
+
+          const barMaxWidth = contentWidth - 75;
+          multiMetrics.forEach((m) => {
+            checkNewPage(18);
+            const maxVal = Math.max(m.page, m.bench, 1);
+            const pageBarW = Math.max((m.page / maxVal) * barMaxWidth, 2);
+            const benchBarW = Math.max((m.bench / maxVal) * barMaxWidth, 2);
+            const isAbove = m.page >= m.bench;
+
+            // Label
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(17, 24, 39);
+            doc.text(cleanText(m.label), margin, yPos + 3);
+            doc.setFont('helvetica', 'normal');
+
+            // Page bar (purple)
+            const barX = margin + 55;
+            drawRoundedRect(barX, yPos, pageBarW, 5, 1.5, [139, 92, 246]);
+            doc.setFontSize(7);
+            doc.setTextColor(139, 92, 246);
+            doc.text(String(m.page), barX + pageBarW + 3, yPos + 4);
+
+            // Benchmark bar (gray)
+            drawRoundedRect(barX, yPos + 7, benchBarW, 5, 1.5, [209, 213, 219]);
+            doc.setFontSize(7);
+            doc.setTextColor(156, 163, 175);
+            doc.text(String(m.bench), barX + benchBarW + 3, yPos + 11);
+
+            // Delta badge
+            if (m.delta) {
+              const deltaStr = String(m.delta);
+              doc.setFontSize(7);
+              doc.setTextColor(isAbove ? 34 : 239, isAbove ? 197 : 68, isAbove ? 94 : 68);
+              doc.text(deltaStr, contentWidth + margin - doc.getTextWidth(deltaStr), yPos + 7);
+            }
+
+            yPos += 17;
+          });
+          yPos += 4;
+
+          // --- BENCHMARKS SECTORIELS (4 boxes avec delta) ---
+          addSection('BENCHMARKS SECTORIELS', [84, 56, 148]); // purple-900
+
+          const benchData = [
+            { label: 'Likes', value: multiMetrics[0].page, bench: multiMetrics[0].bench, delta: multiMetrics[0].delta },
+            { label: 'Commentaires', value: multiMetrics[1].page, bench: multiMetrics[1].bench, delta: multiMetrics[1].delta },
+            { label: 'Partages', value: multiMetrics[2].page, bench: multiMetrics[2].bench, delta: multiMetrics[2].delta },
+            { label: 'Engagement', value: multiMetrics[3].page, bench: multiMetrics[3].bench, delta: multiMetrics[3].delta }
+          ];
+
           const boxWidth = (contentWidth - 9) / 4;
           benchData.forEach((m, i) => {
             const x = margin + (i * (boxWidth + 3));
-            drawRoundedRect(x, yPos, boxWidth, 28, 2, [243, 244, 246]);
-            doc.setFontSize(7);
+            const isAbove = m.value >= m.bench;
+            drawRoundedRect(x, yPos, boxWidth, 32, 2, [248, 247, 255]); // purple-50
+            // Label
+            doc.setFontSize(6.5);
             doc.setTextColor(107, 114, 128);
-            doc.text(m.label.toUpperCase(), x + 3, yPos + 5);
-            doc.setFontSize(14);
+            doc.text(cleanText(m.label.toUpperCase()), x + 3, yPos + 5);
+            // Page value
+            doc.setFontSize(16);
             doc.setTextColor(17, 24, 39);
-            doc.text(String(m.value), x + 3, yPos + 14);
+            doc.text(String(m.value), x + 3, yPos + 16);
+            // Benchmark
             doc.setFontSize(7);
-            doc.setTextColor(107, 114, 128);
-            doc.text(`Bench: ${m.bench}`, x + 3, yPos + 20);
+            doc.setTextColor(156, 163, 175);
+            doc.text(`Secteur: ${m.bench}`, x + 3, yPos + 22);
+            // Delta
             if (m.delta) {
-              doc.setTextColor(34, 197, 94);
-              doc.text(String(m.delta), x + 3, yPos + 25);
+              doc.setFontSize(8);
+              doc.setTextColor(isAbove ? 34 : 239, isAbove ? 197 : 68, isAbove ? 94 : 68);
+              doc.text(String(m.delta), x + 3, yPos + 29);
             }
           });
-          yPos += 34;
-          
-          // Gaps concurrentiels
-          if (parsedData.competitive_gaps?.length > 0) {
-            addSection('GAPS CONCURRENTIELS A COMBLER', [249, 115, 22]);
-            parsedData.competitive_gaps.forEach((gap: any) => {
-              const severity = gap.severity || 'MEDIUM';
-              const severityColor = severity === 'HIGH' ? [239, 68, 68] : severity === 'MEDIUM' ? [249, 115, 22] : [234, 179, 8];
-              addListItem(`[${severity}]`, gap.gap_name || '', gap.current_state || '', severityColor);
-              if (gap.sector_best_practice) {
-                addText('Best practice: ' + gap.sector_best_practice, 8, 8);
+          yPos += 38;
+
+          // --- GAPS CONCURRENTIELS ---
+          const gaps = parsedData.competitive_gaps || parsedData.gaps || [];
+          if (gaps.length > 0) {
+            addSection('GAPS CONCURRENTIELS A COMBLER', [234, 88, 12]); // orange-600
+            gaps.forEach((gap: any) => {
+              checkNewPage(22);
+              const severity = gap.severity || gap.priority || 'MEDIUM';
+              const sevColor = severity === 'HIGH' ? [220, 38, 38] : severity === 'MEDIUM' ? [234, 88, 12] : [202, 138, 4];
+              // Severity badge
+              drawRoundedRect(margin, yPos, 18, 5, 1, sevColor);
+              doc.setFontSize(6);
+              doc.setTextColor(255, 255, 255);
+              doc.text(severity, margin + 2, yPos + 3.5);
+              // Title
+              doc.setFontSize(9);
+              doc.setFont('helvetica', 'bold');
+              doc.setTextColor(17, 24, 39);
+              doc.text(cleanText(gap.gap_name || gap.title || ''), margin + 22, yPos + 3.5);
+              doc.setFont('helvetica', 'normal');
+              yPos += 7;
+              if (gap.current_state || gap.description) {
+                addText(gap.current_state || gap.description, 2, 8);
               }
-              if (gap.impact_if_fixed) {
+              if (gap.how_to_close || gap.sector_best_practice) {
+                doc.setTextColor(59, 130, 246);
+                addText('[>] ' + (gap.how_to_close || gap.sector_best_practice), 2, 8);
+              }
+              if (gap.expected_impact || gap.impact_if_fixed) {
                 doc.setTextColor(34, 197, 94);
-                addText('Impact si corrige: ' + gap.impact_if_fixed, 8, 8);
+                addText('Impact: ' + (gap.expected_impact || gap.impact_if_fixed), 2, 8);
               }
+              yPos += 3;
             });
           }
-          
-          // Opportunites de differenciation
-          if (parsedData.differentiation_opportunities?.length > 0) {
-            addSection('OPPORTUNITES DE DIFFERENCIATION', [234, 179, 8]);
-            parsedData.differentiation_opportunities.forEach((opp: any) => {
-              addListItem('*', opp.opportunity || opp.opportunity_name || '', opp.why_unique || '', [234, 179, 8]);
+
+          // --- OPPORTUNITES DE DIFFERENCIATION ---
+          const opportunities = parsedData.differentiation_opportunities || parsedData.opportunities || [];
+          if (opportunities.length > 0) {
+            addSection('OPPORTUNITES DE DIFFERENCIATION', [202, 138, 4]); // yellow-600
+            opportunities.forEach((opp: any, idx: number) => {
+              checkNewPage(18);
+              // Number badge
+              drawRoundedRect(margin, yPos, 7, 7, 2, [253, 230, 138]); // yellow-200
+              doc.setFontSize(7);
+              doc.setTextColor(113, 63, 18); // yellow-800
+              doc.text(`${idx + 1}`, margin + 2, yPos + 5);
+              // Title
+              doc.setFontSize(9);
+              doc.setFont('helvetica', 'bold');
+              doc.setTextColor(113, 63, 18);
+              doc.text(cleanText(opp.opportunity_name || opp.opportunity || opp.title || ''), margin + 10, yPos + 5);
+              doc.setFont('helvetica', 'normal');
+              yPos += 9;
+              if (opp.description || opp.why_unique) {
+                addText(opp.description || opp.why_unique, 2, 8);
+              }
               if (opp.implementation) {
-                addText('Implementation: ' + opp.implementation, 8, 8);
+                addText('Mise en oeuvre: ' + opp.implementation, 2, 8);
               }
               if (opp.competitive_advantage) {
-                addText('Avantage: ' + opp.competitive_advantage, 8, 8);
+                doc.setTextColor(34, 197, 94);
+                addText('Avantage: ' + opp.competitive_advantage, 2, 8);
               }
+              yPos += 3;
             });
           }
-          
-          // Strategies a adopter
-          if (parsedData.strategies_to_adopt?.length > 0) {
-            addSection('STRATEGIES A ADOPTER DES LEADERS', [59, 130, 246]);
-            parsedData.strategies_to_adopt.forEach((strat: any) => {
-              addListItem('->', strat.strategy_name || '', strat.adaptation || '', [59, 130, 246]);
+
+          // --- STRATEGIES A ADOPTER DES LEADERS ---
+          const strategies = parsedData.strategies_to_adopt || parsedData.leader_strategies_to_adopt || parsedData.strategic_recommendations || parsedData.strategies || [];
+          if (strategies.length > 0) {
+            addSection('STRATEGIES A ADOPTER DES LEADERS', [37, 99, 235]); // blue-600
+            strategies.forEach((strat: any) => {
+              checkNewPage(20);
+              addListItem('->', strat.strategy_name || strat.title || '', strat.adaptation || strat.how_to_adapt || strat.description || '', [37, 99, 235]);
               if (strat.source) {
-                addText('Source: ' + strat.source, 8, 8);
-              }
-              if (strat.example_post) {
-                drawRoundedRect(margin + 8, yPos, contentWidth - 16, 12, 2, [243, 244, 246]);
                 doc.setFontSize(7);
                 doc.setTextColor(107, 114, 128);
-                doc.text('Exemple de post:', margin + 10, yPos + 4);
+                doc.text(cleanText(`Source: ${strat.source}`), margin + 8, yPos);
+                yPos += 4;
+              }
+              if (strat.example_post) {
+                checkNewPage(16);
+                drawRoundedRect(margin + 8, yPos, contentWidth - 16, 14, 2, [239, 246, 255]); // blue-50
+                doc.setFontSize(6.5);
+                doc.setTextColor(59, 130, 246);
+                doc.text('EXEMPLE DE POST', margin + 11, yPos + 4);
                 doc.setFontSize(8);
-                doc.setTextColor(55, 65, 81);
-                const exLines = doc.splitTextToSize(cleanText(strat.example_post), contentWidth - 24);
-                doc.text(exLines[0] || '', margin + 10, yPos + 9);
-                yPos += 15;
+                doc.setTextColor(30, 58, 138); // blue-900
+                const exLines = doc.splitTextToSize(cleanText(strat.example_post), contentWidth - 26);
+                doc.text(exLines.slice(0, 2), margin + 11, yPos + 9);
+                yPos += 17;
               }
-              if (strat.expected_impact) {
-                addText('Impact attendu: ' + strat.expected_impact, 8, 8);
+              if (strat.expected_impact || strat.expected_benefit) {
+                doc.setTextColor(34, 197, 94);
+                addText('Impact attendu: ' + (strat.expected_impact || strat.expected_benefit), 8, 8);
               }
+              yPos += 2;
             });
           }
-          
-          // Plan d'action
-          if (parsedData.action_plan) {
-            addSection('PLAN D\'ACTION', [99, 102, 241]);
-            if (parsedData.action_plan.immediate_actions?.length > 0) {
+
+          // --- RECOMMANDATIONS STRATEGIQUES (Plan d'Action) ---
+          const actionPlan = parsedData.action_plan || parsedData.plan_action || {};
+          const immediateActions = actionPlan.immediate_actions || actionPlan.actions || parsedData.immediate_actions || [];
+          if (immediateActions.length > 0) {
+            addSection('RECOMMANDATIONS STRATEGIQUES', [99, 102, 241]); // indigo-500
+            immediateActions.forEach((action: any, idx: number) => {
+              checkNewPage(14);
+              // Numbered circle
+              drawRoundedRect(margin, yPos, 7, 7, 3, [99, 102, 241]);
+              doc.setFontSize(7);
+              doc.setTextColor(255, 255, 255);
+              doc.text(`${idx + 1}`, margin + 2, yPos + 5);
+              // Action text
               doc.setFontSize(9);
-              doc.setTextColor(99, 102, 241);
-              doc.text('Actions immediates:', margin, yPos);
-              yPos += 5;
-              parsedData.action_plan.immediate_actions.forEach((action: any) => {
-                addListItem('>', action.action || '', `Effort: ${action.effort || 'N/A'} | Resultat: ${action.expected_result || 'N/A'}`, [99, 102, 241]);
-              });
-            }
+              doc.setFont('helvetica', 'bold');
+              doc.setTextColor(17, 24, 39);
+              const actionText = cleanText(action.action || action.title || action.recommendation || '');
+              const actionLines = doc.splitTextToSize(actionText, contentWidth - 12);
+              doc.text(actionLines[0] || '', margin + 10, yPos + 5);
+              doc.setFont('helvetica', 'normal');
+              yPos += 8;
+              if (action.expected_result) {
+                doc.setFontSize(8);
+                doc.setTextColor(34, 197, 94);
+                doc.text(cleanText('Resultat: ' + action.expected_result), margin + 10, yPos);
+                yPos += 4;
+              }
+              if (action.effort) {
+                doc.setFontSize(7);
+                const effortColor = action.effort === 'Faible' ? [34, 197, 94] : action.effort === 'Moyen' ? [234, 179, 8] : [239, 68, 68];
+                doc.setTextColor(effortColor[0], effortColor[1], effortColor[2]);
+                doc.text(cleanText(`Effort: ${action.effort}`), margin + 10, yPos);
+                yPos += 4;
+              }
+              yPos += 3;
+            });
           }
         }
       }
