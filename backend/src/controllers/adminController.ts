@@ -305,18 +305,31 @@ export class AdminController {
       audit('admin.users_searched', { adminId, query: q });
 
       const limit = Math.min(50, Math.max(1, parseInt(String(req.query.limit || '20'), 10)));
-      const rows = await db('users')
-        .select('id', 'email', 'name', 'role', 'credits_balance', 'is_suspended', 'created_at', 'business_sector', 'company_size')
-        .modify((qb: any) => {
-          if (q) {
-            qb.where(function(this: any) {
-              this.whereRaw('LOWER(email) LIKE ?', [`%${q.toLowerCase()}%`])
-                  .orWhereRaw('LOWER(name) LIKE ?', [`%${q.toLowerCase()}%`]);
-            });
-          }
-        })
-        .orderBy('id', 'desc')
-        .limit(limit);
+      const filterFn = (qb: any) => {
+        if (q) {
+          qb.where(function(this: any) {
+            this.whereRaw('LOWER(email) LIKE ?', [`%${q.toLowerCase()}%`])
+                .orWhereRaw('LOWER(name) LIKE ?', [`%${q.toLowerCase()}%`]);
+          });
+        }
+      };
+
+      let rows;
+      try {
+        rows = await db('users')
+          .select('id', 'email', 'name', 'role', 'credits_balance', 'is_suspended', 'created_at', 'business_sector', 'company_size')
+          .modify(filterFn)
+          .orderBy('id', 'desc')
+          .limit(limit);
+      } catch (selectError: any) {
+        // Fallback if new columns don't exist yet (migration not run)
+        logger.warn('[ADMIN] getUsers fallback - some columns missing:', selectError.message);
+        rows = await db('users')
+          .select('id', 'email', 'name', 'role', 'credits_balance', 'created_at')
+          .modify(filterFn)
+          .orderBy('id', 'desc')
+          .limit(limit);
+      }
       res.status(200).json({ status: 'success', data: rows });
     } catch (error) {
       next(error);
