@@ -7,6 +7,7 @@ interface SubSession {
   url: string;
   infoStatus?: string;
   postsStatus?: string;
+  commentsStatus?: string;
 }
 
 interface FacebookPagesProgressProps {
@@ -16,6 +17,8 @@ interface FacebookPagesProgressProps {
 }
 
 export default function FacebookPagesProgress({ progress, overallStatus, subSessions }: FacebookPagesProgressProps) {
+  const hasComments = subSessions.some(s => s.commentsStatus);
+
   const getStatusIcon = (status?: string) => {
     switch (status) {
       case 'SUCCEEDED':
@@ -48,7 +51,7 @@ export default function FacebookPagesProgress({ progress, overallStatus, subSess
   return (
     <div className="bg-white rounded-3xl shadow-2xl p-8 border border-cream-200">
       <h2 className="text-2xl font-bold text-navy mb-6">Extraction en cours</h2>
-      
+
       <div className="mb-8">
         <div className="flex justify-between mb-2">
           <span className="text-sm font-medium text-navy-700">Progression globale</span>
@@ -62,8 +65,8 @@ export default function FacebookPagesProgress({ progress, overallStatus, subSess
           <div key={index} className="border border-cream-300 rounded-xl p-4">
             <h3 className="font-semibold text-navy mb-3">{subSession.pageName}</h3>
             <div className="text-sm text-steel mb-3 truncate">{subSession.url}</div>
-            
-            <div className="grid grid-cols-2 gap-4">
+
+            <div className={`grid gap-4 ${hasComments ? 'grid-cols-3' : 'grid-cols-2'}`}>
               <div className="flex items-center gap-2">
                 {getStatusIcon(subSession.infoStatus)}
                 <div>
@@ -71,7 +74,7 @@ export default function FacebookPagesProgress({ progress, overallStatus, subSess
                   <div className="text-sm font-medium">{getStatusText(subSession.infoStatus)}</div>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 {getStatusIcon(subSession.postsStatus)}
                 <div>
@@ -79,6 +82,16 @@ export default function FacebookPagesProgress({ progress, overallStatus, subSess
                   <div className="text-sm font-medium">{getStatusText(subSession.postsStatus)}</div>
                 </div>
               </div>
+
+              {hasComments && (
+                <div className="flex items-center gap-2">
+                  {getStatusIcon(subSession.commentsStatus)}
+                  <div>
+                    <div className="text-xs text-steel">Commentaires</div>
+                    <div className="text-sm font-medium">{getStatusText(subSession.commentsStatus)}</div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         ))}

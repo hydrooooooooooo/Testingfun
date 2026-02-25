@@ -11,6 +11,8 @@ interface SubSession {
   postsRunId?: string;
   postsStatus?: string;
   postsDatasetId?: string;
+  commentsRunId?: string;
+  commentsStatus?: string;
 }
 
 interface FacebookPagesStatus {
@@ -20,7 +22,11 @@ interface FacebookPagesStatus {
   subSessions: SubSession[];
 }
 
-const POLLING_INTERVAL = 5000; // 5 secondes
+function getAdaptiveInterval(elapsedMs: number): number {
+  if (elapsedMs < 30000) return 5000;   // 0-30s → 5s
+  if (elapsedMs < 120000) return 10000;  // 30s-2min → 10s
+  return 15000;                           // 2min+ → 15s
+}
 
 export function useFacebookPagesPolling(sessionId: string | null) {
   const [status, setStatus] = useState<FacebookPagesStatus | null>(null);
@@ -29,9 +35,11 @@ export function useFacebookPagesPolling(sessionId: string | null) {
   const { toast } = useToast();
   const toastRef = useRef(toast);
   toastRef.current = toast;
+  const startTimeRef = useRef<number>(0);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const fetchStatus = useCallback(async () => {
-    if (!sessionId) return;
+  const fetchStatus = useCallback(async (): Promise<boolean> => {
+    if (!sessionId) return true;
 
     try {
       const response = await api.get(`/scrape/facebook-pages/${sessionId}/status`);
@@ -71,29 +79,32 @@ export function useFacebookPagesPolling(sessionId: string | null) {
     if (!sessionId) return;
 
     setLoading(true);
-    let intervalId: NodeJS.Timeout;
+    startTimeRef.current = Date.now();
+
+    const scheduleNext = () => {
+      const elapsed = Date.now() - startTimeRef.current;
+      const interval = getAdaptiveInterval(elapsed);
+      timeoutRef.current = setTimeout(async () => {
+        const shouldStop = await fetchStatus();
+        if (!shouldStop) {
+          scheduleNext();
+        }
+      }, interval);
+    };
 
     const startPolling = async () => {
-      // Première requête immédiate
       const shouldStop = await fetchStatus();
       setLoading(false);
-
-      if (shouldStop) return;
-
-      // Continuer le polling
-      intervalId = setInterval(async () => {
-        const shouldStop = await fetchStatus();
-        if (shouldStop) {
-          clearInterval(intervalId);
-        }
-      }, POLLING_INTERVAL);
+      if (!shouldStop) {
+        scheduleNext();
+      }
     };
 
     startPolling();
 
     return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
     };
   }, [sessionId, fetchStatus]);
@@ -102,6 +113,9 @@ export function useFacebookPagesPolling(sessionId: string | null) {
     setStatus(null);
     setLoading(false);
     setError(null);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
   }, []);
 
   return {

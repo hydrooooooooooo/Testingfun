@@ -200,30 +200,53 @@ export class FacebookPagesController {
         }
       }
 
-      // Scrape comments if requested
+      // Start batch comments if requested (non-blocking per sub-session)
       if (extractionConfig.extractComments) {
         for (const sub of subSessions) {
           if (sub.postsData?.length) {
-            try {
-              const postUrls = sub.postsData
-                .map((p: any) => p.url || p.postUrl)
-                .filter(Boolean);
-              if (postUrls.length > 0) {
-                sub.commentsStatus = 'RUNNING';
-                const results = await commentScraperService.scrapeMultiplePostsComments(
+            const postUrls = sub.postsData
+              .map((p: any) => p.url || p.postUrl)
+              .filter(Boolean);
+            if (postUrls.length > 0) {
+              try {
+                const { runId, datasetId } = await commentScraperService.startBatchComments(
                   postUrls, { resultsLimit: extractionConfig.commentsLimit || 20 }
                 );
-                for (const r of results) {
-                  if (r.comments.length > 0) {
-                    await commentScraperService.saveComments(userId, sessionId, r.postUrl, r.comments, r.runId);
-                  }
-                }
-                sub.commentsData = results;
-                sub.commentsStatus = 'SUCCEEDED';
+                sub.commentsRunId = runId;
+                sub.commentsDatasetId = datasetId;
+                sub.commentsStatus = 'RUNNING';
+              } catch (error) {
+                logger.error(`[FBPages] Failed to start batch comments for ${sub.pageName}:`, error);
+                sub.commentsStatus = 'FAILED';
               }
+            }
+          }
+        }
+
+        // Save sub_sessions with comment run IDs
+        await db('scraping_sessions').where({ id: sessionId }).update({
+          sub_sessions: JSON.stringify(subSessions),
+          updated_at: new Date(),
+        });
+
+        // Poll comment runs until complete (max 15 minutes)
+        await this.pollCommentsUntilComplete(sessionId, subSessions, 900000);
+
+        // Fetch grouped results and save to DB
+        for (const sub of subSessions) {
+          if (sub.commentsStatus === 'SUCCEEDED' && sub.commentsDatasetId && sub.commentsRunId) {
+            try {
+              const results = await commentScraperService.getGroupedCommentResults(
+                sub.commentsDatasetId, sub.commentsRunId
+              );
+              for (const r of results) {
+                if (r.comments.length > 0) {
+                  await commentScraperService.saveComments(userId, sessionId, r.postUrl, r.comments, r.runId);
+                }
+              }
+              sub.commentsData = results;
             } catch (error) {
-              logger.error(`[FBPages] Comments failed for ${sub.pageName}:`, error);
-              sub.commentsStatus = 'FAILED';
+              logger.error(`[FBPages] Failed to fetch comment results for ${sub.pageName}:`, error);
             }
           }
         }
@@ -337,6 +360,37 @@ export class FacebookPagesController {
     }
   }
 
+  private async pollCommentsUntilComplete(sessionId: string, subSessions: any[], timeoutMs: number): Promise<void> {
+    const startTime = Date.now();
+    const POLL_INTERVAL = 5000;
+    const TERMINAL = ['SUCCEEDED', 'FAILED', 'TIMED-OUT', 'ABORTED', 'ERROR'];
+
+    while (Date.now() - startTime < timeoutMs) {
+      let allDone = true;
+
+      for (const sub of subSessions) {
+        if (sub.commentsRunId && sub.commentsStatus === 'RUNNING') {
+          const runStatus = await commentScraperService.getRunStatus(sub.commentsRunId);
+          sub.commentsStatus = runStatus.status;
+          if (runStatus.datasetId) sub.commentsDatasetId = runStatus.datasetId;
+          if (!TERMINAL.includes(runStatus.status)) allDone = false;
+        }
+      }
+
+      await db('scraping_sessions').where({ id: sessionId }).update({
+        sub_sessions: JSON.stringify(subSessions),
+        updated_at: new Date(),
+      });
+
+      if (allDone) return;
+      await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL));
+    }
+
+    for (const sub of subSessions) {
+      if (sub.commentsStatus === 'RUNNING') sub.commentsStatus = 'TIMED-OUT';
+    }
+  }
+
   async getStatus(req: Request, res: Response, next: NextFunction) {
     try {
       const { sessionId } = req.params;
@@ -374,6 +428,8 @@ export class FacebookPagesController {
           postsRunId: s.postsRunId,
           postsStatus: s.postsStatus,
           postsDatasetId: s.postsDatasetId,
+          commentsRunId: s.commentsRunId,
+          commentsStatus: s.commentsStatus,
         })),
       });
     } catch (error) {

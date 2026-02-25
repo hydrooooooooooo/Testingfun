@@ -14,11 +14,16 @@ export interface SubSession {
   postsStatus?: string;
   postsDatasetId?: string;
   postsData?: any[];
+  commentsRunId?: string;
+  commentsStatus?: string;
+  commentsDatasetId?: string;
+  commentsData?: any[];
 }
 
 export interface ScrapeOptions {
   extractInfo: boolean;
   extractPosts: boolean;
+  extractComments?: boolean;
   postsLimit: number;
   dateFrom?: string;
   dateTo?: string;
@@ -104,6 +109,11 @@ class FacebookPagesService {
         totalSteps++;
         if (sub.postsStatus === 'SUCCEEDED') succeededSteps++;
         if (TERMINAL_STATUSES.includes(sub.postsStatus || '')) failedSteps++;
+      }
+      if (options.extractComments && sub.commentsRunId) {
+        totalSteps++;
+        if (sub.commentsStatus === 'SUCCEEDED') succeededSteps++;
+        if (TERMINAL_STATUSES.includes(sub.commentsStatus || '')) failedSteps++;
       }
     }
 
