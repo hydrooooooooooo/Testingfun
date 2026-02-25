@@ -72,6 +72,7 @@ const FacebookPagesFilesPage: React.FC = () => {
       followers: number;
       likes: number;
       posts: number;
+      followings: number;
     }>;
   } | null>(null);
   const [fbSummaryLoading, setFbSummaryLoading] = useState(false);
@@ -216,8 +217,24 @@ const FacebookPagesFilesPage: React.FC = () => {
         const response = await api.get(`/sessions/facebook-pages/${selectedSessionId}/summary`);
         setFbSummary(response.data);
       } catch (err: any) {
-        // 404 = résumé pas encore disponible, on affiche juste des tirets
-        if (err.response?.status !== 404) {
+        // 404 = résumé pas encore disponible — compute locally from sub_sessions
+        if (err.response?.status === 404 && selectedSession.sub_sessions?.length) {
+          const fallbackDetails = selectedSession.sub_sessions.map(sub => ({
+            pageName: sub.pageName,
+            url: sub.url || '',
+            likes: parseInt(sub.infoData?.[0]?.likes) || 0,
+            followers: parseInt(sub.infoData?.[0]?.followers) || 0,
+            posts: sub.postsData?.length || 0,
+            followings: parseInt(sub.infoData?.[0]?.followings) || parseInt(sub.infoData?.[0]?.following) || 0,
+          }));
+          setFbSummary({
+            pages: fallbackDetails.length,
+            totalLikes: fallbackDetails.reduce((s, p) => s + p.likes, 0),
+            totalFollowers: fallbackDetails.reduce((s, p) => s + p.followers, 0),
+            totalPosts: fallbackDetails.reduce((s, p) => s + p.posts, 0),
+            pagesDetails: fallbackDetails,
+          });
+        } else if (err.response?.status !== 404) {
           console.error('Erreur chargement résumé FB Pages:', err);
           setFbSummaryError(err.response?.data?.message || 'Erreur lors du chargement du résumé');
         }
@@ -1255,7 +1272,7 @@ const FacebookPagesFilesPage: React.FC = () => {
                       </div>
                       <div>
                         <div className="text-lg font-bold text-red-900">
-                          {fbSummary?.totalLikes?.toLocaleString() || '0'}
+                          {fbSummary?.totalLikes ? fbSummary.totalLikes.toLocaleString() : '—'}
                         </div>
                         <div className="text-xs text-red-700">J'aime</div>
                       </div>
@@ -1266,7 +1283,7 @@ const FacebookPagesFilesPage: React.FC = () => {
                       </div>
                       <div>
                         <div className="text-lg font-bold text-navy">
-                          {fbSummary ? fbSummary.totalPosts : 0}
+                          {fbSummary?.totalPosts || '—'}
                         </div>
                         <div className="text-xs text-navy-700">Posts</div>
                       </div>
@@ -1277,7 +1294,7 @@ const FacebookPagesFilesPage: React.FC = () => {
                       </div>
                       <div>
                         <div className="text-lg font-bold text-navy">
-                          {fbSummary?.totalFollowers?.toLocaleString() || '0'}
+                          {fbSummary?.totalFollowers ? fbSummary.totalFollowers.toLocaleString() : '—'}
                         </div>
                         <div className="text-xs text-navy-700">Abonnés</div>
                       </div>
@@ -1361,7 +1378,7 @@ const FacebookPagesFilesPage: React.FC = () => {
                                   <td className="px-3 py-2 text-center">
                                     <div className="flex items-center justify-center gap-1">
                                       <TrendingUp className="h-3 w-3 text-green-500" />
-                                      <span className="font-semibold text-navy">0</span>
+                                      <span className="font-semibold text-navy">{((page as any).followings || 0).toLocaleString()}</span>
                                     </div>
                                   </td>
                                 </tr>

@@ -11,6 +11,7 @@ import { config } from '../config/config';
 import { getDefaultAIModel } from '../config/aiModels';
 import db from '../database';
 import { persistScrapedItems } from '../services/itemPersistenceService';
+import { commentScraperService } from '../services/commentScraperService';
 
 export class FacebookPagesController {
 
@@ -177,6 +178,35 @@ export class FacebookPagesController {
         }
       }
 
+      // Scrape comments if requested
+      if (extractionConfig.extractComments) {
+        for (const sub of subSessions) {
+          if (sub.postsData?.length) {
+            try {
+              const postUrls = sub.postsData
+                .map((p: any) => p.url || p.postUrl)
+                .filter(Boolean);
+              if (postUrls.length > 0) {
+                sub.commentsStatus = 'RUNNING';
+                const results = await commentScraperService.scrapeMultiplePostsComments(
+                  postUrls, { resultsLimit: extractionConfig.commentsLimit || 20 }
+                );
+                for (const r of results) {
+                  if (r.comments.length > 0) {
+                    await commentScraperService.saveComments(userId, sessionId, r.postUrl, r.comments, r.runId);
+                  }
+                }
+                sub.commentsData = results;
+                sub.commentsStatus = 'SUCCEEDED';
+              }
+            } catch (error) {
+              logger.error(`[FBPages] Comments failed for ${sub.pageName}:`, error);
+              sub.commentsStatus = 'FAILED';
+            }
+          }
+        }
+      }
+
       // Persist fetched items to scraped_items table
       for (const sub of subSessions) {
         if (sub.infoData?.length) {
@@ -224,11 +254,13 @@ export class FacebookPagesController {
       // Calculate actual cost based on real data fetched (not the estimate)
       const actualPageCount = subSessions.filter((s: any) => s.infoStatus === 'SUCCEEDED').length;
       const actualPostCount = subSessions.reduce((sum: number, s: any) => sum + (s.postsData?.length || 0), 0);
+      const actualCommentCount = subSessions.reduce((sum: number, s: any) =>
+        sum + (s.commentsData?.reduce((c: number, r: any) => c + (r.totalComments || 0), 0) || 0), 0);
       const actualCost = calculateFacebookPagesCost(
         extractionConfig.extractInfo ? actualPageCount : 0,
         actualPostCount,
         extractionConfig.extractComments || false,
-        0 // comments not yet counted here
+        actualCommentCount
       );
 
       await db('scraping_sessions').where({ id: sessionId }).update({
@@ -338,11 +370,20 @@ export class FacebookPagesController {
       if (session.user_id !== userId) throw new ApiError(403, 'Not authorized');
 
       const { pageName } = req.query;
+
+      // Try backup first, fallback to DB sub_sessions
+      let subSessions: any[] = [];
       const backup = facebookPagesService.readBackup(sessionId);
-      if (!backup) throw new ApiError(404, 'Session data not found');
+      if (backup?.subSessions) {
+        subSessions = backup.subSessions;
+      } else {
+        const raw = session.sub_sessions;
+        subSessions = typeof raw === 'string' ? JSON.parse(raw || '[]') : (raw || []);
+        if (!subSessions.length) throw new ApiError(404, 'Session data not found');
+      }
 
       const infoData: any[] = [];
-      for (const sub of backup.subSessions || []) {
+      for (const sub of subSessions) {
         if (!pageName || sub.pageName === pageName) {
           if (sub.infoData?.length) infoData.push(...sub.infoData);
         }
@@ -366,17 +407,97 @@ export class FacebookPagesController {
       if (session.user_id !== userId) throw new ApiError(403, 'Not authorized');
 
       const { pageName } = req.query;
+
+      // Try backup first, fallback to DB sub_sessions
+      let subSessions: any[] = [];
       const backup = facebookPagesService.readBackup(sessionId);
-      if (!backup) throw new ApiError(404, 'Session data not found');
+      if (backup?.subSessions) {
+        subSessions = backup.subSessions;
+      } else {
+        const raw = session.sub_sessions;
+        subSessions = typeof raw === 'string' ? JSON.parse(raw || '[]') : (raw || []);
+        if (!subSessions.length) throw new ApiError(404, 'Session data not found');
+      }
 
       const postsData: any[] = [];
-      for (const sub of backup.subSessions || []) {
+      for (const sub of subSessions) {
         if (!pageName || sub.pageName === pageName) {
           if (sub.postsData) postsData.push(...sub.postsData);
         }
       }
 
       res.json(postsData);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * GET /sessions/facebook-pages/:sessionId/summary
+   * Aggregate stats across all sub-sessions for a FB Pages session
+   */
+  async getSummary(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { sessionId } = req.params;
+      const userId = (req as any).user?.id;
+      if (!userId) throw new ApiError(401, 'Authentication required');
+
+      const session = await db('scraping_sessions').where({ id: sessionId }).first();
+      if (!session) throw new ApiError(404, 'Session not found');
+      if (session.user_id !== userId) throw new ApiError(403, 'Not authorized');
+
+      // Try backup first, fallback to DB sub_sessions
+      let subSessions: any[] = [];
+      const backup = facebookPagesService.readBackup(sessionId);
+      if (backup?.subSessions) {
+        subSessions = backup.subSessions;
+      } else {
+        const raw = session.sub_sessions;
+        subSessions = typeof raw === 'string' ? JSON.parse(raw || '[]') : (raw || []);
+      }
+
+      const pagesDetails = subSessions.map((sub: any) => {
+        const info = sub.infoData?.[0] || {};
+        return {
+          pageName: sub.pageName || 'unknown',
+          url: sub.url || '',
+          likes: parseInt(info.likes) || 0,
+          followers: parseInt(info.followers) || 0,
+          posts: sub.postsData?.length || 0,
+          followings: parseInt(info.followings) || parseInt(info.following) || 0,
+        };
+      });
+
+      res.json({
+        pages: subSessions.length,
+        totalLikes: pagesDetails.reduce((s: number, p: any) => s + p.likes, 0),
+        totalFollowers: pagesDetails.reduce((s: number, p: any) => s + p.followers, 0),
+        totalPosts: pagesDetails.reduce((s: number, p: any) => s + p.posts, 0),
+        pagesDetails,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * GET /sessions/facebook-pages/:sessionId/ai-analysis/by-page
+   * Return per-page AI analysis results stored in the session
+   */
+  async getAiAnalysisByPage(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { sessionId } = req.params;
+      const userId = (req as any).user?.id;
+      if (!userId) throw new ApiError(401, 'Authentication required');
+
+      const session = await db('scraping_sessions').where({ id: sessionId }).first();
+      if (!session) throw new ApiError(404, 'Session not found');
+      if (session.user_id !== userId) throw new ApiError(403, 'Not authorized');
+
+      const raw = session.ai_analysis_facebook_pages_by_page;
+      const analyses = typeof raw === 'string' ? JSON.parse(raw || '{}') : (raw || {});
+
+      res.json(analyses);
     } catch (error) {
       next(error);
     }

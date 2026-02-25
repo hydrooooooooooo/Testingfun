@@ -53,10 +53,14 @@ export interface Session {
   is_trial?: boolean;
   sub_sessions?: Array<{
     pageName: string;
+    url?: string;
     postsData?: any[];
     postsCount?: number;
+    postsStatus?: string;
+    postsDatasetId?: string;
     infoData?: any[];
     infoStatus?: string;
+    infoDatasetId?: string;
   }>;
   ai_analysis_facebook_pages_by_page?: any;
   ai_benchmark_facebook_pages_by_page?: any;

@@ -9,6 +9,10 @@ const router = Router();
 router.get('/facebook-pages/:sessionId/info', protect, facebookPagesController.getPageInfo.bind(facebookPagesController));
 router.get('/facebook-pages/:sessionId/posts', protect, facebookPagesController.getPagePosts.bind(facebookPagesController));
 
+// Facebook Pages summary & AI data endpoints
+router.get('/facebook-pages/:sessionId/summary', protect, facebookPagesController.getSummary.bind(facebookPagesController));
+router.get('/facebook-pages/:sessionId/ai-analysis/by-page', protect, facebookPagesController.getAiAnalysisByPage.bind(facebookPagesController));
+
 // Facebook Pages AI analysis & benchmark endpoints
 router.post('/facebook-pages/:sessionId/ai-analysis/page', protect, facebookPagesController.launchAiAnalysisForPage.bind(facebookPagesController));
 router.post('/facebook-pages/:sessionId/ai-benchmark/page', protect, facebookPagesController.launchBenchmarkForPage.bind(facebookPagesController));
