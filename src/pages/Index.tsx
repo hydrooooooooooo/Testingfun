@@ -441,9 +441,16 @@ export default function Index() {
                     <h3 className="font-display text-navy font-bold text-xl mb-2">
                       {pack.name}
                     </h3>
-                    <p className="text-navy text-3xl font-bold mb-1">
-                      {pack.price_label || (pack.price_eur ? `${(Number(pack.price_eur) / 100).toLocaleString('fr-FR')} €` : `${formatPrice(pack.price)} MGA`)}
-                    </p>
+                    {(() => {
+                      const label = pack.price_label || (pack.price_eur ? `${(Number(pack.price_eur) / 100).toLocaleString('fr-FR')} €` : `${formatPrice(pack.price)} MGA`);
+                      const parts = label.split(' / ');
+                      return (
+                        <div className="mb-1">
+                          <p className="text-navy text-3xl font-bold">{parts[0]}</p>
+                          {parts[1] && <p className="text-steel text-sm font-medium">≈ {parts[1]}</p>}
+                        </div>
+                      );
+                    })()}
                     <p className="text-steel text-sm mb-6">
                       {formatPrice(pack.nb_downloads)} analyses
                     </p>

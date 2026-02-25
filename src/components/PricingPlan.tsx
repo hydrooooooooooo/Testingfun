@@ -37,10 +37,21 @@ export default function PricingPlan({
         </span>
       )}
       <h3 className="text-xl font-bold text-primary mb-1 text-center">{plan.name}</h3>
-      <div className="w-full flex justify-center">
-        <div className="text-3xl font-extrabold mb-1 bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent whitespace-nowrap text-center">
-          {plan.price}
-        </div>
+      <div className="w-full flex flex-col items-center mb-1">
+        {plan.price.includes(' / ') ? (
+          <>
+            <span className="text-3xl font-extrabold bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent">
+              {plan.price.split(' / ')[0]}
+            </span>
+            <span className="text-sm font-medium text-steel mt-0.5">
+              ≈ {plan.price.split(' / ')[1]}
+            </span>
+          </>
+        ) : (
+          <span className="text-3xl font-extrabold bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent">
+            {plan.price}
+          </span>
+        )}
       </div>
       <div className="mb-2 text-muted-foreground">{plan.desc}</div>
       <ul className="space-y-1 text-sm mb-3">
