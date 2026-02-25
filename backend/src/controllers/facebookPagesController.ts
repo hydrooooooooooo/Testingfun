@@ -78,8 +78,13 @@ export class FacebookPagesController {
           userId, estimate, 'facebook_pages',
           `fbpages_${Date.now()}`, `Extraction Facebook Pages (${pageCount} page(s))`
         );
-      } catch (error) {
-        throw new ApiError(402, 'Credits insuffisants pour cette extraction.');
+      } catch (error: any) {
+        const errMsg = error?.message || String(error);
+        if (errMsg.toLowerCase().includes('insufficient') || errMsg.toLowerCase().includes('insuffisant')) {
+          throw new ApiError(402, 'Crédits insuffisants pour cette extraction.');
+        }
+        logger.error(`[FB_PAGES] Credit reservation failed: ${errMsg}`);
+        throw new ApiError(500, `Erreur lors de la réservation des crédits: ${errMsg}`);
       }
 
       // Create session
@@ -550,10 +555,15 @@ export class FacebookPagesController {
           `ai_${sessionId}_${pageName.replace(/\s+/g, '_')}`,
           `Analyse IA: ${pageName} (${postsData.length} posts)`
         );
-      } catch (error) {
-        const userBalance = await creditService.getUserCreditBalance(userId);
-        logger.warn(`[AI] Insufficient credits for user ${userId}: required=${cost}, available=${userBalance.total}, model=${modelId}`);
-        throw new ApiError(402, `Crédits insuffisants. Requis: ${cost.toFixed(1)}, disponible: ${userBalance.total.toFixed(1)}`);
+      } catch (error: any) {
+        const errMsg = error?.message || String(error);
+        if (errMsg.toLowerCase().includes('insufficient') || errMsg.toLowerCase().includes('insuffisant')) {
+          const userBalance = await creditService.getUserCreditBalance(userId);
+          logger.warn(`[AI] Insufficient credits for user ${userId}: required=${cost}, available=${userBalance.total}, model=${modelId}`);
+          throw new ApiError(402, `Crédits insuffisants. Requis: ${cost.toFixed(1)}, disponible: ${userBalance.total.toFixed(1)}`);
+        }
+        logger.error(`[AI] Credit reservation failed for user ${userId}: ${errMsg}`, { sessionId, pageName, cost, modelId });
+        throw new ApiError(500, `Erreur lors de la réservation des crédits: ${errMsg}`);
       }
 
       try {
@@ -630,8 +640,13 @@ export class FacebookPagesController {
           `bench_${sessionId}_${pageName.replace(/\s+/g, '_')}`,
           `Benchmark: ${pageName} (${postsData.length} posts)`
         );
-      } catch (error) {
-        throw new ApiError(402, 'Crédits insuffisants pour ce benchmark.');
+      } catch (error: any) {
+        const errMsg = error?.message || String(error);
+        if (errMsg.toLowerCase().includes('insufficient') || errMsg.toLowerCase().includes('insuffisant')) {
+          throw new ApiError(402, 'Crédits insuffisants pour ce benchmark.');
+        }
+        logger.error(`[BENCHMARK] Credit reservation failed: ${errMsg}`, { sessionId, pageName, cost, modelId });
+        throw new ApiError(500, `Erreur lors de la réservation des crédits: ${errMsg}`);
       }
 
       try {
