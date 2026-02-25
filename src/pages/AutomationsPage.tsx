@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -101,22 +101,44 @@ const AutomationsPage: React.FC = () => {
     }
   };
 
+  // Polling interval ref for post-trigger auto-refresh
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const pollCountRef = useRef(0);
+
+  const stopPolling = useCallback(() => {
+    if (pollRef.current) {
+      clearInterval(pollRef.current);
+      pollRef.current = null;
+    }
+    pollCountRef.current = 0;
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => stopPolling, [stopPolling]);
+
   const handleTriggerManually = async (id: string) => {
     setTriggeringIds(prev => new Set(prev).add(id));
     try {
       await api.post(`/automations/${id}/trigger`);
       toast({
-        title: '🚀 Scraping lancé',
-        description: 'L\'exécution est en cours en arrière-plan. Rafraîchissez dans quelques minutes pour voir les résultats.',
+        title: 'Scraping lance',
+        description: 'Execution en cours. Les resultats se mettront a jour automatiquement.',
       });
-      // Rafraîchir après 3 secondes pour mettre à jour les stats
-      setTimeout(() => {
-        fetchAutomations();
-      }, 3000);
+      // Poll every 5s for up to 2 minutes (24 polls)
+      stopPolling();
+      pollCountRef.current = 0;
+      pollRef.current = setInterval(async () => {
+        pollCountRef.current++;
+        await fetchAutomations();
+        // Stop after 24 polls (2 min) or if execution completed
+        if (pollCountRef.current >= 24) {
+          stopPolling();
+        }
+      }, 5000);
     } catch (error: any) {
       toast({
         title: 'Erreur',
-        description: error.response?.data?.message || 'Erreur lors du déclenchement',
+        description: error.response?.data?.message || 'Erreur lors du declenchement',
         variant: 'destructive',
       });
     } finally {
@@ -306,7 +328,7 @@ const AutomationsPage: React.FC = () => {
         </div>
 
         {/* Credit Warning */}
-        {balance && balance.balance < stats.estimatedMonthlyCost && stats.active > 0 && (
+        {balance && balance.total < stats.estimatedMonthlyCost && stats.active > 0 && (
           <Card className="bg-gold-50 border-gold-200">
             <CardContent className="pt-6">
               <div className="flex items-start gap-4">
@@ -314,7 +336,7 @@ const AutomationsPage: React.FC = () => {
                 <div>
                   <h3 className="font-semibold text-gold-800">Crédits insuffisants</h3>
                   <p className="text-sm text-gold-700 mt-1">
-                    Votre solde actuel ({balance.balance} crédits) est inférieur au coût mensuel estimé ({stats.estimatedMonthlyCost} crédits).
+                    Votre solde actuel ({balance.total} crédits) est inférieur au coût mensuel estimé ({stats.estimatedMonthlyCost} crédits).
                     Les automatisations seront mises en pause automatiquement si vous manquez de crédits.
                   </p>
                   <Button
