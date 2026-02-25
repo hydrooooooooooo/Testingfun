@@ -108,7 +108,7 @@ class MonitoringController {
         sessions,
       };
     } catch (error: any) {
-      logger.warn('[Monitoring] Failed to get active sessions:', error.message);
+      logger.warn(`[Monitoring] Failed to get active sessions: ${error.message || error}`);
       return { total: 0, byType: {}, sessions: [] };
     }
   }
@@ -180,7 +180,7 @@ class MonitoringController {
 
       return all;
     } catch (error: any) {
-      logger.warn('[Monitoring] Failed to get recent events:', error.message);
+      logger.warn(`[Monitoring] Failed to get recent events: ${error.message || error}`);
       return [];
     }
   }
