@@ -15,7 +15,7 @@ import {
 import mentionDetectionService from './mentionDetectionService';
 import { saveMarketplaceBackup } from './backupService';
 import { ApifyClient } from 'apify-client';
-import config from '../config/config';
+import { config } from '../config/config';
 
 interface ScheduledScrape {
   id: string;
@@ -782,8 +782,8 @@ class ScheduledScrapeService {
     await db('scheduled_scrape_notifications').insert({
       scheduled_scrape_id: scraper.id,
       execution_id: executionId,
-      type: 'success',
-      recipient: emailAddress,
+      notification_type: 'success',
+      recipient_email: emailAddress,
       subject,
     });
   }
@@ -811,8 +811,8 @@ class ScheduledScrapeService {
     await db('scheduled_scrape_notifications').insert({
       scheduled_scrape_id: scraper.id,
       execution_id: executionId,
-      type: 'error',
-      recipient: emailAddress,
+      notification_type: 'error',
+      recipient_email: emailAddress,
       subject,
     });
   }
@@ -836,8 +836,8 @@ class ScheduledScrapeService {
 
     await db('scheduled_scrape_notifications').insert({
       scheduled_scrape_id: scraper.id,
-      type: 'insufficient_credits',
-      recipient: emailAddress,
+      notification_type: 'insufficient_credits',
+      recipient_email: emailAddress,
       subject,
     });
   }
@@ -868,8 +868,8 @@ class ScheduledScrapeService {
 
     await db('scheduled_scrape_notifications').insert({
       scheduled_scrape_id: scraper.id,
-      type: 'price_change',
-      recipient: emailAddress,
+      notification_type: 'price_change',
+      recipient_email: emailAddress,
       subject,
     });
   }
@@ -899,8 +899,8 @@ class ScheduledScrapeService {
 
     await db('scheduled_scrape_notifications').insert({
       scheduled_scrape_id: scraper.id,
-      type: 'new_mention',
-      recipient: emailAddress,
+      notification_type: 'new_mention',
+      recipient_email: emailAddress,
       subject,
     });
   }
@@ -953,8 +953,8 @@ class ScheduledScrapeService {
 
     await db('scheduled_scrape_notifications').insert({
       scheduled_scrape_id: scraper.id,
-      type: 'weekly_report',
-      recipient: emailAddress,
+      notification_type: 'weekly_report',
+      recipient_email: emailAddress,
       subject,
     });
   }
