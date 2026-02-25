@@ -272,7 +272,7 @@ export const addKeyword = async (
     return res.status(401).json({ message: 'Authentication required' });
   }
 
-  const { keyword, category, monitoredPages, frequency, emailAlerts } = req.body;
+  const { keyword, category, monitoredPages, frequency, emailAlerts, linkedAutomationId } = req.body;
 
   if (!keyword || typeof keyword !== 'string' || keyword.trim().length === 0) {
     return res.status(400).json({ message: 'Keyword is required' });
@@ -285,6 +285,7 @@ export const addKeyword = async (
       monitoredPages,
       frequency,
       emailAlerts,
+      linkedAutomationId,
     });
 
     return res.status(201).json({

@@ -85,11 +85,13 @@ class MentionDetectionService {
           suggested_response_time: analysis.responseTime,
           post_url: post.postUrl || post.url || post.link || '',
           comment_text: post.text || post.message || '',
-          comment_author: post.sourceType === 'comment' ? (post.author_name || post.authorName || 'Utilisateur') : (post.pageName || 'Page Facebook'),
+          comment_author: post.sourceType === 'comment'
+            ? (post.author || post.author_name || post.profileName || 'Utilisateur')
+            : (post.pageName || 'Page Facebook'),
           comment_likes: post.likes || post.reactions || 0,
           comment_posted_at: post.time || post.timestamp || post.posted_at || new Date().toISOString(),
           page_name: post.pageName || '',
-          post_type: post.sourceType || post.type || 'post', // 'post' ou 'comment'
+          post_type: post.sourceType === 'comment' ? 'comment' : 'post',
           status: 'new',
         };
 
@@ -432,17 +434,17 @@ Réponds UNIQUEMENT en JSON valide, sans texte avant ou après :
         .where({ user_id: userId })
         .select(
           db.raw('COUNT(*) as total'),
-          db.raw("COUNT(*) FILTER (WHERE status = 'new') as new"),
-          db.raw("COUNT(*) FILTER (WHERE mention_type = 'recommendation') as recommendations"),
-          db.raw("COUNT(*) FILTER (WHERE mention_type = 'question') as questions"),
-          db.raw("COUNT(*) FILTER (WHERE mention_type = 'complaint') as complaints"),
+          db.raw("SUM(CASE WHEN status = 'new' THEN 1 ELSE 0 END) as new_count"),
+          db.raw("SUM(CASE WHEN mention_type = 'recommendation' THEN 1 ELSE 0 END) as recommendations"),
+          db.raw("SUM(CASE WHEN mention_type = 'question' THEN 1 ELSE 0 END) as questions"),
+          db.raw("SUM(CASE WHEN mention_type = 'complaint' THEN 1 ELSE 0 END) as complaints"),
           db.raw('AVG(sentiment_score) as avg_sentiment')
         )
         .first();
 
       return {
         total: parseInt((stats as any)?.total || '0', 10),
-        new: parseInt((stats as any)?.new || '0', 10),
+        new: parseInt((stats as any)?.new_count || '0', 10),
         recommendations: parseInt((stats as any)?.recommendations || '0', 10),
         questions: parseInt((stats as any)?.questions || '0', 10),
         complaints: parseInt((stats as any)?.complaints || '0', 10),
@@ -473,9 +475,12 @@ Réponds UNIQUEMENT en JSON valide, sans texte avant ou après :
     userId: number,
     keywords: { keyword: string; category?: string }[]
   ): Promise<void> {
-    // Désactiver tous les mots-clés existants
+    // Désactiver uniquement les mots-clés manuels (pas les CRON)
     await db('brand_keywords')
       .where({ user_id: userId })
+      .where(function() {
+        this.where('frequency', 'manual').orWhereNull('frequency');
+      })
       .update({ is_active: false });
 
     // Ajouter les nouveaux mots-clés
@@ -504,6 +509,7 @@ Réponds UNIQUEMENT en JSON valide, sans texte avant ou après :
       monitoredPages?: string[];
       frequency?: string;
       emailAlerts?: boolean;
+      linkedAutomationId?: string;
     }
   ): Promise<any> {
     const [keyword] = await db('brand_keywords')
@@ -516,10 +522,44 @@ Réponds UNIQUEMENT en JSON valide, sans texte avant ou après :
         email_alerts: keywordData.emailAlerts !== false,
         is_active: true,
         mentions_count: 0,
+        linked_automation_id: keywordData.linkedAutomationId || null,
       })
       .returning('*');
 
     logger.info(`[MENTIONS] Added keyword "${keywordData.keyword}" for user ${userId}`);
+
+    // Task 2: Auto-activate mentionDetection on the linked automation
+    if (keywordData.linkedAutomationId && keywordData.frequency === 'cron') {
+      try {
+        const automation = await db('scheduled_scrapes')
+          .where({ id: keywordData.linkedAutomationId, user_id: userId })
+          .first();
+
+        if (automation) {
+          let config = automation.config;
+          if (typeof config === 'string') {
+            try {
+              config = JSON.parse(config);
+            } catch {
+              config = {};
+            }
+          }
+          config = config || {};
+
+          if (config.mentionDetection !== true) {
+            config.mentionDetection = true;
+            await db('scheduled_scrapes')
+              .where({ id: keywordData.linkedAutomationId, user_id: userId })
+              .update({ config: JSON.stringify(config) });
+
+            logger.info(`[MENTIONS] Auto-activated mentionDetection on automation ${keywordData.linkedAutomationId} for user ${userId}`);
+          }
+        }
+      } catch (err: any) {
+        logger.warn(`[MENTIONS] Failed to auto-activate mentionDetection on automation ${keywordData.linkedAutomationId}: ${err.message}`);
+      }
+    }
+
     return keyword;
   }
 
@@ -595,15 +635,27 @@ Réponds UNIQUEMENT en JSON valide, sans texte avant ou après :
     const fs = await import('fs/promises');
     const path = await import('path');
     const backupsDir = path.join(__dirname, '../../data/backups');
-    
+
     try {
+      // Query DB to get session IDs owned by this user
+      const userSessions = await db('scraping_sessions')
+        .where({ user_id: userId, service_type: 'facebook_pages' })
+        .select('session_id')
+        .orderBy('created_at', 'desc')
+        .limit(20);
+      const userSessionIds = new Set(userSessions.map((s: any) => s.session_id));
+
       // Lire tous les fichiers de backup
       const files = await fs.readdir(backupsDir);
       const fbPagesFiles = files.filter(f => f.startsWith('fbpages_sess_') && f.endsWith('.json'));
-      
+
       const sessionsWithPages = await Promise.all(
         fbPagesFiles.map(async (file) => {
           try {
+            // Extract sessionId from filename: fbpages_sess_XXX.json → sess_XXX
+            const sessionId = file.replace('fbpages_', '').replace('.json', '');
+            if (!userSessionIds.has(sessionId)) return null;
+
             const filePath = path.join(backupsDir, file);
             const fileContent = await fs.readFile(filePath, 'utf-8');
             const data = JSON.parse(fileContent);
