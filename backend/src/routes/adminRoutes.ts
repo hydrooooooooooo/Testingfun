@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { adminController } from '../controllers/adminController';
+import { monitoringController } from '../controllers/monitoringController';
 import { protect, restrictTo } from '../middlewares/authMiddleware';
 import { adminOwnerOnly } from '../middlewares/adminOwnerMiddleware';
 import { validate, adminSearchSchema, adminUserSearchSchema } from '../middlewares/validation';
@@ -26,5 +27,6 @@ router.patch('/users/:userId/credits', (req, res, next) => adminController.adjus
 router.patch('/users/:userId/status', (req, res, next) => adminController.toggleUserStatus(req, res, next));
 
 router.get('/ai-usage', (req, res, next) => adminController.getAIUsageSummary(req, res, next));
+router.get('/monitoring', (req, res, next) => monitoringController.getMonitoringData(req, res, next));
 
 export default router;

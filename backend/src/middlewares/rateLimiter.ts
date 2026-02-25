@@ -49,7 +49,7 @@ export const authLimiter = rateLimit({
  */
 export const adminLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 60,
+  max: 200,
   standardHeaders: true,
   legacyHeaders: false,
   message: 'Trop de requêtes admin.',

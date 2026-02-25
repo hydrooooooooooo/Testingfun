@@ -49,6 +49,7 @@ import FacebookPagesFilesPage from './pages/FacebookPagesFilesPage';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminUsersPage from './pages/AdminUsersPage';
 import AdminSessionsPage from './pages/AdminSessionsPage';
+import AdminMonitoringPage from './pages/AdminMonitoringPage';
 import NotFound from './pages/NotFound';
 
 // Layouts
@@ -135,6 +136,7 @@ function App() {
                       <Route index element={<AdminDashboard />} />
                       <Route path="users" element={<AdminUsersPage />} />
                       <Route path="sessions" element={<AdminSessionsPage />} />
+                      <Route path="monitoring" element={<AdminMonitoringPage />} />
                       <Route path="reporting" element={<AdminDashboard />} />
                     </Route>
                   </Route>

@@ -495,6 +495,15 @@ export function useApi() {
     }
   }, []);
 
+  const getAdminMonitoring = useCallback(async () => {
+    try {
+      const response = await api.get('/admin/monitoring');
+      return response.data?.data || response.data;
+    } catch {
+      return null;
+    }
+  }, []);
+
   return {
     loading,
     error,
@@ -521,5 +530,6 @@ export function useApi() {
     getAdminActiveSessionsCount,
     getAdminSessions,
     getAdminSessionById,
+    getAdminMonitoring,
   };
 }

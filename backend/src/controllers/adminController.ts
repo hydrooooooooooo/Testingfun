@@ -346,10 +346,21 @@ export class AdminController {
       if (isNaN(userId)) throw new ApiError(400, 'Invalid userId');
       audit('admin.user_viewed', { adminId, userId });
 
-      const user = await db('users')
-        .select('id', 'email', 'name', 'role', 'credits_balance', 'is_suspended', 'suspension_reason', 'created_at', 'email_verified_at', 'business_sector', 'company_size', 'preferred_ai_model', 'last_login_at', 'last_login_ip', 'trial_used')
-        .where({ id: userId })
-        .first();
+      let user;
+      try {
+        user = await db('users')
+          .select('id', 'email', 'name', 'role', 'credits_balance', 'is_suspended', 'suspension_reason',
+                  'created_at', 'email_verified_at', 'business_sector', 'company_size',
+                  'preferred_ai_model', 'last_login_at', 'last_login_ip', 'trial_used')
+          .where({ id: userId })
+          .first();
+      } catch (selectError: any) {
+        logger.warn('[ADMIN] getUserById fallback - some columns missing:', selectError.message);
+        user = await db('users')
+          .select('id', 'email', 'name', 'role', 'credits_balance', 'created_at')
+          .where({ id: userId })
+          .first();
+      }
       if (!user) throw new ApiError(404, 'User not found');
 
       const [transactions, sessionCount, payments, downloads, totalItemsRow, sessionsByStatus, activity] = await Promise.all([

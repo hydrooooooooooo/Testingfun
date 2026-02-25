@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
 import { audit } from '../utils/logger';
 import db from '../database';
+import { activeUsersService } from '../services/activeUsersService';
 
 // Étendre le type Request de Express pour inclure notre propriété `user`
 export interface AuthenticatedRequest extends Request {
@@ -47,6 +48,8 @@ export const protect = async (req: AuthenticatedRequest, res: Response, next: Ne
       email: decoded.email,
       role: decoded.role,
     };
+
+    activeUsersService.touch(decoded.userId, decoded.email, req.ip || 'unknown', req.path);
 
     next();
   } catch (error) {

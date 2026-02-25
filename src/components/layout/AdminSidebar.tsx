@@ -6,6 +6,7 @@ import {
   Users,
   Database,
   BarChart3,
+  Activity,
   ChevronLeft,
   ChevronRight,
   ArrowLeft,
@@ -38,6 +39,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isCollapsed, setIsCollapsed
       title: 'Sessions',
       icon: Database,
       href: '/admin/sessions',
+    },
+    {
+      title: 'Monitoring',
+      icon: Activity,
+      href: '/admin/monitoring',
     },
     {
       title: 'Reporting',
