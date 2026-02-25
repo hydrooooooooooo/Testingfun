@@ -42,6 +42,7 @@ import { ItemsFilter, ItemsSort } from '@/types/scrapedItems';
 import ItemCard from './ItemCard';
 import ItemsList from './ItemsList';
 import SessionStatsPanel from './SessionStatsPanel';
+import { CommentsViewer } from '@/components/CommentsViewer';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
@@ -327,8 +328,6 @@ export function FacebookPostsView({ sessionId, pageName }: FacebookPostsViewProp
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
-  const [commentsData, setCommentsData] = useState<Record<string, any[]>>({});
-  const [loadingComments, setLoadingComments] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const fetchPostsData = async () => {
@@ -347,33 +346,8 @@ export function FacebookPostsView({ sessionId, pageName }: FacebookPostsViewProp
     fetchPostsData();
   }, [sessionId, pageName]);
 
-  const toggleComments = async (postUrl: string, postId: string) => {
-    if (expandedPostId === postId) {
-      setExpandedPostId(null);
-      return;
-    }
-
-    setExpandedPostId(postId);
-
-    // Si les commentaires sont déjà chargés, ne pas les recharger
-    if (commentsData[postId]) {
-      return;
-    }
-
-    // Charger les commentaires
-    setLoadingComments(prev => ({ ...prev, [postId]: true }));
-    try {
-      const response = await api.get(`/comments/${sessionId}/post`, {
-        params: { postUrl }
-      });
-      // L'API retourne { comments: [...], total: X }
-      setCommentsData(prev => ({ ...prev, [postId]: response.data.comments || [] }));
-    } catch (err: any) {
-      console.error('Erreur chargement commentaires:', err);
-      setCommentsData(prev => ({ ...prev, [postId]: [] }));
-    } finally {
-      setLoadingComments(prev => ({ ...prev, [postId]: false }));
-    }
+  const toggleComments = (postId: string) => {
+    setExpandedPostId(expandedPostId === postId ? null : postId);
   };
 
   if (isLoading) {
@@ -494,7 +468,7 @@ export function FacebookPostsView({ sessionId, pageName }: FacebookPostsViewProp
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => toggleComments(post.url, post.postId)}
+                    onClick={() => toggleComments(post.postId)}
                     className="h-7 text-xs gap-1.5"
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
@@ -507,60 +481,11 @@ export function FacebookPostsView({ sessionId, pageName }: FacebookPostsViewProp
               {/* Section Commentaires */}
               {expandedPostId === post.postId && (
                 <div className="mt-4 pt-4 border-t border-cream-300">
-                  {loadingComments[post.postId] ? (
-                    <div className="flex items-center justify-center py-8">
-                      <Loader2 className="w-6 h-6 animate-spin text-navy" />
-                      <span className="ml-2 text-sm text-steel">Chargement des commentaires...</span>
-                    </div>
-                  ) : commentsData[post.postId] && commentsData[post.postId].length > 0 ? (
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2 mb-3">
-                        <MessageCircle className="w-4 h-4 text-navy" />
-                        <h4 className="text-sm font-semibold text-navy">
-                          {commentsData[post.postId].length} commentaire{commentsData[post.postId].length > 1 ? 's' : ''}
-                        </h4>
-                      </div>
-                      <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
-                        {commentsData[post.postId].map((comment: any, idx: number) => (
-                          <div key={idx} className="bg-cream-50 rounded-lg p-3 hover:bg-cream-100 transition-colors">
-                            <div className="flex items-start gap-2">
-                              <div className="w-8 h-8 rounded-full bg-navy-100 flex items-center justify-center flex-shrink-0">
-                                <span className="text-xs font-semibold text-navy">
-                                  {comment.author_name?.charAt(0).toUpperCase() || '?'}
-                                </span>
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1">
-                                  <span className="text-xs font-semibold text-navy">
-                                    {comment.author_name || 'Anonyme'}
-                                  </span>
-                                  {comment.posted_at && (
-                                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                      <Calendar className="h-3 w-3" />
-                                      {comment.posted_at ? format(new Date(comment.posted_at), 'dd MMM yyyy', { locale: fr }) : 'Date inconnue'}
-                                    </div>
-                                  )}
-                                </div>
-                                <p className="text-xs text-navy-700 leading-relaxed whitespace-pre-wrap">
-                                  {comment.text}
-                                </p>
-                                {comment.likes > 0 && (
-                                  <div className="flex items-center gap-1 mt-2">
-                                    <Heart className="w-3 h-3 text-red-400" />
-                                    <span className="text-xs text-steel">{comment.likes}</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-center py-6 text-sm text-steel">
-                      Aucun commentaire disponible pour ce post
-                    </div>
-                  )}
+                  <CommentsViewer
+                    sessionId={sessionId}
+                    postUrl={post.url}
+                    postText={post.text}
+                  />
                 </div>
               )}
             </CardContent>

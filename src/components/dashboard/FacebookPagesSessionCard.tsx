@@ -60,7 +60,7 @@ export default function FacebookPagesSessionCard({ session, onViewItems }: Faceb
     setExpandedPages(newExpanded);
   };
 
-  const handleDownload = async (fileType: 'zip' | 'info' | 'posts', pageName?: string) => {
+  const handleDownload = async (fileType: 'zip' | 'info' | 'posts' | 'comments', pageName?: string) => {
     const extension = fileType === 'zip' ? 'zip' : 'xlsx';
     const filename = fileType === 'zip' 
       ? `facebook_pages_${session.id}.zip`
@@ -332,6 +332,22 @@ export default function FacebookPagesSessionCard({ session, onViewItems }: Faceb
                             <Loader2 className="w-4 h-4 animate-spin text-navy" />
                           ) : (
                             <Download className="w-4 h-4 text-navy" />
+                          )}
+                        </Button>
+                      )}
+                      {(session.extraction_config?.extractComments || session.extract_comments) && (
+                        <Button
+                          onClick={() => handleDownload('comments', subSession.pageName)}
+                          disabled={downloading || !session.isPaid}
+                          size="sm"
+                          variant="ghost"
+                          className="h-8 w-8 p-0 hover:bg-steel/20"
+                          title="Télécharger les commentaires"
+                        >
+                          {downloading && currentDownload?.includes(`${subSession.pageName}_comments`) ? (
+                            <Loader2 className="w-4 h-4 animate-spin text-steel" />
+                          ) : (
+                            <MessageSquare className="w-4 h-4 text-steel" />
                           )}
                         </Button>
                       )}

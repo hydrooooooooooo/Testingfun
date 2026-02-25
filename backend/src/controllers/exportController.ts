@@ -270,6 +270,29 @@ export class ExportController {
             responseData.push(...(sub.postsData || []));
           }
         }
+      } else if (fileType === 'comments') {
+        responseData = [];
+        for (const sub of backupData.subSessions || []) {
+          if (!pageName || sub.pageName === pageName) {
+            if (sub.commentsData && Array.isArray(sub.commentsData)) {
+              for (const result of sub.commentsData) {
+                if (result.comments && Array.isArray(result.comments)) {
+                  responseData.push(...result.comments.map((c: any) => ({
+                    pageName: sub.pageName,
+                    postUrl: result.postUrl,
+                    authorName: c.author?.name || c.author_name || '',
+                    authorUrl: c.author?.url || c.author_url || '',
+                    text: c.text || '',
+                    likes: c.likes || 0,
+                    postedAt: c.postedAt || c.posted_at || '',
+                    isReply: c.isReply || c.is_reply || false,
+                    repliesCount: c.repliesCount || c.replies_count || 0,
+                  })));
+                }
+              }
+            }
+          }
+        }
       } else {
         // 'zip' or default - return everything
         responseData = backupData;
