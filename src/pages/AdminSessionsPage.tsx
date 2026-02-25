@@ -10,7 +10,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Database, RefreshCw, Archive, Undo2 } from 'lucide-react';
+import { Database, RefreshCw, Archive, Undo2, Activity } from 'lucide-react';
 
 const statusColors: Record<string, string> = {
   FINISHED: 'bg-green-100 text-green-800 border-green-200',
@@ -21,9 +21,10 @@ const statusColors: Record<string, string> = {
 };
 
 const AdminSessionsPage: React.FC = () => {
-  const { getAdminSessions, getAdminSessionById, refundAdminSession, archiveAdminSession } = useApi();
+  const { getAdminSessions, getAdminSessionById, refundAdminSession, archiveAdminSession, getAdminActiveSessionsCount } = useApi();
   const [sessions, setSessions] = useState<any[]>([]);
   const [loadingList, setLoadingList] = useState(true);
+  const [activeCounts, setActiveCounts] = useState<{ pending: number; running: number; total: number } | null>(null);
 
   // Filters
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -59,6 +60,17 @@ const AdminSessionsPage: React.FC = () => {
   useEffect(() => {
     fetchSessions();
   }, [fetchSessions]);
+
+  // Poll active sessions count every 10s
+  useEffect(() => {
+    const fetchActive = async () => {
+      const data = await getAdminActiveSessionsCount();
+      setActiveCounts(data);
+    };
+    fetchActive();
+    const interval = setInterval(fetchActive, 10000);
+    return () => clearInterval(interval);
+  }, [getAdminActiveSessionsCount]);
 
   const filteredSessions = useMemo(() => {
     return sessions.filter((s: any) => {
@@ -128,6 +140,23 @@ const AdminSessionsPage: React.FC = () => {
           <RefreshCw className="h-4 w-4 mr-1" /> Rafraîchir
         </Button>
       </div>
+
+      {/* Active sessions banner */}
+      {activeCounts && activeCounts.total > 0 && (
+        <div className="flex items-center gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3">
+          <Activity className="h-5 w-5 text-blue-600" />
+          <span className="text-sm font-medium text-blue-800">Sessions actives</span>
+          <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
+            Pending: {activeCounts.pending}
+          </Badge>
+          <Badge className="bg-blue-100 text-blue-800 border-blue-200">
+            Running: {activeCounts.running}
+          </Badge>
+          <Badge className="bg-navy text-white">
+            Total: {activeCounts.total}
+          </Badge>
+        </div>
+      )}
 
       <Card className="bg-white border-cream-300 shadow-sm">
         <CardHeader className="pb-2">

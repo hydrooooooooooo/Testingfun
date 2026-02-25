@@ -11,6 +11,7 @@ const router = Router();
 router.use(protect, restrictTo('admin'), adminOwnerOnly, adminLimiter);
 
 router.get('/sessions', (req, res, next) => adminController.getAllSessions(req, res, next));
+router.get('/sessions/active-count', (req, res, next) => adminController.getActiveSessionsCount(req, res, next));
 router.get('/sessions/:sessionId', (req, res, next) => adminController.getSessionById(req, res, next));
 router.get('/sessions/:sessionId/refund', (req, res, next) => adminController.refundSession(req, res, next));
 router.delete('/sessions/:sessionId', (req, res, next) => adminController.archiveSession(req, res, next));

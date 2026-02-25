@@ -221,8 +221,12 @@ const AdminUsersPage: React.FC = () => {
                 <div className="font-medium">{COMPANY_SIZES.find((s) => s.value === selectedUser?.company_size)?.label || '—'}</div>
                 <div className="text-steel">Email vérifié</div>
                 <div className="font-medium">{selectedUser?.email_verified_at ? 'Oui' : 'Non'}</div>
+                <div className="text-steel">Trial utilisé</div>
+                <div className="font-medium">{selectedUser?.trial_used ? 'Oui' : 'Non'}</div>
                 <div className="text-steel">Sessions</div>
                 <div className="font-medium">{userDetail?.sessionCount ?? 0}</div>
+                <div className="text-steel">Items scrapés (total)</div>
+                <div className="font-medium">{(userDetail?.totalItemsScraped || 0).toLocaleString()}</div>
                 <div className="text-steel">Modèle IA</div>
                 <div className="font-medium">{selectedUser?.preferred_ai_model ? getModelName(selectedUser.preferred_ai_model) : 'Défaut'}</div>
                 <div className="text-steel">Dernière connexion</div>
@@ -238,6 +242,26 @@ const AdminUsersPage: React.FC = () => {
                   )}
                 </div>
               </div>
+
+              {/* Sessions by status */}
+              {(userDetail?.sessionsByStatus || []).length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {(userDetail.sessionsByStatus as Array<{ status: string; count: number }>).map((s) => (
+                    <Badge
+                      key={s.status}
+                      className={
+                        s.status === 'FINISHED' ? 'bg-green-100 text-green-800 border-green-200' :
+                        s.status === 'RUNNING' ? 'bg-blue-100 text-blue-800 border-blue-200' :
+                        s.status === 'FAILED' ? 'bg-red-100 text-red-800 border-red-200' :
+                        s.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
+                        'bg-gray-100 text-gray-800 border-gray-200'
+                      }
+                    >
+                      {s.status}: {Number(s.count)}
+                    </Badge>
+                  ))}
+                </div>
+              )}
 
               {selectedUser?.suspension_reason && (
                 <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm">
@@ -319,6 +343,36 @@ const AdminUsersPage: React.FC = () => {
                           <span className="ml-2 text-steel">{d.format}</span>
                         </div>
                         <div className="text-steel">{d.created_at ? new Date(d.created_at).toLocaleDateString() : '—'}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Unified Activity Timeline */}
+              <div>
+                <h4 className="text-sm font-semibold text-navy mb-2">Activité récente</h4>
+                {(userDetail?.activity || []).length === 0 ? (
+                  <div className="text-sm text-steel">Aucune activité</div>
+                ) : (
+                  <div className="space-y-1 max-h-72 overflow-y-auto">
+                    {(userDetail.activity as Array<{ type: string; id: string | number; created_at: string; label: string; detail: string; extra: string | null }>).map((item, idx) => (
+                      <div key={`${item.type}-${item.id}-${idx}`} className="flex items-center gap-2 text-xs border-b border-cream-200 py-1.5">
+                        <Badge
+                          className={
+                            item.type === 'credit' ? 'bg-green-100 text-green-800 border-green-200' :
+                            item.type === 'session' ? 'bg-blue-100 text-blue-800 border-blue-200' :
+                            'bg-purple-100 text-purple-800 border-purple-200'
+                          }
+                        >
+                          {item.type === 'credit' ? 'Credit' : item.type === 'session' ? 'Session' : 'Download'}
+                        </Badge>
+                        <span className="font-medium text-navy truncate max-w-[120px]">{item.label}</span>
+                        <span className="text-steel truncate max-w-[100px]">{item.detail}</span>
+                        {item.extra && <span className="text-steel">({item.extra})</span>}
+                        <span className="ml-auto text-steel whitespace-nowrap">
+                          {item.created_at ? new Date(item.created_at).toLocaleDateString() : '—'}
+                        </span>
                       </div>
                     ))}
                   </div>

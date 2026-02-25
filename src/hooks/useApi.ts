@@ -464,6 +464,15 @@ export function useApi() {
     }
   }, []);
 
+  const getAdminActiveSessionsCount = useCallback(async () => {
+    try {
+      const response = await api.get('/admin/sessions/active-count');
+      return response.data?.data || response.data;
+    } catch {
+      return { pending: 0, running: 0, total: 0 };
+    }
+  }, []);
+
   const getAdminSessions = useCallback(async () => {
     try {
       const response = await api.get('/admin/sessions');
@@ -509,6 +518,7 @@ export function useApi() {
     toggleAdminUserStatus,
     refundAdminSession,
     archiveAdminSession,
+    getAdminActiveSessionsCount,
     getAdminSessions,
     getAdminSessionById,
   };

@@ -40,6 +40,31 @@ export class AdminController {
   }
 
   /**
+   * Get count of active sessions (pending + running)
+   */
+  async getActiveSessionsCount(req: Request, res: Response, next: NextFunction) {
+    try {
+      const rows = await db('scraping_sessions')
+        .whereIn('status', [SessionStatus.PENDING, SessionStatus.RUNNING])
+        .select('status')
+        .groupBy('status')
+        .count('* as count');
+
+      const result = { pending: 0, running: 0, total: 0 };
+      for (const row of rows) {
+        const cnt = Number(row.count);
+        if (row.status === SessionStatus.PENDING) result.pending = cnt;
+        if (row.status === SessionStatus.RUNNING) result.running = cnt;
+        result.total += cnt;
+      }
+
+      res.status(200).json({ status: 'success', data: result });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
    * Get session details by ID (for admin purposes)
    */
   async getSessionById(req: Request, res: Response, next: NextFunction) {
@@ -302,37 +327,62 @@ export class AdminController {
       audit('admin.user_viewed', { adminId, userId });
 
       const user = await db('users')
-        .select('id', 'email', 'name', 'role', 'credits_balance', 'is_suspended', 'suspension_reason', 'created_at', 'email_verified_at', 'business_sector', 'company_size', 'preferred_ai_model', 'last_login_at', 'last_login_ip')
+        .select('id', 'email', 'name', 'role', 'credits_balance', 'is_suspended', 'suspension_reason', 'created_at', 'email_verified_at', 'business_sector', 'company_size', 'preferred_ai_model', 'last_login_at', 'last_login_ip', 'trial_used')
         .where({ id: userId })
         .first();
       if (!user) throw new ApiError(404, 'User not found');
 
-      const transactions = await db('credit_transactions')
-        .where({ user_id: userId })
-        .orderBy('created_at', 'desc')
-        .limit(50);
+      const [transactions, sessionCount, payments, downloads, totalItemsRow, sessionsByStatus, activity] = await Promise.all([
+        db('credit_transactions')
+          .where({ user_id: userId })
+          .orderBy('created_at', 'desc')
+          .limit(50),
+        db('scraping_sessions')
+          .where({ user_id: userId })
+          .count('* as count')
+          .first(),
+        db('scraping_sessions')
+          .where({ user_id: userId })
+          .whereNotNull('payment_method')
+          .select('id', 'packId', 'payment_method', 'payment_intent_id', 'isPaid', 'created_at', 'updated_at')
+          .orderBy('created_at', 'desc')
+          .limit(50),
+        db('downloads')
+          .where({ user_id: userId })
+          .select('id', 'session_id', 'format', 'created_at', 'expires_at')
+          .orderBy('created_at', 'desc')
+          .limit(50),
+        db('scraping_sessions')
+          .where({ user_id: userId })
+          .sum('totalItems as total')
+          .first(),
+        db('scraping_sessions')
+          .where({ user_id: userId })
+          .select('status')
+          .groupBy('status')
+          .count('* as count'),
+        db.raw(`
+          SELECT * FROM (
+            SELECT 'credit' as type, id, created_at, transaction_type as label, CAST(amount AS TEXT) as detail, NULL as extra
+            FROM credit_transactions WHERE user_id = ?
+            UNION ALL
+            SELECT 'session', id, created_at, COALESCE(scrape_type,'marketplace'), status, CAST(totalItems AS TEXT)
+            FROM scraping_sessions WHERE user_id = ?
+            UNION ALL
+            SELECT 'download', id, created_at, format, session_id, NULL
+            FROM downloads WHERE user_id = ?
+          ) unified ORDER BY created_at DESC LIMIT 100
+        `, [userId, userId, userId]),
+      ]);
 
-      const sessionCount = await db('scraping_sessions')
-        .where({ user_id: userId })
-        .count('* as count')
-        .first();
+      const totalItemsScraped = Number(totalItemsRow?.total || 0);
 
-      const payments = await db('scraping_sessions')
-        .where({ user_id: userId })
-        .whereNotNull('payment_method')
-        .select('id', 'packId', 'payment_method', 'payment_intent_id', 'isPaid', 'created_at', 'updated_at')
-        .orderBy('created_at', 'desc')
-        .limit(50);
-
-      const downloads = await db('downloads')
-        .where({ user_id: userId })
-        .select('id', 'session_id', 'format', 'created_at', 'expires_at')
-        .orderBy('created_at', 'desc')
-        .limit(50);
+      // Normalize raw result from db.raw (knex returns { rows } for pg, array for sqlite)
+      const activityRows = Array.isArray(activity) ? activity : (activity?.rows || []);
 
       res.status(200).json({
         status: 'success',
-        data: { user, transactions, sessionCount: Number(sessionCount?.count || 0), payments, downloads },
+        data: { user, transactions, sessionCount: Number(sessionCount?.count || 0), payments, downloads, totalItemsScraped, sessionsByStatus, activity: activityRows },
       });
     } catch (error) {
       next(error);

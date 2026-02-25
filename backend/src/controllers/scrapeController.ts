@@ -47,6 +47,17 @@ export class ScrapeController {
       // Get user ID from authenticated request
       const userId = (req as any).user?.id;
 
+      // Check marketplace concurrency (one active session per user)
+      if (userId) {
+        const activeSession = await db('scraping_sessions')
+          .where({ user_id: userId, scrape_type: 'marketplace' })
+          .whereIn('status', [SessionStatus.PENDING, SessionStatus.RUNNING])
+          .first();
+        if (activeSession) {
+          throw new ApiError(409, 'Une extraction Marketplace est déjà en cours. Veuillez attendre la fin.');
+        }
+      }
+
       // Reserve credits before starting (skip if no user)
       if (userId) {
         const estimatedCost = calculateSimpleCost('marketplace', validLimit);
