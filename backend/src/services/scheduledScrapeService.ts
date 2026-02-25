@@ -64,6 +64,19 @@ class ScheduledScrapeService {
   private cronJob: cron.ScheduledTask | null = null;
   private isRunning = false;
 
+  /** Parse TEXT columns to objects (config & notification_settings are stored as TEXT in DB) */
+  private parseNotifSettings(scraper: any): any {
+    return typeof scraper.notification_settings === 'string'
+      ? JSON.parse(scraper.notification_settings || '{}')
+      : (scraper.notification_settings || {});
+  }
+
+  private parseConfig(scraper: any): any {
+    return typeof scraper.config === 'string'
+      ? JSON.parse(scraper.config || '{}')
+      : (scraper.config || {});
+  }
+
   /**
    * Démarrer le scheduler CRON
    */
@@ -134,7 +147,15 @@ class ScheduledScrapeService {
     const executionId = nanoid();
     const startTime = new Date();
 
-    logger.info(`[SCHEDULED_SCRAPE] Starting execution ${executionId} for scrape ${scraper.id}`);
+    // Parse config & notification_settings from TEXT columns
+    const config = typeof scraper.config === 'string'
+      ? JSON.parse(scraper.config || '{}')
+      : (scraper.config || {});
+    const notifSettings = typeof scraper.notification_settings === 'string'
+      ? JSON.parse(scraper.notification_settings || '{}')
+      : (scraper.notification_settings || {});
+
+    logger.info(`[SCHEDULED_SCRAPE] Starting execution ${executionId} for scrape ${scraper.id}`, { config, notifSettings });
 
     // Créer l'enregistrement d'exécution
     await db('scheduled_scrape_executions').insert({
@@ -142,20 +163,15 @@ class ScheduledScrapeService {
       scheduled_scrape_id: scraper.id,
       status: 'pending',
       started_at: startTime,
+      created_at: startTime,
     });
 
     try {
-      // 1. Vérifier les crédits
-      const user = await db('users').where({ id: scraper.user_id }).first();
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      // Utiliser credits_balance (pas credits) - c'est le nom de la colonne dans la DB
-      const userCredits = parseFloat(user.credits_balance || user.credits || 0);
-      const hasCredits = userCredits >= scraper.credits_per_run;
+      // 1. Vérifier les crédits via creditService (source of truth)
+      const userBalance = await creditService.getUserCreditBalance(scraper.user_id);
+      const hasCredits = userBalance.total >= scraper.credits_per_run;
       
-      logger.info(`[SCHEDULED_SCRAPE] Credit check for user ${scraper.user_id}: balance=${userCredits}, required=${scraper.credits_per_run}, hasCredits=${hasCredits}`);
+      logger.info(`[SCHEDULED_SCRAPE] Credit check for user ${scraper.user_id}: balance=${userBalance.total}, required=${scraper.credits_per_run}, hasCredits=${hasCredits}`);
 
       if (!hasCredits) {
         await this.pauseForInsufficientCredits(scraper);
@@ -197,8 +213,8 @@ class ScheduledScrapeService {
         updated_at: new Date(),
       });
       
-      // Utiliser maxItems du config ou valeur par défaut
-      const resultsLimit = (scraper.config as any)?.maxItems || 10;
+      // Utiliser maxItems du config parsé ou valeur par défaut
+      const resultsLimit = config.maxItems || 10;
       const session = await apifyService.startScraping(
         scraper.target_url,
         sessionId,
@@ -239,22 +255,20 @@ class ScheduledScrapeService {
         `Scraping automatisé: ${scraper.name}`
       );
 
-      // 7. Analyses optionnelles
-      // Analyse IA disponible pour tous les types
-      if (scraper.config?.aiAnalysis) {
+      // 7. Analyses optionnelles (using parsed config)
+      if (config.aiAnalysis) {
         const aiCost = await this.runAiAnalysis(sessionId, scraper.user_id);
         totalCreditsUsed += aiCost;
       }
 
-      // Benchmark et mentions pour facebook_pages et posts_comments
       const supportsBenchmark = ['facebook_pages', 'posts_comments'].includes(scraper.scrape_type);
-      
-      if (scraper.config?.benchmark && supportsBenchmark) {
+
+      if (config.benchmark && supportsBenchmark) {
         const benchmarkCost = await this.runBenchmark(sessionId, scraper.user_id);
         totalCreditsUsed += benchmarkCost;
       }
 
-      if (scraper.config?.mentionDetection && supportsBenchmark) {
+      if (config.mentionDetection && supportsBenchmark) {
         const mentionCost = await this.runMentionDetection(sessionId, scraper.user_id);
         totalCreditsUsed += mentionCost;
       }
@@ -281,9 +295,9 @@ class ScheduledScrapeService {
           status: 'completed',
           items_scraped: itemsScraped,
           credits_used: totalCreditsUsed,
-          ai_analysis_performed: scraper.config.aiAnalysis || false,
-          benchmark_performed: scraper.config.benchmark || false,
-          mention_detection_performed: scraper.config.mentionDetection || false,
+          ai_analysis_performed: config.aiAnalysis || false,
+          benchmark_performed: config.benchmark || false,
+          mention_detection_performed: config.mentionDetection || false,
           changes_detected: JSON.stringify(changes),
           completed_at: endTime,
           duration_seconds: durationSeconds,
@@ -301,7 +315,7 @@ class ScheduledScrapeService {
         });
 
       // 13. Notification de succès
-      if (scraper.notification_settings.email) {
+      if (notifSettings.email) {
         await this.sendSuccessNotification(scraper, executionId, itemsScraped, changes);
       }
 
@@ -319,27 +333,34 @@ class ScheduledScrapeService {
       logger.error(`[SCHEDULED_SCRAPE] Execution ${executionId} failed:`, error);
 
       // Mettre à jour l'exécution avec l'erreur
-      await db('scheduled_scrape_executions')
-        .where({ id: executionId })
-        .update({
-          status: 'failed',
-          error_message: error.message,
-          error_stack: error.stack,
-          completed_at: new Date(),
-        });
+      try {
+        await db('scheduled_scrape_executions')
+          .where({ id: executionId })
+          .update({
+            status: 'failed',
+            error_message: error.message + (error.stack ? `\n${error.stack}` : ''),
+            completed_at: new Date(),
+          });
+      } catch (updateErr) {
+        logger.error(`[SCHEDULED_SCRAPE] Failed to update execution ${executionId} status:`, updateErr);
+      }
 
       // Mettre à jour les stats
-      await db('scheduled_scrapes')
-        .where({ id: scraper.id })
-        .update({
-          last_run_at: new Date(),
-          next_run_at: this.calculateNextRun(scraper),
-          total_runs: db.raw('total_runs + 1'),
-          failed_runs: db.raw('failed_runs + 1'),
-        });
+      try {
+        await db('scheduled_scrapes')
+          .where({ id: scraper.id })
+          .update({
+            last_run_at: new Date(),
+            next_run_at: this.calculateNextRun(scraper),
+            total_runs: db.raw('total_runs + 1'),
+            failed_runs: db.raw('failed_runs + 1'),
+          });
+      } catch (statsErr) {
+        logger.error(`[SCHEDULED_SCRAPE] Failed to update scraper stats for ${scraper.id}:`, statsErr);
+      }
 
       // Notification d'erreur
-      if (scraper.notification_settings.alertOnError) {
+      if (notifSettings.alertOnError) {
         await this.sendErrorNotification(scraper, executionId, error);
       }
 
@@ -533,7 +554,7 @@ class ScheduledScrapeService {
     }
 
     // Pour Facebook Pages: détecter nouvelles mentions
-    if (scraper.scrape_type === 'facebook_pages' && scraper.config.mentionDetection) {
+    if (scraper.scrape_type === 'facebook_pages' && this.parseConfig(scraper).mentionDetection) {
       const mentionChanges = await this.detectNewMentions(
         lastExecution.session_id,
         currentSession.id
@@ -651,13 +672,14 @@ class ScheduledScrapeService {
 
     // Alertes de changement de prix
     const priceChanges = criticalChanges.filter(c => c.change_type === 'price_change');
-    if (priceChanges.length > 0 && scraper.notification_settings.alertOnPriceChange) {
+    const ns = this.parseNotifSettings(scraper);
+    if (priceChanges.length > 0 && ns.alertOnPriceChange) {
       await this.sendPriceChangeAlert(scraper, priceChanges);
     }
 
     // Alertes de nouvelles mentions
     const newMentions = criticalChanges.filter(c => c.change_type === 'new_mention');
-    if (newMentions.length > 0 && scraper.notification_settings.alertOnNewMention) {
+    if (newMentions.length > 0 && ns.alertOnNewMention) {
       await this.sendMentionAlert(scraper, newMentions);
     }
   }
@@ -713,7 +735,7 @@ class ScheduledScrapeService {
     changes: any[]
   ): Promise<void> {
     const user = await db('users').where({ id: scraper.user_id }).first();
-    const emailAddress = scraper.notification_settings.emailAddress || user?.email;
+    const emailAddress = this.parseNotifSettings(scraper).emailAddress || user?.email;
 
     if (!emailAddress) return;
 
@@ -739,8 +761,8 @@ class ScheduledScrapeService {
     await db('scheduled_scrape_notifications').insert({
       scheduled_scrape_id: scraper.id,
       execution_id: executionId,
-      notification_type: 'success',
-      recipient_email: emailAddress,
+      type: 'success',
+      recipient: emailAddress,
       subject,
     });
   }
@@ -751,7 +773,7 @@ class ScheduledScrapeService {
     error: Error
   ): Promise<void> {
     const user = await db('users').where({ id: scraper.user_id }).first();
-    const emailAddress = scraper.notification_settings.emailAddress || user?.email;
+    const emailAddress = this.parseNotifSettings(scraper).emailAddress || user?.email;
 
     if (!emailAddress) return;
 
@@ -768,15 +790,15 @@ class ScheduledScrapeService {
     await db('scheduled_scrape_notifications').insert({
       scheduled_scrape_id: scraper.id,
       execution_id: executionId,
-      notification_type: 'error',
-      recipient_email: emailAddress,
+      type: 'error',
+      recipient: emailAddress,
       subject,
     });
   }
 
   private async sendInsufficientCreditsNotification(scraper: ScheduledScrape): Promise<void> {
     const user = await db('users').where({ id: scraper.user_id }).first();
-    const emailAddress = scraper.notification_settings.emailAddress || user?.email;
+    const emailAddress = this.parseNotifSettings(scraper).emailAddress || user?.email;
 
     if (!emailAddress) return;
 
@@ -793,15 +815,15 @@ class ScheduledScrapeService {
 
     await db('scheduled_scrape_notifications').insert({
       scheduled_scrape_id: scraper.id,
-      notification_type: 'insufficient_credits',
-      recipient_email: emailAddress,
+      type: 'insufficient_credits',
+      recipient: emailAddress,
       subject,
     });
   }
 
   private async sendPriceChangeAlert(scraper: ScheduledScrape, priceChanges: any[]): Promise<void> {
     const user = await db('users').where({ id: scraper.user_id }).first();
-    const emailAddress = scraper.notification_settings.emailAddress || user?.email;
+    const emailAddress = this.parseNotifSettings(scraper).emailAddress || user?.email;
 
     if (!emailAddress) return;
 
@@ -825,15 +847,15 @@ class ScheduledScrapeService {
 
     await db('scheduled_scrape_notifications').insert({
       scheduled_scrape_id: scraper.id,
-      notification_type: 'price_change',
-      recipient_email: emailAddress,
+      type: 'price_change',
+      recipient: emailAddress,
       subject,
     });
   }
 
   private async sendMentionAlert(scraper: ScheduledScrape, mentions: any[]): Promise<void> {
     const user = await db('users').where({ id: scraper.user_id }).first();
-    const emailAddress = scraper.notification_settings.emailAddress || user?.email;
+    const emailAddress = this.parseNotifSettings(scraper).emailAddress || user?.email;
 
     if (!emailAddress) return;
 
@@ -856,8 +878,8 @@ class ScheduledScrapeService {
 
     await db('scheduled_scrape_notifications').insert({
       scheduled_scrape_id: scraper.id,
-      notification_type: 'new_mention',
-      recipient_email: emailAddress,
+      type: 'new_mention',
+      recipient: emailAddress,
       subject,
     });
   }
@@ -877,7 +899,7 @@ class ScheduledScrapeService {
 
   private async sendWeeklyReport(scraper: ScheduledScrape): Promise<void> {
     const user = await db('users').where({ id: scraper.user_id }).first();
-    const emailAddress = scraper.notification_settings.emailAddress || user?.email;
+    const emailAddress = this.parseNotifSettings(scraper).emailAddress || user?.email;
 
     if (!emailAddress) return;
 
@@ -910,8 +932,8 @@ class ScheduledScrapeService {
 
     await db('scheduled_scrape_notifications').insert({
       scheduled_scrape_id: scraper.id,
-      notification_type: 'weekly_report',
-      recipient_email: emailAddress,
+      type: 'weekly_report',
+      recipient: emailAddress,
       subject,
     });
   }
