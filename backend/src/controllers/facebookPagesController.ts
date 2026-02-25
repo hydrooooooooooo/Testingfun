@@ -13,6 +13,7 @@ import db from '../database';
 import { persistScrapedItems } from '../services/itemPersistenceService';
 import { commentScraperService } from '../services/commentScraperService';
 import { saveFacebookPagesBackup } from '../services/backupService';
+import { openRouterCostService } from '../services/openRouterCostService';
 
 export class FacebookPagesController {
 
@@ -652,7 +653,21 @@ export class FacebookPagesController {
       }
 
       try {
-        const analysis = await this.callOpenRouterForAudit(pageName, infoData, postsData, modelId);
+        const result = await this.callOpenRouterForAudit(pageName, infoData, postsData, modelId);
+        const analysis = result.analysis;
+
+        // Log AI usage (fire-and-forget)
+        if (result.generationId) {
+          openRouterCostService.logAIUsage({
+            userId,
+            sessionId,
+            generationId: result.generationId,
+            model: modelId,
+            agentType: 'audit',
+            creditsCharged: cost,
+            pageName,
+          }).catch(err => logger.warn('[AI] Failed to log AI usage:', err.message));
+        }
 
         existingAnalyses[pageName] = {
           raw: JSON.stringify(analysis),
@@ -747,7 +762,21 @@ export class FacebookPagesController {
       }
 
       try {
-        const benchmark = await this.callOpenRouterForBenchmark(pageName, infoData, postsData, modelId);
+        const result = await this.callOpenRouterForBenchmark(pageName, infoData, postsData, modelId);
+        const benchmark = result.analysis;
+
+        // Log AI usage (fire-and-forget)
+        if (result.generationId) {
+          openRouterCostService.logAIUsage({
+            userId,
+            sessionId,
+            generationId: result.generationId,
+            model: modelId,
+            agentType: 'benchmark',
+            creditsCharged: cost,
+            pageName,
+          }).catch(err => logger.warn('[AI] Failed to log AI usage:', err.message));
+        }
 
         existingBenchmarks[pageName] = {
           raw: JSON.stringify(benchmark),
@@ -776,10 +805,10 @@ export class FacebookPagesController {
   /**
    * Call OpenRouter for page audit analysis
    */
-  private async callOpenRouterForAudit(pageName: string, infoData: any, postsData: any[], modelId: string): Promise<any> {
+  private async callOpenRouterForAudit(pageName: string, infoData: any, postsData: any[], modelId: string): Promise<{ analysis: any; generationId: string; usage: any }> {
     const openRouterKey = config.ai.openRouterApiKey;
     if (!openRouterKey) {
-      return this.generateBasicAudit(pageName, infoData, postsData);
+      return { analysis: this.generateBasicAudit(pageName, infoData, postsData), generationId: '', usage: {} };
     }
 
     try {
@@ -848,26 +877,29 @@ Génère un JSON avec EXACTEMENT cette structure:
         }
       );
 
+      const generationId = response.data.id || '';
+      const usage = response.data.usage || {};
       const content = response.data.choices?.[0]?.message?.content || '';
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        return JSON.parse(jsonMatch[0]);
+        return { analysis: JSON.parse(jsonMatch[0]), generationId, usage };
       }
       logger.warn(`[AI] Could not parse audit JSON response for ${pageName}`);
+      return { analysis: this.generateBasicAudit(pageName, infoData, postsData), generationId, usage };
     } catch (error: any) {
       logger.error(`[AI] OpenRouter audit call failed for ${pageName}:`, error.message);
     }
 
-    return this.generateBasicAudit(pageName, infoData, postsData);
+    return { analysis: this.generateBasicAudit(pageName, infoData, postsData), generationId: '', usage: {} };
   }
 
   /**
    * Call OpenRouter for competitive benchmark analysis
    */
-  private async callOpenRouterForBenchmark(pageName: string, infoData: any, postsData: any[], modelId: string): Promise<any> {
+  private async callOpenRouterForBenchmark(pageName: string, infoData: any, postsData: any[], modelId: string): Promise<{ analysis: any; generationId: string; usage: any }> {
     const openRouterKey = config.ai.openRouterApiKey;
     if (!openRouterKey) {
-      return this.generateBasicBenchmark(pageName, infoData, postsData);
+      return { analysis: this.generateBasicBenchmark(pageName, infoData, postsData), generationId: '', usage: {} };
     }
 
     try {
@@ -924,6 +956,8 @@ Génère un JSON avec EXACTEMENT cette structure:
         }
       );
 
+      const generationId = response.data.id || '';
+      const usage = response.data.usage || {};
       const content = response.data.choices?.[0]?.message?.content || '';
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
@@ -932,14 +966,15 @@ Génère un JSON avec EXACTEMENT cette structure:
         const fallback = this.generateBasicBenchmark(pageName, infoData, postsData);
         if (!parsed.strategies_to_adopt?.length) parsed.strategies_to_adopt = fallback.strategies_to_adopt;
         if (!parsed.action_plan?.immediate_actions?.length) parsed.action_plan = fallback.action_plan;
-        return parsed;
+        return { analysis: parsed, generationId, usage };
       }
       logger.warn(`[AI] Could not parse benchmark JSON response for ${pageName}`);
+      return { analysis: this.generateBasicBenchmark(pageName, infoData, postsData), generationId, usage };
     } catch (error: any) {
       logger.error(`[AI] OpenRouter benchmark call failed for ${pageName}:`, error.message);
     }
 
-    return this.generateBasicBenchmark(pageName, infoData, postsData);
+    return { analysis: this.generateBasicBenchmark(pageName, infoData, postsData), generationId: '', usage: {} };
   }
 
   /**

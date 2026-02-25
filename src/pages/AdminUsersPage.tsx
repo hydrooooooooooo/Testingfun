@@ -13,12 +13,14 @@ import { Label } from '@/components/ui/label';
 import { Users, Search, Coins, ShieldOff, ShieldCheck } from 'lucide-react';
 import { BUSINESS_SECTORS, COMPANY_SIZES } from '@/constants/userProfile';
 import { getModelName } from '@/lib/aiModels';
+import { toast } from '@/hooks/use-toast';
 
 const AdminUsersPage: React.FC = () => {
   const { searchAdminUsers, getAdminUserById, adjustAdminUserCredits, toggleAdminUserStatus } = useApi();
   const [query, setQuery] = useState('');
   const [users, setUsers] = useState<any[]>([]);
   const [loadingList, setLoadingList] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Sheet detail
   const [selectedUser, setSelectedUser] = useState<any>(null);
@@ -40,9 +42,12 @@ const AdminUsersPage: React.FC = () => {
     setLoadingList(true);
     try {
       const rows = await searchAdminUsers(q, 50);
+      setError(null);
       setUsers(rows);
-    } catch {
-      // handled
+    } catch (err: any) {
+      const msg = err?.message || 'Erreur lors du chargement des utilisateurs';
+      setError(msg);
+      toast({ title: 'Erreur', description: msg, variant: 'destructive' });
     } finally {
       setLoadingList(false);
     }
@@ -131,6 +136,14 @@ const AdminUsersPage: React.FC = () => {
           </div>
         </CardHeader>
         <CardContent>
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+              <strong>Erreur:</strong> {error}
+              <Button size="sm" variant="ghost" className="ml-2 text-red-700" onClick={() => { setError(null); fetchUsers(query); }}>
+                Réessayer
+              </Button>
+            </div>
+          )}
           {loadingList ? (
             <div className="space-y-2">
               {Array.from({ length: 5 }).map((_, i) => (
