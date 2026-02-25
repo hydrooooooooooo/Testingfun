@@ -14,13 +14,15 @@ import {
 } from './costEstimationService';
 import mentionDetectionService from './mentionDetectionService';
 import { saveMarketplaceBackup } from './backupService';
+import { ApifyClient } from 'apify-client';
+import config from '../config/config';
 
 interface ScheduledScrape {
   id: string;
   user_id: number;
   name: string;
   description?: string;
-  scrape_type: 'marketplace' | 'facebook_pages';
+  scrape_type: 'marketplace' | 'facebook_pages' | 'posts_comments';
   target_url: string;
   frequency: 'daily' | 'weekly' | 'monthly' | 'custom';
   custom_cron_expression?: string;
@@ -215,14 +217,33 @@ class ScheduledScrapeService {
       
       // Utiliser maxItems du config parsé ou valeur par défaut
       const resultsLimit = config.maxItems || 10;
-      const session = await apifyService.startScraping(
-        scraper.target_url,
-        sessionId,
-        resultsLimit,
-        {
-          deepScrape: false,
-        }
-      );
+
+      if (scraper.scrape_type === 'marketplace') {
+        await apifyService.startScraping(
+          scraper.target_url,
+          sessionId,
+          resultsLimit,
+          { deepScrape: false }
+        );
+      } else {
+        // facebook_pages and posts_comments both use the Facebook Pages Posts actor
+        const client = new ApifyClient({ token: config.api.apifyToken });
+        const actorId = config.api.apifyPagesPostsActorId;
+        const run = await client.actor(actorId).start({
+          startUrls: [{ url: scraper.target_url }],
+          resultsLimit,
+        });
+
+        // Save run info to session
+        await db('scraping_sessions')
+          .where({ id: sessionId })
+          .update({
+            status: 'running',
+            apify_run_id: run.id,
+            dataset_id: run.defaultDatasetId,
+            updated_at: new Date(),
+          });
+      }
 
       // 4. Attendre la fin du scraping (polling)
       await this.waitForScrapingCompletion(sessionId);

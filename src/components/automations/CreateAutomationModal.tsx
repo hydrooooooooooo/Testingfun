@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -44,15 +44,28 @@ const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({ onClose, 
   const [alertOnError, setAlertOnError] = useState(true);
   const [weeklyReport, setWeeklyReport] = useState(true);
 
-  // Cost calculation
-  const baseCost = 1;
-  const aiCost = aiAnalysis ? 5 : 0;
-  const benchmarkCost = benchmark ? 2 : 0;
-  const mentionCost = mentionDetection ? 1 : 0;
-  const costPerRun = baseCost + aiCost + benchmarkCost + mentionCost;
-  
+  // Cost calculation — aligned with backend COST_MATRIX
+  const scrapingCost = (() => {
+    switch (scrapeType) {
+      case 'marketplace':
+        return maxItems * 0.5; // COST_MATRIX.marketplace.perItem
+      case 'facebook_pages':
+        return 0.5 + maxItems * 0.1; // perPage + maxPosts * perPost
+      case 'posts_comments':
+        return maxItems * 0.5; // COST_MATRIX.facebook_posts.perPost
+      default:
+        return maxItems * 0.5;
+    }
+  })();
+  const automationBaseCost = 1; // COST_MATRIX.automation.baseCost
+  const aiCost = aiAnalysis ? (2 + maxItems * 0.05) : 0; // ai_analysis: perPage + posts * perPost
+  const benchmarkCost = benchmark ? (2 + maxItems * 0.1 + 3 + 1) : 0; // benchmark: perPage + posts*perPost + aiAnalysis + reportGeneration
+  const mentionCost = mentionDetection ? 0.1 : 0; // mentions.perKeyword (minimum 1 keyword)
+  const commentsCost = includeComments ? (maxItems * 0.1) : 0; // comments.perPost estimate
+  const costPerRun = Math.ceil((automationBaseCost + scrapingCost + aiCost + benchmarkCost + mentionCost + commentsCost) * 10) / 10;
+
   const runsPerMonth = frequency === 'daily' ? 30 : frequency === 'weekly' ? 4 : 1;
-  const monthlyCost = costPerRun * runsPerMonth;
+  const monthlyCost = Math.ceil(costPerRun * runsPerMonth * 10) / 10;
 
   const hasEnoughCredits = balance ? balance.total >= costPerRun : false;
 
@@ -209,6 +222,25 @@ const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({ onClose, 
                 required
               />
             </div>
+
+            {/* Quantity Control */}
+            <div>
+              <Label htmlFor="maxItems" className="text-navy-700">
+                {scrapeType === 'marketplace' ? "Nombre d'annonces" : 'Nombre de posts'}
+              </Label>
+              <Input
+                id="maxItems"
+                type="number"
+                value={maxItems}
+                onChange={(e) => setMaxItems(Math.max(1, Math.min(500, parseInt(e.target.value) || 10)))}
+                min={1}
+                max={500}
+                className="bg-white border-cream-300 text-navy mt-1"
+              />
+              <p className="text-xs text-steel mt-1">
+                De 1 à 500 — plus d'éléments = plus de crédits
+              </p>
+            </div>
           </div>
 
           {/* Options */}
@@ -225,13 +257,28 @@ const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({ onClose, 
               <Label htmlFor="aiAnalysis" className="text-navy-700 cursor-pointer flex items-center gap-2">
                 Analyse IA
                 <Badge variant="outline" className="bg-steel-100 border-steel-300 text-steel-600">
-                  +5 crédits
+                  +{Math.ceil((2 + maxItems * 0.05) * 10) / 10} crédits
                 </Badge>
               </Label>
             </div>
 
             {(scrapeType === 'facebook_pages' || scrapeType === 'posts_comments') && (
               <>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="includeComments"
+                    checked={includeComments}
+                    onCheckedChange={(checked) => setIncludeComments(checked as boolean)}
+                    className="border-steel"
+                  />
+                  <Label htmlFor="includeComments" className="text-navy-700 cursor-pointer flex items-center gap-2">
+                    Inclure les commentaires
+                    <Badge variant="outline" className="bg-cream-200 border-cream-300 text-steel">
+                      +0.02/commentaire
+                    </Badge>
+                  </Label>
+                </div>
+
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="benchmark"
@@ -242,7 +289,7 @@ const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({ onClose, 
                   <Label htmlFor="benchmark" className="text-navy-700 cursor-pointer flex items-center gap-2">
                     Benchmark concurrent
                     <Badge variant="outline" className="bg-navy-100 border-navy-300 text-navy">
-                      +2 crédits
+                      +{Math.ceil((2 + maxItems * 0.1 + 3 + 1) * 10) / 10} crédits
                     </Badge>
                   </Label>
                 </div>
@@ -257,7 +304,7 @@ const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({ onClose, 
                   <Label htmlFor="mentionDetection" className="text-navy-700 cursor-pointer flex items-center gap-2">
                     Détection de mentions
                     <Badge variant="outline" className="bg-gold-100 border-gold-300 text-gold-600">
-                      +1 crédit
+                      +{Math.ceil(0.1 * 10) / 10} crédit
                     </Badge>
                   </Label>
                 </div>
@@ -360,6 +407,42 @@ const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({ onClose, 
                     <span className="text-navy-700 font-medium">Coût par exécution</span>
                   </div>
                   <div className="text-2xl font-bold text-steel-400">{costPerRun} crédits</div>
+                </div>
+
+                {/* Breakdown */}
+                <div className="text-xs text-steel space-y-1 border-t border-cream-200 pt-2">
+                  <div className="flex justify-between">
+                    <span>Base automatisation</span>
+                    <span>{automationBaseCost}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Scraping ({maxItems} {scrapeType === 'marketplace' ? 'annonces' : 'posts'})</span>
+                    <span>{Math.ceil(scrapingCost * 10) / 10}</span>
+                  </div>
+                  {includeComments && (
+                    <div className="flex justify-between">
+                      <span>Commentaires (estimation)</span>
+                      <span>{Math.ceil(commentsCost * 10) / 10}</span>
+                    </div>
+                  )}
+                  {aiAnalysis && (
+                    <div className="flex justify-between">
+                      <span>Analyse IA</span>
+                      <span>{Math.ceil(aiCost * 10) / 10}</span>
+                    </div>
+                  )}
+                  {benchmark && (
+                    <div className="flex justify-between">
+                      <span>Benchmark</span>
+                      <span>{Math.ceil(benchmarkCost * 10) / 10}</span>
+                    </div>
+                  )}
+                  {mentionDetection && (
+                    <div className="flex justify-between">
+                      <span>Détection mentions</span>
+                      <span>{Math.ceil(mentionCost * 10) / 10}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-between text-sm">

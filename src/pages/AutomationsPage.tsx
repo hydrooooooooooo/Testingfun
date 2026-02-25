@@ -61,6 +61,7 @@ const AutomationsPage: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedAutomation, setSelectedAutomation] = useState<ScheduledScrape | null>(null);
   const [triggeringIds, setTriggeringIds] = useState<Set<string>>(new Set());
+  const [runningIds, setRunningIds] = useState<Set<string>>(new Set());
   const [activeTab, setActiveTab] = useState<'active' | 'paused' | 'all'>('active');
   const { balance, refreshBalance } = useCredits();
 
@@ -121,27 +122,75 @@ const AutomationsPage: React.FC = () => {
     try {
       await api.post(`/automations/${id}/trigger`);
       toast({
-        title: 'Scraping lance',
-        description: 'Execution en cours. Les resultats se mettront a jour automatiquement.',
+        title: 'Scraping lancé',
+        description: 'Exécution en cours. Les résultats se mettront à jour automatiquement.',
       });
-      // Poll every 5s for up to 2 minutes (24 polls)
+
+      // Mark as running (keep visual indicator)
+      setRunningIds(prev => new Set(prev).add(id));
+      setTriggeringIds(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+      });
+
+      // Poll every 5s for up to 5 minutes (60 polls)
       stopPolling();
       pollCountRef.current = 0;
+      const triggeredId = id;
       pollRef.current = setInterval(async () => {
         pollCountRef.current++;
-        await fetchAutomations();
-        // Stop after 24 polls (2 min) or if execution completed
-        if (pollCountRef.current >= 24) {
+        try {
+          const response = await api.get('/automations');
+          const updatedList = response.data.scheduledScrapes || [];
+          setAutomations(updatedList);
+
+          // Check if the triggered automation's last execution completed
+          const updated = updatedList.find((a: ScheduledScrape) => a.id === triggeredId);
+          if (updated?.last_execution) {
+            const status = updated.last_execution.status;
+            if (status === 'completed' || status === 'failed') {
+              setRunningIds(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(triggeredId);
+                return newSet;
+              });
+              stopPolling();
+              refreshBalance();
+              if (status === 'completed') {
+                toast({
+                  title: 'Exécution terminée',
+                  description: `${updated.last_execution.items_scraped || 0} éléments extraits`,
+                });
+              } else {
+                toast({
+                  title: 'Exécution échouée',
+                  description: updated.last_execution.error_message || 'Une erreur est survenue',
+                  variant: 'destructive',
+                });
+              }
+            }
+          }
+        } catch {
+          // silent poll error
+        }
+
+        // Stop after 60 polls (5 min)
+        if (pollCountRef.current >= 60) {
+          setRunningIds(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(triggeredId);
+            return newSet;
+          });
           stopPolling();
         }
       }, 5000);
     } catch (error: any) {
       toast({
         title: 'Erreur',
-        description: error.response?.data?.message || 'Erreur lors du declenchement',
+        description: error.response?.data?.message || 'Erreur lors du déclenchement',
         variant: 'destructive',
       });
-    } finally {
       setTriggeringIds(prev => {
         const newSet = new Set(prev);
         newSet.delete(id);
@@ -413,6 +462,12 @@ const AutomationsPage: React.FC = () => {
                                 Active
                               </Badge>
                             )}
+                            {runningIds.has(automation.id) && (
+                              <Badge variant="outline" className="bg-steel-100 border-steel-300 text-steel animate-pulse">
+                                <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                                En cours
+                              </Badge>
+                            )}
                           </div>
                           {automation.description && (
                             <CardDescription className="text-steel">{automation.description}</CardDescription>
@@ -542,14 +597,23 @@ const AutomationsPage: React.FC = () => {
                         </Button>
                         <Button
                           size="sm"
-                          className="bg-gold hover:bg-gold-600 text-white"
+                          className={`text-white ${
+                            runningIds.has(automation.id)
+                              ? 'bg-steel animate-pulse'
+                              : 'bg-gold hover:bg-gold-600'
+                          }`}
                           onClick={() => handleTriggerManually(automation.id)}
-                          disabled={triggeringIds.has(automation.id)}
+                          disabled={triggeringIds.has(automation.id) || runningIds.has(automation.id)}
                         >
                           {triggeringIds.has(automation.id) ? (
                             <>
                               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                               Lancement...
+                            </>
+                          ) : runningIds.has(automation.id) ? (
+                            <>
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              En cours...
                             </>
                           ) : (
                             <>
