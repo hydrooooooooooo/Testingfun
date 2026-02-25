@@ -362,29 +362,37 @@ const BenchmarkPage: React.FC = () => {
 
   const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
 
-  // Générer un graphique barres SVG pour le PDF
+  // Design system colors for PDF (navy/steel/gold/cream)
+  const PDF_COLORS = {
+    navy: '#1A3263',
+    steel: '#547792',
+    gold: '#FAB95B',
+    cream50: '#F5F1EC',
+    cream200: '#E8E2DB',
+  };
+
   const generateBarChartSVG = (data: { name: string; value: number; color: string }[], title: string, maxWidth: number = 500) => {
     const maxValue = Math.max(...data.map(d => d.value));
     const barHeight = 30;
     const gap = 10;
     const labelWidth = 120;
     const chartHeight = data.length * (barHeight + gap);
-    
+
     const bars = data.map((d, i) => {
       const barWidth = maxValue > 0 ? (d.value / maxValue) * (maxWidth - labelWidth - 60) : 0;
       const y = i * (barHeight + gap);
       return `
         <g transform="translate(0, ${y})">
-          <text x="0" y="${barHeight / 2 + 4}" font-size="11" fill="#374151">${d.name.substring(0, 15)}${d.name.length > 15 ? '...' : ''}</text>
+          <text x="0" y="${barHeight / 2 + 4}" font-size="11" fill="${PDF_COLORS.navy}">${d.name.substring(0, 15)}${d.name.length > 15 ? '...' : ''}</text>
           <rect x="${labelWidth}" y="0" width="${barWidth}" height="${barHeight}" fill="${d.color}" rx="4"/>
-          <text x="${labelWidth + barWidth + 8}" y="${barHeight / 2 + 4}" font-size="11" fill="#6366f1" font-weight="bold">${d.value.toLocaleString()}</text>
+          <text x="${labelWidth + barWidth + 8}" y="${barHeight / 2 + 4}" font-size="11" fill="${PDF_COLORS.navy}" font-weight="bold">${d.value.toLocaleString()}</text>
         </g>
       `;
     }).join('');
 
     return `
       <div style="margin: 20px 0;">
-        <h4 style="color: #374151; margin-bottom: 10px;">${title}</h4>
+        <h4 style="color: ${PDF_COLORS.navy}; margin-bottom: 10px;">${title}</h4>
         <svg width="${maxWidth}" height="${chartHeight}" viewBox="0 0 ${maxWidth} ${chartHeight}">
           ${bars}
         </svg>
@@ -392,19 +400,18 @@ const BenchmarkPage: React.FC = () => {
     `;
   };
 
-  // Générer un graphique comparatif multi-métriques pour le PDF
   const generateComparisonChartSVG = (pages: CompetitorResult[]) => {
     const metrics = [
       { key: 'followers', label: 'Followers', color: '#3b82f6' },
       { key: 'avgLikesPerPost', label: 'Likes Moy.', color: '#10b981' },
       { key: 'avgCommentsPerPost', label: 'Comments Moy.', color: '#8b5cf6' },
-      { key: 'engagementRate', label: 'Engagement %', color: '#f59e0b' },
+      { key: 'engagementRate', label: 'Engagement %', color: PDF_COLORS.gold },
     ];
 
     return metrics.map(metric => {
       const data = pages.map((p, i) => ({
         name: p.pageData.pageName,
-        value: metric.key === 'followers' ? p.pageData.followers : 
+        value: metric.key === 'followers' ? p.pageData.followers :
                metric.key === 'avgLikesPerPost' ? p.quantitativeMetrics.avgLikesPerPost :
                metric.key === 'avgCommentsPerPost' ? p.quantitativeMetrics.avgCommentsPerPost :
                p.quantitativeMetrics.engagementRate,
@@ -414,19 +421,23 @@ const BenchmarkPage: React.FC = () => {
     }).join('');
   };
 
-  // Export PDF complet - Version Corporate
-  const exportPDF = async () => {
-    if (!report) return;
+  /**
+   * Generate the full benchmark PDF HTML — used by both exportPDF and history tab.
+   */
+  const generateBenchmarkPDFHTML = (
+    reportData: {
+      myPage: CompetitorResult | null;
+      comparativeAnalysis: FullBenchmarkReport['comparativeAnalysis'];
+    },
+    allPages: CompetitorResult[],
+    dateLabel: string,
+  ): string => {
+    const avgEngagement = allPages.length > 0 ? (allPages.reduce((sum, p) => sum + p.quantitativeMetrics.engagementRate, 0) / allPages.length).toFixed(2) : '0';
+    const totalFollowers = allPages.reduce((sum, p) => sum + p.pageData.followers, 0);
+    const totalPosts = allPages.reduce((sum, p) => sum + p.quantitativeMetrics.totalPosts, 0);
+    const avgLikesPerPost = allPages.length ? Math.round(allPages.reduce((s, p) => s + p.quantitativeMetrics.avgLikesPerPost, 0) / allPages.length) : 0;
 
-    try {
-      const allPages = getAllPages();
-      const dateGeneration = format(new Date(), 'dd MMMM yyyy à HH:mm', { locale: fr });
-      const avgEngagement = allPages.length > 0 ? (allPages.reduce((sum, p) => sum + p.quantitativeMetrics.engagementRate, 0) / allPages.length).toFixed(2) : 0;
-      const totalFollowers = allPages.reduce((sum, p) => sum + p.pageData.followers, 0);
-      const totalPosts = allPages.reduce((sum, p) => sum + p.quantitativeMetrics.totalPosts, 0);
-      
-      const htmlContent = `
-<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -435,104 +446,93 @@ const BenchmarkPage: React.FC = () => {
     @page { margin: 15mm; size: A4; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; background: #fff; color: #1f2937; padding: 0; line-height: 1.5; font-size: 11px; }
-    
-    /* Header Corporate */
-    .cover { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; padding: 40px; text-align: center; margin-bottom: 30px; }
-    .cover h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
-    .cover .subtitle { font-size: 16px; opacity: 0.9; margin-bottom: 20px; }
-    .cover .meta { display: flex; justify-content: center; gap: 30px; font-size: 12px; opacity: 0.85; }
+
+    .cover { background: linear-gradient(135deg, ${PDF_COLORS.navy} 0%, ${PDF_COLORS.steel} 100%); color: white; padding: 50px 40px; text-align: center; margin-bottom: 30px; }
+    .cover h1 { font-size: 30px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.5px; }
+    .cover .subtitle { font-size: 14px; opacity: 0.85; margin-bottom: 24px; }
+    .cover .meta { display: flex; justify-content: center; gap: 30px; font-size: 12px; opacity: 0.8; }
     .cover .meta-item { display: flex; align-items: center; gap: 6px; }
-    .logo { font-size: 14px; font-weight: 700; margin-bottom: 15px; letter-spacing: 1px; }
-    
-    /* Sections */
+    .logo { font-size: 20px; font-weight: 800; color: ${PDF_COLORS.gold}; margin-bottom: 12px; letter-spacing: 2px; }
+
     .content { padding: 0 30px; }
-    .section { margin-bottom: 25px; page-break-inside: avoid; }
-    .section-title { font-size: 16px; font-weight: 700; color: #f97316; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #fed7aa; display: flex; align-items: center; gap: 8px; }
-    .section-title::before { content: ''; width: 4px; height: 20px; background: #f97316; border-radius: 2px; }
-    
-    /* Executive Summary */
-    .exec-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
-    .exec-card { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 15px; text-align: center; }
-    .exec-card .value { font-size: 28px; font-weight: 700; color: #ea580c; }
-    .exec-card .label { font-size: 10px; color: #9a3412; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
-    
-    /* Tables */
+    .section { margin-bottom: 28px; page-break-inside: avoid; }
+    .section-title { font-size: 15px; font-weight: 700; color: ${PDF_COLORS.navy}; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid ${PDF_COLORS.gold}; display: flex; align-items: center; gap: 8px; }
+    .section-title::before { content: ''; width: 4px; height: 18px; background: ${PDF_COLORS.gold}; border-radius: 2px; }
+
+    .exec-summary { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+    .exec-card { background: ${PDF_COLORS.cream50}; border: 1px solid ${PDF_COLORS.cream200}; border-radius: 8px; padding: 14px 10px; text-align: center; }
+    .exec-card .value { font-size: 24px; font-weight: 700; color: ${PDF_COLORS.navy}; }
+    .exec-card .label { font-size: 9px; color: ${PDF_COLORS.steel}; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+    .exec-card.highlight .value { color: ${PDF_COLORS.gold}; }
+
     table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 10px; }
-    th { background: #f97316; color: white; padding: 10px 8px; text-align: left; font-weight: 600; font-size: 9px; text-transform: uppercase; letter-spacing: 0.3px; }
-    td { padding: 10px 8px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
-    tr:nth-child(even) { background: #fafafa; }
-    tr:hover { background: #fff7ed; }
-    
-    /* Page Analysis Cards */
-    .page-card { background: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 20px; page-break-inside: avoid; }
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; }
-    .page-name { font-size: 14px; font-weight: 700; color: #1f2937; }
-    .page-badge { background: #10b981; color: white; padding: 3px 10px; border-radius: 12px; font-size: 9px; font-weight: 600; }
-    .page-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
-    .page-metric { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 10px; text-align: center; }
-    .page-metric .value { font-size: 16px; font-weight: 700; color: #f97316; }
-    .page-metric .label { font-size: 9px; color: #6b7280; }
-    
-    /* AI Analysis */
-    .ai-analysis { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 15px; margin-top: 15px; }
-    .ai-analysis h4 { font-size: 11px; font-weight: 700; color: #92400e; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
-    .ai-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .ai-item { background: white; border-radius: 6px; padding: 10px; }
-    .ai-item .title { font-size: 9px; font-weight: 600; color: #92400e; text-transform: uppercase; margin-bottom: 4px; }
-    .ai-item .content { font-size: 10px; color: #1f2937; }
-    
-    /* Strengths & Weaknesses */
-    .sw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+    th { background: ${PDF_COLORS.navy}; color: white; padding: 10px 8px; text-align: left; font-weight: 600; font-size: 9px; text-transform: uppercase; letter-spacing: 0.3px; }
+    td { padding: 10px 8px; border-bottom: 1px solid ${PDF_COLORS.cream200}; vertical-align: top; }
+    tr:nth-child(even) { background: ${PDF_COLORS.cream50}; }
+
+    .badge-ref { background: #10b981; color: white; padding: 2px 8px; border-radius: 10px; font-size: 8px; font-weight: 600; }
+    .badge-mine { background: ${PDF_COLORS.gold}; color: ${PDF_COLORS.navy}; padding: 2px 8px; border-radius: 10px; font-size: 8px; font-weight: 700; }
+    .engagement-high { color: #059669; font-weight: 700; }
+    .engagement-mid { color: #d97706; font-weight: 700; }
+    .engagement-low { color: #dc2626; font-weight: 700; }
+
+    .page-card { background: ${PDF_COLORS.cream50}; border: 1px solid ${PDF_COLORS.cream200}; border-radius: 10px; padding: 20px; margin-bottom: 20px; page-break-inside: avoid; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid ${PDF_COLORS.gold}; }
+    .page-name { font-size: 14px; font-weight: 700; color: ${PDF_COLORS.navy}; }
+    .page-metrics { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 15px; }
+    .page-metric { background: white; border: 1px solid ${PDF_COLORS.cream200}; border-radius: 6px; padding: 10px; text-align: center; }
+    .page-metric .value { font-size: 15px; font-weight: 700; color: ${PDF_COLORS.navy}; }
+    .page-metric .label { font-size: 8px; color: ${PDF_COLORS.steel}; text-transform: uppercase; }
+
+    .ai-analysis { background: white; border: 1px solid ${PDF_COLORS.cream200}; border-radius: 8px; padding: 15px; margin-top: 15px; }
+    .ai-analysis h4 { font-size: 11px; font-weight: 700; color: ${PDF_COLORS.navy}; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid ${PDF_COLORS.cream200}; }
+    .ai-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .ai-item { background: ${PDF_COLORS.cream50}; border-radius: 6px; padding: 10px; border-left: 3px solid ${PDF_COLORS.gold}; }
+    .ai-item .title { font-size: 9px; font-weight: 600; color: ${PDF_COLORS.navy}; text-transform: uppercase; margin-bottom: 4px; }
+    .ai-item .content { font-size: 10px; color: #374151; }
+    .ai-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+    .ai-tag { background: ${PDF_COLORS.navy}; color: white; padding: 1px 6px; border-radius: 4px; font-size: 8px; }
+
+    .sw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
     .sw-box { border-radius: 8px; padding: 12px; }
     .sw-box.strengths { background: #ecfdf5; border: 1px solid #a7f3d0; }
     .sw-box.weaknesses { background: #fef2f2; border: 1px solid #fecaca; }
-    .sw-box h5 { font-size: 10px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
+    .sw-box h5 { font-size: 10px; font-weight: 700; margin-bottom: 8px; }
     .sw-box.strengths h5 { color: #065f46; }
     .sw-box.weaknesses h5 { color: #991b1b; }
     .sw-box ul { padding-left: 15px; margin: 0; }
     .sw-box li { font-size: 10px; margin-bottom: 4px; color: #374151; }
-    
-    /* Rankings */
+
     .ranking-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-    .ranking-card { background: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; }
-    .ranking-card h4 { font-size: 11px; font-weight: 600; color: #374151; margin-bottom: 10px; }
-    .ranking-item { display: flex; align-items: center; padding: 6px 0; border-bottom: 1px solid #f3f4f6; }
+    .ranking-card { background: ${PDF_COLORS.cream50}; border: 1px solid ${PDF_COLORS.cream200}; border-radius: 8px; padding: 12px; }
+    .ranking-card h4 { font-size: 11px; font-weight: 600; color: ${PDF_COLORS.navy}; margin-bottom: 10px; }
+    .ranking-item { display: flex; align-items: center; padding: 5px 0; border-bottom: 1px solid ${PDF_COLORS.cream200}; }
     .ranking-item:last-child { border-bottom: none; }
     .rank-badge { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; margin-right: 10px; }
-    .rank-1 { background: #fbbf24; color: #1f2937; }
+    .rank-1 { background: ${PDF_COLORS.gold}; color: ${PDF_COLORS.navy}; }
     .rank-2 { background: #9ca3af; color: white; }
     .rank-3 { background: #cd7f32; color: white; }
-    .rank-other { background: #e5e7eb; color: #6b7280; }
-    .ranking-name { flex: 1; font-size: 10px; }
-    .ranking-value { font-weight: 700; color: #f97316; font-size: 10px; }
-    
-    /* Recommendations */
-    .recommendation { background: linear-gradient(90deg, #fff7ed 0%, #ffffff 100%); border-left: 4px solid #f97316; padding: 12px 15px; margin-bottom: 10px; border-radius: 0 6px 6px 0; }
-    .recommendation .number { display: inline-block; background: #f97316; color: white; width: 20px; height: 20px; border-radius: 50%; text-align: center; line-height: 20px; font-size: 10px; font-weight: 700; margin-right: 10px; }
+    .rank-other { background: ${PDF_COLORS.cream200}; color: ${PDF_COLORS.steel}; }
+    .ranking-name { flex: 1; font-size: 10px; color: ${PDF_COLORS.navy}; }
+    .ranking-value { font-weight: 700; color: ${PDF_COLORS.navy}; font-size: 10px; }
+
+    .recommendation { background: ${PDF_COLORS.cream50}; border-left: 4px solid ${PDF_COLORS.gold}; padding: 12px 15px; margin-bottom: 10px; border-radius: 0 6px 6px 0; }
+    .recommendation .number { display: inline-block; background: ${PDF_COLORS.navy}; color: white; width: 20px; height: 20px; border-radius: 50%; text-align: center; line-height: 20px; font-size: 10px; font-weight: 700; margin-right: 10px; }
     .recommendation .text { font-size: 11px; color: #1f2937; }
-    
-    /* Top Posts */
-    .top-post { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; margin-bottom: 8px; }
+
+    .top-post { background: white; border: 1px solid ${PDF_COLORS.cream200}; border-radius: 6px; padding: 12px; margin-bottom: 8px; }
     .top-post .text { font-size: 10px; color: #374151; margin-bottom: 8px; line-height: 1.4; }
-    .top-post .stats { display: flex; gap: 15px; font-size: 9px; color: #6b7280; }
+    .top-post .stats { display: flex; gap: 15px; font-size: 9px; color: ${PDF_COLORS.steel}; }
     .top-post .stat { display: flex; align-items: center; gap: 4px; }
-    .top-post .stat.likes { color: #3b82f6; }
-    .top-post .stat.comments { color: #8b5cf6; }
-    .top-post .stat.shares { color: #10b981; }
-    
-    /* Charts Section */
+
     .charts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .chart-container { background: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; }
-    .chart-title { font-size: 11px; font-weight: 600; color: #374151; margin-bottom: 10px; }
-    
-    /* Footer */
-    .footer { margin-top: 40px; padding: 20px 30px; background: #1f2937; color: white; text-align: center; }
-    .footer .brand { font-size: 14px; font-weight: 700; color: #f97316; margin-bottom: 5px; }
+
+    .footer { margin-top: 40px; padding: 20px 30px; background: ${PDF_COLORS.navy}; color: white; text-align: center; }
+    .footer .brand { font-size: 16px; font-weight: 800; color: ${PDF_COLORS.gold}; margin-bottom: 4px; letter-spacing: 1px; }
     .footer .tagline { font-size: 10px; opacity: 0.7; }
-    .footer .legal { font-size: 9px; opacity: 0.5; margin-top: 10px; }
-    
-    /* Print optimizations */
-    @media print { 
+    .footer .legal { font-size: 9px; opacity: 0.5; margin-top: 8px; }
+
+    @media print {
       body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .section { page-break-inside: avoid; }
       .page-card { page-break-inside: avoid; }
@@ -540,19 +540,18 @@ const BenchmarkPage: React.FC = () => {
   </style>
 </head>
 <body>
-  <!-- Cover Page -->
   <div class="cover">
     <div class="logo">EASY</div>
     <h1>Rapport Benchmark Concurrentiel</h1>
     <div class="subtitle">Analyse comparative des performances sur les réseaux sociaux</div>
     <div class="meta">
-      <div class="meta-item">📅 ${dateGeneration}</div>
-      <div class="meta-item">📄 ${allPages.length} pages analysées</div>
+      <div class="meta-item">${dateLabel}</div>
+      <div class="meta-item">${allPages.length} pages analysées</div>
+      <div class="meta-item">${totalPosts} publications</div>
     </div>
   </div>
 
   <div class="content">
-    <!-- Executive Summary -->
     <div class="section">
       <div class="section-title">Résumé Exécutif</div>
       <div class="exec-summary">
@@ -568,15 +567,18 @@ const BenchmarkPage: React.FC = () => {
           <div class="value">${totalFollowers.toLocaleString()}</div>
           <div class="label">Followers total</div>
         </div>
-        <div class="exec-card">
+        <div class="exec-card highlight">
           <div class="value">${avgEngagement}%</div>
           <div class="label">Engagement moyen</div>
         </div>
+        <div class="exec-card">
+          <div class="value">${avgLikesPerPost}</div>
+          <div class="label">Likes moy./post</div>
+        </div>
       </div>
-      ${report.comparativeAnalysis.summary ? `<p style="font-size: 11px; color: #4b5563; background: #f9fafb; padding: 12px; border-radius: 6px; border-left: 3px solid #f97316;">${report.comparativeAnalysis.summary}</p>` : ''}
+      ${reportData.comparativeAnalysis?.summary ? '<p style="font-size: 11px; color: #4b5563; background: ' + PDF_COLORS.cream50 + '; padding: 12px; border-radius: 6px; border-left: 3px solid ' + PDF_COLORS.gold + ';">' + reportData.comparativeAnalysis.summary + '</p>' : ''}
     </div>
 
-    <!-- Quantitative Metrics Table -->
     <div class="section">
       <div class="section-title">Métriques Quantitatives</div>
       <table>
@@ -593,23 +595,25 @@ const BenchmarkPage: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          ${allPages.map((page) => `
-            <tr>
-              <td><strong>${page.pageData.pageName}</strong>${report.myPage && page.pageData.pageUrl === report.myPage.pageData.pageUrl ? ' <span class="page-badge">Référence</span>' : ''}</td>
-              <td style="text-align:right">${page.pageData.followers.toLocaleString()}</td>
-              <td style="text-align:right">${page.quantitativeMetrics.totalPosts}</td>
-              <td style="text-align:right">${page.quantitativeMetrics.avgLikesPerPost}</td>
-              <td style="text-align:right">${page.quantitativeMetrics.avgCommentsPerPost}</td>
-              <td style="text-align:right">${page.quantitativeMetrics.avgSharesPerPost}</td>
-              <td style="text-align:right; font-weight:600; color:#f97316">${page.quantitativeMetrics.engagementRate}%</td>
-              <td style="text-align:right">${page.quantitativeMetrics.postFrequencyPerMonth}/mois</td>
-            </tr>
-          `).join('')}
+          ${allPages.map((page) => {
+            const isRef = reportData.myPage && page.pageData.pageUrl === reportData.myPage.pageData.pageUrl;
+            const eng = page.quantitativeMetrics.engagementRate;
+            const engClass = eng >= 5 ? 'engagement-high' : eng >= 2 ? 'engagement-mid' : 'engagement-low';
+            return '<tr' + (isRef ? ' style="background:#ecfdf5"' : '') + '>' +
+              '<td><strong>' + page.pageData.pageName + '</strong>' + (isRef ? ' <span class="badge-ref">Référence</span>' : '') + '</td>' +
+              '<td style="text-align:right">' + page.pageData.followers.toLocaleString() + '</td>' +
+              '<td style="text-align:right">' + page.quantitativeMetrics.totalPosts + '</td>' +
+              '<td style="text-align:right">' + page.quantitativeMetrics.avgLikesPerPost + '</td>' +
+              '<td style="text-align:right">' + page.quantitativeMetrics.avgCommentsPerPost + '</td>' +
+              '<td style="text-align:right">' + page.quantitativeMetrics.avgSharesPerPost + '</td>' +
+              '<td style="text-align:right" class="' + engClass + '">' + eng + '%</td>' +
+              '<td style="text-align:right">' + page.quantitativeMetrics.postFrequencyPerMonth + '/mois</td>' +
+            '</tr>';
+          }).join('')}
         </tbody>
       </table>
     </div>
 
-    <!-- Charts -->
     <div class="section">
       <div class="section-title">Graphiques Comparatifs</div>
       <div class="charts-grid">
@@ -617,122 +621,64 @@ const BenchmarkPage: React.FC = () => {
       </div>
     </div>
 
-    <!-- Rankings -->
+    ${reportData.comparativeAnalysis?.rankings?.length ? '<div class="section"><div class="section-title">Classements par Métrique</div><div class="ranking-grid">' +
+      reportData.comparativeAnalysis.rankings.map(ranking =>
+        '<div class="ranking-card"><h4>' + ranking.metric + '</h4>' +
+        ranking.rankings.map((item, idx) =>
+          '<div class="ranking-item"><div class="rank-badge rank-' + (idx < 3 ? idx + 1 : 'other') + '">' + item.rank + '</div><div class="ranking-name">' + item.pageName + '</div><div class="ranking-value">' + (typeof item.value === 'number' && item.value % 1 !== 0 ? item.value.toFixed(2) : item.value) + (ranking.metric.includes('Engagement') ? '%' : '') + '</div></div>'
+        ).join('') +
+        '</div>'
+      ).join('') +
+    '</div></div>' : ''}
+
     <div class="section">
-      <div class="section-title">Classements par Métrique</div>
-      <div class="ranking-grid">
-        ${report.comparativeAnalysis.rankings.map(ranking => `
-          <div class="ranking-card">
-            <h4>${ranking.metric}</h4>
-            ${ranking.rankings.map((item, idx) => `
-              <div class="ranking-item">
-                <div class="rank-badge rank-${idx < 3 ? idx + 1 : 'other'}">${item.rank}</div>
-                <div class="ranking-name">${item.pageName}</div>
-                <div class="ranking-value">${typeof item.value === 'number' && item.value % 1 !== 0 ? item.value.toFixed(2) : item.value}${ranking.metric.includes('Engagement') ? '%' : ''}</div>
-              </div>
-            `).join('')}
-          </div>
-        `).join('')}
-      </div>
+      <div class="section-title">Analyse Détaillée par Page</div>
+      ${allPages.map((page) => {
+        const isRef = reportData.myPage && page.pageData.pageUrl === reportData.myPage.pageData.pageUrl;
+        const qa = page.qualitativeAnalysis;
+        const engColor = page.quantitativeMetrics.engagementRate >= 5 ? '#059669' : page.quantitativeMetrics.engagementRate >= 2 ? '#d97706' : '#dc2626';
+        return '<div class="page-card">' +
+          '<div class="page-header"><div class="page-name">' + page.pageData.pageName + '</div>' + (isRef ? '<span class="badge-mine">Votre page</span>' : '') + '</div>' +
+          '<div class="page-metrics">' +
+            '<div class="page-metric"><div class="value">' + page.pageData.followers.toLocaleString() + '</div><div class="label">Followers</div></div>' +
+            '<div class="page-metric"><div class="value">' + page.quantitativeMetrics.totalPosts + '</div><div class="label">Publications</div></div>' +
+            '<div class="page-metric"><div class="value">' + page.quantitativeMetrics.avgLikesPerPost + '</div><div class="label">Likes moy.</div></div>' +
+            '<div class="page-metric"><div class="value">' + page.quantitativeMetrics.avgCommentsPerPost + '</div><div class="label">Comments moy.</div></div>' +
+            '<div class="page-metric"><div class="value" style="color:' + engColor + '">' + page.quantitativeMetrics.engagementRate + '%</div><div class="label">Engagement</div></div>' +
+          '</div>' +
+          '<div class="ai-analysis"><h4>Analyse IA — Stratégie de Contenu</h4><div class="ai-grid">' +
+            '<div class="ai-item"><div class="title">Fréquence</div><div class="content">' + qa.publicationFrequency + '</div></div>' +
+            '<div class="ai-item"><div class="title">Types de contenu</div><div class="ai-tags">' + qa.contentTypes.map(t => '<span class="ai-tag">' + t + '</span>').join('') + '</div></div>' +
+            '<div class="ai-item"><div class="title">Réaction du public</div><div class="content">' + qa.audienceReaction + '</div></div>' +
+            '<div class="ai-item"><div class="title">Style visuel</div><div class="content">' + qa.visualStyle.description + '</div>' + (qa.visualStyle.characteristics?.length ? '<ul style="margin-top:4px;padding-left:14px;font-size:9px;color:' + PDF_COLORS.steel + '">' + qa.visualStyle.characteristics.map(c => '<li>' + c + '</li>').join('') + '</ul>' : '') + '</div>' +
+            '<div class="ai-item"><div class="title">Tonalité</div><div class="content">' + qa.tonality.description + '</div>' + (qa.tonality.characteristics?.length ? '<ul style="margin-top:4px;padding-left:14px;font-size:9px;color:' + PDF_COLORS.steel + '">' + qa.tonality.characteristics.map(c => '<li>' + c + '</li>').join('') + '</ul>' : '') + '</div>' +
+            '<div class="ai-item"><div class="title">Thématiques</div><div class="ai-tags">' + qa.mainThemes.map(t => '<span class="ai-tag">' + t + '</span>').join('') + '</div></div>' +
+          '</div></div>' +
+          '<div class="sw-grid">' +
+            '<div class="sw-box strengths"><h5>Forces identifiées</h5><ul>' + qa.strengths.map(s => '<li>' + s + '</li>').join('') + '</ul></div>' +
+            '<div class="sw-box weaknesses"><h5>Points d\'amélioration</h5><ul>' + qa.weaknesses.map(w => '<li>' + w + '</li>').join('') + '</ul></div>' +
+          '</div>' +
+        '</div>';
+      }).join('')}
     </div>
 
-    <!-- Detailed Analysis per Page -->
-    <div class="section">
-      <div class="section-title">Analyse Détaillée par Page (IA)</div>
-      ${allPages.map((page) => `
-        <div class="page-card">
-          <div class="page-header">
-            <div class="page-name">${page.pageData.pageName}</div>
-            ${report.myPage && page.pageData.pageUrl === report.myPage.pageData.pageUrl ? '<span class="page-badge">Votre page</span>' : ''}
-          </div>
-          
-          <div class="page-metrics">
-            <div class="page-metric">
-              <div class="value">${page.pageData.followers.toLocaleString()}</div>
-              <div class="label">Followers</div>
-            </div>
-            <div class="page-metric">
-              <div class="value">${page.quantitativeMetrics.engagementRate}%</div>
-              <div class="label">Taux d'engagement</div>
-            </div>
-            <div class="page-metric">
-              <div class="value">${page.quantitativeMetrics.postFrequencyPerMonth}</div>
-              <div class="label">Posts/mois</div>
-            </div>
-          </div>
-
-          <div class="ai-analysis">
-            <h4>🤖 Analyse IA de la Stratégie de Contenu</h4>
-            <div class="ai-grid">
-              <div class="ai-item">
-                <div class="title">📅 Fréquence de publication</div>
-                <div class="content">${page.qualitativeAnalysis.publicationFrequency}</div>
-              </div>
-              <div class="ai-item">
-                <div class="title">📝 Types de contenu</div>
-                <div class="content">${page.qualitativeAnalysis.contentTypes.join(', ')}</div>
-              </div>
-              <div class="ai-item">
-                <div class="title">🎨 Style visuel</div>
-                <div class="content">${page.qualitativeAnalysis.visualStyle.description}</div>
-                ${page.qualitativeAnalysis.visualStyle.characteristics?.length ? `<ul style="margin-top:4px;padding-left:14px;font-size:9px;color:#6b7280">${page.qualitativeAnalysis.visualStyle.characteristics.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
-              </div>
-              <div class="ai-item">
-                <div class="title">🎤 Tonalité</div>
-                <div class="content">${page.qualitativeAnalysis.tonality.description}</div>
-                ${page.qualitativeAnalysis.tonality.characteristics?.length ? `<ul style="margin-top:4px;padding-left:14px;font-size:9px;color:#6b7280">${page.qualitativeAnalysis.tonality.characteristics.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
-              </div>
-              <div class="ai-item">
-                <div class="title">🎯 Thématiques principales</div>
-                <div class="content">${page.qualitativeAnalysis.mainThemes.join(', ')}</div>
-              </div>
-              <div class="ai-item">
-                <div class="title">👥 Réaction du public</div>
-                <div class="content">${page.qualitativeAnalysis.audienceReaction}</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="sw-grid">
-            <div class="sw-box strengths">
-              <h5>✅ Forces identifiées</h5>
-              <ul>
-                ${page.qualitativeAnalysis.strengths.map(s => `<li>${s}</li>`).join('')}
-              </ul>
-            </div>
-            <div class="sw-box weaknesses">
-              <h5>⚠️ Points d'amélioration</h5>
-              <ul>
-                ${page.qualitativeAnalysis.weaknesses.map(w => `<li>${w}</li>`).join('')}
-              </ul>
-            </div>
-          </div>
-        </div>
-      `).join('')}
-    </div>
-
-    <!-- Top Posts -->
     <div class="section">
       <div class="section-title">Top Posts Performants</div>
-      ${allPages.map(page => `
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #f97316;">${page.pageData.pageName}</h4>
-          ${page.topPosts.slice(0, 3).map((post: any) => `
-            <div class="top-post">
-              <div class="text">${(post.text || 'Publication sans texte').substring(0, 200)}${post.text?.length > 200 ? '...' : ''}</div>
-              <div class="stats">
-                <span class="stat likes">👍 ${post.likes?.toLocaleString() || 0} likes</span>
-                <span class="stat comments">💬 ${post.comments?.toLocaleString() || 0} commentaires</span>
-                <span class="stat shares">🔄 ${post.shares?.toLocaleString() || 0} partages</span>
-                ${post.postedAt ? `<span class="stat">📅 ${format(new Date(post.postedAt), 'dd/MM/yyyy', { locale: fr })}</span>` : ''}
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      `).join('')}
+      ${allPages.map(page =>
+        '<div style="margin-bottom: 20px;"><h4 style="font-size: 12px; font-weight: 600; color: ' + PDF_COLORS.navy + '; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid ' + PDF_COLORS.gold + ';">' + page.pageData.pageName + '</h4>' +
+        (page.topPosts || []).slice(0, 3).map((post: any) =>
+          '<div class="top-post"><div class="text">' + ((post.text || 'Publication sans texte').substring(0, 200)) + (post.text?.length > 200 ? '...' : '') + '</div>' +
+          '<div class="stats">' +
+            '<span class="stat" style="color:#3b82f6">' + (post.likes?.toLocaleString?.() || 0) + ' likes</span>' +
+            '<span class="stat" style="color:#8b5cf6">' + (post.comments?.toLocaleString?.() || 0) + ' comm.</span>' +
+            '<span class="stat" style="color:#10b981">' + (post.shares?.toLocaleString?.() || 0) + ' partages</span>' +
+            (post.postedAt ? '<span class="stat">' + format(new Date(post.postedAt), 'dd/MM/yyyy', { locale: fr }) + '</span>' : '') +
+          '</div></div>'
+        ).join('') +
+        '</div>'
+      ).join('')}
     </div>
 
-    <!-- Comparatif Détaillé -->
     <div class="section" style="page-break-before: always;">
       <div class="section-title">Comparatif Détaillé</div>
       <table>
@@ -748,74 +694,65 @@ const BenchmarkPage: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          ${[...allPages].sort((a, b) => b.quantitativeMetrics.engagementRate - a.quantitativeMetrics.engagementRate).map((page, idx) => {
-            const isRef = report.myPage && page.pageData.pageUrl === report.myPage.pageData.pageUrl;
-            return `
-            <tr style="${isRef ? 'background:#ecfdf5;font-weight:600;' : ''}">
-              <td>${page.pageData.pageName}${isRef ? ' <span class="page-badge">Réf.</span>' : ''}</td>
-              <td style="text-align:right">${page.pageData.followers.toLocaleString()}</td>
-              <td style="text-align:right">${page.quantitativeMetrics.avgLikesPerPost}</td>
-              <td style="text-align:right">${page.quantitativeMetrics.avgCommentsPerPost}</td>
-              <td style="text-align:right">${page.quantitativeMetrics.avgSharesPerPost}</td>
-              <td style="text-align:right;color:#f97316;font-weight:700">${page.quantitativeMetrics.engagementRate}%</td>
-              <td style="text-align:right">${page.quantitativeMetrics.postFrequencyPerMonth}</td>
-            </tr>`;
+          ${[...allPages].sort((a, b) => b.quantitativeMetrics.engagementRate - a.quantitativeMetrics.engagementRate).map((page) => {
+            const isRef = reportData.myPage && page.pageData.pageUrl === reportData.myPage.pageData.pageUrl;
+            const eng = page.quantitativeMetrics.engagementRate;
+            const engClass = eng >= 5 ? 'engagement-high' : eng >= 2 ? 'engagement-mid' : 'engagement-low';
+            return '<tr style="' + (isRef ? 'background:#ecfdf5;font-weight:600;' : '') + '">' +
+              '<td>' + page.pageData.pageName + (isRef ? ' <span class="badge-ref">Réf.</span>' : '') + '</td>' +
+              '<td style="text-align:right">' + page.pageData.followers.toLocaleString() + '</td>' +
+              '<td style="text-align:right">' + page.quantitativeMetrics.avgLikesPerPost + '</td>' +
+              '<td style="text-align:right">' + page.quantitativeMetrics.avgCommentsPerPost + '</td>' +
+              '<td style="text-align:right">' + page.quantitativeMetrics.avgSharesPerPost + '</td>' +
+              '<td style="text-align:right" class="' + engClass + '">' + eng + '%</td>' +
+              '<td style="text-align:right">' + page.quantitativeMetrics.postFrequencyPerMonth + '</td>' +
+            '</tr>';
           }).join('')}
         </tbody>
       </table>
       ${(() => {
-        const avgFollowers = allPages.length ? Math.round(allPages.reduce((s, p) => s + p.pageData.followers, 0) / allPages.length) : 0;
+        const avgFollowersCalc = allPages.length ? Math.round(allPages.reduce((s, p) => s + p.pageData.followers, 0) / allPages.length) : 0;
         const avgEngRate = allPages.length ? (allPages.reduce((s, p) => s + p.quantitativeMetrics.engagementRate, 0) / allPages.length).toFixed(2) : '0';
         const avgLikes = allPages.length ? Math.round(allPages.reduce((s, p) => s + p.quantitativeMetrics.avgLikesPerPost, 0) / allPages.length) : 0;
-        return `<p style="font-size:10px;color:#6b7280;margin-top:8px;">Moyennes du panel : ${avgFollowers.toLocaleString()} followers, ${avgEngRate}% engagement, ${avgLikes} likes/post</p>`;
+        return '<p style="font-size:10px;color:' + PDF_COLORS.steel + ';margin-top:8px;">Moyennes du panel : ' + avgFollowersCalc.toLocaleString() + ' followers · ' + avgEngRate + '% engagement · ' + avgLikes + ' likes/post</p>';
       })()}
     </div>
 
-    <!-- Recommendations -->
-    <div class="section">
-      <div class="section-title">Recommandations Stratégiques</div>
-      ${report.comparativeAnalysis.recommendations.map((rec, idx) => `
-        <div class="recommendation">
-          <span class="number">${idx + 1}</span>
-          <span class="text">${rec}</span>
-        </div>
-      `).join('')}
-    </div>
+    ${reportData.comparativeAnalysis?.recommendations?.length ? '<div class="section"><div class="section-title">Recommandations Stratégiques</div>' +
+      reportData.comparativeAnalysis.recommendations.map((rec, idx) =>
+        '<div class="recommendation"><span class="number">' + (idx + 1) + '</span><span class="text">' + rec + '</span></div>'
+      ).join('') +
+    '</div>' : ''}
   </div>
 
-  <!-- Footer -->
   <div class="footer">
     <div class="brand">EASY</div>
     <div class="tagline">Intelligence Sociale & Veille Concurrentielle</div>
-    <div class="legal">© ${new Date().getFullYear()} Easy - Rapport généré automatiquement - Tous droits réservés</div>
+    <div class="legal">© ${new Date().getFullYear()} Easy — Rapport généré automatiquement</div>
   </div>
 </body>
 </html>`;
+  };
 
-      // Ouvrir dans une nouvelle fenêtre pour impression/PDF
-      const printWindow = window.open('', '_blank');
-      if (printWindow) {
-        printWindow.document.write(htmlContent);
-        printWindow.document.close();
-        
-        // Attendre le chargement puis lancer l'impression
-        printWindow.onload = () => {
-          setTimeout(() => {
-            printWindow.print();
-          }, 500);
-        };
-      }
+  const openPDFWindow = (html: string) => {
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(html);
+      printWindow.document.close();
+      printWindow.onload = () => setTimeout(() => printWindow.print(), 500);
+    }
+  };
 
-      toast({
-        title: 'Export PDF',
-        description: 'Le rapport s\'ouvre dans une nouvelle fenêtre. Utilisez Ctrl+P ou Cmd+P pour sauvegarder en PDF.',
-      });
+  const exportPDF = async () => {
+    if (!report) return;
+    try {
+      const allPages = getAllPages();
+      const dateLabel = format(new Date(), 'dd MMMM yyyy à HH:mm', { locale: fr });
+      const html = generateBenchmarkPDFHTML(report, allPages, dateLabel);
+      openPDFWindow(html);
+      toast({ title: 'Export PDF', description: 'Le rapport s\'ouvre dans une nouvelle fenêtre. Utilisez Ctrl+P ou Cmd+P pour sauvegarder en PDF.' });
     } catch (error) {
-      toast({
-        title: 'Erreur',
-        description: 'Impossible de générer le PDF',
-        variant: 'destructive',
-      });
+      toast({ title: 'Erreur', description: 'Impossible de générer le PDF', variant: 'destructive' });
     }
   };
 
@@ -1453,71 +1390,13 @@ const BenchmarkPage: React.FC = () => {
                               const response = await api.get(`/benchmark/${item.id}`);
                               const data = response.data;
                               const allPages = [...(data.myPage ? [data.myPage] : []), ...(data.competitors || [])];
-                              
-                              const htmlContent = `<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Rapport Benchmark - ${format(new Date(item.created_at), 'dd/MM/yyyy')}</title>
-  <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; margin: 40px; background: #1a1d29; color: #e5e7eb; }
-    .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #8b5cf6; padding-bottom: 20px; }
-    h1 { color: #a78bfa; margin: 0; }
-    h2 { color: #8b5cf6; border-bottom: 1px solid #374151; padding-bottom: 10px; }
-    h3 { color: #60a5fa; }
-    .date { color: #9ca3af; font-size: 14px; }
-    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-    th, td { border: 1px solid #374151; padding: 12px; text-align: left; }
-    th { background: #1f2937; color: #a78bfa; }
-    tr:nth-child(even) { background: #111827; }
-    .metric { display: inline-block; margin: 10px; padding: 15px; background: #1f2937; border-radius: 8px; text-align: center; }
-    .metric-value { font-size: 24px; font-weight: bold; color: #8b5cf6; }
-    .metric-label { font-size: 12px; color: #9ca3af; }
-    .recommendation { background: #1f2937; padding: 15px; margin: 10px 0; border-left: 4px solid #8b5cf6; border-radius: 4px; }
-    .page-section { background: #111827; padding: 20px; margin: 20px 0; border-radius: 8px; }
-    @media print { body { background: white; color: black; } th { background: #f3f4f6; color: black; } }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h1>📊 Rapport Benchmark Concurrentiel</h1>
-    <p class="date">Généré le ${format(new Date(), 'dd MMMM yyyy à HH:mm', { locale: fr })}</p>
-    <p class="date">Analyse du ${format(new Date(item.created_at), 'dd MMMM yyyy', { locale: fr })}</p>
-  </div>
-  
-  <h2>📈 Résumé des Pages Analysées</h2>
-  <table>
-    <tr><th>Page</th><th>Followers</th><th>Posts</th><th>Engagement</th><th>Likes Moy.</th></tr>
-    ${allPages.map((p: any) => `<tr><td>${p.pageData?.pageName || 'N/A'}</td><td>${(p.pageData?.followers || 0).toLocaleString()}</td><td>${p.quantitativeMetrics?.totalPosts || 0}</td><td>${p.quantitativeMetrics?.engagementRate || 0}%</td><td>${p.quantitativeMetrics?.avgLikesPerPost || 0}</td></tr>`).join('')}
-  </table>
-  
-  ${allPages.map((p: any) => `
-  <div class="page-section">
-    <h3>📄 ${p.pageData?.pageName || 'Page'}</h3>
-    <div class="metric"><div class="metric-value">${(p.pageData?.followers || 0).toLocaleString()}</div><div class="metric-label">Followers</div></div>
-    <div class="metric"><div class="metric-value">${p.quantitativeMetrics?.totalPosts || 0}</div><div class="metric-label">Posts</div></div>
-    <div class="metric"><div class="metric-value">${p.quantitativeMetrics?.engagementRate || 0}%</div><div class="metric-label">Engagement</div></div>
-    ${p.qualitativeAnalysis?.strengths ? `<h4>Forces</h4><ul>${p.qualitativeAnalysis.strengths.map((s: string) => `<li>${s}</li>`).join('')}</ul>` : ''}
-  </div>
-  `).join('')}
-  
-  ${data.comparativeAnalysis?.recommendations ? `
-  <h2>💡 Recommandations</h2>
-  ${data.comparativeAnalysis.recommendations.map((r: string) => `<div class="recommendation">${r}</div>`).join('')}
-  ` : ''}
-  
-  <div style="text-align: center; margin-top: 40px; color: #6b7280; font-size: 12px;">
-    <p>Rapport généré par Easy - Intelligence Sociale</p>
-  </div>
-</body>
-</html>`;
-                              
-                              const printWindow = window.open('', '_blank');
-                              if (printWindow) {
-                                printWindow.document.write(htmlContent);
-                                printWindow.document.close();
-                                printWindow.onload = () => setTimeout(() => printWindow.print(), 500);
-                              }
+                              const dateLabel = format(new Date(item.created_at), 'dd MMMM yyyy', { locale: fr });
+                              const html = generateBenchmarkPDFHTML(
+                                { myPage: data.myPage || null, comparativeAnalysis: data.comparativeAnalysis || { summary: '', rankings: [], recommendations: [] } },
+                                allPages,
+                                dateLabel,
+                              );
+                              openPDFWindow(html);
                               toast({ title: 'Export PDF', description: 'Utilisez Ctrl+P pour sauvegarder en PDF.' });
                             } catch (error) {
                               toast({ title: 'Erreur', description: 'Impossible de générer le PDF', variant: 'destructive' });
