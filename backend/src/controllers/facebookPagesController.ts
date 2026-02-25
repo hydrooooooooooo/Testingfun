@@ -534,10 +534,22 @@ export class FacebookPagesController {
         return res.json({ success: true, analysis: existingAnalyses[pageName], alreadyExists: true });
       }
 
-      // Read backup data
+      // Read backup data (with DB fallback)
+      let subSession: any;
       const backup = facebookPagesService.readBackup(sessionId);
-      if (!backup) throw new ApiError(404, 'Session data not found');
-      const subSession = backup.subSessions?.find((s: any) => s.pageName === pageName);
+      if (backup) {
+        subSession = backup.subSessions?.find((s: any) => s.pageName === pageName);
+      }
+      if (!subSession) {
+        // Fallback: use sub_sessions stored in DB
+        const dbSubSessions = typeof session.sub_sessions === 'string'
+          ? JSON.parse(session.sub_sessions || '[]')
+          : (session.sub_sessions || []);
+        subSession = dbSubSessions.find((s: any) => s.pageName === pageName);
+        if (subSession) {
+          logger.info(`[AI] Using DB fallback for sub_sessions (backup file missing) session=${sessionId} page=${pageName}`);
+        }
+      }
       if (!subSession) throw new ApiError(404, `Page "${pageName}" not found in session`);
 
       const postsData = subSession.postsData || [];
@@ -619,10 +631,22 @@ export class FacebookPagesController {
         return res.json({ success: true, benchmark: existingBenchmarks[pageName], alreadyExists: true });
       }
 
-      // Read backup data
+      // Read backup data (with DB fallback)
+      let subSession: any;
       const backup = facebookPagesService.readBackup(sessionId);
-      if (!backup) throw new ApiError(404, 'Session data not found');
-      const subSession = backup.subSessions?.find((s: any) => s.pageName === pageName);
+      if (backup) {
+        subSession = backup.subSessions?.find((s: any) => s.pageName === pageName);
+      }
+      if (!subSession) {
+        // Fallback: use sub_sessions stored in DB
+        const dbSubSessions = typeof session.sub_sessions === 'string'
+          ? JSON.parse(session.sub_sessions || '[]')
+          : (session.sub_sessions || []);
+        subSession = dbSubSessions.find((s: any) => s.pageName === pageName);
+        if (subSession) {
+          logger.info(`[BENCHMARK] Using DB fallback for sub_sessions (backup file missing) session=${sessionId} page=${pageName}`);
+        }
+      }
       if (!subSession) throw new ApiError(404, `Page "${pageName}" not found in session`);
 
       const postsData = subSession.postsData || [];
