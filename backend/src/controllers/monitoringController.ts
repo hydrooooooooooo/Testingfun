@@ -87,7 +87,7 @@ class MonitoringController {
         .select(
           'scraping_sessions.id',
           'scraping_sessions.status',
-          'scraping_sessions.service_type',
+          'scraping_sessions.scrape_type as service_type',
           'scraping_sessions.totalItems',
           'scraping_sessions.created_at',
           'scraping_sessions.updated_at',
@@ -152,7 +152,7 @@ class MonitoringController {
             db.raw("'session' as event_type"),
             'scraping_sessions.id',
             'scraping_sessions.status as detail',
-            'scraping_sessions.service_type',
+            'scraping_sessions.scrape_type as service_type',
             'scraping_sessions.created_at',
             'users.email as user_email'
           )
@@ -164,7 +164,7 @@ class MonitoringController {
           .select(
             db.raw("'credit' as event_type"),
             'credit_transactions.id',
-            'credit_transactions.type as detail',
+            'credit_transactions.transaction_type as detail',
             'credit_transactions.amount as service_type',
             'credit_transactions.created_at',
             'users.email as user_email'
