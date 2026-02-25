@@ -397,7 +397,9 @@ class ScheduledScrapeService {
   }
 
   /**
-   * Attendre la fin du scraping
+   * Attendre la fin du scraping.
+   * Pour marketplace: le webhook Apify met à jour la session → on poll la DB.
+   * Pour facebook_pages/posts_comments: pas de webhook → on poll le run Apify directement.
    */
   private async waitForScrapingCompletion(sessionId: string, maxWaitMinutes = 30): Promise<void> {
     const maxAttempts = maxWaitMinutes * 2; // Check every 30 seconds
@@ -405,7 +407,7 @@ class ScheduledScrapeService {
 
     while (attempts < maxAttempts) {
       const session = await db('scraping_sessions').where({ id: sessionId }).first();
-      
+
       if (!session) {
         throw new Error('Session not found');
       }
@@ -418,10 +420,71 @@ class ScheduledScrapeService {
         throw new Error('Scraping failed');
       }
 
+      // For non-marketplace types with an apify_run_id, poll the Apify run directly
+      if (session.apify_run_id && session.scrape_type !== 'marketplace') {
+        try {
+          const client = new ApifyClient({ token: appConfig.api.apifyToken });
+          const runInfo = await client.run(session.apify_run_id).get();
+
+          if (runInfo) {
+            logger.info(`[SCHEDULED_SCRAPE] Apify run ${session.apify_run_id} status: ${runInfo.status}`);
+
+            if (runInfo.status === 'SUCCEEDED') {
+              // Fetch dataset items count and update session
+              const datasetId = session.dataset_id || runInfo.defaultDatasetId;
+              let itemCount = 0;
+              if (datasetId) {
+                const dataset = await client.dataset(datasetId).get();
+                itemCount = dataset?.itemCount || 0;
+              }
+
+              await db('scraping_sessions').where({ id: sessionId }).update({
+                status: 'completed',
+                totalItems: itemCount,
+                items_scraped: itemCount,
+                hasData: itemCount > 0,
+                dataset_id: datasetId,
+                updated_at: new Date(),
+              });
+
+              // Create backup
+              if (datasetId && itemCount > 0) {
+                try {
+                  const items = await client.dataset(datasetId).listItems();
+                  saveMarketplaceBackup(sessionId, datasetId, items.items);
+                } catch (backupErr) {
+                  logger.warn(`[SCHEDULED_SCRAPE] Backup failed for ${sessionId}:`, backupErr);
+                }
+              }
+
+              logger.info(`[SCHEDULED_SCRAPE] Session ${sessionId} completed: ${itemCount} items`);
+              return;
+            }
+
+            if (['FAILED', 'ABORTED', 'TIMED-OUT'].includes(runInfo.status)) {
+              await db('scraping_sessions').where({ id: sessionId }).update({
+                status: 'failed',
+                updated_at: new Date(),
+              });
+              throw new Error(`Apify run ${runInfo.status}`);
+            }
+          }
+        } catch (pollErr: any) {
+          // If it's our own throw (FAILED/ABORTED), re-throw
+          if (pollErr.message?.startsWith('Apify run')) throw pollErr;
+          logger.warn(`[SCHEDULED_SCRAPE] Apify poll error (will retry): ${pollErr.message}`);
+        }
+      }
+
       await new Promise(resolve => setTimeout(resolve, 30000)); // Wait 30 seconds
       attempts++;
     }
 
+    // Timeout: mark session as failed
+    await db('scraping_sessions').where({ id: sessionId }).update({
+      status: 'failed',
+      updated_at: new Date(),
+    });
     throw new Error('Scraping timeout');
   }
 
