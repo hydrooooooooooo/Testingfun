@@ -464,6 +464,17 @@ export function useApi() {
     }
   }, []);
 
+  const forceCancelAdminSession = useCallback(async (sessionId: string) => {
+    try {
+      const response = await api.post(`/admin/sessions/${sessionId}/force-cancel`);
+      return response.data;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || err.message || 'Erreur lors de l\'annulation forcée';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, []);
+
   const getAdminActiveSessionsCount = useCallback(async () => {
     try {
       const response = await api.get('/admin/sessions/active-count');
@@ -527,6 +538,7 @@ export function useApi() {
     toggleAdminUserStatus,
     refundAdminSession,
     archiveAdminSession,
+    forceCancelAdminSession,
     getAdminActiveSessionsCount,
     getAdminSessions,
     getAdminSessionById,

@@ -10,7 +10,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Database, RefreshCw, Archive, Undo2, Activity } from 'lucide-react';
+import { Database, RefreshCw, Archive, Undo2, Activity, XCircle } from 'lucide-react';
 
 const statusColors: Record<string, string> = {
   FINISHED: 'bg-green-100 text-green-800 border-green-200',
@@ -21,7 +21,7 @@ const statusColors: Record<string, string> = {
 };
 
 const AdminSessionsPage: React.FC = () => {
-  const { getAdminSessions, getAdminSessionById, refundAdminSession, archiveAdminSession, getAdminActiveSessionsCount } = useApi();
+  const { getAdminSessions, getAdminSessionById, refundAdminSession, archiveAdminSession, forceCancelAdminSession, getAdminActiveSessionsCount } = useApi();
   const [sessions, setSessions] = useState<any[]>([]);
   const [loadingList, setLoadingList] = useState(true);
   const [activeCounts, setActiveCounts] = useState<{ pending: number; running: number; total: number } | null>(null);
@@ -44,6 +44,11 @@ const AdminSessionsPage: React.FC = () => {
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false);
   const [archiveSessionId, setArchiveSessionId] = useState<string | null>(null);
   const [archiveLoading, setArchiveLoading] = useState(false);
+
+  // Force cancel dialog
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [cancelSessionId, setCancelSessionId] = useState<string | null>(null);
+  const [cancelLoading, setCancelLoading] = useState(false);
 
   const fetchSessions = useCallback(async () => {
     setLoadingList(true);
@@ -124,6 +129,27 @@ const AdminSessionsPage: React.FC = () => {
     } finally {
       setArchiveLoading(false);
     }
+  };
+
+  const handleForceCancel = async () => {
+    if (!cancelSessionId) return;
+    setCancelLoading(true);
+    try {
+      await forceCancelAdminSession(cancelSessionId);
+      setCancelDialogOpen(false);
+      setCancelSessionId(null);
+      fetchSessions();
+      if (sheetOpen) setSheetOpen(false);
+    } catch {
+      // handled
+    } finally {
+      setCancelLoading(false);
+    }
+  };
+
+  const isStuckSession = (status: string) => {
+    const s = status?.toLowerCase();
+    return s === 'pending' || s === 'running';
   };
 
   const uniqueStatuses = useMemo(() => {
@@ -265,6 +291,16 @@ const AdminSessionsPage: React.FC = () => {
                               <Archive className="h-3 w-3 mr-1" /> Archiver
                             </Button>
                           )}
+                          {isStuckSession(s.status) && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-7 text-xs bg-transparent border-red-300 text-red-700 hover:bg-red-50"
+                              onClick={(e) => { e.stopPropagation(); setCancelSessionId(s.id); setCancelDialogOpen(true); }}
+                            >
+                              <XCircle className="h-3 w-3 mr-1" /> Annuler
+                            </Button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -346,6 +382,16 @@ const AdminSessionsPage: React.FC = () => {
                     <Archive className="h-4 w-4 mr-1" /> Archiver
                   </Button>
                 )}
+                {isStuckSession(sessionDetail.status) && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="bg-transparent border-red-300 text-red-700 hover:bg-red-50"
+                    onClick={() => { setCancelSessionId(sessionDetail.id); setCancelDialogOpen(true); }}
+                  >
+                    <XCircle className="h-4 w-4 mr-1" /> Forcer l'annulation
+                  </Button>
+                )}
               </div>
             </div>
           )}
@@ -383,6 +429,24 @@ const AdminSessionsPage: React.FC = () => {
             <AlertDialogCancel>Annuler</AlertDialogCancel>
             <AlertDialogAction onClick={handleArchive} disabled={archiveLoading}>
               {archiveLoading ? 'En cours...' : 'Archiver'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Force Cancel AlertDialog */}
+      <AlertDialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Forcer l'annulation de cette session ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              La session sera marquée comme échouée et les crédits réservés seront remboursés à l'utilisateur. Cette action est irréversible.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={handleForceCancel} disabled={cancelLoading} className="bg-red-600 hover:bg-red-700">
+              {cancelLoading ? 'En cours...' : 'Forcer l\'annulation'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

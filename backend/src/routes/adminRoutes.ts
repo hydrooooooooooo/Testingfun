@@ -16,6 +16,7 @@ router.get('/sessions/active-count', (req, res, next) => adminController.getActi
 router.get('/sessions/:sessionId', (req, res, next) => adminController.getSessionById(req, res, next));
 router.get('/sessions/:sessionId/refund', (req, res, next) => adminController.refundSession(req, res, next));
 router.delete('/sessions/:sessionId', (req, res, next) => adminController.archiveSession(req, res, next));
+router.post('/sessions/:sessionId/force-cancel', (req, res, next) => adminController.forceCancelSession(req, res, next));
 router.get('/stats', (req, res, next) => adminController.getDashboardStats(req, res, next));
 router.get('/report', (req, res, next) => adminController.getFullReport(req, res, next));
 router.get('/searches', validate(adminSearchSchema), (req, res, next) => adminController.getSearchEvents(req, res, next));

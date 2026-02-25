@@ -380,9 +380,10 @@ export class AdminController {
           .limit(50),
         db('downloads')
           .where({ user_id: userId })
-          .select('id', 'session_id', 'format', 'created_at', 'expires_at')
-          .orderBy('created_at', 'desc')
-          .limit(50),
+          .select('id', 'session_id', 'format', 'downloaded_at', 'expires_at')
+          .orderBy('downloaded_at', 'desc')
+          .limit(50)
+          .catch(() => []),
         db('scraping_sessions')
           .where({ user_id: userId })
           .sum('totalItems as total')
@@ -400,10 +401,10 @@ export class AdminController {
             SELECT 'session', id, created_at, COALESCE(scrape_type,'marketplace'), status, CAST(totalItems AS TEXT)
             FROM scraping_sessions WHERE user_id = ?
             UNION ALL
-            SELECT 'download', id, created_at, format, session_id, NULL
+            SELECT 'download', id, downloaded_at as created_at, format, session_id, NULL
             FROM downloads WHERE user_id = ?
           ) unified ORDER BY created_at DESC LIMIT 100
-        `, [userId, userId, userId]),
+        `, [userId, userId, userId]).catch(() => []),
       ]);
 
       const totalItemsScraped = Number(totalItemsRow?.total || 0);
@@ -530,6 +531,45 @@ export class AdminController {
       });
 
       res.status(200).json({ status: 'success', message: 'Session archived' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Force-cancel a stuck pending/running session, refunding reserved credits
+   */
+  async forceCancelSession(req: Request, res: Response, next: NextFunction) {
+    try {
+      const adminId = (req as AuthenticatedRequest).user?.id;
+      const { sessionId } = req.params;
+
+      const session = await sessionService.getSession(sessionId) as any;
+      if (!session) throw new ApiError(404, 'Session not found');
+
+      const status = (session.status || '').toLowerCase();
+      if (status !== 'pending' && status !== 'running') {
+        throw new ApiError(400, `Cannot force-cancel a session with status "${session.status}". Only pending/running sessions can be cancelled.`);
+      }
+
+      // Cancel reserved credits if any
+      if (session.credit_transaction_id && session.user_id) {
+        try {
+          await creditService.cancelReservation(session.credit_transaction_id);
+          logger.info(`[ADMIN] Credits refunded for force-cancelled session ${sessionId}`);
+        } catch (creditError: any) {
+          logger.warn(`[ADMIN] Could not cancel credit reservation for session ${sessionId}:`, creditError.message);
+        }
+      }
+
+      await db('scraping_sessions').where({ id: sessionId }).update({
+        status: 'failed',
+        updated_at: db.fn.now(),
+      });
+
+      audit('admin.session_force_cancelled', { adminId, sessionId, previousStatus: session.status });
+
+      res.status(200).json({ status: 'success', message: 'Session force-cancelled and credits refunded' });
     } catch (error) {
       next(error);
     }
