@@ -71,12 +71,16 @@ const CollapsibleSidebar: React.FC<CollapsibleSidebarProps> = ({ isCollapsed, se
       title: 'Automatisations',
       icon: Calendar,
       href: '/dashboard/automations',
+      badge: 'Bêta',
+      badgeColor: 'bg-steel/20 text-cream-300',
     },
     {
       title: 'Surveillance',
       icon: Bell,
       href: '/dashboard/mentions',
-      ...(unreadCount > 0 ? { badge: String(unreadCount), badgeColor: 'bg-red-500 text-white' } : {}),
+      badge: 'Bêta',
+      badgeColor: 'bg-steel/20 text-cream-300',
+      ...(unreadCount > 0 ? { notifBadge: String(unreadCount) } : {}),
     },
     {
       title: 'Paiements',
@@ -144,6 +148,11 @@ const CollapsibleSidebar: React.FC<CollapsibleSidebarProps> = ({ isCollapsed, se
                 item.badgeColor || 'bg-gold/20 text-gold'
               )}>
                 {item.badge}
+              </Badge>
+            )}
+            {item.notifBadge && (
+              <Badge className="text-[10px] px-1.5 py-0 h-4 border-0 bg-red-500 text-white flex-shrink-0">
+                {item.notifBadge}
               </Badge>
             )}
           </>

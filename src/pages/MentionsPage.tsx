@@ -410,6 +410,7 @@ const MentionsPage: React.FC = () => {
           <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2 flex items-center gap-2 text-navy">
             <Bell className="w-6 h-6 sm:w-8 sm:h-8 text-gold" />
             Surveillance
+            <Badge className="text-[10px] px-1.5 py-0.5 bg-steel/20 text-steel border-0 font-medium">Bêta</Badge>
           </h1>
           <p className="text-steel text-sm sm:text-base">
             Détectez les mentions de votre marque

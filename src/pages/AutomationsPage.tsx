@@ -243,7 +243,10 @@ const AutomationsPage: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-navy">Automatisations</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-navy flex items-center gap-2">
+              Automatisations
+              <Badge className="text-[10px] px-1.5 py-0.5 bg-steel/20 text-steel border-0 font-medium">Bêta</Badge>
+            </h1>
             <p className="text-steel mt-1 text-sm sm:text-base">Surveillez automatiquement vos pages</p>
           </div>
           <Button
