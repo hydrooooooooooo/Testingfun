@@ -7,10 +7,9 @@ import { calculateSimpleCost } from '../services/costEstimationService';
 import { ApiError } from '../middlewares/errorHandler';
 import { logger } from '../utils/logger';
 import { config } from '../config/config';
-import fs from 'fs';
-import path from 'path';
 import db from '../database';
 import { persistScrapedItems } from '../services/itemPersistenceService';
+import { saveMarketplaceBackup } from '../services/backupService';
 
 export class ScrapeController {
   /**
@@ -244,8 +243,8 @@ export class ScrapeController {
 
           const previewItems = normalizedItems.slice(0, 3);
 
-          // Créer le fichier de backup
-          this.createBackupFile(sessionId, session.datasetId, normalizedItems.length, previewItems, normalizedItems);
+          // Sauvegarder le backup complet (données brutes Apify)
+          saveMarketplaceBackup(sessionId, session.datasetId, normalizedItems);
           
           // Mettre à jour la session avec les données finales et le statut FINISHED
           const updatedSession = await sessionService.updateSession(sessionId, {
@@ -389,8 +388,8 @@ export class ScrapeController {
         const totalItemsCount = allItems.length;
         const previewItems = allItems.slice(0, 3);
 
-        // Create backup file (same as polling path)
-        this.createBackupFile(sessionId, datasetId, totalItemsCount, previewItems, allItems);
+        // Sauvegarder le backup complet (données brutes Apify)
+        saveMarketplaceBackup(sessionId, datasetId, allItems);
 
         // Update session in DB
         await sessionService.updateSession(sessionId, {
@@ -453,67 +452,6 @@ export class ScrapeController {
       logger.error('Error handling Apify webhook:', error);
       // Important to not pass to next() to avoid sending a generic error response to Apify
       res.status(500).send('Internal Server Error');
-    }
-  }
-
-  /**
-   * Créer un fichier de backup avec les données extraites
-   */
-  private createBackupFile(
-    sessionId: string, 
-    datasetId: string, 
-    totalItemsCount: number, 
-    previewItems: any[], 
-    sampleAllItems: any[]
-  ): void {
-    try {
-      const backupDir = path.join(process.cwd(), 'data', 'backups');
-      // Le sessionId inclut déjà 'sess_', donc on l'utilise directement
-      const backupPath = path.join(backupDir, `${sessionId}.json`);
-      
-      // Vérifier si le fichier existe déjà
-      if (fs.existsSync(backupPath)) {
-        logger.info(`Fichier de backup pour la session ${sessionId} existe déjà, pas de nouvelle sauvegarde créée`);
-        return;
-      }
-      
-      // Assurer que le répertoire existe
-      if (!fs.existsSync(backupDir)) {
-        fs.mkdirSync(backupDir, { recursive: true });
-      }
-      
-      // Sauvegarder les données avec la structure correcte et les données extraites
-      const backupData = {
-        sessionId,
-        datasetId,
-        timestamp: new Date().toISOString(),
-        totalItems: totalItemsCount,
-        previewItems: previewItems.map(item => ({
-          title: item.title,
-          price: item.price,
-          desc: item.desc,
-          image: item.image,
-          images: Array.isArray(item.images) ? item.images.slice(0, 3) : [],
-          location: item.location,
-          url: item.url,
-          postedAt: item.postedAt
-        })),
-        allItems: sampleAllItems.map(item => ({
-          title: item.title,
-          price: item.price,
-          desc: item.desc,
-          image: item.image,
-          images: Array.isArray(item.images) ? item.images.slice(0, 3) : [],
-          location: item.location,
-          url: item.url,
-          postedAt: item.postedAt
-        }))
-      };
-      
-      fs.writeFileSync(backupPath, JSON.stringify(backupData, null, 2));
-      logger.info(`Sauvegarde des données créée: ${backupPath}`);
-    } catch (backupError) {
-      logger.error(`Erreur lors de la sauvegarde des données: ${backupError}`);
     }
   }
 

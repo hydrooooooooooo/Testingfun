@@ -13,6 +13,7 @@ import {
   calculateMentionsCost
 } from './costEstimationService';
 import mentionDetectionService from './mentionDetectionService';
+import { saveMarketplaceBackup } from './backupService';
 
 interface ScheduledScrape {
   id: string;
@@ -213,6 +214,16 @@ class ScheduledScrapeService {
       // 5. Récupérer les résultats
       const sessionData = await sessionService.getSession(sessionId);
       const itemsScraped = sessionData?.totalItems || 0;
+
+      // 5b. Créer le backup (filet de sécurité — le webhook l'a peut-être déjà fait)
+      if (sessionData?.datasetId) {
+        try {
+          const backupItems = await apifyService.getDatasetItems(sessionData.datasetId);
+          saveMarketplaceBackup(sessionId, sessionData.datasetId, backupItems);
+        } catch (backupErr) {
+          logger.warn(`[SCHEDULED_SCRAPE] Backup creation failed for ${sessionId}:`, backupErr);
+        }
+      }
 
       // 6. Déduire les crédits de base
       let totalCreditsUsed = scraper.credits_per_run;

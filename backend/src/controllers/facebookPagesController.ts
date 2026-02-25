@@ -12,6 +12,7 @@ import { getDefaultAIModel } from '../config/aiModels';
 import db from '../database';
 import { persistScrapedItems } from '../services/itemPersistenceService';
 import { commentScraperService } from '../services/commentScraperService';
+import { saveFacebookPagesBackup } from '../services/backupService';
 
 export class FacebookPagesController {
 
@@ -251,7 +252,7 @@ export class FacebookPagesController {
       }
 
       // Save backup and finalize
-      facebookPagesService.saveBackup(sessionId, subSessions);
+      saveFacebookPagesBackup(sessionId, subSessions);
 
       const totalItems = subSessions.reduce((sum: number, s: any) =>
         sum + (s.postsData?.length || 0) + (s.infoData?.length || 0), 0);

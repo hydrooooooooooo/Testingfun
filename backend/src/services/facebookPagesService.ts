@@ -1,8 +1,7 @@
 import { ApifyClient } from 'apify-client';
 import { config } from '../config/config';
 import { logger } from '../utils/logger';
-import fs from 'fs';
-import path from 'path';
+import { readBackup as readBackupFile } from './backupService';
 
 export interface SubSession {
   pageName: string;
@@ -119,34 +118,8 @@ class FacebookPagesService {
     return { status: 'RUNNING', progress };
   }
 
-  saveBackup(sessionId: string, subSessions: SubSession[]): void {
-    try {
-      const backupDir = path.join(__dirname, '../../data/backups');
-      if (!fs.existsSync(backupDir)) fs.mkdirSync(backupDir, { recursive: true });
-
-      const filePath = path.join(backupDir, `fbpages_${sessionId}.json`);
-      const data = {
-        sessionId,
-        timestamp: new Date().toISOString(),
-        totalPages: subSessions.length,
-        subSessions,
-      };
-      fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-      logger.info(`[FBPages] Backup saved: ${filePath}`);
-    } catch (error) {
-      logger.error(`[FBPages] Error saving backup for ${sessionId}:`, error);
-    }
-  }
-
   readBackup(sessionId: string): any | null {
-    try {
-      if (!/^sess_[A-Za-z0-9_-]+$/.test(sessionId)) return null;
-      const filePath = path.join(__dirname, '../../data/backups', `fbpages_${sessionId}.json`);
-      if (!fs.existsSync(filePath)) return null;
-      return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-    } catch {
-      return null;
-    }
+    return readBackupFile(sessionId, 'fbpages');
   }
 }
 
