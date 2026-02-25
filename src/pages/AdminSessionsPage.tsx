@@ -75,7 +75,7 @@ const AdminSessionsPage: React.FC = () => {
   const filteredSessions = useMemo(() => {
     return sessions.filter((s: any) => {
       if (statusFilter !== 'all' && s.status !== statusFilter) return false;
-      if (userFilter && !String(s.user).toLowerCase().includes(userFilter.toLowerCase())) return false;
+      if (userFilter && !String(s.user).toLowerCase().includes(userFilter.toLowerCase()) && !(s.user_name && s.user_name.toLowerCase().includes(userFilter.toLowerCase())) && !(s.user_email && s.user_email.toLowerCase().includes(userFilter.toLowerCase()))) return false;
       if (dateFrom) {
         const sessionDate = new Date(s.created_at).toISOString().slice(0, 10);
         if (sessionDate < dateFrom) return false;
@@ -173,7 +173,7 @@ const AdminSessionsPage: React.FC = () => {
               </SelectContent>
             </Select>
             <Input
-              placeholder="Filtrer par user ID..."
+              placeholder="Filtrer par user..."
               value={userFilter}
               onChange={(e) => setUserFilter(e.target.value)}
               className="w-48 h-8 bg-white border-cream-300"
@@ -229,7 +229,12 @@ const AdminSessionsPage: React.FC = () => {
                           {s.status}
                         </Badge>
                       </td>
-                      <td className="py-2 pr-2">{s.user || '—'}</td>
+                      <td className="py-2 pr-2">
+                        <div className="text-sm">{s.user_name || s.user_email || s.user || '—'}</div>
+                        {s.user_email && s.user_name && (
+                          <div className="text-xs text-steel">{s.user_email}</div>
+                        )}
+                      </td>
                       <td className="py-2 pr-2">{s.packId || '—'}</td>
                       <td className="py-2 pr-2">{s.totalItems ?? 0}</td>
                       <td className="py-2 pr-2">
@@ -290,8 +295,24 @@ const AdminSessionsPage: React.FC = () => {
                 <div className="font-medium font-mono text-xs break-all">{sessionDetail.id}</div>
                 <div className="text-steel">Statut</div>
                 <div><Badge className={statusColors[sessionDetail.status] || ''}>{sessionDetail.status}</Badge></div>
-                <div className="text-steel">User ID</div>
-                <div className="font-medium">{sessionDetail.user_id || '—'}</div>
+                <div className="text-steel">User</div>
+                <div className="font-medium">
+                  {sessionDetail.user_id || '—'}
+                  {/* Lookup user info from sessions list */}
+                  {(() => {
+                    const match = sessions.find((s: any) => s.id === sessionDetail.id);
+                    if (match?.user_name || match?.user_email) {
+                      return (
+                        <div className="text-xs text-steel mt-0.5">
+                          {match.user_name && <span>{match.user_name}</span>}
+                          {match.user_name && match.user_email && <span> &middot; </span>}
+                          {match.user_email && <span>{match.user_email}</span>}
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
+                </div>
                 <div className="text-steel">Pack</div>
                 <div className="font-medium">{sessionDetail.packId || '—'}</div>
                 <div className="text-steel">Items</div>

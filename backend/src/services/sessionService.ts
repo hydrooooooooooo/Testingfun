@@ -165,6 +165,17 @@ class SessionService {
   }
 
   /**
+   * Get all sessions with user info (name + email) via JOIN.
+   * Used by admin panel to display human-readable user info.
+   */
+  async getAllSessionsWithUsers(): Promise<(Session & { user_email?: string; user_name?: string })[]> {
+    return db('scraping_sessions as s')
+      .leftJoin('users as u', 's.user_id', 'u.id')
+      .select('s.*', 'u.email as user_email', 'u.name as user_name')
+      .orderBy('s.created_at', 'desc');
+  }
+
+  /**
    * Mark a session as paid.
    * @param id Session ID.
    * @returns The updated session or null if not found.

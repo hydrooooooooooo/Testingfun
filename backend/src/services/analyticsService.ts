@@ -117,6 +117,7 @@ export class AnalyticsService {
         db.raw('u.email as user_email'),
         db.raw('"ss"."packId" as session_name'),
         db.raw('"ss"."downloadUrl" as download_url'),
+        db.raw('coalesce(ss."totalItems", 0) as total_items'),
         db.raw('coalesce(ss.is_trial, false) as is_trial')
       )
       .orderBy('se.created_at', 'desc');

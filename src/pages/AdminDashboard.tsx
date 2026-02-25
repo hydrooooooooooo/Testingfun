@@ -428,12 +428,13 @@ const AdminDashboard: React.FC = () => {
                         <th className="py-2 pr-2">Utilisateur</th>
                         <th className="py-2 pr-2">Lien</th>
                         <th className="py-2 pr-2">Session</th>
+                        <th className="py-2 pr-2">Items</th>
                         <th className="py-2 pr-2">Téléchargement</th>
                       </tr>
                     </thead>
                     <tbody>
                       {(searches?.items || []).length === 0 ? (
-                        <tr><td colSpan={5}><EmptyTable /></td></tr>
+                        <tr><td colSpan={6}><EmptyTable /></td></tr>
                       ) : (searches?.items || []).map((it: any) => (
                         <tr key={it.id} className="border-b border-cream-200 hover:bg-cream-50">
                           <td className="py-2 pr-2 whitespace-nowrap">{new Date(it.created_at).toLocaleString()}</td>
@@ -442,6 +443,7 @@ const AdminDashboard: React.FC = () => {
                             <a href={it.url} target="_blank" rel="noreferrer" className="text-navy hover:underline">{it.url}</a>
                           </td>
                           <td className="py-2 pr-2">{it.session_name || it.session_id}</td>
+                          <td className="py-2 pr-2">{it.total_items || 0}</td>
                           <td className="py-2 pr-2">
                             {it.download_url ? (
                               <a href={it.download_url} target="_blank" rel="noreferrer" className="text-navy hover:underline">Télécharger</a>
@@ -544,6 +546,17 @@ const AdminDashboard: React.FC = () => {
               </div>
             ) : (
               <>
+                {aiUsage.summary?.total_requests === 0 && (
+                  <Card className="bg-navy-50 border-navy-200">
+                    <CardContent className="py-8 text-center">
+                      <h3 className="text-lg font-semibold text-navy mb-2">Aucune donnée IA disponible</h3>
+                      <p className="text-sm text-steel max-w-md mx-auto">
+                        Les coûts IA seront affichés ici une fois que les analyses IA (audit, benchmark, copywriting) seront activées et utilisées par vos clients.
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+
                 {/* KPI Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <StatCard title="Requêtes IA" value={aiUsage.summary?.total_requests ?? 0} />

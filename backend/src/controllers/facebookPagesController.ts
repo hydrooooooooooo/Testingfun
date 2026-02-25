@@ -108,6 +108,22 @@ export class FacebookPagesController {
         data_types: JSON.stringify({ extractInfo, extractPosts, extractComments }),
       });
 
+      // Log search events for reporting
+      try {
+        for (const pageUrl of urls) {
+          const domain = (() => { try { return new URL(pageUrl).hostname; } catch { return null; } })();
+          await db('search_events').insert({
+            user_id: userId || null,
+            session_id: sessionId,
+            url: pageUrl,
+            domain,
+            status: 'PENDING',
+          });
+        }
+      } catch (e) {
+        logger.warn('[FBPages] Failed to log search event', e);
+      }
+
       // Launch pipeline in background
       this.launchPipeline(sessionId, userId, urls, extractionConfig, reservation.id)
         .catch(err => logger.error(`[FBPages] Pipeline error for ${sessionId}:`, err));

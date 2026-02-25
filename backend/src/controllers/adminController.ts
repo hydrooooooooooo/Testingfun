@@ -18,7 +18,7 @@ export class AdminController {
       const adminId = (req as AuthenticatedRequest).user?.id;
       audit('admin.sessions_listed', { adminId });
 
-      const sessions = await sessionService.getAllSessions();
+      const sessions = await sessionService.getAllSessionsWithUsers();
 
       const formattedSessions = sessions.map(session => ({
         id: session.id,
@@ -27,6 +27,8 @@ export class AdminController {
         created_at: session.created_at,
         updated_at: session.updated_at || session.created_at,
         user: session.user_id || 'N/A',
+        user_name: (session as any).user_name || null,
+        user_email: (session as any).user_email || null,
         packId: session.packId || 'N/A',
         totalItems: session.totalItems || 0,
         hasData: session.hasData,
@@ -306,7 +308,12 @@ export class AdminController {
       const rows = await db('users')
         .select('id', 'email', 'name', 'role', 'credits_balance', 'is_suspended', 'created_at', 'business_sector', 'company_size')
         .modify((qb: any) => {
-          if (q) qb.whereILike('email', `%${q}%`);
+          if (q) {
+            qb.where(function(this: any) {
+              this.whereRaw('LOWER(email) LIKE ?', [`%${q.toLowerCase()}%`])
+                  .orWhereRaw('LOWER(name) LIKE ?', [`%${q.toLowerCase()}%`]);
+            });
+          }
         })
         .orderBy('id', 'desc')
         .limit(limit);
