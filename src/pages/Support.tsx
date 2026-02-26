@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import SEOHead from '@/components/seo/SEOHead';
+import { useLocale } from '@/hooks/useLocale';
 
 const SUPPORT_EMAIL = 'support@easyscrapy.com';
 
@@ -88,13 +89,17 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 }
 
 export default function SupportPage() {
+  const { locale, t } = useLocale();
+  const isFr = locale === 'fr';
+
   return (
     <div className="min-h-[calc(100vh-80px)] bg-cream-50">
       <SEOHead
-        title="Support — Centre d'aide"
-        description="Besoin d'aide ? Notre equipe vous accompagne pour tirer le meilleur parti de la plateforme. Reponse sous 24-48h."
-        path="/support"
-        alternatePath="/en/support"
+        title={t.seo.support_title}
+        description={t.seo.support_desc}
+        path={isFr ? '/support' : '/en/support'}
+        locale={isFr ? 'fr_FR' : 'en_US'}
+        alternatePath={isFr ? '/en/support' : '/support'}
       />
 
       {/* ─── HERO ─── */}

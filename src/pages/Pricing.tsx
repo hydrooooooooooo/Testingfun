@@ -8,8 +8,11 @@ import { useAuth } from "@/context/AuthContext";
 import PaymentModal from "@/components/PaymentModal";
 import type { PricingPlanDisplay } from "@/components/PricingPlan";
 import SEOHead from '@/components/seo/SEOHead';
+import { useLocale } from '@/hooks/useLocale';
 
 export default function PricingPage() {
+  const { locale, t } = useLocale();
+  const isFr = locale === 'fr';
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
   const [pricingPlans, setPricingPlans] = useState<PricingPlanDisplay[]>([]);
@@ -101,10 +104,11 @@ export default function PricingPage() {
   return (
     <main className="bg-cream-50 min-h-screen">
       <SEOHead
-        title="Tarifs — Packs de credits"
-        description="Decouvrez nos offres de credits pour l'analyse de donnees sociales. Pas d'abonnement, payez uniquement ce que vous utilisez."
-        path="/pricing"
-        alternatePath="/en/pricing"
+        title={t.seo.pricing_title}
+        description={t.seo.pricing_desc}
+        path={isFr ? '/pricing' : '/en/pricing'}
+        locale={isFr ? 'fr_FR' : 'en_US'}
+        alternatePath={isFr ? '/en/pricing' : '/pricing'}
       />
       <section className="w-full bg-white py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

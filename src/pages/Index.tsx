@@ -6,9 +6,12 @@ import {
   ArrowRight, Zap
 } from "lucide-react";
 import SEOHead from '@/components/seo/SEOHead';
+import { useLocale } from '@/hooks/useLocale';
 import { organizationSchema, faqSchema, softwareApplicationSchema } from '@/components/seo/schemas';
 
 export default function Index() {
+  const { locale, t } = useLocale();
+  const isFr = locale === 'fr';
   /* ---------- Pricing packs from API ---------- */
   const [packs, setPacks] = useState<any[]>([]);
   const [loadingPacks, setLoadingPacks] = useState(true);
@@ -142,10 +145,11 @@ export default function Index() {
   return (
     <div className="flex flex-col min-h-screen w-full">
       <SEOHead
-        title="Social Media Analytics pour Agences"
-        description="Plateforme d'analyse de donnees sociales pour agences. Collectez, analysez et surveillez les donnees Facebook avec l'IA. Essai gratuit."
-        path="/"
-        alternatePath="/en/"
+        title={t.seo.home_title}
+        description={t.seo.home_desc}
+        path={isFr ? '/' : '/en/'}
+        locale={isFr ? 'fr_FR' : 'en_US'}
+        alternatePath={isFr ? '/en/' : '/'}
         jsonLd={[
           organizationSchema(),
           softwareApplicationSchema(),

@@ -7,6 +7,7 @@ import {
   Car, GraduationCap
 } from 'lucide-react';
 import SEOHead from '@/components/seo/SEOHead';
+import { useLocale } from '@/hooks/useLocale';
 
 interface UseCaseExample {
   sector: string;
@@ -126,13 +127,17 @@ const examples: UseCaseExample[] = [
 ];
 
 export default function ExemplesPage() {
+  const { locale, t } = useLocale();
+  const isFr = locale === 'fr';
+
   return (
     <div className="min-h-[calc(100vh-80px)] bg-cream-50">
       <SEOHead
-        title="Exemples — Cas d'usage par secteur"
-        description="Decouvrez comment les agences marketing, l'immobilier, l'e-commerce et d'autres secteurs utilisent notre plateforme de Social Media Analytics."
-        path="/exemples"
-        alternatePath="/en/examples"
+        title={t.seo.examples_title}
+        description={t.seo.examples_desc}
+        path={isFr ? '/exemples' : '/en/examples'}
+        locale={isFr ? 'fr_FR' : 'en_US'}
+        alternatePath={isFr ? '/en/examples' : '/exemples'}
       />
 
       {/* ─── HERO ─── */}
