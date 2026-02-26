@@ -60,6 +60,7 @@ export default function SEOHead({
           href={`${SITE_URL}${alternatePath}`}
         />
       )}
+      <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
 
       {/* JSON-LD */}
       {jsonLd?.map((schema, i) => (
