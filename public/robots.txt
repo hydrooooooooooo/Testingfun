@@ -10,5 +10,8 @@ Disallow: /payment/
 Disallow: /download
 Disallow: /verify-email/
 Disallow: /resend-verification
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
 
 Sitemap: https://easyscrapy.com/sitemap.xml
