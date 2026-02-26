@@ -175,6 +175,11 @@ cat > "$FRONTEND_DEPLOY/.htaccess" << 'EOF'
 
 RewriteEngine On
 
+# Remove trailing slash (except root /) to avoid duplicate content
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} (.+)/$
+RewriteRule ^ %1 [R=301,L]
+
 # Rediriger les requêtes /api vers le backend Node.js sur le port 3001
 RewriteCond %{REQUEST_URI} ^/api/
 RewriteRule ^api/(.*)$ http://localhost:3001/api/$1 [P,L]
@@ -207,6 +212,7 @@ RewriteRule . /index.html [L]
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "SAMEORIGIN"
     Header set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
 EOF
 
